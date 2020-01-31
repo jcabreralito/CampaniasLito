@@ -33,8 +33,14 @@ namespace CampaniasLito
             UsuariosHelper.CheckRole("SuperAdmin");
             UsuariosHelper.CheckRole("Admin");
             UsuariosHelper.CheckRole("User");
-            UsuariosHelper.CheckRole("Customer");
+            UsuariosHelper.CheckRole("Servicio");
+            UsuariosHelper.CheckRole("Cliente");
             UsuariosHelper.CheckSuperUser();
+            UsuariosHelper.CrearRoles("SuperAdmin");
+            UsuariosHelper.CrearRoles("Admin");
+            UsuariosHelper.CrearRoles("User");
+            UsuariosHelper.CrearRoles("Servicio");
+            UsuariosHelper.CrearRoles("Cliente");
         }
     }
 }

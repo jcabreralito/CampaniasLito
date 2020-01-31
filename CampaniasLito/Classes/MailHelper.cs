@@ -1,21 +1,21 @@
-﻿using System;
+﻿using CampaniasLito.Properties;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Configuration;
 
 namespace CampaniasLito.Classes
 {
     public class MailHelper
     {
-        public static async Task SendMail(string to, string subject, string body)
+        public static async Task SendMail(string to, string cc, string cco, string subject, string body)
         {
             var message = new MailMessage();
             message.To.Add(new MailAddress(to));
-            message.From = new MailAddress(WebConfigurationManager.AppSettings["AdminUser"]);
+            message.CC.Add(new MailAddress(cc));
+            message.Bcc.Add(new MailAddress(cco));
+            message.From = new MailAddress(Resources.emailInfo.ToString());//(WebConfigurationManager.AppSettings["AdminUser"]);
             message.Subject = subject;
             message.Body = body;
             message.IsBodyHtml = true;
@@ -24,13 +24,13 @@ namespace CampaniasLito.Classes
             {
                 var credential = new NetworkCredential
                 {
-                    UserName = WebConfigurationManager.AppSettings["AdminUser"],
-                    Password = WebConfigurationManager.AppSettings["AdminPassWord"]
+                    UserName = Resources.emailInfo.ToString(),
+                    Password = Resources.passwordInfo.ToString()//WebConfigurationManager.AppSettings["AdminPassWord"]
                 };
 
                 smtp.Credentials = credential;
-                smtp.Host = WebConfigurationManager.AppSettings["SMTPName"];
-                smtp.Port = int.Parse(WebConfigurationManager.AppSettings["SMTPPort"]);
+                smtp.Host = Resources.SMTPName;
+                smtp.Port = int.Parse(Resources.SMTPPort);
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(message);
             }
@@ -45,7 +45,7 @@ namespace CampaniasLito.Classes
                 message.To.Add(new MailAddress(to));
             }
 
-            message.From = new MailAddress(WebConfigurationManager.AppSettings["AdminUser"]);
+            message.From = new MailAddress(Resources.emailInfo.ToString());
             message.Subject = subject;
             message.Body = body;
             message.IsBodyHtml = true;
@@ -54,16 +54,21 @@ namespace CampaniasLito.Classes
             {
                 var credential = new NetworkCredential
                 {
-                    UserName = WebConfigurationManager.AppSettings["AdminUser"],
-                    Password = WebConfigurationManager.AppSettings["AdminPassWord"]
+                    UserName = Resources.emailInfo.ToString(),
+                    Password = Resources.passwordInfo.ToString()//WebConfigurationManager.AppSettings["AdminPassWord"]
                 };
 
                 smtp.Credentials = credential;
-                smtp.Host = WebConfigurationManager.AppSettings["SMTPName"];
-                smtp.Port = int.Parse(WebConfigurationManager.AppSettings["SMTPPort"]);
+                smtp.Host = Resources.SMTPName;
+                smtp.Port = int.Parse(Resources.SMTPPort);
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(message);
             }
+        }
+
+        internal static Task SendMail(object nombreUsuario, string subject, string body)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CampaniasLito.Models;
+using CampaniasLito.Properties;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -43,6 +44,29 @@ namespace CampaniasLito.Classes
             return response.Succeeded;
         }
 
+        public static void CrearRoles(string rolName)
+        {
+            var rolExist = db.Roles.Where(r => r.Nombre == rolName).FirstOrDefault();
+
+            if (rolExist != null)
+            {
+                if (rolExist.Nombre != rolName)
+                {
+                    Rol rol = new Rol();
+                    rol.Nombre = rolName;
+                    db.Roles.Add(rol);
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                Rol rol = new Rol();
+                rol.Nombre = rolName;
+                db.Roles.Add(rol);
+                db.SaveChanges();
+            }
+        }
+
         public static void CheckRole(string roleName)
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(userContext));
@@ -57,8 +81,8 @@ namespace CampaniasLito.Classes
         public static void CheckSuperUser()
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
-            var email = WebConfigurationManager.AppSettings["AdminUser"];
-            var password = WebConfigurationManager.AppSettings["AdminPassWord"];
+            var email = Resources.AdminUser.ToString(); //WebConfigurationManager.AppSettings["AdminUser"];
+            var password = Resources.AdminPassWord.ToString(); //WebConfigurationManager.AppSettings["AdminPassWord"];
             var userASP = userManager.FindByName(email);
             if (userASP == null)
             {
