@@ -1,0 +1,50 @@
+﻿@model CampaniasLito.Models.Categoria
+
+@{
+    ViewBag.Title = "Eliminar Categoria";
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <table>
+            <tr>
+                <td class="col-md-12">
+                    <h2><i class="fa fa-table"></i> @ViewBag.Title</h2>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="panel-body">
+
+        <h3>¿Eliminar este Registro?</h3>
+        <div>
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Compañias.Nombre)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Compañias.Nombre)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Descripcion)
+                </dd>
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Eliminar" class="btn btn-outline btn-primary" />
+                    @Html.ActionLink("Cancelar", "Index", new { }, new { @class = "btn btn-outline btn-danger" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

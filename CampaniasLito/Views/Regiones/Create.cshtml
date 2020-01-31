@@ -1,0 +1,58 @@
+﻿@model CampaniasLito.Models.Region
+
+@{
+    ViewBag.Title = "Agregar";
+}
+
+@using (Html.BeginForm("Create", "Regiones", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel">
+        <div class="panel-heading" style="border-radius: 10px; background: #DF2530">
+            <table>
+                <tr>
+                    <th class="col-xs-6">
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">Agregar</h2>
+                    </th>
+                    <th class=" col-xs-12"></th>
+                    <th align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal">
+                                <i class="fas fa-times-circle"></i>
+                                @*SALIR*@
+                            </button>
+                        </div>
+                    </th>
+                    <th align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
+                                <i class="fas fa-check-circle"></i>
+                                @*ACEPTAR*@
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+        </div>
+
+        <div class="panel-body">
+            <div class="form-horizontal row responsivoUsuarioLabel">
+                <div class="col-xs-12">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.CompañiaId)
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Nombre" } })
+                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/fileupload.js"></script>
+}

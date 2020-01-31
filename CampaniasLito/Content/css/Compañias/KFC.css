@@ -1,0 +1,53 @@
+﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr:hover, th, table, .navbar-toggle, body {
+    background-color: #DF2530 !important;
+    color: #fff !important;
+}
+
+.navbar-toggle:hover, .nav > li > a:hover {
+    background-color: #000 !important;
+    color: #DF2530 !important;
+}
+
+.sidebar ul li a.active {
+    background-color: #ffffff !important;
+    color: #DF2530 !important;
+}
+
+table > tbody > tr > td:hover {
+    background-color: transparent !important;
+}
+
+table > tbody > tr > td {
+    border-radius: 10px !important
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #000 !important;
+    color: #DF2530 !important;
+}
+.table-hover > tbody > tr:hover {
+    background-color: #6C6C6C !important;
+    color: #DF2530 !important;
+}
+
+dd, dt {
+    color: #000;
+}
+
+.jumbotron .h1, .jumbotron h1 {
+    color: #DF2530 !important;
+}
+
+.table-bordered:hover > tbody > tr:hover > td {
+    border: 1px solid #000 !important;
+    border-radius: 10px;
+}
+
+.botonF1 {
+    background: #DF2530 !important;
+}
+
+a:focus, a:hover {
+    color: #000 !important;
+    text-decoration: none;
+}

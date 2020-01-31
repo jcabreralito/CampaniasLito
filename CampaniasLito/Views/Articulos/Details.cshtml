@@ -1,0 +1,114 @@
+﻿@model CampaniasLito.Models.Articulo
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Articulo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Compañia.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Compañia.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Codigo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Codigo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sustrato)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sustrato)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tintas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tintas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MatPegue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MatPegue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MedExtendida)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MedExtendida)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SistemaImpresion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SistemaImpresion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InfAdicional)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InfAdicional)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Laminado_FV)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Laminado_FV)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Corte)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Corte)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Paquete)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Paquete)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ArticuloId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

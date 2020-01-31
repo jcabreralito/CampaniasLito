@@ -1,0 +1,142 @@
+﻿@model CampaniasLito.Models.Compañia
+
+@{
+    ViewBag.Title = "Editar";
+}
+
+<style>
+
+    .custom-file-input ~ .custom-file-label::after {
+        content: "Elegir";
+    }
+
+</style>
+
+@using (Html.BeginForm("Edit", "Compañias", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel">
+        <div class="panel-heading" style="border-radius: 10px; background: #01207B">
+            <table>
+                <tr>
+                    <th class="col-xs-6">
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
+                    </th>
+                    <th class=" col-xs-12"></th>
+                    <th align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="button" class="botonF2" style="background-color: #01207B" data-dismiss="modal">
+                                <i class="fas fa-times-circle"></i>
+                                @*SALIR*@
+                            </button>
+                        </div>
+                    </th>
+                    <th align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
+                                <i class="fas fa-check-circle"></i>
+                                @*ACEPTAR*@
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+        </div>
+
+        <div class="panel-body">
+            <div class="form-horizontal row responsivoUsuarioLabel">
+                <div class="col-xs-12">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.CompañiaId)
+                    @Html.HiddenFor(model => model.Logo)
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Nombre" } })
+                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="file-input-new">
+                                <div class="input-group col-sm-12">
+                                    <div tabindex="500" class="form-control file-caption col-sm-4 inputModal">
+                                        <div class="file-caption-name" id="NombreArchivo">
+                                        </div>
+                                    </div>
+                                    <div class="input-group-btn" style="height:auto; border-radius: 0 10px 10px 0">
+                                        <div tabindex="500" class="btn btn-primary btn-file" style="border-radius: 0 10px 10px 0">
+                                            <i class="fas fa-image"></i>
+                                            @Html.TextBoxFor(modelo => modelo.LogoFile, new { type = "file", id = "files" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="container">
+                        <div class="custom-file" id="customFile">
+                            <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+                            <label class="custom-file-label" for="exampleInputFile">
+                                Seleccionar Archivo
+                            </label>
+                        </div>
+                    </div>*@
+
+
+
+                    @*<div class="input-group">
+                            <label class="input-group-btn">
+                                <span class="btn btn-pilares">
+                                    IMAGEN&hellip; <input type="file" style="display: none;" multiple>
+                                </span>
+                            </label>
+                            @Html.TextBoxFor(modelo => modelo.LogoFile, new { type = "file", style="display: none;", multiple = "multiple" })
+                            <input type="text" class="form-control" readonly>
+                        </div>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @*var UrlM = '@Url.Action("GetMunicipios", "Generic")';
+        var UrlC = '@Url.Action("GetColonias", "Generic")';*@
+
+
+    <script>
+
+        $(function () {
+
+            // We can attach the `fileselect` event to all file inputs on the page
+            $(document).on('change', ':file', function () {
+                var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                input.trigger('fileselect', [numFiles, label]);
+            });
+
+            // We can watch for our custom `fileselect` event like this
+            $(document).ready(function () {
+                $(':file').on('fileselect', function (event, numFiles, label) {
+
+                    var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                    if (input.length) {
+                        input.val(log);
+                    } else {
+                        if (log) alert(log);
+                    }
+
+                });
+            });
+
+        });
+
+    </script>
+}

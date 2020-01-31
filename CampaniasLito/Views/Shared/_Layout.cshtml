@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    @if (Session["Compañia"] != null)
+    {
+        <title>@Session["Compañia"].ToString() - @ViewBag.Title</title>
+        <link href="~/Content/css/Compañias/KFC.css" rel="stylesheet" />
+    }
+    else
+    {
+        <title>Campañas LITO - @ViewBag.Title</title>
+    }
+
+    @Styles.Render("~/bundles/css")
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script src="https://kit.fontawesome.com/8068fd2104.js" crossorigin="anonymous"></script>
+
+</head>
+    <body>
+        <div id="page-top">
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div id="bodyCompañia">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" style="color: #fff">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <table>
+                        <tr>
+                            <th align="left" class="col-sm-9">
+                                @if (Session["Logo"] != null)
+                                {
+                                    <img src="@Url.Content(Session["Logo"].ToString())" alt="Image" style="width:95px; max-width: 95px; height: auto; padding: 5px 25px 0 0; vertical-align:middle" align="left" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/Logos/Logo_LIto_gris.png" alt="Image" style="width:180px; max-width: 180px; height: auto; padding: 5px 25px 0 0; vertical-align:middle" align="left" />
+                                }
+
+                                @if (Session["Compañia"] != null)
+                                {
+                                    <a class="navbar-brand" style="margin: 0 0 0 -25px; color: #fff; text-decoration: none"><i></i>@Session["Compañia"].ToString()</a>
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Campañas ", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", style = "color: #fff; text-decoration: none" })
+                                }
+                            </th>
+                            <th align="right" class="col-sm-7">
+                                @if (Request.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        @*<div class="col-sm-6" style="text-align: right; font-size:17px; color: #fff; margin-top: 6px">
+                                                <i class="fas fa-user" style="text-align: right"></i>
+                                                &nbsp;&nbsp;@Session["NombreCompleto"].ToString()
+                                            </div>*@
+
+                                        <div class="col-sm-12" style="text-align:right">
+                                            <a href="javascript:document.getElementById('logoutForm').submit()" style="font-size:17px; color: #fff; text-decoration: none; text-align: right">
+                                                <i class="fas fa-sign-out-alt fa-2x"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    @*<div class="col-sm-12" style="text-align:right">
+                                            <a href="@Url.Action("Login", "Account", routeValues:  new { id = "loginLink", @class = "dialog-window" })" style="font-size:17px; color: #fff; text-decoration: none">
+                                                <i class="fas fa-power-off"></i>
+                                                &nbsp;&nbsp;Iniciar sesión
+                                            </a>
+                                        </div>*@
+                                }
+                            </th>
+                            <th align="right" class="col-sm-1">
+                                <ul class="nav navbar-top-links navbar-right">
+                                    <li class="dropdown">
+                                </ul>
+                            </th>
+                        </tr>
+                    </table>
+
+                </div>
+            </nav>
+            <div class="navbar-default sidebar" role="navigation" style="background-color: white">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="@Url.Action("Index", "Home")" style="font-size:17px">
+                                <i class="fas fa-home"></i>
+                                &nbsp;&nbsp;Inicio
+                            </a>
+                        </li>
+
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <li style="font-size:17px">
+                                <a href="#"><i class="fa fa-user-cog"></i>&nbsp;Administrador<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="@Url.Action("Index", "Roles")">
+                                            &nbsp;&nbsp;<i class="fas fa-user-lock"></i>
+                                            &nbsp;&nbsp;Roles
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Compañias")">
+                                            &nbsp;&nbsp;<i class="fas fa-building"></i>
+                                            &nbsp;&nbsp;Compañias
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Usuarios")">
+                                            &nbsp;&nbsp;<i class="fas fa-users"></i>
+                                            &nbsp;&nbsp;Usuarios
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li style="font-size:17px">
+                                <a href="#" style="font-size:17px"><i class="fa fa-user-cog fa-fw"></i> Administrador<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="@Url.Action("Index", "Regiones")">
+                                            &nbsp;&nbsp;<i class="fas fa-map-marked-alt"></i>
+                                            &nbsp;&nbsp;Regiones
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Ciudades")">
+                                            &nbsp;&nbsp;<i class="fas fa-map-marker-alt"></i>
+                                            &nbsp;&nbsp;&nbsp;Ciudades
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Tiendas")">
+                                            &nbsp;<i class="fas fa-store"></i>
+                                            &nbsp;&nbsp;Tiendas
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Articulos")">
+                                            &nbsp;<i class="fas fa-barcode"></i>
+                                            &nbsp;&nbsp;Artículos
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Campañas")">
+                                            &nbsp;&nbsp;<i class="fas fa-calendar-alt"></i>
+                                            &nbsp;&nbsp;Campañas
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (User.IsInRole("User"))
+                        {
+                            <li style="font-size:17px">
+                                <a href="#"><i class="fa fa-archive fa-fw"></i>&nbsp;&nbsp;Altas<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="@Url.Action("Index", "Campañas")">
+                                            &nbsp;<i class="fas fa-calendar-alt"></i>
+                                            &nbsp;&nbsp;Campañas
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Tiendas")">
+                                            <i class="fas fa-store"></i>
+                                            &nbsp;&nbsp;Tiendas
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Articulos")">
+                                            <i class="fas fa-barcode"></i>
+                                            &nbsp;&nbsp;Artículos
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (User.IsInRole("Customer"))
+                        {
+                            <li>
+                                <a href="#"><i class="fa fa-money fa-fw"></i> Movimientos<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">Compras</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Inventarios</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Ventas</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        @*<li style="font-size:17px">
+                                <a href="#"><i class="fa fa-user fa-fw"></i> Usuario<span class="fa arrow"></span></a>
+                                @if (Request.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                @Html.ActionLink("Hola " + Session["NombreCompleto"].ToString() + "", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                                            </li>
+                                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>
+                                        </ul>
+                                    }
+                                }
+                                else
+                                {
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            @Html.ActionLink("Registrarse", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                                        </li>
+                                        <li>
+                                            @Html.ActionLink("Iniciar sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+                                        </li>
+                                    </ul>
+                                }
+                            </li>*@
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="page-wrapper">
+            <div class="py-3">
+                <div class="container-fluid">
+                    @RenderBody()
+                    @*<footer style="padding-top: 2%">
+
+
+                            @if (Session["Compañia"] != null)
+                            {
+                                <p>&copy; @DateTime.Now.Year @Session["Compañia"].ToString()</p>
+                            }
+                            else
+                            {
+                                <p>&copy; @DateTime.Now.Year KFC Campañas</p>
+                            }
+
+                        </footer>*@
+                </div>
+            </div>
+        </div>
+        <!-- /#wrapper -->
+        <!-- jQuery -->
+        @Scripts.Render("~/bundles/js")
+        @*@Scripts.Render("~/bundles/bootstrap")*@
+        @RenderSection("scripts", required: false)
+
+        <div class="modal fade" data-keyboard="false" id="IniciarSesion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @*<div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h2 class="modal-title"></h2>
+                        </div>*@
+                    <div class="modal-body"><div class="te">Please wait...</div></div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var title = $link.text();
+                $('#IniciarSesion .modal-title').html(title);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#IniciarSesion').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#IniciarSesion .te').html(data);
+                        $('#IniciarSesion').modal();
+                    }).success(function () { $('input:text:visible:first').focus(); });
+
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var title = $link.text();
+                $('#Edit .modal-title').html(title);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#Edit').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#Edit .te').html(data);
+                        $('#Edit').modal();
+                    }).success(function () { $('input:text:visible:first').focus(); });
+
+                }
+            });
+        });
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var title = $link.text();
+                $('#Delete .modal-title').html(title);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#Delete').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#Delete .te').html(data);
+                        $('#Delete').modal();
+                    }).success(function () { $('input:text:visible:first').focus(); });
+
+                }
+            });
+        });
+    </script>
+
+    @*<script>
+            $(document).ready(function () {
+                $('.fixed-action-btn').floatingActionButton();
+            });
+
+        </script>*@
+}

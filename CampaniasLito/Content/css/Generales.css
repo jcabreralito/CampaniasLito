@@ -1,0 +1,403 @@
+﻿#smallTamanio {
+    width: 30% !important;
+}
+
+#mdialTamanio {
+    width: 45% !important;
+}
+
+#largeTamanio {
+    width: 70% !important;
+}
+
+#xtralargeTamanio {
+    width: 85% !important;
+}
+
+h4 {
+    font-size: 12px;
+}
+
+.responsivoUsuarioLabelIndex {
+    font-size: 12px;
+}
+
+.responsivoUsuarioLabelFa {
+    font-size: 20px;
+}
+
+.name {
+    font-size: 12px;
+}
+
+.user {
+    visibility: visible;
+}
+
+.profession {
+    visibility: visible;
+}
+
+#imagenUser {
+    visibility: visible;
+}
+
+#telefonos {
+    visibility: visible;
+}
+
+#telefonosTittle {
+    visibility: visible;
+}
+
+#puesto {
+    visibility: visible;
+}
+
+#puestoTittle {
+    visibility: visible;
+}
+
+#area {
+    visibility: visible;
+}
+
+#areaTittle {
+    visibility: visible;
+}
+
+#foto {
+    visibility: visible;
+}
+
+#foto2 {
+    visibility: visible;
+    margin-top: 10px;
+}
+
+#fotoTittle {
+    visibility: visible;
+}
+
+#rol {
+    visibility: visible;
+}
+
+#rolTittle {
+    visibility: visible;
+}
+
+.boton {
+    font-size: 10px;
+}
+
+#botones {
+    font-size: 14px;
+    border-radius: 10px;
+    text-align: right;
+}
+
+#botones2 {
+    font-size: 22px;
+}
+
+@media screen and (max-width:768px) {
+
+    .responsivoUsuarioHeader {
+        margin-top: -2px;
+        font-size: 20px;
+    }
+
+    .responsivoUsuarioHeaderPanel {
+        margin-top: 15px;
+        height: 40px;
+    }
+
+    .responsivoUsuarioLabel {
+        font-size: 12px;
+    }
+
+    .responsivoUsuarioText {
+        height: 26px;
+        font-size: 12px;
+    }
+
+    #smallTamanio {
+        width: 40% !important;
+        left: 30%;
+        top: 20%;
+    }
+
+    #mdialTamanio {
+        width: 60% !important;
+        left: 20%;
+    }
+
+    #largeTamanio {
+        width: 60% !important;
+    }
+
+    .panel-body {
+        font-size: 12px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    #botones {
+        margin-top: 20px;
+        font-size: 10px;
+        border-radius: 10px;
+        text-align: right;
+    }
+
+    #botones2 {
+        margin-top: 30px;
+        font-size: 10px;
+        border-radius: 10px;
+        text-align: left;
+    }
+
+    .name {
+        font-size: 12px;
+    }
+
+    #usuario {
+        display: none;
+    }
+
+    #usuarioTittle {
+        display: none;
+    }
+
+    .user {
+        visibility: hidden;
+        height: 0;
+    }
+
+    .profession {
+        visibility: hidden;
+    }
+
+    #telefonos {
+        display: none;
+    }
+
+    #telefonosTittle {
+        display: none;
+    }
+
+    #puesto {
+        display: none;
+    }
+
+    #puestoTittle {
+        display: none;
+    }
+
+    #area {
+        display: none;
+    }
+
+    #areaTittle {
+        display: none;
+    }
+
+    #foto {
+        display: none;
+    }
+
+    #foto2 {
+        visibility: visible;
+        margin-top: 20px;
+    }
+
+    #fotoTittle {
+        display: none;
+    }
+
+    #rol {
+        display: none;
+    }
+
+    #rolTittle {
+        display: none;
+    }
+
+    .responsivoUsuarioHeaderIndex {
+        margin-top: -10px;
+    }
+
+    .responsivoUsuarioLabelFa {
+        font-size: 16px;
+    }
+
+    .responsivoUsuarioHeaderPanelIndex {
+        height: 50px;
+    }
+
+    .responsivoUsuarioLabelIndex {
+        font-size: 12px;
+    }
+
+    .responsivoUsuarioTextIndex {
+        height: 22px;
+    }
+
+    .boton {
+        font-size: 8px;
+    }
+}
+
+@media screen and (max-width:320px) {
+
+    .responsivoUsuarioHeader {
+        margin-top: -2px;
+        font-size: 20px;
+    }
+
+    .responsivoUsuarioHeaderPanel {
+        margin-top: 15px;
+        height: 40px;
+    }
+
+    .responsivoUsuarioLabel {
+        font-size: 12px;
+    }
+
+    .responsivoUsuarioText {
+        height: 26px;
+        font-size: 12px;
+    }
+
+    #smallTamanio {
+        width: 30% !important;
+        align-content: center;
+        margin-top: 40px;
+        margin-left: 40px;
+    }
+
+    #mdialTamanio {
+        width: 60% !important;
+        align-content: center;
+        margin-top: 40px;
+        margin-left: 40px;
+    }
+
+    #largeTamanio {
+        width: 60% !important;
+    }
+
+    .panel-body {
+        font-size: 12px;
+    }
+
+    h2 {
+        font-size: 12px;
+    }
+
+    #botones {
+        margin-top: 20px;
+        font-size: 5px;
+        border-radius: 10px;
+        text-align: right;
+    }
+
+    #botones2 {
+        margin-top: 30px;
+        font-size: 5px;
+        border-radius: 10px;
+        text-align: left;
+    }
+
+    .name {
+        font-size: 12px;
+    }
+
+    #usuario {
+        display: none;
+    }
+
+    #usuarioTittle {
+        display: none;
+    }
+
+    .user {
+        visibility: hidden;
+        height: 0;
+    }
+
+    .profession {
+        visibility: hidden;
+    }
+
+    #telefonos {
+        display: none;
+    }
+
+    #telefonosTittle {
+        display: none;
+    }
+
+    #puesto {
+        display: none;
+    }
+
+    #puestoTittle {
+        display: none;
+    }
+
+    #area {
+        display: none;
+    }
+
+    #areaTittle {
+        display: none;
+    }
+
+    #foto {
+        display: none;
+    }
+
+    #foto2 {
+        visibility: visible;
+        margin-top: 20px;
+    }
+
+    #fotoTittle {
+        display: none;
+    }
+
+    #rol {
+        display: none;
+    }
+
+    #rolTittle {
+        display: none;
+    }
+
+    .responsivoUsuarioHeaderIndex {
+        margin-top: -10px;
+    }
+
+    .responsivoUsuarioLabelFa {
+        font-size: 16px;
+    }
+
+    .responsivoUsuarioHeaderPanelIndex {
+        height: 50px;
+    }
+
+    .responsivoUsuarioLabelIndex {
+        font-size: 12px;
+    }
+
+    .responsivoUsuarioTextIndex {
+        height: 22px;
+    }
+
+    .boton {
+        font-size: 8px;
+    }
+}

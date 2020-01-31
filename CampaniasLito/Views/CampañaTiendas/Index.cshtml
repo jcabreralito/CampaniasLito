@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CampaniasLito.Models.CampañaTienda>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Campaña.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Compañia.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tienda.Clasificacion)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Campaña.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Compañia.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tienda.Clasificacion)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CampañaTiendaId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.CampañaTiendaId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CampañaTiendaId })
+        </td>
+    </tr>
+}
+
+</table>

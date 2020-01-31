@@ -1,0 +1,42 @@
+﻿@model CampaniasLito.Models.CampañaTienda
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CampañaTienda</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Campaña.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Campaña.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Compañia.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Compañia.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tienda.Clasificacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tienda.Clasificacion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CampañaTiendaId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
