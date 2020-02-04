@@ -1,7 +1,9 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using CampaniasLito.Classes;
 using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
@@ -14,7 +16,15 @@ namespace CampaniasLito.Controllers
         // GET: Tiendas
         public ActionResult Index()
         {
-            return View(db.Tiendas.ToList());
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var tiendas = db.Tiendas.Where(a => a.CompañiaId == usuario.CompañiaId);
+            return View(tiendas.ToList());
         }
 
         // GET: Tiendas/Details/5
@@ -37,7 +47,29 @@ namespace CampaniasLito.Controllers
         // GET: Tiendas/Create
         public ActionResult Create()
         {
-            return PartialView();
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var tienda = new Tienda { CompañiaId = usuario.CompañiaId, };
+
+
+            List<SelectListItem> lst = new List<SelectListItem>();
+
+            lst.Add(new SelectListItem() { Text = "[Seleccionar...]", Value = "0" });
+            lst.Add(new SelectListItem() { Text = "Alto", Value = "Alto" });
+            lst.Add(new SelectListItem() { Text = "Bajo", Value = "Bajo" });
+
+            ViewBag.Opciones = lst;
+
+
+            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId), "CiudadId", "Nombre");
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId), "RegionId", "Nombre");
+
+            return View(tienda);
         }
 
         // POST: Tiendas/Create

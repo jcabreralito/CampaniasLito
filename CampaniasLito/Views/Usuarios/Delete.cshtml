@@ -48,11 +48,11 @@
                         </dd>
 
                         <dt>
-                            @Html.DisplayNameFor(model => model.Compañias.Nombre)
+                            @Html.DisplayNameFor(model => model.Compañia.Nombre)
                         </dt>
 
                         <dd>
-                            @Html.DisplayFor(model => model.Compañias.Nombre)
+                            @Html.DisplayFor(model => model.Compañia.Nombre)
                         </dd>
 
                         <dt>
@@ -63,40 +63,9 @@
                             @Html.DisplayFor(model => model.Rol.Nombre)
                         </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Ciudad.Nombre)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Ciudad.Nombre)
-                        </dd>
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.DelegacionMunicipio.Nombre)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.DelegacionMunicipio.Nombre)
-                        </dd>
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Colonia.Nombre)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Colonia.Nombre)
-                        </dd>
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Telefono)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Telefono)
-                        </dd>
                     </dl>
                 </div>
-                <div class="col-md-6">
+                @*<div class="col-md-6">
                     <dl class="dl-horizontal">
 
                         <dt>
@@ -114,7 +83,7 @@
                             }
                         </dd>
                     </dl>
-                </div>
+                </div>*@
             </div>
             @using (Html.BeginForm())
             {

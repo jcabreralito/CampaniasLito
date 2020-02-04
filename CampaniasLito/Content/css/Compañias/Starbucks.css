@@ -1,20 +1,20 @@
 ﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr:hover, th, table, .navbar-toggle, body {
-    background-color: #DF2530 !important;
+    background-color: #067655 !important;
     color: #fff !important;
 }
 
-.navbar-toggle:hover, .nav > li > a:hover {
-    background-color: #000 !important;
-    color: #DF2530 !important;
-}
+    .navbar-toggle:hover, .nav > li > a:hover {
+        background-color: #000 !important;
+        color: #067655 !important;
+    }
 
 .sidebar ul li a.active {
     background-color: #ffffff !important;
-    color: #DF2530 !important;
+    color: #067655 !important;
 }
 
 #panelH {
-    background-color: #DF2530 !important;
+    background-color: #067655 !important;
 }
 
 table > tbody > tr > td:hover {
@@ -27,11 +27,11 @@ table > tbody > tr > td {
 
 .table-striped > tbody > tr:nth-of-type(odd) {
     background-color: #000 !important;
-    color: #DF2530 !important;
+    color: #067655 !important;
 }
 .table-hover > tbody > tr:hover {
     background-color: #6C6C6C !important;
-    color: #DF2530 !important;
+    color: #067655 !important;
 }
 
 dd, dt {
@@ -39,7 +39,7 @@ dd, dt {
 }
 
 .jumbotron .h1, .jumbotron h1 {
-    color: #DF2530 !important;
+    color: #067655 !important;
 }
 
 .table-bordered:hover > tbody > tr:hover > td {
@@ -48,7 +48,7 @@ dd, dt {
 }
 
 .botonF1 {
-    background: #DF2530 !important;
+    background: #067655 !important;
 }
 
 a:focus, a:hover {
@@ -56,8 +56,8 @@ a:focus, a:hover {
     text-decoration: none;
 }
 
-.bgPortadaKFC {
-    background: url('../Fotos/historia_10.jpg') no-repeat !important;
+.bgPortadaStarbucks {
+    background: url('../Fotos/starbucks-portal-palermo.jpg') no-repeat !important;
     background-position: center !important;
     background-size: auto !important;
     width: 100% !important;

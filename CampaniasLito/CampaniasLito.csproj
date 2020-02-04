@@ -244,6 +244,8 @@
     <Content Include="Content\css\bootstrap-slider.css" />
     <Content Include="Content\css\button-loader.css" />
     <Content Include="Content\css\buttons.css" />
+    <Content Include="Content\css\Compañias\KrispyKreme.css" />
+    <Content Include="Content\css\Compañias\Starbucks.css" />
     <Content Include="Content\css\Compañias\KFC.css" />
     <Content Include="Content\css\content.css" />
     <Content Include="Content\css\Estilos.css" />
@@ -272,6 +274,10 @@
     <Content Include="Content\dist\js\sb-admin-2.js" />
     <Content Include="Content\dist\js\sb-admin-2.min.js" />
     <Content Include="Content\Fotos\historia_10.jpg" />
+    <Content Include="Content\Fotos\HOME_planta.jpg" />
+    <Content Include="Content\Fotos\krispy.jpg" />
+    <Content Include="Content\Fotos\lito.jpg" />
+    <Content Include="Content\Fotos\starbucks-portal-palermo.jpg" />
     <Content Include="Content\Fotos\usuarios.jpg" />
     <Content Include="Content\js\inputfile-custom.js" />
     <Content Include="Content\js\sb-admin-2.js" />

@@ -4,7 +4,7 @@ h6, html, input[type=submit], input[type=button] {
 }
 
 .bgPortada {
-    background: url('../Fotos/historia_10.jpg') no-repeat;
+    background: url('../Fotos/lito.jpg') no-repeat;
     background-position: center;
     background-size: auto;
     width: 100%;
@@ -194,6 +194,10 @@ mainuser {
     height: 100px;
 }
 
+#panelH {
+    background-color: #01207B;
+}
+
 
 
 /*=============================================M E D I A  7 6 8=======================================*/
@@ -312,6 +316,14 @@ mainuser {
         font-size: 31px !important;
     }
 
+    .botonF3 {
+        font-size: 31px !important;
+    }
+
+    .botonF1View {
+        bottom: 2% !important;
+        right: 50% !important;
+    }
 }
 
 /*====================================================================================================*/
@@ -635,12 +647,31 @@ input[type=range] {
     text-align: center;
 }
 
+.botonF1View {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background: #F44336;
+    right: 40%;
+    bottom: 0;
+    position: fixed;
+    margin-bottom: 1%;
+    border: none;
+    outline: none;
+    color: #FFF;
+    font-size: 39px !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    transition: .3s;
+    z-index: 1;
+    text-align: center;
+}
+
 .botonF1Modal {
     width: 50px;
     height: 50px;
     border-radius: 100%;
     background: #F44336;
-    right: 50%;
+    right: 43%;
     bottom: 0;
     position: fixed;
     /*margin-right: 36px;*/
@@ -713,9 +744,30 @@ span {
     }
 
 .botonF3 {
-    background: #673AB7;
-    margin-bottom: 130px;
-    transition: 0.7s;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background: #2196F3;
+    right: -50px;
+    top: -20px;
+    bottom: 0;
+    position: absolute;
+    border: none;
+    outline: none;
+    color: #FFF;
+    font-size: 40px !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    transition: .3s;
+    z-index: 1;
+    text-align: center;
+}
+
+.botonF3:hover span {
+    transform: rotate(360deg);
+}
+
+.botonF3:active {
+    transform: scale(1.1);
 }
 
 .botonF4 {

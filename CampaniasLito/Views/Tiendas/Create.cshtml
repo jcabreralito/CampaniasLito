@@ -1,33 +1,32 @@
 ﻿@model CampaniasLito.Models.Tienda
 
 @{
-    ViewBag.Title = "Tienda";
+    ViewBag.Title = "Agregar";
+    Layout = null;
 }
 
 @using (Html.BeginForm("Create", "Tiendas", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <div class="panel">
-        <div class="panel-heading" style="border-radius: 10px; background: #DF2530">
+    <div class="panel mt-3">
+        <div class="panel-heading" style="border-radius: 10px" id="panelH">
             <table>
                 <tr>
                     <td class="col-xs-6">
-                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">Nueva</h2>
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
                     </td>
                     <td class=" col-xs-12"></td>
                     <td align="right" class="col-xs-1">
                         <div class="input-group">
                             <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal">
                                 <i class="fas fa-times-circle"></i>
-                                @*SALIR*@
                             </button>
                         </div>
                     </td>
-                    <td align="right" class="col-xs-1">
+                    <td align="center" class="col-xs-1">
                         <div class="input-group">
                             <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
                                 <i class="fas fa-check-circle"></i>
-                                @*ACEPTAR*@
                             </button>
                         </div>
                     </td>
@@ -63,14 +62,14 @@
 
                     <div class="form-group">
                         <div class="col-md-10">
-                            @Html.DropDownList("RegionId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[0].Watermark, htmlAttributes: new { @class = "form-control", @required = "true" })
+                            @Html.DropDownList("RegionId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[6].Watermark, htmlAttributes: new { @class = "form-control", @required = "true", @style = "text-transform:uppercase" })
                             @Html.ValidationMessageFor(model => model.RegionId, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-10">
-                            @Html.DropDownList("CiudadId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[0].Watermark, htmlAttributes: new { @class = "form-control", @required = "true" })
+                            @Html.DropDownList("CiudadId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[0].Watermark, htmlAttributes: new { @class = "form-control", @required = "true", @style = "text-transform:uppercase" })
                             @Html.ValidationMessageFor(model => model.CiudadId, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -84,12 +83,13 @@
 
                     <div class="form-group">
                         <div class="col-md-10">
-                            @Html.DropDownList("NuevoNivelDePrecioId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[0].Watermark, htmlAttributes: new { @class = "form-control", @required = "true" })
+                            @*@Html.DropDownListFor(model => model.NuevoNivelDePrecioId, (IEnumerable<SelectListItem>)ViewBag.Opciones)*@
+                            @Html.DropDownList("Opciones", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[0].Watermark, htmlAttributes: new { @class = "form-control", @required = "true", @style = "text-transform:uppercase" })
                             @Html.ValidationMessageFor(model => model.NuevoNivelDePrecioId, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    @*<div class="form-group">
                         <div class="col-md-10">
                             @Html.DropDownList("TipoId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[0].Watermark, htmlAttributes: new { @class = "form-control", @required = "true" })
                             @Html.ValidationMessageFor(model => model.TipoId, "", new { @class = "text-danger" })
@@ -283,7 +283,7 @@
                             @Html.DropDownList("TipoDeCajaId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[0].Watermark, htmlAttributes: new { @class = "form-control", @required = "true" })
                             @Html.ValidationMessageFor(model => model.TipoDeCajaId, "", new { @class = "text-danger" })
                         </div>
-                    </div>
+                    </div>*@
 
 
                 </div>
@@ -291,8 +291,10 @@
         </div>
     </div>
 }
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/fileupload.js"></script>
+    <script type="text/javascript">
+        var UrlM = '@Url.Action("GetCiudadesXRegion", "Generic")';
+    </script>
+
 }

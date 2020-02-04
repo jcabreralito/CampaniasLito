@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using CampaniasLito.Models;
 using CampaniasLito.Classes;
@@ -42,8 +39,8 @@ namespace CampaniasLito.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre");
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre");
+            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre");
+            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre");
 
             var usuario = new Usuario { };
             return PartialView(usuario);
@@ -62,20 +59,6 @@ namespace CampaniasLito.Controllers
                     var rol = db.Roles.Where(r => r.RolId == usuario.RolId).FirstOrDefault();
 
                     UsuariosHelper.CreateUserASP(usuario.NombreUsuario, rol.Nombre);
-
-                    if (usuario.FotoFile != null)
-                    {
-                        var folder = "~/Content/Fotos";
-                        var file = string.Format("{0}.jpg", usuario.UsuarioId);
-                        var responseFoto = FilesHelper.UploadPhoto(usuario.FotoFile, folder, file);
-                        if (responseFoto)
-                        {
-                            var pic = string.Format("{0}/{1}", folder, file);
-                            usuario.Foto = pic;
-                            db.Entry(usuario).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    }
 
                     return RedirectToAction("Index");
                 }
@@ -126,20 +109,6 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-                    if (usuario.FotoFile != null)
-                    {
-                        var folder = "~/Content/Fotos";
-                        var file = string.Format("{0}.jpg", usuario.UsuarioId);
-                        var responseFoto = FilesHelper.UploadPhoto(usuario.FotoFile, folder, file);
-                        if (responseFoto)
-                        {
-                            var pic = string.Format("{0}/{1}", folder, file);
-                            usuario.Foto = pic;
-                            db.Entry(usuario).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    }
-
 
                     var db2 = new CampaniasLitoContext();
                     var currentUser = db2.Usuarios.Find(usuario.UsuarioId);
