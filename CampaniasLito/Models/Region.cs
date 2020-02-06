@@ -28,5 +28,8 @@ namespace CampaniasLito.Models
         public virtual Compañia Compañia { get; set; }
 
         public virtual ICollection<Ciudad> Ciudades { get; set; }
+
+        public virtual ICollection<Tienda> Tiendas { get; set; }
+
     }
 }

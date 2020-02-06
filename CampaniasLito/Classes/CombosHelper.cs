@@ -51,7 +51,7 @@ namespace CampaniasLito.Classes
             regiones.Add(new Region
             {
                 RegionId = 0,
-                Nombre = "[Seleccionar una Región...]",
+                Nombre = "[Región]",
             });
             return regiones.OrderBy(r => r.Nombre).ToList();
         }
@@ -68,7 +68,7 @@ namespace CampaniasLito.Classes
             ciudades.Add(new Ciudad
             {
                 CiudadId = 0,
-                Nombre = "[Seleccionar una Ciudad...]",
+                Nombre = "[Ciudad]",
                 
             });
 
@@ -101,6 +101,74 @@ namespace CampaniasLito.Classes
         public void Dispose()
         {
             db.Dispose();
+        }
+
+        public static List<TipoTienda> GetTiposTienda(bool v)
+        {
+            var tipos = db.TipoTiendas.ToList();
+            return tipos.OrderBy(c => c.Tipo).ToList();
+        }
+
+        public static List<TipoCaja> GetTiposCaja(bool v)
+        {
+            var tiposCaja = db.TipoCajas.ToList();
+            return tiposCaja.OrderBy(c => c.Descripcion).ToList();
+        }
+
+        public static List<TipoCaja> GetTiposCaja()
+        {
+            var tiposCaja = db.TipoCajas.ToList();
+            tiposCaja.Add(new TipoCaja
+            {
+                TipoCajaId = 0,
+                Descripcion = "[Tipo de Caja]",
+            });
+            return tiposCaja.OrderBy(c => c.Descripcion).ToList();
+        }
+
+        public static List<AcomodoCaja> GetAcomodoCajas(bool v)
+        {
+            var acomodos = db.AcomodoCajas.ToList();
+            return acomodos.OrderBy(c => c.Descripcion).ToList();
+        }
+
+        public static List<AcomodoCaja> GetAcomodoCajas()
+        {
+            var acomodos = db.AcomodoCajas.ToList();
+            acomodos.Add(new AcomodoCaja
+            {
+                AcomodoCajaId = 0,
+                Descripcion = "[Acomodo Caja]",
+            });
+            return acomodos.OrderBy(c => c.Descripcion).ToList();
+        }
+
+        public static List<TipoTienda> GetTiposTienda()
+        {
+            var tipos = db.TipoTiendas.ToList();
+            tipos.Add(new TipoTienda
+            {
+                TipoTiendaId = 0,
+                Tipo = "[Tipo]",
+            });
+            return tipos.OrderBy(c => c.Tipo).ToList();
+        }
+
+        public static List<NivelPrecio> GetNivelesPrecio()
+        {
+            var niveles = db.NivelPrecios.ToList();
+            niveles.Add(new NivelPrecio
+            {
+                NivelPrecioId = 0,
+                Descripcion = "[Nivel de Precios]",
+            });
+            return niveles.OrderBy(c => c.Descripcion).ToList();
+        }
+
+        public static List<NivelPrecio> GetNivelesPrecio(bool sw)
+        {
+            var niveles = db.NivelPrecios.ToList();
+            return niveles.OrderBy(c => c.Descripcion).ToList();
         }
     }
 }

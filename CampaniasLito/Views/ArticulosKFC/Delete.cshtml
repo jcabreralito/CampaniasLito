@@ -1,0 +1,52 @@
+﻿@model CampaniasLito.Models.ArticuloKFC
+
+@{
+    ViewBag.Title = "Eliminar";
+    Layout = null;
+}
+@using (Html.BeginForm("Delete", "ArticulosKFC", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel mt-3">
+        <div class="panel-heading" style="border-radius: 10px" id="panelH">
+            <table>
+                <tr>
+                    <td class="col-xs-6">
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
+                    </td>
+                    <td class=" col-xs-12"></td>
+                    <td align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td align="center" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="panel-body">
+            <div class="form-horizontal row responsivoUsuarioLabel">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @disabled = "disabled", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Artículo" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

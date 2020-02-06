@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -30,6 +31,8 @@ namespace CampaniasLito.Controllers
         // GET: Tiendas/Details/5
         public ActionResult Details(int? id)
         {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -41,6 +44,14 @@ namespace CampaniasLito.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId, true), "CiudadId", "Nombre", tienda.TiendaId);
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId, true), "RegionId", "Nombre", tienda.TiendaId);
+            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.TiendaId);
+            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TiendaId);
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(), "AcomodoCajaId", "Descripcion", tienda.TiendaId);
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(), "TipoCajaId", "Descripcion", tienda.TiendaId);
+
             return PartialView(tienda);
         }
 
@@ -56,18 +67,12 @@ namespace CampaniasLito.Controllers
 
             var tienda = new Tienda { CompañiaId = usuario.CompañiaId, };
 
-
-            List<SelectListItem> lst = new List<SelectListItem>();
-
-            lst.Add(new SelectListItem() { Text = "[Seleccionar...]", Value = "0" });
-            lst.Add(new SelectListItem() { Text = "Alto", Value = "Alto" });
-            lst.Add(new SelectListItem() { Text = "Bajo", Value = "Bajo" });
-
-            ViewBag.Opciones = lst;
-
-
             ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId), "CiudadId", "Nombre");
             ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId), "RegionId", "Nombre");
+            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion");
+            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo");
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(), "AcomodoCajaId", "Descripcion");
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(), "TipoCajaId", "Descripcion");
 
             return View(tienda);
         }
@@ -77,30 +82,56 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Tienda tienda)
         {
+
+
             if (ModelState.IsValid)
             {
                 db.Tiendas.Add(tienda);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                ModelState.AddModelError(string.Empty, response.Message);
             }
 
-            return View(tienda);
+            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tienda.CompañiaId), "CiudadId", "Nombre");
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tienda.CompañiaId), "RegionId", "Nombre");
+            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion");
+            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo");
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(), "AcomodoCajaId", "Descripcion");
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(), "TipoCajaId", "Descripcion");
+
+
+            return PartialView(tienda);
+
         }
 
         // GET: Tiendas/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index", "Home");
             }
 
             var tienda = db.Tiendas.Find(id);
-            
+
             if (tienda == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId, true), "CiudadId", "Nombre", tienda.TiendaId);
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId, true), "RegionId", "Nombre", tienda.TiendaId);
+            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.TiendaId);
+            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TiendaId);
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "AcomodoCajaId", "Descripcion", tienda.TiendaId);
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TiendaId);
+
             return PartialView(tienda);
         }
 
@@ -109,18 +140,30 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Tienda tienda)
         {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
             if (ModelState.IsValid)
             {
                 db.Entry(tienda).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(tienda);
+
+            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId, true), "CiudadId", "Nombre", tienda.TiendaId);
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId, true), "RegionId", "Nombre", tienda.TiendaId);
+            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.TiendaId);
+            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TiendaId);
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(), "AcomodoCajaId", "Descripcion", tienda.TiendaId);
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(), "TipoCajaId", "Descripcion", tienda.TiendaId);
+
+            return PartialView(tienda);
         }
 
         // GET: Tiendas/Delete/5
         public ActionResult Delete(int? id)
         {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -131,6 +174,14 @@ namespace CampaniasLito.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId, true), "CiudadId", "Nombre", tienda.TiendaId);
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId, true), "RegionId", "Nombre", tienda.TiendaId);
+            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.TiendaId);
+            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TiendaId);
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(), "AcomodoCajaId", "Descripcion", tienda.TiendaId);
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(), "TipoCajaId", "Descripcion", tienda.TiendaId);
+
             return PartialView(tienda);
         }
 

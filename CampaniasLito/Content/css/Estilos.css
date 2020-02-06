@@ -44,8 +44,8 @@
 
 #unId70 {
     overflow-y: auto; /*Ajuste automático, agrega scroll según el tamaño del contenido*/
-    height: 53vh; /*Alto del 100% del Viewport*/
-    max-height: 53vh; /*Alto máximo*/
+    height: 56vh; /*Alto del 100% del Viewport*/
+    max-height: 56vh; /*Alto máximo*/
 }
 
 #unIdCalender {
@@ -102,11 +102,11 @@
     #unId30::-webkit-scrollbar-track,
     #unId32::-webkit-scrollbar-track,
     #unId34::-webkit-scrollbar-track,
-    #unId40::-webkit-scrollbar-track, 
-    #unId35::-webkit-scrollbar-track, 
-    #unId70::-webkit-scrollbar-track, 
+    #unId40::-webkit-scrollbar-track,
+    #unId35::-webkit-scrollbar-track,
+    #unId70::-webkit-scrollbar-track,
     #unIdCalender::-webkit-scrollbar-track {
-        background: #CE5432;
+        background: #000;
         border-radius: 10px;
     }
 
@@ -124,7 +124,7 @@
         #unId70::-webkit-scrollbar-track:active,
         #unIdCalender::-webkit-scrollbar-track:hover,
         #unIdCalender::-webkit-scrollbar-track:active {
-            background: #CE5432;
+            background: #000;
         }
 
 

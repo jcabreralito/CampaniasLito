@@ -16,7 +16,6 @@ namespace CampaniasLito.Models
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
         [MaxLength(50, ErrorMessage = "El Campo {0} debe tener máximo {1} carácteres de largo")]
         [Display(Name = "Ciudad")]
-        [Index("Ciudad_CompañiaId_Nombre_Index", 2, IsUnique = true)]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
@@ -27,7 +26,6 @@ namespace CampaniasLito.Models
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
         [Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
         [Display(Name = "Compañia")]
-        [Index("Ciudad_CompañiaId_Nombre_Index", 1, IsUnique = true)]
         public int CompañiaId { get; set; }
 
         public virtual Compañia Compañia { get; set; }

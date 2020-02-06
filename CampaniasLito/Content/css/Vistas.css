@@ -14,6 +14,39 @@ h6, html, input[type=submit], input[type=button] {
     margin: 0 auto;
 }
 
+.bgPortadaStarbucks {
+    background: url('../Fotos/starbucks-portal-palermo.jpg') no-repeat;
+    background-position: center;
+    background-size: auto;
+    width: 100%;
+    height: 87vh;
+    position: center;
+    border-radius: 20px;
+    margin: 0 auto;
+}
+
+.bgPortadaKrispy {
+    background: url('../Fotos/krispy.jpg') no-repeat;
+    background-position: center;
+    background-size: auto;
+    width: 100%;
+    height: 87vh;
+    position: center;
+    border-radius: 20px;
+    margin: 0 auto;
+}
+
+.bgPortadaKFC {
+    background: url('../Fotos/historia_10.jpg') no-repeat;
+    background-position: center;
+    background-size: auto;
+    width: 100%;
+    height: 87vh;
+    position: center;
+    border-radius: 20px;
+    margin: 0 auto;
+}
+
 .redondear {
     border-radius: 10px;
 }

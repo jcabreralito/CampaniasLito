@@ -56,13 +56,3 @@ a:focus, a:hover {
     text-decoration: none;
 }
 
-.bgPortadaKrispy {
-    background: url('../Fotos/krispy.jpg') no-repeat !important;
-    background-position: center !important;
-    background-size: auto !important;
-    width: 100% !important;
-    height: 87vh !important;
-    position: center !important;
-    border-radius: 20px !important;
-    margin: 0 auto !important;
-}

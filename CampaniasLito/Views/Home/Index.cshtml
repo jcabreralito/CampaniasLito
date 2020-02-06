@@ -8,22 +8,24 @@
     if (Model.Compañia.Nombre == "KFC")
     {
         <div class="jumbotron bgPortadaKFC" align="center" style="height: 87vh">
-            <h1 style="text-align:center"><i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas</h1>
+            <h1 style="text-align:center; margin-top: -55px"><i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas</h1>
             <img src="@Url.Content(Model.Compañia.Logo)" alt="Image" style="width: 250px; height: 250px; max-width: 100%; height: auto; border-radius: 10px" />
         </div>
     }
     else if (Model.Compañia.Nombre == "STARBUCKS")
     {
         <div class="jumbotron bgPortadaStarbucks" align="center" style="height: 87vh">
-            <h1 style="text-align:center"><i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas</h1>
-            <img src="@Url.Content(Model.Compañia.Logo)" alt="Image" style="width: 250px; height: 250px; max-width: 100%; height: auto; border-radius: 10px" />
+            <h1 style="text-align:center; margin-top: -55px"><i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas</h1>
+            <img src="@Url.Content(Model.Compañia.Logo)" alt="Image" style="width: 150px; height: 150px; max-width: 100%; height: auto; border-radius: 10px" />
         </div>
     }
     else if (Model.Compañia.Nombre == "KRISPY KREME")
     {
         <div class="jumbotron bgPortadaKrispy" align="center" style="height: 87vh">
-            <h1 style="text-align:center"><i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas</h1>
-            <img src="@Url.Content(Model.Compañia.Logo)" alt="Image" style="width: 250px; height: 250px; max-width: 100%; height: auto; border-radius: 10px" />
+            <h1 style="text-align: center; margin-top: -55px">
+                <i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas
+            </h1>
+            <img src="@Url.Content(Model.Compañia.Logo)" alt="Image" style="width: 200px; height: 200px; max-width: 100%; height: auto; border-radius: 10px" />
         </div>
     }
 }

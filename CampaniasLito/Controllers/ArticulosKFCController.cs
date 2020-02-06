@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -7,11 +8,11 @@ using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
 {
-    public class CiudadesController : Controller
+    public class ArticulosKFCController : Controller
     {
         private CampaniasLitoContext db = new CampaniasLitoContext();
 
-        // GET: Ciudades
+        // GET: ArticulosKFC
         public ActionResult Index()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -21,95 +22,90 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var ciudads = db.Ciudads.Include(c => c.Region).Where(c => c.CompañiaId == usuario.CompañiaId).OrderBy(c => c.Nombre);
-            return View(ciudads.ToList());
+            var articuloKFCs = db.ArticuloKFCs.Where(a => a.CompañiaId == usuario.CompañiaId);
+            return View(articuloKFCs.ToList());
         }
 
-        // GET: Ciudades/Details/5
+        // GET: ArticulosKFC/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var ciudad = db.Ciudads.Find(id);
-            
-            if (ciudad == null)
+            ArticuloKFC articuloKFC = db.ArticuloKFCs.Find(id);
+            if (articuloKFC == null)
             {
                 return HttpNotFound();
             }
-            return PartialView(ciudad);
+            return PartialView(articuloKFC);
         }
 
-        // GET: Ciudades/Create
+        // GET: ArticulosKFC/Create
         public ActionResult Create()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
             if (usuario == null)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var ciudades = new Ciudad { CompañiaId = usuario.CompañiaId, };
+            var articulos = new ArticuloKFC { CompañiaId = usuario.CompañiaId, };
 
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId), "RegionId", "Nombre");
-
-            return PartialView(ciudades);
+            return PartialView(articulos);
         }
 
-        // POST: Ciudades/Create
+        // POST: ArticulosKFC/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Ciudad ciudad)
+        public ActionResult Create(ArticuloKFC articuloKFC)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
             if (ModelState.IsValid)
             {
-                db.Ciudads.Add(ciudad);
+                db.ArticuloKFCs.Add(articuloKFC);
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+
                     return RedirectToAction("Index");
+
                 }
 
                 ModelState.AddModelError(string.Empty, response.Message);
             }
 
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId, true), "RegionId", "Nombre", ciudad.RegionId);
-
-            return PartialView(ciudad);
+            return PartialView(articuloKFC);
         }
 
-        // GET: Ciudades/Edit/5
+        // GET: ArticulosKFC/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var ciudad = db.Ciudads.Find(id);
             
-            if (ciudad == null)
+            var articuloKFC = db.ArticuloKFCs.Find(id);
+            
+            if (articuloKFC == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(ciudad.CompañiaId, true), "RegionId", "Nombre", ciudad.RegionId);
-
-            return PartialView(ciudad);
+            return PartialView(articuloKFC);
         }
 
-        // POST: Ciudades/Edit/5
+        // POST: ArticulosKFC/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Ciudad ciudad)
+        public ActionResult Edit(ArticuloKFC articuloKFC)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(ciudad).State = EntityState.Modified;
+                db.Entry(articuloKFC).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
@@ -121,37 +117,34 @@ namespace CampaniasLito.Controllers
                 ModelState.AddModelError(string.Empty, response.Message);
             }
 
-
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(ciudad.CompañiaId, true), "RegionId", "Nombre", ciudad.RegionId);
-
-            return View(ciudad);
+            return PartialView(articuloKFC);
         }
 
-        // GET: Ciudades/Delete/5
+        // GET: ArticulosKFC/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var ciudad = db.Ciudads.Find(id);
             
-            if (ciudad == null)
+            var articuloKFC = db.ArticuloKFCs.Find(id);
+            
+            if (articuloKFC == null)
             {
                 return HttpNotFound();
             }
             
-            return PartialView(ciudad);
+            return View(articuloKFC);
         }
 
-        // POST: Ciudades/Delete/5
+        // POST: ArticulosKFC/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var ciudad = db.Ciudads.Find(id);
-            db.Ciudads.Remove(ciudad);
+            var articulo = db.ArticuloKFCs.Find(id);
+            db.ArticuloKFCs.Remove(articulo);
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
@@ -159,7 +152,8 @@ namespace CampaniasLito.Controllers
             }
 
             ModelState.AddModelError(string.Empty, response.Message);
-            return PartialView(ciudad);
+
+            return PartialView(articulo);
         }
 
         protected override void Dispose(bool disposing)

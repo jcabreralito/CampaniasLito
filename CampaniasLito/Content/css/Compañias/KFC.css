@@ -55,14 +55,3 @@ a:focus, a:hover {
     color: #000 !important;
     text-decoration: none;
 }
-
-.bgPortadaKFC {
-    background: url('../Fotos/historia_10.jpg') no-repeat !important;
-    background-position: center !important;
-    background-size: auto !important;
-    width: 100% !important;
-    height: 87vh !important;
-    position: center !important;
-    border-radius: 20px !important;
-    margin: 0 auto !important;
-}

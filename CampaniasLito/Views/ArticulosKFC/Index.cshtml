@@ -1,29 +1,28 @@
-﻿@model IEnumerable<CampaniasLito.Models.Tienda>
+﻿@model IEnumerable<CampaniasLito.Models.ArticuloKFC>
 
 @{
-    ViewBag.Title = "Tiendas";
+    ViewBag.Title = "Artículos";
 }
-
 
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <title>Artículos</title>
 </head>
 <body>
     <div class="panel" style="margin-right: 2%">
         <div class="panel-heading table-responsive" id="panelH">
 
-            <a href="@Url.Action("Create", "Tiendas", new { })" class="botonF1 dialog-window-delete">
+            <a href="@Url.Action("Create", "ArticulosKFC", new { })" class="botonF1 dialog-window-delete">
                 <i class="fas fa-plus-circle"></i>
             </a>
 
-            <table style="width:100%" id="dataTable" cellspacing="0">
+            <table class="" style="width:100%" id="dataTable" cellspacing="0">
                 <tr>
                     <td class=" col-xs-4">
-                        <h2 style="color: white"><i class="fas fa-store "></i> @ViewBag.Title</h2>
+                        <h2 class="" style="color: white"><i id="foto" class="fa fa-barcode "></i> Artículos</h2>
                     </td>
                 </tr>
             </table>
@@ -31,17 +30,12 @@
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" style="width:100%" id="dataTable" cellspacing="0">
-                    <thead style="font-size:17px; font-weight:bold; background-color:#DF2530; color: #fff; text-transform: uppercase">
+                    <thead style="font-size:100%; font-weight:bold; background-color:#DF2530; color: #fff; text-transform: uppercase">
                         <tr>
-                            <th align="center" style="width: 25%">
-                                @Html.DisplayNameFor(model => model.CCoFranquicia)
+                            <th align="center" style="width: 85%">
+                                @Html.DisplayNameFor(model => model.Descripcion)
                             </th>
-                            <th align="center" style="width: 55%">
-                                @Html.DisplayNameFor(model => model.Restaurante)
-                            </th>
-                            <th align="center" style="width: 10%">
-                            </th>
-                            <th align="center" style="width: 10%">
+                            <th align="center" style="width: 15%">
                             </th>
                         </tr>
                     </thead>
@@ -52,28 +46,18 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr style="font-size:12px; text-transform: capitalize">
-                            <td style="width: 25%" align="center">
-                                <a href="@Url.Action("Edit", "Tiendas", new { id = item.TiendaId})" class="dialog-window-delete" style="text-decoration: none; list-style: none; color: white">
-                                    @Html.DisplayFor(modelItem => item.CCoFranquicia)
-                                </a>
-                            </td>
-                            <td style="width: 55%">
-                                <a href="@Url.Action("Edit", "Tiendas", new { id = item.TiendaId})" class="dialog-window-delete" style="text-decoration: none; list-style: none; color: white">
-                                    @Html.DisplayFor(modelItem => item.Restaurante)
-                                </a>
-                            </td>
-                            <td style="width: 10%" align="center">
-                                <a id="botones" href="@Url.Action("Details", "Tiendas", new { id = item.TiendaId})" class="btn btn-danger dialog-window-delete" style="background-color: transparent; border:none; font-size: 20px">
-                                    <i class="fas fa-list-alt"></i>
-                                </a>
-                            </td>
-                            <td style="width: 10%" align="center">
-                                <a id="botones" href="@Url.Action("Delete", "Tiendas", new { id = item.TiendaId})" class="btn btn-danger dialog-window-delete" style="background-color: transparent; border:none; font-size: 20px">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
+                            <tr style="font-size:12px; text-transform: capitalize">
+                                <td style="width: 85%">
+                                    <a href="@Url.Action("Edit", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="dialog-window-delete" style="text-decoration: none; list-style: none; color: white">
+                                        @Html.DisplayFor(modelItem => item.Descripcion)
+                                    </a>
+                                </td>
+                                <td style="width: 15%" align="center">
+                                    <a id="botones" href="@Url.Action("Delete", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="btn btn-danger dialog-window-delete" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -82,15 +66,15 @@
     </div>
 
     <div class="modal fade" data-keyboard="false" id="Delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
-        <div class="modal-dialog modal-dialog-centered mx-auto" id="largeTamanio">
+        <div class="modal-dialog modal-dialog-centered mx-auto" id="mdialTamanio">
             <div class="modal-content">
                 <div class="te">Please wait...</div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" data-keyboard="false" id="agregarcategoria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
-        <div class="modal-dialog modal-dialog-centered mx-auto" id="largeTamanio">
+    <div class="modal fade" data-keyboard="false" id="agregarcategoria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8)">
+        <div class="modal-dialog modal-dialog-centered mx-auto" id="mdialTamanio">
             <div class="modal-content">
                 <div class="te">Please wait...</div>
             </div>
@@ -170,4 +154,5 @@
             $('.btnFlot').removeClass('animacionVer');
         })
     </script>
+
 }

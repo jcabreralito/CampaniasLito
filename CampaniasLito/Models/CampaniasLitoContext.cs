@@ -38,5 +38,15 @@ namespace CampaniasLito.Models
         public DbSet<CampañaTienda> CampañaTiendas { get; set; }
 
         public DbSet<Campaña> Campañas { get; set; }
+
+        public System.Data.Entity.DbSet<CampaniasLito.Models.NivelPrecio> NivelPrecios { get; set; }
+
+        public System.Data.Entity.DbSet<CampaniasLito.Models.TipoCaja> TipoCajas { get; set; }
+
+        public System.Data.Entity.DbSet<CampaniasLito.Models.AcomodoCaja> AcomodoCajas { get; set; }
+
+        public System.Data.Entity.DbSet<CampaniasLito.Models.TipoTienda> TipoTiendas { get; set; }
+
+        public System.Data.Entity.DbSet<CampaniasLito.Models.ArticuloKFC> ArticuloKFCs { get; set; }
     }
 }
