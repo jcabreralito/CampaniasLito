@@ -12,7 +12,14 @@ namespace CampaniasLito.Controllers
         private CampaniasLitoContext db = new CampaniasLitoContext();
 
         // GET: Ciudades
-        public ActionResult Index()
+        public ActionResult GetList()
+        {
+            var ciudadesList = db.Ciudads.ToList<Ciudad>();
+            return Json(new { data = ciudadesList }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult Index(string ciudad)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
@@ -21,8 +28,27 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            if (string.IsNullOrEmpty(ciudad))
+            {
+                Session["ciudadFiltro"] = string.Empty;
+            }
+            else
+            {
+                Session["ciudadFiltro"] = ciudad;
+            }
+
+            var filtro = Session["ciudadFiltro"].ToString();
+
             var ciudads = db.Ciudads.Include(c => c.Region).Where(c => c.CompañiaId == usuario.CompañiaId).OrderBy(c => c.Nombre);
-            return View(ciudads.ToList());
+
+            if (!string.IsNullOrEmpty(ciudad))
+            {
+                return View(ciudads.Where(a => a.Nombre.Contains(filtro) || a.Region.Nombre.Contains(filtro)).ToList());
+            }
+            else
+            {
+                return View(ciudads.ToList());
+            }
         }
 
         // GET: Ciudades/Details/5

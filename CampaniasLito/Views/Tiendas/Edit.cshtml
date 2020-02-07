@@ -9,7 +9,7 @@
 {
     @Html.AntiForgeryToken()
     <div class="panel mt-3">
-        <div class="panel-heading" style="border-radius: 10px" id="panelH">
+        <div class="panel-heading">
             <table>
                 <tr>
                     <td class="col-xs-6">
@@ -85,12 +85,12 @@
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.Ensalada, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.Ensalada, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.Ensalada, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.Ensalada, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.Autoexpress, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.Autoexpress, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.Autoexpress, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.Autoexpress, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -98,22 +98,22 @@
                     <div class="form-group">
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.MenuBackLigth, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.MenuBackLigth, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.MenuBackLigth, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.MenuBackLigth, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.MPKeMartesBigKrunch, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.MPKeMartesBigKrunch, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.MPKeMartesBigKrunch, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.MPKeMartesBigKrunch, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.TerceraReceta, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.TerceraReceta, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.TerceraReceta, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.TerceraReceta, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.Postres, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.Postres, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.Postres, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.Postres, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -121,22 +121,22 @@
                     <div class="form-group">
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.CopeteAERemodelado, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.CopeteAERemodelado, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.CopeteAERemodelado, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.CopeteAERemodelado, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.CopeteAETradicional, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.CopeteAETradicional, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.CopeteAETradicional, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.CopeteAETradicional, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.Delivery, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.Delivery, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.Delivery, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.Delivery, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.WCMedidaEspecial60_8x85cm, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.WCMedidaEspecial60_8x85cm, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.WCMedidaEspecial60_8x85cm, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.WCMedidaEspecial60_8x85cm, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -144,22 +144,22 @@
                     <div class="form-group">
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.PanelDeInnovacion, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.PanelDeInnovacion, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.PanelDeInnovacion, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.PanelDeInnovacion, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.BisquetMiel, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.BisquetMiel, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.BisquetMiel, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.BisquetMiel, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.Elote, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.Elote, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.Elote, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.Elote, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.Hamburgesas, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.Hamburgesas, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.Hamburgesas, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.Hamburgesas, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -167,22 +167,22 @@
                     <div class="form-group">
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.Arroz, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.Arroz, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.Arroz, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.Arroz, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.PET2Litros, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.PET2Litros, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.PET2Litros, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.PET2Litros, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.MenuDigital, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.MenuDigital, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.MenuDigital, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.MenuDigital, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.MedidasEspecialesMenu, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.MedidasEspecialesMenu, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.MedidasEspecialesMenu, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.MedidasEspecialesMenu, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -190,12 +190,12 @@
                     <div class="form-group">
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.MedidaEspecialAutoexpress, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.MedidaEspecialAutoexpress, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.MedidaEspecialAutoexpress, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.MedidaEspecialAutoexpress, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.MedidaEspecialPanelDeComplementos, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.MedidaEspecialPanelDeComplementos, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 9px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.MedidaEspecialPanelDeComplementos, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.MedidaEspecialPanelDeComplementos, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3">
@@ -204,14 +204,14 @@
                         </div>
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.DisplayDeBurbuja, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.DisplayDeBurbuja, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.DisplayDeBurbuja, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.DisplayDeBurbuja, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-3 form-inline inputModal divFormCheck">
                             @Html.CheckBoxFor(model => model.AreaDeJuegos, htmlAttributes: new { @class = "form-check" })
-                            @Html.LabelFor(model => model.AreaDeJuegos, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 10px !important; margin-top: 4px" })
+                            @Html.LabelFor(model => model.AreaDeJuegos, htmlAttributes: new { style = "vertical-align: middle !important; font-size: 12px !important; margin-top: 4px" })
                             @Html.ValidationMessageFor(model => model.AreaDeJuegos, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-sm-3">

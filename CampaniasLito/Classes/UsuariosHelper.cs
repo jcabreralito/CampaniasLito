@@ -3,11 +3,8 @@ using CampaniasLito.Properties;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Configuration;
 
 namespace CampaniasLito.Classes
 {
@@ -81,8 +78,8 @@ namespace CampaniasLito.Classes
         public static void CheckSuperUser()
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
-            var email = Resources.AdminUser.ToString(); //WebConfigurationManager.AppSettings["AdminUser"];
-            var password = Resources.AdminPassWord.ToString(); //WebConfigurationManager.AppSettings["AdminPassWord"];
+            var email = Resources.AdminUser.ToString();
+            var password = Resources.AdminPassWord.ToString();
             var userASP = userManager.FindByName(email);
             if (userASP == null)
             {
@@ -147,7 +144,7 @@ namespace CampaniasLito.Classes
 
             var subject = "Taxes Password Recovery";
             var body = string.Format(@"
-                <h1>Taxes Password Recovery</h1>
+                <h1>Password Recovery</h1>
                 <p>Yor new password is: <strong>{0}</strong></p>
                 <p>Please change it for one, that you remember easyly",
                 newPassword);

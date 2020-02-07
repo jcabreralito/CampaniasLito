@@ -25,12 +25,12 @@ body {
 
   @media (min-width: 992px) {
     .content-wrapper {
-      margin-left: 250px; } }
+      margin-left: 15%; } }
 
 @media (min-width: 770px) {
   #page-wrapper {
     position: inherit;
-    margin: 0 0 0 250px;
+    margin: 0 0 0 15%;
     /*padding: 0 30px;*/
     /*border-left: 1px solid #000;*/
   }
@@ -95,7 +95,7 @@ body {
         color: #01207B;
     }
 .sidebar .arrow {
-  float: right;
+  float: right !important;
 }
 .sidebar .fa.arrow:before {
   content: "\f104";
@@ -103,6 +103,15 @@ body {
 .sidebar .active > a > .fa.arrow:before {
   content: "\f107";
 }
+
+.sidebar .arrow2 {
+    float: right !important;
+}
+
+.sidebar .fa.arrow2:before {
+    content: "\f105";
+}
+
 .sidebar .nav-second-level li,
 .sidebar .nav-third-level li {
     background-color:#e7e7e7;
@@ -120,7 +129,7 @@ body {
   .sidebar {
     z-index: 1;
     position: absolute;
-    width: 250px;
+    width: 15%;
     /*margin-top: 51px;*/
   }
   .navbar-top-links .dropdown-messages,

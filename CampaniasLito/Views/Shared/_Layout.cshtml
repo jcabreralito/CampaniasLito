@@ -30,7 +30,6 @@
     }
 
     @Styles.Render("~/bundles/css")
-    @*@Styles.Render("~/Content/css")*@
     @Scripts.Render("~/bundles/modernizr")
 
     <script src="https://kit.fontawesome.com/8068fd2104.js" crossorigin="anonymous"></script>
@@ -76,11 +75,6 @@
                                 {
                                     @Html.AntiForgeryToken()
 
-                                    @*<div class="col-sm-6" style="text-align: right; font-size:17px; color: #fff; margin-top: 6px">
-                                            <i class="fas fa-user" style="text-align: right"></i>
-                                            &nbsp;&nbsp;@Session["NombreCompleto"].ToString()
-                                        </div>*@
-
                                     <div class="col-sm-12" style="text-align:right">
                                         <a href="javascript:document.getElementById('logoutForm').submit()" style="font-size:17px; color: #fff; text-decoration: none; text-align: right">
                                             <i class="fas fa-sign-out-alt fa-2x"></i>
@@ -90,12 +84,7 @@
                             }
                             else
                             {
-                                @*<div class="col-sm-12" style="text-align:right">
-                                        <a href="@Url.Action("Login", "Account", routeValues:  new { id = "loginLink", @class = "dialog-window" })" style="font-size:17px; color: #fff; text-decoration: none">
-                                            <i class="fas fa-power-off"></i>
-                                            &nbsp;&nbsp;Iniciar sesión
-                                        </a>
-                                    </div>*@
+
                             }
                         </th>
                         <th align="right" class="col-sm-1">
@@ -112,15 +101,15 @@
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="@Url.Action("Index", "Home")" style="font-size:17px">
-                            <i class="fas fa-home"></i>
-                            &nbsp;&nbsp;Inicio
+                        <a href="@Url.Action("Index", "Home")" style="font-size:15px; margin-bottom: -10px">
+                            <i class="fas fa-home" style="float: left"></i>
+                            <p style="margin-left: 15%">Inicio</p>
                         </a>
                     </li>
 
                     @if (User.IsInRole("SuperAdmin"))
                     {
-                        <li style="font-size:17px">
+                        <li style="font-size:15px">
                             <a href="#"><i class="fas fa-user-cog"></i>&nbsp;Administrador<span class="fas arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -146,37 +135,41 @@
                     }
                     @if (User.IsInRole("Admin"))
                     {
-                        <li style="font-size:17px">
-                            <a href="#" style="font-size:17px"><i class="fa fa-user-cog fa-fw"></i> Administrador<span class="fa arrow"></span></a>
+                        <li style="font-size:15px">
+                            <a href="#" style="font-size:15px">
+                                <i class="fas fa-user-cog fa-fw" style="float: left"></i>
+                                &nbsp;&nbsp;Administrador
+                                <span class="fa arrow"></span>
+                            </a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="@Url.Action("Index", "Regiones")">
-                                        &nbsp;&nbsp;<i class="fas fa-map-marked-alt"></i>
-                                        &nbsp;&nbsp;Regiones
+                                    <a href="@Url.Action("Index", "Regiones")" style="margin-bottom: -10px">
+                                        <i class="fas fa-map-marked-alt" style="float: left"></i>
+                                        <p style="margin-left: 25%">Regiones</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("Index", "Ciudades")">
-                                        &nbsp;&nbsp;<i class="fas fa-map-marker-alt"></i>
-                                        &nbsp;&nbsp;&nbsp;Ciudades
+                                    <a href="@Url.Action("Index", "Ciudades")" style="margin-bottom: -10px">
+                                        <i class="fas fa-map-marker-alt" style="float: left"></i>
+                                        <p style="margin-left: 25%">Ciudades</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("Index", "Tiendas")">
-                                        &nbsp;<i class="fas fa-store"></i>
-                                        &nbsp;&nbsp;Tiendas
+                                    <a href="@Url.Action("Index", "Tiendas")" style="margin-bottom: -10px">
+                                        <i class="fas fa-store" style="float: left"></i>
+                                        <p style="margin-left: 25%">Tiendas</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("Index", "ArticulosKFC")">
-                                        &nbsp;<i class="fas fa-barcode"></i>
-                                        &nbsp;&nbsp;Artículos
+                                    <a href="@Url.Action("Index", "ArticulosKFC")" style="margin-bottom: -10px">
+                                        <i class="fas fa-barcode" style="float: left"></i>
+                                        <p style="margin-left: 25%">Artículos</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("Index", "Campañas")">
-                                        &nbsp;&nbsp;<i class="fas fa-calendar-alt"></i>
-                                        &nbsp;&nbsp;Campañas
+                                    <a href="@Url.Action("Index", "Campañas")" style="margin-bottom: -10px">
+                                        <i class="fas fa-calendar-alt" style="float: left"></i>
+                                        <p style="margin-left: 25%">Campañas</p>
                                     </a>
                                 </li>
                             </ul>
@@ -185,7 +178,7 @@
                     @if (User.IsInRole("User"))
                     {
                         <li style="font-size:17px">
-                            <a href="#"><i class="fa fa-archive fa-fw"></i>&nbsp;&nbsp;Altas<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-archive fa-fw"></i>&nbsp;&nbsp;Altas<span class="fas arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="@Url.Action("Index", "Campañas")">
@@ -225,35 +218,6 @@
                             </ul>
                         </li>
                     }
-
-                    @*<li style="font-size:17px">
-                            <a href="#"><i class="fa fa-user fa-fw"></i> Usuario<span class="fa arrow"></span></a>
-                            @if (Request.IsAuthenticated)
-                            {
-                                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                                {
-                                    @Html.AntiForgeryToken()
-
-                                    <ul class="nav nav-second-level">
-                                        <li>
-                                            @Html.ActionLink("Hola " + Session["NombreCompleto"].ToString() + "", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-                                        </li>
-                                        <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>
-                                    </ul>
-                                }
-                            }
-                            else
-                            {
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        @Html.ActionLink("Registrarse", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Iniciar sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-                                    </li>
-                                </ul>
-                            }
-                        </li>*@
                 </ul>
             </div>
         </div>
@@ -262,110 +226,17 @@
         <div class="py-3">
             <div class="container-fluid">
                 @RenderBody()
-                @*<footer style="padding-top: 2%">
-
-
-                        @if (Session["Compañia"] != null)
-                        {
-                            <p>&copy; @DateTime.Now.Year @Session["Compañia"].ToString()</p>
-                        }
-                        else
-                        {
-                            <p>&copy; @DateTime.Now.Year KFC Campañas</p>
-                        }
-
-                    </footer>*@
             </div>
         </div>
     </div>
     <!-- /#wrapper -->
     <!-- jQuery -->
     @Scripts.Render("~/bundles/js")
-    @*@Scripts.Render("~/bundles/bootstrap")*@
     @RenderSection("scripts", required: false)
-
-    <div class="modal fade" data-keyboard="false" id="IniciarSesion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                @*<div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h2 class="modal-title"></h2>
-                    </div>*@
-                <div class="modal-body"><div class="te">Please wait...</div></div>
-            </div>
-        </div>
-    </div>
 
 </body>
 </html>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("body").on("click", "a.dialog-window", null, function (e) {
-                e.preventDefault();
-                var $link = $(this);
-                var title = $link.text();
-                $('#IniciarSesion .modal-title').html(title);
-                var url = $(this).attr('href');
-                if (url.indexOf('#') == 0) {
-                    $('#IniciarSesion').modal('show');
-                }
-                else {
-                    $.get(url, function (data) {
-                        $('#IniciarSesion .te').html(data);
-                        $('#IniciarSesion').modal();
-                    }).success(function () { $('input:text:visible:first').focus(); });
-
-                }
-            });
-        });
-
-        $(document).ready(function () {
-            $("body").on("click", "a.dialog-window", null, function (e) {
-                e.preventDefault();
-                var $link = $(this);
-                var title = $link.text();
-                $('#Edit .modal-title').html(title);
-                var url = $(this).attr('href');
-                if (url.indexOf('#') == 0) {
-                    $('#Edit').modal('show');
-                }
-                else {
-                    $.get(url, function (data) {
-                        $('#Edit .te').html(data);
-                        $('#Edit').modal();
-                    }).success(function () { $('input:text:visible:first').focus(); });
-
-                }
-            });
-        });
-        $(document).ready(function () {
-            $("body").on("click", "a.dialog-window", null, function (e) {
-                e.preventDefault();
-                var $link = $(this);
-                var title = $link.text();
-                $('#Delete .modal-title').html(title);
-                var url = $(this).attr('href');
-                if (url.indexOf('#') == 0) {
-                    $('#Delete').modal('show');
-                }
-                else {
-                    $.get(url, function (data) {
-                        $('#Delete .te').html(data);
-                        $('#Delete').modal();
-                    }).success(function () { $('input:text:visible:first').focus(); });
-
-                }
-            });
-        });
-    </script>
-
-    @*<script>
-            $(document).ready(function () {
-                $('.fixed-action-btn').floatingActionButton();
-            });
-
-        </script>*@
 }

@@ -12,7 +12,14 @@ namespace CampaniasLito.Controllers
         private CampaniasLitoContext db = new CampaniasLitoContext();
 
         // GET: Regiones
-        public ActionResult Index()
+        public ActionResult GetList()
+        {
+            var regionesList = db.Regions.ToList<Region>();
+            return Json(new { data = regionesList }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult Index(string region)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
@@ -21,8 +28,27 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            if (string.IsNullOrEmpty(region))
+            {
+                Session["regionFiltro"] = string.Empty;
+            }
+            else
+            {
+                Session["regionFiltro"] = region;
+            }
+
+            var filtro = Session["regionFiltro"].ToString();
+
             var regions = db.Regions.Where(c => c.CompañiaId == usuario.CompañiaId);
-            return View(regions.ToList());
+            
+            if (!string.IsNullOrEmpty(region))
+            {
+                return View(regions.Where(a => a.Nombre.Contains(filtro)).ToList());
+            }
+            else
+            {
+                return View(regions.ToList());
+            }
         }
 
         // GET: Regiones/Details/5

@@ -15,7 +15,7 @@
     <div class="panel" style="margin-right: 2%">
         <div class="panel-heading table-responsive" id="panelH">
 
-            <a href="@Url.Action("Create", "Campañas", new { })" class="botonF1 dialog-window-delete">
+            <a href="@Url.Action("Create", "Campañas", new { })" class="botonF1 dialog-window-small">
                 <i class="fas fa-plus-circle"></i>
             </a>
 
@@ -24,6 +24,15 @@
                     <th class=" col-xs-4">
                         <h2 style="color: white"><i class="fas fa-calendar-alt"></i> Campañas</h2>
                     </th>
+                    @using (Html.BeginForm("Index", "Campañas", FormMethod.Get))
+                    {
+                        <td class="col-xs-7">
+                            <div id="botones" class="input-group" style="display:flex; float:right">
+                                <input class="input-group-addon" type="text" name="campaña" id="campaña" value="@Session["campañaFiltro"].ToString()" style="color:#CE5432; text-transform:uppercase; border-radius:10px 0 0 10px; text-align:center; width:250px" />
+                                <button type="submit" class="fas fa-search btn btn-pilares" style="border-radius:0 10px 10px 0; text-align: right; font-size: 17px"></button>
+                            </div>
+                        </td>
+                    }
                 </tr>
             </table>
         </div>
@@ -42,7 +51,7 @@
                                 @Html.DisplayNameFor(model => model.Generada)
                             </th>
                             <th align="center" style="width: 15%">
-                                TIENDAS
+                                GENERAR
                             </th>
                             <th align="center" style="width: 15%">
                             </th>
@@ -55,33 +64,51 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr style="font-size:12px; text-transform: capitalize">
-                            <td style="width: 15%">
-                                <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-delete" style="text-decoration: none; list-style: none; color: white">
-                                    @Html.DisplayFor(modelItem => item.Nombre)
-                                </a>
-                            </td>
-                            <td style="width: 40%">
-                                <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-delete" style="text-decoration: none; list-style: none; color: white">
-                                    @Html.DisplayFor(modelItem => item.Descripcion)
-                                </a>
-                            </td>
-                            <td style="width: 15%" align="center">
-                                <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-delete" style="text-decoration: none; list-style: none; color: white">
-                                    @Html.DisplayFor(modelItem => item.Generada)
-                                </a>
-                            </td>
-                            <td style="width: 15%" align="center">
-                                <a id="botones" href="@Url.Action("Create", "Tiendas", new { id = item.CampañaId})" class="btn btn-danger dialog-window-delete" style="background-color: transparent; border:none; font-size: 20px">
-                                    <i class="fas fa-plus-circle"></i>
-                                </a>
-                            </td>
-                            <td style="width: 15%" align="center">
-                                <a id="botones" href="@Url.Action("Delete", "Campañas", new { id = item.CampañaId})" class="btn btn-danger dialog-window-delete" style="background-color: transparent; border:none; font-size: 20px">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
+                            <tr style="font-size:12px; text-transform: capitalize">
+                                <td style="width: 15%">
+                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white">
+                                        @Html.DisplayFor(modelItem => item.Nombre)
+                                    </a>
+                                </td>
+                                <td style="width: 40%">
+                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white">
+                                        @Html.DisplayFor(modelItem => item.Descripcion)
+                                    </a>
+                                </td>
+                                <td style="width: 15%" align="center">
+                                    @if (item.Generada == "NO")
+                                    {
+                                        <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white; font-size: 20px">
+                                            <i class="fas fa-times-circle"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white; font-size: 20px">
+                                            <i class="fas fa-check-circle"></i>
+                                        </a>
+                                    }
+                                </td>
+                                <td style="width: 15%" align="center">
+                                    @if (item.Generada == "NO")
+                                    {
+                                        <a id="botones" href="@Url.Action("Create", "CampañaTiendas", new { id = item.CampañaId})" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
+                                            <i class="fas fa-calendar-check"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a id="botones" href="#" class="btn btn-danger dialog-window-message" style="background-color: transparent; border:none; font-size: 20px">
+                                            <i class="fas fa-ban"></i>
+                                        </a>
+                                    }
+                                </td>
+                                <td style="width: 15%" align="center">
+                                    <a id="botones" href="@Url.Action("Delete", "Campañas", new { id = item.CampañaId})" class="btn btn-danger dialog-window-small" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -89,7 +116,7 @@
         </div>
     </div>
 
-    <div class="modal fade" data-keyboard="false" id="Delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
+    <div class="modal fade" data-keyboard="false" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
         <div class="modal-dialog modal-dialog-centered mx-auto" id="smallTamanio">
             <div class="modal-content">
                 <div class="te">Please wait...</div>
@@ -97,10 +124,30 @@
         </div>
     </div>
 
-    <div class="modal fade" data-keyboard="false" id="agregarcategoria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
-        <div class="modal-dialog modal-dialog-centered mx-auto" id="smallTamanio">
+    <div class="modal fade" data-keyboard="false" id="extraLargeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
+        <div class="modal-dialog modal-dialog-centered mx-auto" id="xtralargeTamanio">
             <div class="modal-content">
                 <div class="te">Please wait...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-keyboard="false" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
+        <div class="modal-dialog modal-dialog-centered mx-auto" id="smallTamanio">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #DF2530; border-radius: 10px">
+                    <h5 class="modal-title">Mensaje</h5>
+                </div>
+                <div class="modal-body panel-body">
+                    <p style="color: black; font-size: 16px; font-weight: bold">Esta Campaña ya fue creada.</p>
+                </div>
+                <div class="modal-footer">
+                    <div class="input-group" style="margin-top: 30px !important">
+                        <button type="button" class="botonF1Modal btn-success" style="background-color: green" data-dismiss="modal">
+                            <i class="fas fa-check-circle"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -111,24 +158,23 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script src="~/Scripts/jquery-barcode.min.js"></script>
     <script src="~/Content/js/sweetalert.js" type="text/javascript"></script>
     <script src="~/Scripts/sweetalert.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $("body").on("click", "a.dialog-window-delete", null, function (e) {
+            $("body").on("click", "a.dialog-window-small", null, function (e) {
                 e.preventDefault();
                 var $link = $(this);
                 var url = $(this).attr('href');
                 if (url.indexOf('#') == 0) {
-                    $('#Delete').modal('show');
+                    $('#smallModal').modal('show');
                 }
                 else {
                     $.get(url, function (data) {
-                        $('#Delete .te').html(data);
-                        $('#Delete').modal();
+                        $('#smallModal .te').html(data);
+                        $('#smallModal').modal();
                     }).success(function () { $('input:text:visible:first').focus(); });
 
                 }
@@ -136,17 +182,35 @@
         });
 
         $(document).ready(function () {
-            $("body").on("click", "a.dialog-window-categoria", null, function (e) {
+            $("body").on("click", "a.dialog-window-extralarge", null, function (e) {
                 e.preventDefault();
                 var $link = $(this);
                 var url = $(this).attr('href');
                 if (url.indexOf('#') == 0) {
-                    $('#agregarcategoria').modal('show');
+                    $('#extraLargeModal').modal('show');
                 }
                 else {
                     $.get(url, function (data) {
-                        $('#agregarcategoria .te').html(data);
-                        $('#agregarcategoria').modal();
+                        $('#extraLargeModal .te').html(data);
+                        $('#extraLargeModal').modal();
+                    }).success(function () { $('input:text:visible:first').focus(); });
+
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window-message", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#messageModal').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#messageModal .te').html(data);
+                        $('#messageModal').modal();
                     }).success(function () { $('input:text:visible:first').focus(); });
 
                 }
@@ -162,21 +226,4 @@
             contenedor.style.opacity = '0';
         }
     </script>
-
-    <script>
-        $(function () {
-            var value = $("#CodigoBarras").val();
-            var btype = 'ean13'
-            $("#barcode").html("").show().barcode(value, btype);
-        });
-    </script>
-    <script>
-        $('.botonF1').hover(function () {
-            $('.btnFlot').addClass('animacionVer');
-        })
-        $('.contenedor').mouseleave(function () {
-            $('.btnFlot').removeClass('animacionVer');
-        })
-    </script>
-
 }

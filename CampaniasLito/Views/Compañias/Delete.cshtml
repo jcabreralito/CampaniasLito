@@ -3,147 +3,147 @@
 @{
     ViewBag.Title = "Eliminar Compañia";
 }
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <table>
-            <tr>
-                <td class="col-md-12">
-                    <h2><i class="fa fa-table"></i> @ViewBag.Title</h2>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="panel-body">
+    <div class="panel panel-primary">
+        <div class="panel-heading" id="panelH">
+            <table>
+                <tr>
+                    <td class="col-md-12">
+                        <h2><i class="fa fa-table"></i> @ViewBag.Title</h2>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-body">
 
-        <h3>¿Eliminar este Registro?</h3>
-        <div>
-            <div class="row">
-                <div class="col-md-6">
+            <h3>¿Eliminar este Registro?</h3>
+            <div>
+                <div class="row">
+                    <div class="col-md-6">
 
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                    <dl class="dl-horizontal">
+                        <dl class="dl-horizontal">
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Nombre)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Nombre)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Nombre)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Nombre)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Calle)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Calle)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Calle)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Calle)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.NumeroInterior)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.NumeroInterior)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.NumeroInterior)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.NumeroInterior)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.NumeroExterior)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.NumeroExterior)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.NumeroExterior)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.NumeroExterior)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Ciudad.Nombre)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Ciudad.Nombre)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Ciudad.Nombre)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Ciudad.Nombre)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.DelegacionMunicipio.Nombre)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.DelegacionMunicipio.Nombre)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.DelegacionMunicipio.Nombre)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.DelegacionMunicipio.Nombre)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Colonia.Nombre)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Colonia.Nombre)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Colonia.Nombre)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Colonia.Nombre)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.CodigoPostal)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CodigoPostal)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.CodigoPostal)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.CodigoPostal)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Telefono)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Telefono)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Telefono)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Telefono)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Telefono2)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Telefono2)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Telefono2)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Telefono2)
+                            </dd>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.RFC)
-                        </dt>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.RFC)
+                            </dt>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.RFC)
-                        </dd>
-                    </dl>
+                            <dd>
+                                @Html.DisplayFor(model => model.RFC)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal">
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Logo)
+                            </dt>
+
+                            <dd>
+                                @if (!string.IsNullOrEmpty(Model.Logo))
+                                {
+                                    <img src="@Url.Content(Model.Logo)" alt="Image" style="width:150px;height:150px;" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/Content/Logos/empresa.gif")" alt="Image" style="width:150px; height:150px;" />
+                                }
+                            </dd>
+
+                        </dl>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <dl class="dl-horizontal">
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Logo)
-                        </dt>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
 
-                        <dd>
-                            @if (!string.IsNullOrEmpty(Model.Logo))
-                            {
-                                <img src="@Url.Content(Model.Logo)" alt="Image" style="width:150px;height:150px;" />
-                            }
-                            else
-                            {
-                                <img src="@Url.Content("~/Content/Logos/empresa.gif")" alt="Image" style="width:150px; height:150px;" />
-                            }
-                        </dd>
-
-                    </dl>
-                </div>
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Eliminar" class="btn btn-outline btn-primary" />
+                        @Html.ActionLink("Cancelar", "Index", new { }, new { @class = "btn btn-outline btn-danger" })
+                    </div>
+                }
             </div>
-
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
-
-                <div class="form-actions no-color">
-                    <input type="submit" value="Eliminar" class="btn btn-outline btn-primary" />
-                    @Html.ActionLink("Cancelar", "Index", new { }, new { @class = "btn btn-outline btn-danger" })
-                </div>
-            }
         </div>
     </div>
-</div>

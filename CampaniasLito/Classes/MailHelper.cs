@@ -15,7 +15,7 @@ namespace CampaniasLito.Classes
             message.To.Add(new MailAddress(to));
             message.CC.Add(new MailAddress(cc));
             message.Bcc.Add(new MailAddress(cco));
-            message.From = new MailAddress(Resources.emailInfo.ToString());//(WebConfigurationManager.AppSettings["AdminUser"]);
+            message.From = new MailAddress(Resources.emailInfo.ToString());
             message.Subject = subject;
             message.Body = body;
             message.IsBodyHtml = true;
@@ -25,7 +25,7 @@ namespace CampaniasLito.Classes
                 var credential = new NetworkCredential
                 {
                     UserName = Resources.emailInfo.ToString(),
-                    Password = Resources.passwordInfo.ToString()//WebConfigurationManager.AppSettings["AdminPassWord"]
+                    Password = Resources.passwordInfo.ToString()
                 };
 
                 smtp.Credentials = credential;
@@ -55,7 +55,7 @@ namespace CampaniasLito.Classes
                 var credential = new NetworkCredential
                 {
                     UserName = Resources.emailInfo.ToString(),
-                    Password = Resources.passwordInfo.ToString()//WebConfigurationManager.AppSettings["AdminPassWord"]
+                    Password = Resources.passwordInfo.ToString()
                 };
 
                 smtp.Credentials = credential;

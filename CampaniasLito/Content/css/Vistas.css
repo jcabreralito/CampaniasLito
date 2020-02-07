@@ -229,6 +229,7 @@ mainuser {
 
 #panelH {
     background-color: #01207B;
+    border-radius: 10px;
 }
 
 
@@ -704,7 +705,7 @@ input[type=range] {
     height: 50px;
     border-radius: 100%;
     background: #F44336;
-    right: 43%;
+    right: 47%;
     bottom: 0;
     position: fixed;
     /*margin-right: 36px;*/

@@ -21,6 +21,11 @@ namespace CampaniasLito.Models
         [Index("ArticuloKFC_CompañiaId_Descripcion_Index", 1, IsUnique = true)]
         public int CompañiaId { get; set; }
 
+        [Required(ErrorMessage = "El Campo {0} es obligatorio")]
+        [MaxLength(3, ErrorMessage = "El Campo {0} debe tener máximo {1} carácteres de largo")]
+        [Display(Name = "Familia")]
+        public string Familia { get; set; }
+
         public virtual Compañia Compañia { get; set; }
     }
 }

@@ -56,11 +56,11 @@ namespace CampaniasLito.Controllers
 
             var campañaTiendas = new CampañaTienda { CompañiaId = usuario.CompañiaId, };
 
-            ViewBag.CampañaId = new SelectList(db.Campañas, "CampañaId", "Nombre");
-            ViewBag.CompañiaId = new SelectList(db.Compañias, "CompañiaId", "Nombre");
-            ViewBag.TiendaId = new SelectList(db.Tiendas, "TiendaId", "Clasificacion");
+            //ViewBag.CampañaId = new SelectList(db.Campañas, "CampañaId", "Nombre");
+            //ViewBag.CompañiaId = new SelectList(db.Compañias, "CompañiaId", "Nombre");
+            //ViewBag.TiendaId = new SelectList(db.Tiendas, "TiendaId", "TiendaId");
 
-            return PartialView(campañaTiendas);
+            return View(campañaTiendas);
 
 
 

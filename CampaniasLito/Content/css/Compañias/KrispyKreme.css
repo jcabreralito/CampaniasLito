@@ -47,7 +47,7 @@ dd, dt {
     border-radius: 10px;
 }
 
-.botonF1 {
+.botonF1, .botonF2 {
     background: #0D6938 !important;
 }
 
@@ -56,3 +56,7 @@ a:focus, a:hover {
     text-decoration: none;
 }
 
+.panel-heading {
+    background-color: #0D6938 !important;
+    border-radius: 10px !important;
+}

@@ -42,16 +42,28 @@ dd, dt {
     color: #DF2530 !important;
 }
 
+.btn-light {
+    background-color: transparent !important;
+    font-size: 150% !important;
+    margin: -10px 0 !important;
+    color: #fff !important;
+}
+
 .table-bordered:hover > tbody > tr:hover > td {
     border: 1px solid #000 !important;
     border-radius: 10px;
 }
 
-.botonF1 {
+.botonF1, .botonF2 {
     background: #DF2530 !important;
 }
 
 a:focus, a:hover {
     color: #000 !important;
     text-decoration: none;
+}
+
+.panel-heading {
+    background-color: #DF2530 !important;
+    border-radius: 10px !important;
 }

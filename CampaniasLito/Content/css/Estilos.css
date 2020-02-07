@@ -45,7 +45,7 @@
 #unId70 {
     overflow-y: auto; /*Ajuste automático, agrega scroll según el tamaño del contenido*/
     height: 56vh; /*Alto del 100% del Viewport*/
-    max-height: 56vh; /*Alto máximo*/
+    max-height: 63vh; /*Alto máximo*/
 }
 
 #unIdCalender {

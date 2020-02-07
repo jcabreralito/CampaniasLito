@@ -51,9 +51,9 @@ namespace CampaniasLito.Classes
             regiones.Add(new Region
             {
                 RegionId = 0,
-                Nombre = "[Región]",
+                Nombre = "[Región...]",
             });
-            return regiones.OrderBy(r => r.Nombre).ToList();
+            return regiones.OrderBy(r => r.RegionId).ToList();
         }
 
         public static List<Region> GetRegiones(int compañiaId, bool sw)

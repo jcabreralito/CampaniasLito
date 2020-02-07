@@ -12,8 +12,15 @@ namespace CampaniasLito.Controllers
     {
         private CampaniasLitoContext db = new CampaniasLitoContext();
 
+        public ActionResult GetList()
+        {
+            var artList = db.ArticuloKFCs.ToList<ArticuloKFC>();
+            return Json(new { data = artList }, JsonRequestBehavior.AllowGet);
+
+        }
+
         // GET: ArticulosKFC
-        public ActionResult Index()
+        public ActionResult Index(string articulo)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
@@ -22,8 +29,28 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var articuloKFCs = db.ArticuloKFCs.Where(a => a.CompañiaId == usuario.CompañiaId);
-            return View(articuloKFCs.ToList());
+            if (string.IsNullOrEmpty(articulo))
+            {
+                Session["articuloFiltro"] = string.Empty;
+            }
+            else
+            {
+                Session["articuloFiltro"] = articulo;
+            }
+
+            var filtro = Session["articuloFiltro"].ToString();
+
+            var articuloKFCs = db.ArticuloKFCs.Where(a => a.CompañiaId == usuario.CompañiaId).OrderBy(a => a.Familia).ThenBy(a => a.Descripcion);
+
+            if (!string.IsNullOrEmpty(articulo))
+            {
+                return View(articuloKFCs.Where(a => a.Descripcion.Contains(filtro) || a.Familia.Contains(filtro)).ToList());
+            }
+            else
+            {
+                return View(articuloKFCs.ToList());
+            }
+
         }
 
         // GET: ArticulosKFC/Details/5
