@@ -225,6 +225,10 @@
     <div id="page-wrapper">
         <div class="py-3">
             <div class="container-fluid">
+                <div id="contenedor_carga">
+                    <div id="carga">
+                    </div>
+                </div>
                 @RenderBody()
             </div>
         </div>
@@ -239,4 +243,13 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        window.onload = function () {
+            var contenedor = document.getElementById('contenedor_carga');
+            contenedor.style.visibility = 'hidden';
+            contenedor.style.opacity = '0';
+        }
+    </script>
+
 }

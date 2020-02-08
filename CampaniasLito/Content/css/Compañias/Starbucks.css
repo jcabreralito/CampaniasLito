@@ -67,3 +67,7 @@ a:focus, a:hover {
     background-color: #067655 !important;
     border-radius: 10px !important;
 }
+
+#carga {
+    border-top-color: #067655 !important;
+}

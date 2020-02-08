@@ -60,3 +60,8 @@ a:focus, a:hover {
     background-color: #0D6938 !important;
     border-radius: 10px !important;
 }
+
+#carga {
+    border-top-color: #0D6938 !important;
+}
+

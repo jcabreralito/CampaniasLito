@@ -36,3 +36,18 @@ else
     </div>
 
 }
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/js/sweetalert.js" type="text/javascript"></script>
+    <script src="~/Scripts/sweetalert.min.js" type="text/javascript"></script>
+
+    <script>
+        window.onload = function () {
+            var contenedor = document.getElementById('contenedor_carga');
+            contenedor.style.visibility = 'hidden';
+            contenedor.style.opacity = '0';
+        }
+    </script>
+}
