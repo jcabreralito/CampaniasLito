@@ -238,9 +238,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\KFC.mdf" />
-    <Content Include="App_Data\KFC_log.ldf">
-      <DependentUpon>KFC.mdf</DependentUpon>
+    <Content Include="App_Data\CampaniasLito.mdf" />
+    <Content Include="App_Data\CampaniasLito_log.ldf">
+      <DependentUpon>CampaniasLito.mdf</DependentUpon>
     </Content>
     <Content Include="Content\Clientes\Clientes.jpg" />
     <Content Include="Content\css\Animate.css" />

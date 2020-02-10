@@ -11,15 +11,15 @@
     {
         <title>@Session["Compañia"].ToString() - @ViewBag.Title</title>
 
-        if (Session["Compañia"].ToString() == "KFC")
+        if (Session["Compañia"].ToString() == "KFC" || Session["Compañia"].ToString() == "kfc")
         {
             <link href="~/Content/css/Compañias/KFC.css" rel="stylesheet" />
         }
-        else if (Session["Compañia"].ToString() == "STARBUCKS")
+        else if (Session["Compañia"].ToString() == "STARBUCKS" || Session["Compañia"].ToString() == "starbucks")
         {
             <link href="~/Content/css/Compañias/Starbucks.css" rel="stylesheet" />
         }
-        else if (Session["Compañia"].ToString() == "KRISPY KREME")
+        else if (Session["Compañia"].ToString() == "KRISPY KREME" || Session["Compañia"].ToString() == "krispy kreme")
         {
             <link href="~/Content/css/Compañias/KrispyKreme.css" rel="stylesheet" />
         }
@@ -49,7 +49,7 @@
 
                 <table>
                     <tr>
-                        <th align="left" class="col-sm-9">
+                        <th align="left" class="col-sm-7">
                             @if (Session["Logo"] != null)
                             {
                                 <img src="@Url.Content(Session["Logo"].ToString())" alt="Image" style="width:95px; max-width: 95px; height: 50px; padding: 5px 25px 0 0; vertical-align:middle" align="left" />
@@ -68,7 +68,7 @@
                                 @Html.ActionLink("Campañas ", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", style = "color: #fff; text-decoration: none" })
                             }
                         </th>
-                        <th align="right" class="col-sm-7">
+                        <th align="right" class="col-sm-12">
                             @if (Request.IsAuthenticated)
                             {
                                 using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
