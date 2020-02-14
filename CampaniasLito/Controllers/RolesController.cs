@@ -51,6 +51,10 @@ namespace CampaniasLito.Controllers
             {
                 db.Roles.Add(rol);
                 db.SaveChanges();
+
+                Session["Compañia"] = "Litoprocess";
+                TempData["msgRolCreado"] = "ROL AGREGADO";
+
                 return RedirectToAction("Index");
             }
 
@@ -82,6 +86,10 @@ namespace CampaniasLito.Controllers
             {
                 db.Entry(rol).State = EntityState.Modified;
                 db.SaveChanges();
+
+                Session["Compañia"] = "Litoprocess";
+                TempData["msgRolEditado"] = "ROL EDITADO";
+
                 return RedirectToAction("Index");
             }
 
@@ -112,6 +120,10 @@ namespace CampaniasLito.Controllers
             var rol = db.Roles.Find(id);
             db.Roles.Remove(rol);
             db.SaveChanges();
+
+            Session["Compañia"] = "Litoprocess";
+            TempData["msgRolEliminado"] = "ROL ELIMINADO";
+
             return RedirectToAction("Index");
         }
 

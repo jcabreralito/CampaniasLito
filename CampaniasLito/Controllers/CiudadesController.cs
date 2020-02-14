@@ -79,7 +79,7 @@ namespace CampaniasLito.Controllers
 
             var ciudades = new Ciudad { CompañiaId = usuario.CompañiaId, };
 
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId), "RegionId", "Nombre");
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId, true), "RegionId", "Nombre");
 
             return PartialView(ciudades);
         }
@@ -97,6 +97,8 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    TempData["msgCiudadCreada"] = "CIUDAD AGREGADA";
+
                     return RedirectToAction("Index");
                 }
 
@@ -140,6 +142,8 @@ namespace CampaniasLito.Controllers
                 if (response.Succeeded)
                 {
 
+                    TempData["msgCiudadEditada"] = "CIUDAD EDITADA";
+
                     return RedirectToAction("Index");
 
                 }
@@ -181,6 +185,8 @@ namespace CampaniasLito.Controllers
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
+                TempData["msgCiudadEliminada"] = "CIUDAD ELIMINADA";
+
                 return RedirectToAction("Index");
             }
 

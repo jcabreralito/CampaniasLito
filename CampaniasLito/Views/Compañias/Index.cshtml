@@ -13,17 +13,19 @@
 </head>
 <body>
     <div class="panel" style="margin-right: 2%">
-        <div class="panel-heading table-responsive">
+        <div class="panel-heading table-responsive" id="panelH">
 
-            <a href="@Url.Action("Create", "Compañias", new { })" class="botonF1 dialog-window-small">
+            <a href="@Url.Action("Create", "Compañias", new { })" class="botonF1 dialog-window-medium">
                 <i class="fas fa-plus-circle"></i>
             </a>
 
             <table style="width:100%" id="dataTable" cellspacing="0">
                 <tr>
-                    <th class=" col-xs-4">
-                        <h2 style="color: white"><i class="fas fa-building"></i> @ViewBag.Title</h2>
-                    </th>
+                    <td class=" col-xs-4">
+                        <h2 style="color: white"><i class="fas fa-building "></i> @ViewBag.Title</h2>
+                    </td>
+                    <td class="col-xs-7">
+                    </td>
                 </tr>
             </table>
         </div>
@@ -51,12 +53,12 @@
                         {
                             <tr style="font-size:12px; text-transform: capitalize">
                                 <td style="width: 45%">
-                                    <a href="@Url.Action("Edit", "Compañias", new { id = item.CompañiaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white">
+                                    <a href="@Url.Action("Edit", "Compañias", new { id = item.CompañiaId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
                                         @Html.DisplayFor(modelItem => item.Nombre)
                                     </a>
                                 </td>
                                 <td style="width: 40%" align="center">
-                                    <a href="@Url.Action("Edit", "Compañias", new { id = item.CompañiaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white">
+                                    <a href="@Url.Action("Edit", "Compañias", new { id = item.CompañiaId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
                                         @if (!string.IsNullOrEmpty(item.Logo))
                                         {
                                             <img src="@Url.Content(item.Logo)" alt="Image" style="height:40px;" />
@@ -68,7 +70,7 @@
                                     </a>
                                 </td>
                                 <td style="width: 15%" align="center">
-                                    <a id="botones" href="@Url.Action("Delete", "Compañias", new { id = item.CompañiaId})" class="btn btn-danger dialog-window-small" style="background-color: transparent; border:none; font-size: 20px">
+                                    <a id="botones" href="@Url.Action("Delete", "Compañias", new { id = item.CompañiaId})" class="btn btn-danger dialog-window-medium" style="background-color: transparent; border:none; font-size: 20px">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
@@ -80,8 +82,8 @@
         </div>
     </div>
 
-    <div class="modal fade" data-keyboard="false" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
-        <div class="modal-dialog modal-dialog-centered mx-auto" id="smallTamanio">
+    <div class="modal fade" data-keyboard="false" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%">
+        <div class="modal-dialog modal-dialog-centered mx-auto" id="mdialTamanio">
             <div class="modal-content">
                 <div class="te">Please wait...</div>
             </div>
@@ -100,17 +102,17 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $("body").on("click", "a.dialog-window-small", null, function (e) {
+            $("body").on("click", "a.dialog-window-medium", null, function (e) {
                 e.preventDefault();
                 var $link = $(this);
                 var url = $(this).attr('href');
                 if (url.indexOf('#') == 0) {
-                    $('#smallModal').modal('show');
+                    $('#mediumModal').modal('show');
                 }
                 else {
                     $.get(url, function (data) {
-                        $('#smallModal .te').html(data);
-                        $('#smallModal').modal();
+                        $('#mediumModal .te').html(data);
+                        $('#mediumModal').modal();
                     }).success(function () { $('input:text:visible:first').focus(); });
 
                 }

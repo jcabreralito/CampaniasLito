@@ -36,7 +36,7 @@ namespace CampaniasLito.Models
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
         [Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
-        [Display(Name = "Compañia", Prompt = "[Seleccionar una Compañias...]")]
+        [Display(Name = "Compañia", Prompt = "[Seleccionar una Compañia...]")]
         public int CompañiaId { get; set; }
 
         [Display(Name = "Usuario")]

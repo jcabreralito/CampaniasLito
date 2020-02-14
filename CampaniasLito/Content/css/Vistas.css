@@ -43,7 +43,7 @@ h6, html, input[type=submit], input[type=button] {
 .bgPortada {
     background: url('../Fotos/lito.jpg') no-repeat;
     background-position: center;
-    background-size: auto;
+    background-size: 50%;
     width: 100%;
     height: 87vh;
     position: center;
@@ -54,7 +54,7 @@ h6, html, input[type=submit], input[type=button] {
 .bgPortadaStarbucks {
     background: url('../Fotos/starbucks-portal-palermo.jpg') no-repeat;
     background-position: center;
-    background-size: auto;
+    background-size: 80% 65%;
     width: 100%;
     height: 87vh;
     position: center;
@@ -65,7 +65,7 @@ h6, html, input[type=submit], input[type=button] {
 .bgPortadaKrispy {
     background: url('../Fotos/krispy.jpg') no-repeat;
     background-position: center;
-    background-size: auto;
+    background-size: 80% 65%;
     width: 100%;
     height: 87vh;
     position: center;
@@ -76,7 +76,7 @@ h6, html, input[type=submit], input[type=button] {
 .bgPortadaKFC {
     background: url('../Fotos/historia_10.jpg') no-repeat;
     background-position: center;
-    background-size: auto;
+    background-size: 70% 65%;
     width: 100%;
     height: 87vh;
     position: center;
@@ -742,7 +742,7 @@ input[type=range] {
     height: 50px;
     border-radius: 100%;
     background: #F44336;
-    right: 47%;
+    right: 45%;
     bottom: 0;
     position: fixed;
     /*margin-right: 36px;*/
@@ -750,7 +750,7 @@ input[type=range] {
     border: none;
     outline: none;
     color: #FFF;
-    font-size: 39px !important;
+    font-size: 37px !important;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     transition: .3s;
     z-index: 1;
@@ -786,12 +786,12 @@ span {
 }
 
 .botonF2 {
-    width: 40px;
-    height: 40px;
+    width: 43px;
+    height: 43px;
     border-radius: 100%;
     background: #2196F3;
-    right: -70px;
-    top: -45px;
+    right: -40px;
+    top: -40px;
     bottom: 0;
     position: absolute;
     /*margin-right: -15%;

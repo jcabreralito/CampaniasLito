@@ -90,12 +90,12 @@ namespace CampaniasLito.Controllers
 
             var tienda = new Tienda { CompañiaId = usuario.CompañiaId, };
 
-            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId), "CiudadId", "Nombre");
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId), "RegionId", "Nombre");
-            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion");
-            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo");
-            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(), "AcomodoCajaId", "Descripcion");
-            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(), "TipoCajaId", "Descripcion");
+            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId, true), "CiudadId", "Nombre");
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(usuario.CompañiaId, true), "RegionId", "Nombre");
+            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion");
+            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo");
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "AcomodoCajaId", "Descripcion");
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion");
 
             return View(tienda);
         }
@@ -113,18 +113,20 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    TempData["msgTiendaCreada"] = "TIENDA AGREGADA";
+
                     return RedirectToAction("Index");
                 }
 
                 ModelState.AddModelError(string.Empty, response.Message);
             }
 
-            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tienda.CompañiaId), "CiudadId", "Nombre");
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tienda.CompañiaId), "RegionId", "Nombre");
-            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion");
-            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo");
-            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(), "AcomodoCajaId", "Descripcion");
-            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(), "TipoCajaId", "Descripcion");
+            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tienda.CompañiaId, true), "CiudadId", "Nombre");
+            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tienda.CompañiaId, true), "RegionId", "Nombre");
+            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion");
+            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo");
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "AcomodoCajaId", "Descripcion");
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion");
 
 
             return PartialView(tienda);
@@ -169,6 +171,9 @@ namespace CampaniasLito.Controllers
             {
                 db.Entry(tienda).State = EntityState.Modified;
                 db.SaveChanges();
+
+                TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+
                 return RedirectToAction("Index");
             }
 
@@ -216,6 +221,9 @@ namespace CampaniasLito.Controllers
             var tienda = db.Tiendas.Find(id);
             db.Tiendas.Remove(tienda);
             db.SaveChanges();
+
+            TempData["msgTiendaEliminada"] = "TIENDA ELIMINADA";
+
             return RedirectToAction("Index");
         }
 

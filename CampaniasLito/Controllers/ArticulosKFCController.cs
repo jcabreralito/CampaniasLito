@@ -97,6 +97,8 @@ namespace CampaniasLito.Controllers
                 if (response.Succeeded)
                 {
 
+                    TempData["msgArticuloCreado"] = "ARTICULO AGREGADO";
+
                     return RedirectToAction("Index");
 
                 }
@@ -137,6 +139,7 @@ namespace CampaniasLito.Controllers
                 if (response.Succeeded)
                 {
 
+                    TempData["msgArticuloEditado"] = "ARTICULO EDITADO";
                     return RedirectToAction("Index");
 
                 }
@@ -175,6 +178,8 @@ namespace CampaniasLito.Controllers
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
+                TempData["msgArticuloEliminado"] = "ARTICULO ELIMINADO";
+
                 return RedirectToAction("Index");
             }
 

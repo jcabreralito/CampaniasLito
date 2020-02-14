@@ -24,19 +24,19 @@ namespace CampaniasLito.Models
         [Display(Name = "RESTAURANTE")]
         public string Restaurante { get; set; }
 
-        [Display(Name = "REGIÓN")]
+        [Display(Name = "REGIÓN", Prompt = "[Región...]")]
         public int RegionId { get; set; }
 
-        [Display(Name = "CIUDAD")]
+        [Display(Name = "CIUDAD", Prompt = "[Ciudad...]")]
         public int CiudadId { get; set; }
 
         [Display(Name = "DIRECCIÓN")]
         public string Direccion { get; set; }
 
-        [Display(Name = "NUEVO NIVEL DE PRECIO")]
+        [Display(Name = "NUEVO NIVEL DE PRECIO", Prompt = "[Nivel Precio...]")]
         public int NuevoNivelDePrecioId { get; set; }
 
-        [Display(Name = "TIPO")]
+        [Display(Name = "TIPO", Prompt = "[Tipo...]")]
         public int TipoId { get; set; }
 
         [Display(Name = "ENSALADA")]
@@ -117,10 +117,10 @@ namespace CampaniasLito.Models
         [Display(Name = "CANTIDAD DE PANTALLAS")]
         public string CantidadDePantallas { get; set; }
 
-        [Display(Name = "ACOMODO DE CAJA")]
+        [Display(Name = "ACOMODO DE CAJA", Prompt = "[Acomodo...]")]
         public string AcomodoDeCajas { get; set; }
 
-        [Display(Name = "TIPO DE CAJA")]
+        [Display(Name = "TIPO DE CAJA", Prompt = "[Tipo Caja...]")]
         public int TipoDeCajaId { get; set; }
 
         public virtual Region Region { get; set; }
@@ -130,6 +130,8 @@ namespace CampaniasLito.Models
         public virtual ICollection<CampañaArticulo> CampañaArticulos { get; set; }
 
         public virtual ICollection<CampañaTienda> CampañaTiendas { get; set; }
+
+        public virtual ICollection<CampañaTiendaTMP> CampañaTiendaTMPs { get; set; }
 
     }
 }

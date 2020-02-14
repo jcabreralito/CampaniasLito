@@ -1,11 +1,15 @@
-﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr:hover, th, table, .navbar-toggle, body {
+﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr, tr:hover, th, .navbar-toggle {
     background-color: #DF2530 !important;
     color: #fff !important;
 }
 
+table {
+    background-color: transparent !important;
+}
+
 .navbar-toggle:hover, .nav > li > a:hover {
     background-color: #000 !important;
-    color: #DF2530 !important;
+    color: #ffffff !important;
 }
 
 .sidebar ul li a.active {
@@ -15,6 +19,7 @@
 
 #panelH {
     background-color: #DF2530 !important;
+    color: #fff !important;
 }
 
 table > tbody > tr > td:hover {
@@ -26,16 +31,18 @@ table > tbody > tr > td {
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: #000 !important;
-    color: #DF2530 !important;
+    background-color: #A5202A !important;
+    color: #fff !important
 }
-.table-hover > tbody > tr:hover {
-    background-color: #6C6C6C !important;
+
+.table-hover > tbody > tr:hover a:hover {
+    background-color: #2B3E50 !important;
     color: #DF2530 !important;
+    border-color: #fff !important;
 }
 
 dd, dt {
-    color: #000;
+    color: #000 !important;
 }
 
 .jumbotron .h1, .jumbotron h1 {
@@ -66,9 +73,18 @@ a:focus, a:hover {
 .panel-heading {
     background-color: #DF2530 !important;
     border-radius: 10px !important;
+    padding: 0 !important;
 }
 
 #carga {
     border-top-color: #DF2530 !important;
 }
 
+a.inicio {
+    background: url(../../Logos/KFC-logo.png) center no-repeat !important;
+    background-size: 90px !important;
+}
+
+.menuNav {
+    background-color: rgba(223, 37, 48, 0.8) !important;
+}

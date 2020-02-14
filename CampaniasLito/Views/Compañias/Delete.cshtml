@@ -1,149 +1,68 @@
 ﻿@model CampaniasLito.Models.Compañia
 
 @{
-    ViewBag.Title = "Eliminar Compañia";
+    ViewBag.Title = "Eliminar";
 }
-    <div class="panel panel-primary">
+
+@using (Html.BeginForm("Delete", "Compañias", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel">
         <div class="panel-heading" id="panelH">
             <table>
                 <tr>
-                    <td class="col-md-12">
-                        <h2><i class="fa fa-table"></i> @ViewBag.Title</h2>
-                    </td>
+                    <th class="col-xs-6">
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
+                    </th>
+                    <th class=" col-xs-12"></th>
+                    <th align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="button" class="botonF2" style="background-color: #01207B" data-dismiss="modal">
+                                <i class="fas fa-times-circle"></i>
+                                @*SALIR*@
+                            </button>
+                        </div>
+                    </th>
+                    <th align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
+                                <i class="fas fa-check-circle"></i>
+                                @*ACEPTAR*@
+                            </button>
+                        </div>
+                    </th>
                 </tr>
             </table>
         </div>
+
         <div class="panel-body">
-
-            <h3>¿Eliminar este Registro?</h3>
-            <div>
-                <div class="row">
-                    <div class="col-md-6">
-
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                        <dl class="dl-horizontal">
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Nombre)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.Nombre)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Calle)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.Calle)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.NumeroInterior)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.NumeroInterior)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.NumeroExterior)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.NumeroExterior)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Ciudad.Nombre)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.Ciudad.Nombre)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.DelegacionMunicipio.Nombre)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.DelegacionMunicipio.Nombre)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Colonia.Nombre)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.Colonia.Nombre)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.CodigoPostal)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.CodigoPostal)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Telefono)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.Telefono)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Telefono2)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.Telefono2)
-                            </dd>
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.RFC)
-                            </dt>
-
-                            <dd>
-                                @Html.DisplayFor(model => model.RFC)
-                            </dd>
-                        </dl>
+            <div class="form-horizontal row responsivoUsuarioLabel">
+                <div class="col-xs-12">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", disabled = "disabled", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Nombre" } })
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <dl class="dl-horizontal">
-
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Logo)
-                            </dt>
-
-                            <dd>
-                                @if (!string.IsNullOrEmpty(Model.Logo))
-                                {
-                                    <img src="@Url.Content(Model.Logo)" alt="Image" style="width:150px;height:150px;" />
-                                }
-                                else
-                                {
-                                    <img src="@Url.Content("~/Content/Logos/empresa.gif")" alt="Image" style="width:150px; height:150px;" />
-                                }
-                            </dd>
-
-                        </dl>
+                    <div class="form-group">
+                        <div class="col-sm-12" style="text-align: center">
+                            @if (!string.IsNullOrEmpty(Model.Logo))
+                            {
+                                <img src="@Url.Content(Model.Logo)" alt="Image" style="width:75px;height:75px;" />
+                            }
+                            else
+                            {
+                                <img src="@Url.Content("~/Content/Logos/empresa.gif")" alt="Image" style="width:75px; height:75px;" />
+                            }
+                        </div>
                     </div>
                 </div>
-
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-
-                    <div class="form-actions no-color">
-                        <input type="submit" value="Eliminar" class="btn btn-outline btn-primary" />
-                        @Html.ActionLink("Cancelar", "Index", new { }, new { @class = "btn btn-outline btn-danger" })
-                    </div>
-                }
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/fileupload.js"></script>
+}

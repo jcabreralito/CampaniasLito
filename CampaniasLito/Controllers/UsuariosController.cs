@@ -14,10 +14,36 @@ namespace CampaniasLito.Controllers
     {
         private CampaniasLitoContext db = new CampaniasLitoContext();
 
-        public ActionResult Index()
+        public ActionResult GetList()
         {
+            var userList = db.Usuarios.ToList<Usuario>();
+            return Json(new { data = userList }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult Index(string usuario)
+        {
+            if (string.IsNullOrEmpty(usuario))
+            {
+                Session["usuarioFiltro"] = string.Empty;
+            }
+            else
+            {
+                Session["usuarioFiltro"] = usuario;
+            }
+
+            var filtro = Session["usuarioFiltro"].ToString();
+
             var usuarios = db.Usuarios.Include(u => u.Compañia);
-            return View(usuarios.ToList());
+
+            if (!string.IsNullOrEmpty(usuario))
+            {
+                return View(usuarios.Where(a => a.NombreUsuario.Contains(filtro) || a.Nombres.Contains(filtro)).ToList());
+            }
+            else
+            {
+                return View(usuarios.ToList());
+            }
         }
 
         public ActionResult Details(int? id)
@@ -39,8 +65,8 @@ namespace CampaniasLito.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre");
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre");
+            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre");
+            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre");
 
             var usuario = new Usuario { };
             return PartialView(usuario);
@@ -59,6 +85,9 @@ namespace CampaniasLito.Controllers
                     var rol = db.Roles.Where(r => r.RolId == usuario.RolId).FirstOrDefault();
 
                     UsuariosHelper.CreateUserASP(usuario.NombreUsuario, rol.Nombre);
+
+                    Session["Compañia"] = "Litoprocess";
+                    TempData["msgUsuarioCreado"] = "USUARIO AGREGADO";
 
                     return RedirectToAction("Index");
                 }
@@ -123,6 +152,9 @@ namespace CampaniasLito.Controllers
                     db2.Dispose();
 
 
+                    Session["Compañia"] = "Litoprocess";
+                    TempData["msgUsuarioEditado"] = "USUARIO EDITADO";
+
                     return RedirectToAction("Index");
                 }
 
@@ -157,6 +189,8 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
+            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
             return PartialView(usuario);
         }
 
@@ -169,10 +203,16 @@ namespace CampaniasLito.Controllers
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
+                Session["Compañia"] = "Litoprocess";
+                TempData["msgUsuarioEliminado"] = "USUARIO ELIMINADO";
+
                 return RedirectToAction("Index");
             }
 
             ModelState.AddModelError(string.Empty, response.Message);
+
+            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
+            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
             return PartialView(usuario);
         }
 

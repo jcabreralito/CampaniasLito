@@ -230,19 +230,19 @@ body.stop-scrolling {
   z-index: 1040;
 }
 .sweet-alert {
-  background-color: #132F52;
-  width: 478px;
-  padding: 17px;
-  border-radius: 10px;
-  text-align: center;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  margin-left: -256px;
-  margin-top: -200px;
-  overflow: hidden;
-  display: none;
-  z-index: 2000;
+    background-color: transparent;
+    width: 478px;
+    padding: 17px;
+    border-radius: 10px;
+    text-align: center;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -256px;
+    margin-top: -200px;
+    overflow: hidden;
+    display: none;
+    z-index: 2000;
 }
 @media all and (max-width: 767px) {
   .sweet-alert {
@@ -303,15 +303,15 @@ body.stop-scrolling {
   position: relative;
   display: block;
 }
-.sweet-alert .sa-icon.sa-error .sa-line {
-  position: absolute;
-  height: 5px;
-  width: 47px;
-  background-color: #132F52;
-  display: block;
-  top: 37px;
-  border-radius: 10px;
-}
+    .sweet-alert .sa-icon.sa-error .sa-line {
+        position: absolute;
+        height: 5px;
+        width: 47px;
+        background-color: transparent;
+        display: block;
+        top: 37px;
+        border-radius: 10px;
+    }
 .sweet-alert .sa-icon.sa-error .sa-line.sa-left {
   transform: rotate(45deg);
   left: 17px;
@@ -323,63 +323,63 @@ body.stop-scrolling {
 .sweet-alert .sa-icon.sa-warning {
   border-color: #eea236;
 }
-.sweet-alert .sa-icon.sa-warning .sa-body {
-  position: absolute;
-  width: 5px;
-  height: 47px;
-  left: 50%;
-  top: 10px;
-  border-radius: 10px;
-  margin-left: -2px;
-  background-color: #132F52;
-}
-.sweet-alert .sa-icon.sa-warning .sa-dot {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  margin-left: -3px;
-  left: 50%;
-  bottom: 10px;
-  background-color: #132F52;
-}
+    .sweet-alert .sa-icon.sa-warning .sa-body {
+        position: absolute;
+        width: 5px;
+        height: 47px;
+        left: 50%;
+        top: 10px;
+        border-radius: 10px;
+        margin-left: -2px;
+        background-color: transparent;
+    }
+    .sweet-alert .sa-icon.sa-warning .sa-dot {
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        margin-left: -3px;
+        left: 50%;
+        bottom: 10px;
+        background-color: transparent;
+    }
 .sweet-alert .sa-icon.sa-info {
   border-color: #46b8da;
 }
-.sweet-alert .sa-icon.sa-info::before {
-  content: "";
-  position: absolute;
-  width: 5px;
-  height: 29px;
-  left: 50%;
-  bottom: 17px;
-  border-radius: 10px;
-  margin-left: -2px;
-  background-color: #132F52;
-}
-.sweet-alert .sa-icon.sa-info::after {
-  content: "";
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  margin-left: -3px;
-  top: 19px;
-  background-color: #132F52;
-}
+    .sweet-alert .sa-icon.sa-info::before {
+        content: "";
+        position: absolute;
+        width: 5px;
+        height: 29px;
+        left: 50%;
+        bottom: 17px;
+        border-radius: 10px;
+        margin-left: -2px;
+        background-color: transparent;
+    }
+    .sweet-alert .sa-icon.sa-info::after {
+        content: "";
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        margin-left: -3px;
+        top: 19px;
+        background-color: transparent;
+    }
 .sweet-alert .sa-icon.sa-success {
   border-color: #4cae4c;
 }
-.sweet-alert .sa-icon.sa-success::before,
-.sweet-alert .sa-icon.sa-success::after {
-  content: '';
-  border-radius: 50%;
-  position: absolute;
-  width: 60px;
-  height: 120px;
-  background: #132F52;
-  transform: rotate(45deg);
-}
+    .sweet-alert .sa-icon.sa-success::before,
+    .sweet-alert .sa-icon.sa-success::after {
+        content: '';
+        border-radius: 50%;
+        position: absolute;
+        width: 60px;
+        height: 120px;
+        background: transparent;
+        transform: rotate(45deg);
+    }
 .sweet-alert .sa-icon.sa-success::before {
   border-radius: 120px 0 0 120px;
   top: -7px;
@@ -405,16 +405,16 @@ body.stop-scrolling {
   top: -4px;
   z-index: 2;
 }
-.sweet-alert .sa-icon.sa-success .sa-fix {
-  width: 5px;
-  height: 90px;
-  background-color: #132F52;
-  position: absolute;
-  left: 28px;
-  top: 8px;
-  z-index: 1;
-  transform: rotate(-45deg);
-}
+    .sweet-alert .sa-icon.sa-success .sa-fix {
+        width: 5px;
+        height: 90px;
+        background-color: transparent;
+        position: absolute;
+        left: 28px;
+        top: 8px;
+        z-index: 1;
+        transform: rotate(-45deg);
+    }
 .sweet-alert .sa-icon.sa-success .sa-line {
   height: 5px;
   background-color: #5cb85c;

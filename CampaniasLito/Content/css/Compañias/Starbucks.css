@@ -1,7 +1,12 @@
-﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr:hover, th, table, .navbar-toggle, body {
+﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr, tr:hover, th, .navbar-toggle {
     background-color: #067655 !important;
     color: #fff !important;
 }
+
+table {
+    background-color: transparent !important;
+}
+
 
     .navbar-toggle:hover, .nav > li > a:hover {
         background-color: #000 !important;
@@ -70,4 +75,17 @@ a:focus, a:hover {
 
 #carga {
     border-top-color: #067655 !important;
+}
+
+header {
+    background-color: #067655 !important;
+}
+
+a.inicio {
+    background: url(../../Logos/starbucks_logo.png) center no-repeat !important;
+    background-size: contain !important;
+}
+
+.menuNav {
+    background-color: rgba(6, 118, 85, 0.8) !important;
 }

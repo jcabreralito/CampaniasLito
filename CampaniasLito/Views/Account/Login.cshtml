@@ -2,77 +2,177 @@
 @model LoginViewModel
 @{
     ViewBag.Title = "Iniciar sesión";
+    Layout = null;
 }
 
-@*<link href="~/Content/css/materialize/css/materialize.min.css" rel="stylesheet" />
-    <script src="~/Content/css/materialize/js/materialize.min.js"></script>*@
+<link href="~/Content/LoginCSS/bootstrap_superhero.min.css" rel="stylesheet" />
+<link href="~/Content/LoginCSS/site.css" rel="stylesheet" />
+<link href="~/Content/LoginCSS/styles.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+      integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 style="margin-left: 33%"><i class="fa fa-user"></i> @ViewBag.Title.</h2>
+<script src="~/Scripts/script.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="~/Scripts/sweetalert.min.js"></script>
+<script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+<script src="~/Scripts/fileupload.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<style>
+
+    .form-control.login-user {
+        border: 0 solid #fff !important;
+    }
+
+    input, .card, .card-header, .btn, .card-footer {
+        border-radius: 20px;
+    }
+
+    input, h1 {
+        padding: 10px;
+    }
+
+    .input {
+        background: #2B3E50;
+        color: #fff;
+    }
+
+    .card {
+        background: #4E5D6C;
+    }
+
+    .bg-primary, .btn-primary {
+        background: #01207B;
+    }
+
+        .btn-primary:hover {
+            background: #004A7F;
+        }
+
+    @@media (max-width:414px) {
+        .ocultar {
+            display: none;
+        }
+    }
+</style>
+
+<section class="mt-5" id="body">
+    <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <section id="loginForm">
-                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        @*<h4>Use una cuenta local para iniciar sesión.</h4>*@
-                        <br />
+            <div class="col-xs-8 col-lg-6 mx-auto">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="">
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Email, new { @class = "col-sm-2 control-label" })
-                            <div class="col-sm-4">
-                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Correo electrónico" })
+                        <div class="card">
+                            <div class="card-header bg-primary text-center">
+                                <h2 class="font-weight-normal">Acceso</h2>
                                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Password, new { @class = "col-sm-2 control-label" })
-                            <div class="col-sm-4">
-                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Contraseña" })
                                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                @*<div *ngIf="isErrorLogin" style="border-radius: 20px">
+                                        <h2 class="h5 mb-1 mt-1 font-weight-normal">Usuario o Password incorrectos!</h2>
+                                    </div>*@
                             </div>
-                        </div>
-                        @*<div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <div class="checkbox">
-                                        @Html.CheckBoxFor(m => m.RememberMe)
-                                        @Html.LabelFor(m => m.RememberMe)
+                            <div class="mx-auto" style="padding-top: 40px">
+                                <img class="ocultar" style="border-radius: 20%" src="~/Content/Fotos/lito.jpg"
+                                     width="150" height="150">
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="border: .5px solid #007FFD; border-radius: 10px 0 0 10px">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                        </div>
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "input form-control text-center", style = "border: .5px solid #007FFD; border-radius: 0 10px 10px 0", placeholder = "Usuario" })
                                     </div>
                                 </div>
-                            </div>*@
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <input type="submit" value="Iniciar sesión" class="btn btn-pilares" />
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="border: .5px solid #007FFD; border-radius: 10px 0 0 10px">
+                                                <i class="fas fa-lock"></i>
+                                            </div>
+                                        </div>
+                                        @Html.PasswordFor(m => m.Password, new { @class = "input form-control text-center", style = "border: .5px solid #007FFD; border-radius: 0 10px 10px 0", placeholder = "Password" })
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="card-footer" style="background: #5B6976; margin-top: -20px">
+                                <input type="submit" value="Iniciar sesión" class="btn btn-primary btn-block" style="padding: 10px 0" />
                             </div>
                         </div>
-                        @*<p>
-                                @Html.ActionLink("Registrar como nuevo usuario", "Register")
-                            </p>*@
-                        @* Habilite esta opción después de habilitar la confirmación de la cuenta para la función de restablecimiento de contraseña
-                            <p>
-                                @Html.ActionLink("¿Ha olvidado su contraseña?", "ForgotPassword")
-                            </p>*@
-                    }
-                </section>
+                    </div>
+                }
             </div>
-            @*<div class="col-md-4">
-                    <section id="socialLoginForm">
-                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-                    </section>
-                </div>*@
+
         </div>
     </div>
-</div>
+</section>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/script.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+    <script src="~/Scripts/fileupload.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
     <script>
         window.onload = function () {
             var contenedor = document.getElementById('contenedor_carga');
             contenedor.style.visibility = 'hidden';
             contenedor.style.opacity = '0';
-        }
+        };
+
+        //document.addEventListener("keydown", function (e) {
+        //    if (e.keyCode == 13) {
+        //        toggleFullScreen();
+        //    }
+        //}, false);
+
+        //function toggleFullScreen() {
+        //    if (!document.fullscreenElement) {
+        //        document.documentElement.requestFullscreen();
+        //    } else {
+        //        if (document.exitFullscreen) {
+        //            document.exitFullscreen();
+        //        }
+        //    }
+        //}
+
     </script>
+
+    <script>
+        var el = document.getElementById("body");
+
+        function toggleFullScreen() {
+            if (!document.mozFullScreen && !document.webkitFullScreen) {
+                if (el.mozRequestFullScreen) {
+                    el.mozRequestFullScreen();
+                } else {
+                    el.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else {
+                    document.webkitCancelFullScreen();
+                }
+            }
+        }
+
+        document.addEventListener("keydown", function (e) {
+            if (e.keyCode == 13) {
+                toggleFullScreen();
+            }
+        }, false);
+    </script>
+
+
 }

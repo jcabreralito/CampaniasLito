@@ -20,7 +20,7 @@ namespace CampaniasLito.Models
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
         [Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
-        [Display(Name = "Región")]
+        [Display(Name = "Región", Prompt = "[Seleccionar una Región...]")]
         public int RegionId { get; set; }
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]

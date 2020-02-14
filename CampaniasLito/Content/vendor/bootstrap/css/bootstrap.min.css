@@ -189,11 +189,11 @@ optgroup {
 
 table {
     border-spacing: 0;
-    border-collapse: collapse;
+    /*border-collapse: collapse;*/
 }
 
 td, th {
-    padding: 0;
+    padding: 0 20px;
 }
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 
@@ -1657,7 +1657,7 @@ a.bg-danger:focus, a.bg-danger:hover {
 }
 
 ol, ul {
-    margin-top: 0;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
@@ -1857,6 +1857,7 @@ pre {
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+    margin-top: 10px;
 }
 
 .row {
@@ -2732,7 +2733,7 @@ th {
 }
 
     .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
-        padding: 2px;
+        /*padding: 2px;*/
         line-height: 1.42857143;
         vertical-align: top;
         border-top: 1px solid #fff;
@@ -2746,7 +2747,7 @@ th {
     }
 
     .table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
-        border-top: 0;
+        border: 0;
     }
 
     .table > tbody + tbody {
@@ -2763,7 +2764,7 @@ th {
 }
 
 .table-bordered {
-    border: 1px solid #fff;
+    /*border: 1px solid #fff;*/
 }
 
     .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
@@ -2775,18 +2776,19 @@ th {
         border-bottom-width: 2px;
     }
 
-    /*.table-bordered:hover > tbody > tr:hover > td {
-        border: 1px solid #01207B;
-    }*/
+    .table-bordered:hover > tbody > tr:hover > td {
+        border: 1px solid #fff !important;
+    }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: #01207B;
+    background-color: #000;
     color: #fff;
 }
 
 .table-hover > tbody > tr:hover {
-    background-color: #000;
-    color: #01207B !important;
+    background-color: #2B3E50 !important;
+    color: #fff;
+    border-color: #fff !important;
 }
 
 table col[class*=col-] {
@@ -2852,7 +2854,7 @@ table td[class*=col-], table th[class*=col-] {
         margin-bottom: 15px;
         overflow-y: hidden;
         -ms-overflow-style: -ms-autohiding-scrollbar;
-        border: 1px solid #ddd;
+        /*border: 1px solid #ddd;*/
     }
 
         .table-responsive > .table {
@@ -2878,6 +2880,11 @@ table td[class*=col-], table th[class*=col-] {
             .table-responsive > .table-bordered > tbody > tr:last-child > td, .table-responsive > .table-bordered > tbody > tr:last-child > th, .table-responsive > .table-bordered > tfoot > tr:last-child > td, .table-responsive > .table-bordered > tfoot > tr:last-child > th {
                 border-bottom: 0;
             }
+
+    .container-fluid {
+        padding-top : 20px;
+    }
+
 }
 
 fieldset {
@@ -3042,7 +3049,7 @@ input[type=search] {
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .checkbox, .radio {
@@ -3386,8 +3393,8 @@ select[multiple].input-lg, textarea.input-lg {
 }
 
 .form-horizontal .form-group {
-    margin-right: -15px;
-    margin-left: -15px;
+    /*margin-right: -15px;
+    margin-left: -15px;*/
 }
 
 @media (min-width:770px) {
@@ -5399,7 +5406,7 @@ a.badge:focus, a.badge:hover {
     padding-bottom: 30px;
     margin-bottom: 30px;
     color: inherit;
-    background-color: #ffffff;
+    background-color: #ffffff !important;
 }
 
     .jumbotron .h1, .jumbotron h1 {
@@ -5427,10 +5434,10 @@ a.badge:focus, a.badge:hover {
 }
 
 @media screen and (min-width:770px) {
-    .jumbotron {
+    /*.jumbotron {
         padding-top: 48px;
         padding-bottom: 48px;
-    }
+    }*/
 
     .container .jumbotron, .container-fluid .jumbotron {
         padding-right: 60px;
@@ -5907,15 +5914,19 @@ a.list-group-item-danger, button.list-group-item-danger {
 
 @media (max-width: 768px) {
     .divFormCheck {
-        width: 93%;
-        margin-right: 3.5%;
-        margin-left: 3.5%;
+        width: 95%;
+        margin-right: 2.5%;
+        margin-left: 2.5%;
+    }
+
+    .container-fluid {
+        padding-top: 20px;
     }
 }
 
 .panel {
     margin-bottom: 20px;
-    background-color: #fff;
+    background-color: transparent;
     border: 0 solid transparent;
     border-radius: 10px;
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
@@ -5923,7 +5934,7 @@ a.list-group-item-danger, button.list-group-item-danger {
 }
 
 .panel-body {
-    padding: 20px 35px 35px 35px;
+    padding: 20px 0 30px 0;
 }
 
 .panel-heading {
@@ -6036,7 +6047,7 @@ a.list-group-item-danger, button.list-group-item-danger {
             }
 
     .panel > .panel-body + .table, .panel > .panel-body + .table-responsive, .panel > .table + .panel-body, .panel > .table-responsive + .panel-body {
-        border-top: 1px solid #ddd;
+        /*border-top: 1px solid #ddd;*/
     }
 
     .panel > .table > tbody:first-child > tr:first-child td, .panel > .table > tbody:first-child > tr:first-child th {
@@ -7267,8 +7278,9 @@ button.close {
 }
 
 .py-3 {
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    background-color: #2b3e50 !important;
 }
 
 /*# sourceMappingURL=bootstrap.min.css.map */

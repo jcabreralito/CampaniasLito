@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CampaniasLito.Models
@@ -20,6 +21,9 @@ namespace CampaniasLito.Models
         public int TiendaId { get; set; }
 
         public int CompañiaId { get; set; }
+
+        [Display(Name = "Fecha")]
+        public DateTime CreatedDate { get; set; }
 
         public virtual Campaña Campaña { get; set; }
 

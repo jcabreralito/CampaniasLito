@@ -1,4 +1,257 @@
-﻿#smallTamanio {
+﻿a.inicio {
+    background: url(../../Content/Logos/Logo_LIto_gris.png) center no-repeat;
+    @*background: url('@Session["Logo"].ToString()') center no-repeat !important;
+    *@ display: block;
+    width: 45px;
+    height: 45px;
+    text-indent: -9999px; /* hides the link text */
+    /*margin-top: -6px;*/
+    margin-left: 25px;
+    border-radius: 10px;
+}
+
+.leftLogo150 {
+    margin-left: 150px;
+}
+
+.leftLogo30 {
+    margin-left: 30px;
+}
+
+#btn-menu {
+    display: none;
+}
+
+.menuNav {
+    margin-top: 0;
+}
+
+.responsivo {
+    margin-top: 0;
+    font-size: 35px;
+}
+
+.responsivo2 {
+    margin-top: 0;
+}
+
+.headeruserlayout {
+    display: grid;
+    margin: 0 auto;
+    grid-gap: 5px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.iconomenu {
+    border-radius: 10px;
+    padding: 11px;
+    background: #2B3E50;
+    color: white;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    font-size: 25px;
+    text-decoration: none;
+    list-style: none;
+    /*margin: -6px 20px 0 20px;*/
+}
+
+    .iconomenu:hover {
+        background-color: white;
+        color: #2B3E50;
+        text-decoration: none;
+    }
+
+.active {
+    background-color: white;
+    color: #2B3E50;
+    text-decoration: none;
+}
+
+#logo {
+    margin-top: 0;
+    margin-left: -25px;
+    visibility: visible;
+}
+
+#logo2 {
+    visibility: hidden;
+}
+
+.margentop {
+    margin-top: 0;
+}
+
+.margentopsesion2 {
+    margin-top: 3px;
+}
+
+.ulNav {
+    margin-left: 60px;
+}
+
+.responsivoUsuarioLabelIndexPro {
+    margin: -5px 0 -5px 0;
+    border-radius: 10px;
+}
+
+@media (max-width:768px) {
+
+    .menuNav {
+        display: block;
+        position: fixed;
+        background: #01207B;
+        margin-top: -200%;
+        border-radius: 10px;
+        margin-left: -70px;
+        width: 50%;
+        transition: all 1s;
+    }
+
+        .menuNav ul {
+            display: flex;
+            flex-direction: column;
+            margin: 0 0 40px 0;
+        }
+
+        .menuNav li {
+            margin-top: -10px;
+        }
+
+    #btn-menu:checked ~ .menuNav {
+        margin-top: 30px;
+    }
+
+    .responsivo {
+        font-size: 0;
+    }
+
+    .responsivo2 {
+        margin-top: -3px;
+    }
+
+    .headeruserlayout {
+        display: grid;
+        margin-top: 5px;
+        margin-left: -20px;
+        grid-gap: 5px;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .iconomenu {
+        font-size: 35px !important;
+        width: 1950% !important;
+        text-align: left !important;
+        margin-top: 40px !important;
+    }
+
+    #logout {
+        margin-top: 8px;
+    }
+
+    header span {
+        font-size: 10px;
+        color: white;
+        cursor: pointer;
+        position: relative;
+        top: 16px;
+        margin-left: 5px;
+    }
+
+    #logo {
+        display: none;
+        visibility: hidden;
+    }
+
+    #logo2 {
+        margin-top: -30px;
+        margin-left: -35px;
+        visibility: visible;
+    }
+
+    .margentopsesion2 {
+        margin-top: 12px;
+    }
+
+    .ulNav {
+        margin-left: -10px;
+        margin-top: 10px;
+    }
+
+    .responsivoUsuarioLabelIndexPro {
+        margin-top: -7px;
+    }
+}
+
+#contenedor_carga {
+    display: block;
+    background-color: rgba(255, 245, 255, 0.2);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    -webkit-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+    z-index: 10000;
+}
+
+#carga {
+    border: 15px solid #ccc;
+    border-top-color: #01207B;
+    border-top-style: groove;
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite;
+    animation: girar 1.5s linear infinite;
+}
+
+@keyframes girar {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+@media screen and (min-width: 1024px) {
+    .iconomenu {
+        padding: 10px;
+        font-size: 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*#smallTamanio {
     width: 30% !important;
 }
 
@@ -401,4 +654,4 @@ h4 {
     .boton {
         font-size: 8px;
     }
-}
+}*/

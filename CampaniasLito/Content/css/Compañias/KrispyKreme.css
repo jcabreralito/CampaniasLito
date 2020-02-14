@@ -1,7 +1,12 @@
-﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr:hover, th, table, .navbar-toggle, body {
+﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr, tr:hover, th, .navbar-toggle {
     background-color: #0D6938 !important;
     color: #fff !important;
 }
+
+table {
+    background-color: transparent !important;
+}
+
 
     .navbar-toggle:hover, .nav > li > a:hover {
         background-color: #000 !important;
@@ -65,3 +70,15 @@ a:focus, a:hover {
     border-top-color: #0D6938 !important;
 }
 
+header {
+    background-color: #0D6938 !important;
+}
+
+a.inicio {
+    background: url(../../Logos/Logo-Kryspy.png) center no-repeat !important;
+    background-size: contain !important;
+}
+
+.menuNav {
+    background-color: rgba(13, 105, 56, 0.8) !important;
+}

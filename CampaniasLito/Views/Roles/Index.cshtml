@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="panel" style="margin-right: 2%">
-        <div class="panel-heading table-responsive">
+        <div class="panel-heading table-responsive" id="panelH">
 
             <a href="@Url.Action("Create", "Roles", new { })" class="botonF1 dialog-window-small">
                 <i class="fas fa-plus-circle"></i>
@@ -21,9 +21,11 @@
 
             <table style="width:100%" id="dataTable" cellspacing="0">
                 <tr>
-                    <th class=" col-xs-4">
-                        <h2 style="color: white"><i class="fas fa-user-lock"></i> @ViewBag.Title</h2>
-                    </th>
+                    <td class=" col-xs-4">
+                        <h2 style="color: white"><i class="fas fa-user-lock "></i> @ViewBag.Title</h2>
+                    </td>
+                    <td class="col-xs-7">
+                    </td>
                 </tr>
             </table>
         </div>

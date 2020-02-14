@@ -72,6 +72,77 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Campañas/Create
+        public ActionResult CreateCamp(int? id)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+                var response = MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id);
+
+                if (response.Succeeded)
+                {
+                    //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                }
+
+                ModelState.AddModelError(string.Empty, response.Message);
+
+            var view = new NuevaCampañaView
+            {
+                CampañaId = db.NuevaCampañaViews.Where(cdt => cdt.CampañaId == (int)id).FirstOrDefault().CampañaId,
+                Descripcion = db.NuevaCampañaViews.Where(cdt => cdt.CampañaId == (int)id).FirstOrDefault().Descripcion,
+                Nombre = db.NuevaCampañaViews.Where(cdt => cdt.CampañaId == (int)id).FirstOrDefault().Nombre,
+                Detalles = db.CampañaTiendaTMPs.Where(cdt => cdt.Usuario == usuario.NombreUsuario).ToList(),
+            };
+
+            return View(view);
+
+
+        }
+
+        // POST: Campañas/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateCamp(NuevaCampañaView campaña)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(campaña.Descripcion) && !string.IsNullOrEmpty(campaña.Nombre))
+            {
+                campaña.Detalles = db.CampañaTiendaTMPs.Where(cdt => cdt.Usuario == usuario.NombreUsuario).ToList();
+
+                if (campaña.Detalles.Count != 0)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        var response = MovementsHelper.NuevaCampaña(campaña, usuario.NombreUsuario, usuario.Compañia.CompañiaId);
+                        if (response.Succeeded)
+                        {
+                            TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+
+                            return RedirectToAction("Index");
+                        }
+
+                        ModelState.AddModelError(string.Empty, response.Message);
+                    }
+                }
+                else
+                {
+                    TempData["msgDetalles"] = "AUN NO SE HAN AGREGADO TIENDAS";
+                }
+            }
+            else
+            {
+                TempData["msgCampaña"] = "CAPTURAR LOS DATOS DE LA CAMPAÑA";
+            }
+
+            return View(campaña);
+
+        }
+
+        // GET: Campañas/Create
         public ActionResult Create()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -80,7 +151,7 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var campañas = new Campaña{ CompañiaId = usuario.CompañiaId, };
+            var campañas = new Campaña { CompañiaId = usuario.CompañiaId, };
 
             campañas.Generada = "NO";
 
@@ -107,52 +178,8 @@ namespace CampaniasLito.Controllers
 
                 if (response.Succeeded)
                 {
-                    return RedirectToAction("Index");
-                }
+                    TempData["msgCampañaCreada"] = "CAMPAÑA CREADA";
 
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            return PartialView(campaña);
-
-        }
-
-        // GET: Campañas/Create
-        public ActionResult CreateCamp()
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var campañas = new Campaña { CompañiaId = usuario.CompañiaId, };
-
-            campañas.Generada = "NO";
-
-            return PartialView(campañas);
-
-
-        }
-
-        // POST: Campañas/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateCamp(Campaña campaña)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            campaña.Generada = "NO";
-
-            if (ModelState.IsValid)
-            {
-
-                db.Campañas.Add(campaña);
-
-                var response = DBHelper.SaveChanges(db);
-
-                if (response.Succeeded)
-                {
                     return RedirectToAction("Index");
                 }
 
@@ -193,6 +220,8 @@ namespace CampaniasLito.Controllers
                 if (response.Succeeded)
                 {
 
+                    TempData["msgCampañaEditada"] = "CAMPAÑA EDITADA";
+
                     return RedirectToAction("Index");
 
                 }
@@ -213,12 +242,12 @@ namespace CampaniasLito.Controllers
             }
 
             var campaña = db.Campañas.Find(id);
-            
+
             if (campaña == null)
             {
                 return HttpNotFound();
             }
-            
+
             return View(campaña);
         }
 
@@ -230,9 +259,11 @@ namespace CampaniasLito.Controllers
             var campaña = db.Campañas.Find(id);
             db.Campañas.Remove(campaña);
             var response = DBHelper.SaveChanges(db);
-            
+
             if (response.Succeeded)
             {
+                TempData["msgCampañaEliminada"] = "CAMPAÑA ELIMINADA";
+
                 return RedirectToAction("Index");
             }
 
