@@ -26,7 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>3.7</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>3.6</TypeScriptToolsVersion>
     <Use64BitIISExpress />
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -187,6 +187,7 @@
     <Compile Include="Controllers\BodegasController.cs" />
     <Compile Include="Controllers\CampañasController.cs" />
     <Compile Include="Controllers\CampañaTiendasController.cs" />
+    <Compile Include="Controllers\CampañaTiendaTMPsController.cs" />
     <Compile Include="Controllers\CategoriasController.cs" />
     <Compile Include="Controllers\CiudadesController.cs" />
     <Compile Include="Controllers\CompañiasController.cs" />
@@ -272,6 +273,7 @@
     <Content Include="Content\css\sweetalert.css" />
     <Content Include="Content\css\text.css" />
     <Content Include="Content\css\Vistas.css" />
+    <Content Include="Content\css\web.css" />
     <Content Include="Content\DataTables\AutoFill-2.3.4\css\autoFill.bootstrap.css" />
     <Content Include="Content\DataTables\AutoFill-2.3.4\css\autoFill.bootstrap.min.css" />
     <Content Include="Content\DataTables\AutoFill-2.3.4\css\autoFill.bootstrap4.css" />
@@ -636,6 +638,7 @@
     <Content Include="Content\Fotos\lito.jpg" />
     <Content Include="Content\Fotos\starbucks-portal-palermo.jpg" />
     <Content Include="Content\Fotos\usuarios.jpg" />
+    <Content Include="Content\js\gridviewscroll.js" />
     <Content Include="Content\js\inputfile-custom.js" />
     <Content Include="Content\js\sb-admin-2.js" />
     <Content Include="Content\js\sweetalert.js" />
@@ -1060,6 +1063,12 @@
     <Content Include="Views\Account\Login - Copia.cshtml" />
     <Content Include="Views\Shared\_Layout - Copia.cshtml" />
     <Content Include="Views\Campañas\Create.cshtml" />
+    <Content Include="Views\CampañaTiendaTMPs\Index.cshtml" />
+    <Content Include="Views\CampañaTiendaTMPs\Create.cshtml" />
+    <Content Include="Views\CampañaTiendaTMPs\Delete.cshtml" />
+    <Content Include="Views\CampañaTiendaTMPs\Details.cshtml" />
+    <Content Include="Views\CampañaTiendaTMPs\Edit.cshtml" />
+    <Content Include="Views\CampañaTiendaTMPs\Index1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Generic\" />
@@ -1071,6 +1080,7 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Content\js\gridviewscroll.ts" />
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <ItemGroup>

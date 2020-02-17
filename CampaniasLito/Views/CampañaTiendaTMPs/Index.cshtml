@@ -1,0 +1,145 @@
+﻿@model IEnumerable<CampaniasLito.Models.CampañaTiendaTMP>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>GridViewScroll</title>
+    <link href="~/Content/css/web.css" rel="stylesheet" />
+    <link href="~/Content/css/Compañias/KFC.css" rel="stylesheet" />
+    <link href="~/Content/css/Estilos.css" rel="stylesheet" />
+    <link href="~/Content/css/Vistas.css" rel="stylesheet" />
+    <link href="~/Content/css/Generales.css" rel="stylesheet" />
+    <link href="~/Content/css/flexboxgrid.min.css" rel="stylesheet" />
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    <link href="~/Content/css/menuresponsive.css" rel="stylesheet" />
+    <link href="~/Content/dist/css/sb-admin-2.css" rel="stylesheet" />
+    <link href="~/Content/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="~/Content/js/gridviewscroll.js"></script>
+
+    <script type="text/javascript">
+        var gridViewScroll = null;
+        window.onload = function () {
+            var options = new GridViewScrollOptions();
+            options.elementID = "gvMain";
+            options.width = "100% !important";
+            options.height = "100% !important";
+            options.freezeColumn = true;
+            options.freezeFooter = false;
+            options.freezeColumnCssClass = "GridViewScrollItemFreeze";
+            options.freezeFooterCssClass = "GridViewScrollFooterFreeze";
+            options.freezeColumnCount = 1;
+
+            gridViewScroll = new GridViewScroll(options);
+            gridViewScroll.enhance();
+        }
+    </script>
+
+</head>
+<body>
+    @*<input type="button" value="getScrollPosition" onclick="getScrollPosition()">
+        <input type="button" value="setScrollPosition" onclick="setScrollPosition()">*@
+    <div style="height: 97vh !important; width: 99%">
+        <table cellspacing="0" id="gvMain">
+            <tr class="GridViewScrollHeader">
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.Restaurante)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.Region.Nombre)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.Ciudad.Nombre)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.AcomodoDeCajas)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.AreaDeJuegos)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.Arroz)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.Autoexpress)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.BisquetMiel)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.CantidadDePantallas)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.CCoFranquicia)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.Clasificacion)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.CopeteAERemodelado)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.CopeteAETradicional)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Tienda.Delivery)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr class="GridViewScrollItem">
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.Restaurante)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.Region.Nombre)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.Ciudad.Nombre)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.AcomodoDeCajas)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.AreaDeJuegos)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.Arroz)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.Autoexpress)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.BisquetMiel)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.CantidadDePantallas)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.CCoFranquicia)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.Clasificacion)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.CopeteAERemodelado)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.CopeteAETradicional)
+                    </td>
+                    <td scope="col">
+                        @Html.DisplayFor(modelItem => item.Tienda.Delivery)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>
