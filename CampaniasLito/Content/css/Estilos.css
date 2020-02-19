@@ -67,11 +67,6 @@ table {
     max-height: 87vh; /*Alto máximo*/
 }
 
-#gvMain {
-    overflow-y: auto; /*Ajuste automático, agrega scroll según el tamaño del contenido*/
-    height: 87vh; /*Alto del 100% del Viewport*/
-    max-height: 87vh; /*Alto máximo*/
-}
 
     #unId30::-webkit-scrollbar,
     #unId32::-webkit-scrollbar,
@@ -79,7 +74,7 @@ table {
     #unId40::-webkit-scrollbar,
     #unId35::-webkit-scrollbar,
     #unId70::-webkit-scrollbar,
-    #gvMain::-webkit-scrollbar,
+    #gvMain_Content_Fixed::-webkit-scrollbar,
     #unIdCalender::-webkit-scrollbar {
         width: 12px; /* Tamaño del scroll en vertical */
         /*margin-right: 10px;*/
@@ -87,71 +82,71 @@ table {
         /*display: none; /* Ocultar scroll */
     }
 
-#unId30::-webkit-scrollbar-thumb,
-#unId32::-webkit-scrollbar-thumb,
-#unId34::-webkit-scrollbar-thumb,
-#unId40::-webkit-scrollbar-thumb,
-#unId35::-webkit-scrollbar-thumb,
-#unId70::-webkit-scrollbar-thumb,
-#gvMain::-webkit-scrollbar-thumb,
-#unIdCalender::-webkit-scrollbar-thumb {
-    background: #999999;
-    border-radius: 10px;
-}
-
-    #unId30::-webkit-scrollbar-thumb:hover,
-    #unId32::-webkit-scrollbar-thumb:hover,
-    #unId34::-webkit-scrollbar-thumb:hover,
-    #unId40::-webkit-scrollbar-thumb:hover,
-    #unId35::-webkit-scrollbar-thumb:hover,
-    #unId70::-webkit-scrollbar-thumb:hover,
-    #gvMain::-webkit-scrollbar-thumb:hover,
-    #unIdCalender::-webkit-scrollbar-thumb:hover {
-        background: #b3b3b3;
-        box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+    #unId30::-webkit-scrollbar-thumb,
+    #unId32::-webkit-scrollbar-thumb,
+    #unId34::-webkit-scrollbar-thumb,
+    #unId40::-webkit-scrollbar-thumb,
+    #unId35::-webkit-scrollbar-thumb,
+    #unId70::-webkit-scrollbar-thumb,
+    #gvMain_Content_Fixed::-webkit-scrollbar-thumb,
+    #unIdCalender::-webkit-scrollbar-thumb {
+        background: #999999;
+        border-radius: 10px;
     }
 
-    #unId30::-webkit-scrollbar-thumb:active,
-    #unId32::-webkit-scrollbar-thumb:active,
-    #unId34::-webkit-scrollbar-thumb:active,
-    #unId40::-webkit-scrollbar-thumb:active,
-    #unId35::-webkit-scrollbar-thumb:active,
-    #unId70::-webkit-scrollbar-thumb:active,
-    #gvMain::-webkit-scrollbar-thumb:active,
-    #unIdCalender::-webkit-scrollbar-thumb:active {
-        background-color: #ddd;
-    }
+        #unId30::-webkit-scrollbar-thumb:hover,
+        #unId32::-webkit-scrollbar-thumb:hover,
+        #unId34::-webkit-scrollbar-thumb:hover,
+        #unId40::-webkit-scrollbar-thumb:hover,
+        #unId35::-webkit-scrollbar-thumb:hover,
+        #unId70::-webkit-scrollbar-thumb:hover,
+        #gvMain_Content_Fixed::-webkit-scrollbar-thumb:hover,
+        #unIdCalender::-webkit-scrollbar-thumb:hover {
+            background: #b3b3b3;
+            box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+        }
 
-#unId30::-webkit-scrollbar-track,
-#unId32::-webkit-scrollbar-track,
-#unId34::-webkit-scrollbar-track,
-#unId40::-webkit-scrollbar-track,
-#unId35::-webkit-scrollbar-track,
-#unId70::-webkit-scrollbar-track,
-#gvMain::-webkit-scrollbar-track,
-#unIdCalender::-webkit-scrollbar-track {
-    background: #000;
-    border-radius: 10px;
-}
+        #unId30::-webkit-scrollbar-thumb:active,
+        #unId32::-webkit-scrollbar-thumb:active,
+        #unId34::-webkit-scrollbar-thumb:active,
+        #unId40::-webkit-scrollbar-thumb:active,
+        #unId35::-webkit-scrollbar-thumb:active,
+        #unId70::-webkit-scrollbar-thumb:active,
+        #gvMain_Content_Fixed::-webkit-scrollbar-thumb:active,
+        #unIdCalender::-webkit-scrollbar-thumb:active {
+            background-color: #ddd;
+        }
 
-    #unId30::-webkit-scrollbar-track:hover,
-    #unId30::-webkit-scrollbar-track:active,
-    #unId32::-webkit-scrollbar-track:hover,
-    #unId32::-webkit-scrollbar-track:active,
-    #unId34::-webkit-scrollbar-track:hover,
-    #unId34::-webkit-scrollbar-track:active,
-    #unId40::-webkit-scrollbar-track:hover,
-    #unId40::-webkit-scrollbar-track:active,
-    #unId35::-webkit-scrollbar-track:hover,
-    #unId35::-webkit-scrollbar-track:active,
-    #unId70::-webkit-scrollbar-track:hover,
-    #unId70::-webkit-scrollbar-track:active,
-    #gvMain::-webkit-scrollbar-track:hover,
-    #gvMain::-webkit-scrollbar-track:active,
-    #unIdCalender::-webkit-scrollbar-track:hover,
-    #unIdCalender::-webkit-scrollbar-track:active {
+    #unId30::-webkit-scrollbar-track,
+    #unId32::-webkit-scrollbar-track,
+    #unId34::-webkit-scrollbar-track,
+    #unId40::-webkit-scrollbar-track,
+    #unId35::-webkit-scrollbar-track,
+    #unId70::-webkit-scrollbar-track,
+    #gvMain_Content_Fixed::-webkit-scrollbar-track,
+    #unIdCalender::-webkit-scrollbar-track {
         background: #000;
+        border-radius: 10px;
     }
+
+        #unId30::-webkit-scrollbar-track:hover,
+        #unId30::-webkit-scrollbar-track:active,
+        #unId32::-webkit-scrollbar-track:hover,
+        #unId32::-webkit-scrollbar-track:active,
+        #unId34::-webkit-scrollbar-track:hover,
+        #unId34::-webkit-scrollbar-track:active,
+        #unId40::-webkit-scrollbar-track:hover,
+        #unId40::-webkit-scrollbar-track:active,
+        #unId35::-webkit-scrollbar-track:hover,
+        #unId35::-webkit-scrollbar-track:active,
+        #unId70::-webkit-scrollbar-track:hover,
+        #unId70::-webkit-scrollbar-track:active,
+        #gvMain_Content_Fixed::-webkit-scrollbar-track:hover,
+        #gvMain_Content_Fixed::-webkit-scrollbar-track:active,
+        #unIdCalender::-webkit-scrollbar-track:hover,
+        #unIdCalender::-webkit-scrollbar-track:active {
+            background: #000;
+        }
 
 
 .inputModal {

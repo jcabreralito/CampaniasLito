@@ -480,4 +480,3 @@ var GridViewScroll = /** @class */ (function () {
     };
     return GridViewScroll;
 }());
-//# sourceMappingURL=gridviewscroll.js.map

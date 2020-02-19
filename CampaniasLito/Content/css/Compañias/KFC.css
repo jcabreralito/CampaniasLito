@@ -88,3 +88,13 @@ a.inicio {
 .menuNav {
     background-color: rgba(223, 37, 48, 0.8) !important;
 }
+
+/*.GridViewScrollItem TD:hover {
+    background-color: transparent !important;
+    color: #DF2530;
+}*/
+
+.GridViewScrollItem .table-striped > tr:nth-of-type(odd) {
+    background-color: #A5202A !important;
+    color: #fff !important
+}

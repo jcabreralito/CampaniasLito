@@ -18,7 +18,7 @@ namespace CampaniasLito.Controllers
         public ActionResult Index()
         {
             var campañaTiendaTMPs = db.CampañaTiendaTMPs.Include(c => c.Tienda);
-            return View(campañaTiendaTMPs.ToList());
+            return PartialView(campañaTiendaTMPs.ToList());
         }
 
         // GET: CampañaTiendaTMPs/Details/5

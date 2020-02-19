@@ -26,7 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>3.6</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>3.7</TypeScriptToolsVersion>
     <Use64BitIISExpress />
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -1063,12 +1063,12 @@
     <Content Include="Views\Account\Login - Copia.cshtml" />
     <Content Include="Views\Shared\_Layout - Copia.cshtml" />
     <Content Include="Views\Campañas\Create.cshtml" />
-    <Content Include="Views\CampañaTiendaTMPs\Index.cshtml" />
+    <Content Include="Views\CampañaTiendaTMPs\Index2.cshtml" />
     <Content Include="Views\CampañaTiendaTMPs\Create.cshtml" />
     <Content Include="Views\CampañaTiendaTMPs\Delete.cshtml" />
     <Content Include="Views\CampañaTiendaTMPs\Details.cshtml" />
     <Content Include="Views\CampañaTiendaTMPs\Edit.cshtml" />
-    <Content Include="Views\CampañaTiendaTMPs\Index1.cshtml" />
+    <Content Include="Views\CampañaTiendaTMPs\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Generic\" />

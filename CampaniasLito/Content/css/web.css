@@ -9,35 +9,58 @@
 }*/
 
 .GridViewScrollHeader TH, .GridViewScrollHeader TD {
-    padding: 10px;
+    padding: 5px;
     font-weight: normal;
     white-space: nowrap;
     border-right: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
-    background-color: #F4F4F4;
-    color: #999999;
+    background-color: #DF2530;
+    color: #fff;
     text-align: left;
     vertical-align: bottom;
+    font-size: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px !important;
 }
 
 .GridViewScrollItem TD {
-    padding: 10px;
+    padding: 0 5px;
     white-space: nowrap;
     border-right: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
-    background-color: #FFFFFF;
-    color: #444444;
+    /*background-color: #DF2530;
+    color: #fff;*/
+    font-size: 12px;
+    vertical-align: middle;
 }
 
-.GridViewScrollItemFreeze TD {
-    padding: 10px;
-    white-space: nowrap;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
-    background-color: #FAFAFA;
-    color: #444444;
-    border-radius: 10px;
+.GridViewScrollItemFreeze {
+    background-color: #A5202A !important;
+    color: #fff !important;
 }
+
+    .GridViewScrollItemFreeze:hover {
+        background-color: #2B3E50 !important;
+        color: #fff !important;
+        border-color: #fff !important;
+    }
+
+    .GridViewScrollItemFreeze TD {
+        padding: 0 5px;
+        white-space: nowrap;
+        /*border-right: 1px solid #fff;*/
+        border-bottom: 1px solid #fff;
+        /*background-color: #DF2530 !important;
+        color: #fff !important;*/
+        border-radius: 10px;
+        font-size: 12px;
+        vertical-align: middle !important;
+    }
+
+    .GridViewScrollItemFreeze > tr:nth-of-type(odd) {
+        background-color: #A5202A !important;
+        color: #fff !important
+    }
 
 .GridViewScrollFooterFreeze TD {
     padding: 10px;
@@ -45,6 +68,12 @@
     border-right: 1px solid #e6e6e6;
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
-    background-color: #F4F4F4;
-    color: #444444;
+    background-color: #DF2530;
+    color: #fff;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+#gvMain_Header_Fixed {
+    margin-bottom: 10px;
 }
