@@ -125,7 +125,7 @@ namespace CampaniasLito.Controllers
 
             ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
 
-            return View(view);
+            return PartialView(view);
 
 
         }

@@ -99,7 +99,7 @@ namespace CampaniasLito.Classes
                                 Usuario = nombreUsuario,
                                 TiendaId = id,
                                 ArticuloKFCId = articulo.ArticuloKFCId,
-                                Cantidad = 0,
+                                Cantidad = 1,
                                 Habilitado = true,
                                 CampañaTiendaTMPId = campId,
                             };
