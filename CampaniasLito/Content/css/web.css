@@ -17,7 +17,7 @@
     background-color: #DF2530;
     color: #fff;
     text-align: left;
-    vertical-align: bottom;
+    vertical-align: middle;
     font-size: 12px;
     border-radius: 10px;
     margin-bottom: 10px !important;
@@ -76,4 +76,12 @@
 
 #gvMain_Header_Fixed {
     margin-bottom: 10px;
+}
+
+th > .gridViewScrollHelper {
+    height: 18px !important;
+}
+
+td > .gridViewScrollHelper {
+    padding-top: 15px;
 }

@@ -97,6 +97,34 @@ namespace CampaniasLito.Controllers
                 Detalles = db.CampañaTiendaTMPs.Where(cdt => cdt.Usuario == usuario.NombreUsuario).ToList(),
             };
 
+            Session["CampañaId"] = view.CampañaId;
+            
+            return View(view);
+
+
+        }
+
+        public ActionResult CreateCampArt(int? id, int? campId)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var response = MovementsHelper.AgregarArticulosTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id, (int)campId);
+
+            if (response.Succeeded)
+            {
+                //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+            }
+
+            ModelState.AddModelError(string.Empty, response.Message);
+
+            var view = db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == id).ToList();
+
+            ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
+
             return View(view);
 
 

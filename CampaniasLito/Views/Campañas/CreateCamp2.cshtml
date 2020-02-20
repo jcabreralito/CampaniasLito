@@ -54,6 +54,41 @@
     @Styles.Render("~/bundles/js")
     @Styles.Render("~/bundles/css")
 
+    <style>
+
+        table {
+            overflow-x: auto !important;
+            display: block !important;
+            white-space: nowrap !important;
+        }
+
+        th {
+            height: 4rem !important; /* Alto fijo de las dos primeras filas */
+        }
+
+        .fijar-headcol {
+            position: absolute !important;
+            height: 8rem !important; /*Doble de alto de la primera fila*/
+            background-color: #0F0 !important;
+            /* Centramos */
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            color: #FFF !important;
+        }
+
+        .headcol {
+            display: block !important;
+            width: 8rem !important; /* Ancho fijo de la primera columna */
+        }
+
+        .fijar {
+            position: absolute !important;
+            width: 8rem !important; /* Ancho fijo de la primera columna */
+            background-color: red !important;
+        }
+    </style>
+
     <link href="~/Content/css/menuresponsive.css" rel="stylesheet" />
     <link href="~/Content/icon/style.css" rel="stylesheet" />
     <link href="~/Content/css/Estilos.css" rel="stylesheet" />
@@ -66,41 +101,41 @@
     <link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
     <link href="~/Content/css/Vistas.css" rel="stylesheet" />
     <link href="~/Content/css/Generales.css" rel="stylesheet" />
-    <link href="~/Content/css/web.css" rel="stylesheet" />
+    @*<link href="~/Content/css/web.css" rel="stylesheet" />*@
 
     <script src="https://kit.fontawesome.com/8068fd2104.js" crossorigin="anonymous"></script>
 
-    <script type="text/javascript" src="~/Content/js/gridviewscroll.js"></script>
+    @*<script type="text/javascript" src="~/Content/js/gridviewscroll.js"></script>*@
 
-    <script type="text/javascript">
+    @*<script type="text/javascript">
 
-        var gridViewScroll = null;
+            var gridViewScroll = null;
 
-        window.onload = function () {
-            var options = new GridViewScrollOptions();
-            options.elementID = "gvMain";
-            options.width = "100% !important";
-            options.height = "100% !important";
-            options.freezeColumn = true;
-            options.freezeFooter = false;
-            options.freezeColumnCssClass = "GridViewScrollItemFreeze";
-            options.freezeFooterCssClass = "GridViewScrollFooterFreeze";
-            options.freezeColumnCount = 3;
+            window.onload = function () {
+                var options = new GridViewScrollOptions();
+                options.elementID = "gvMain";
+                options.width = "100% !important";
+                options.height = "100% !important";
+                options.freezeColumn = true;
+                options.freezeFooter = false;
+                options.freezeColumnCssClass = "GridViewScrollItemFreeze";
+                options.freezeFooterCssClass = "GridViewScrollFooterFreeze";
+                options.freezeColumnCount = 1;
 
-            gridViewScroll = new GridViewScroll(options);
-            gridViewScroll.enhance();
-        }
+                gridViewScroll = new GridViewScroll(options);
+                gridViewScroll.enhance();
+            }
 
-    </script>
+        </script>
 
-    <script>
+        <script>
 
-        function redimensionar() {
-            gridViewScroll.enhance();
-        }
-    </script>
+            function redimensionar() {
+                gridViewScroll.enhance();
+            }
+        </script>*@
 </head>
-<body OnResize="redimensionar()">
+<body>
     @using (Html.BeginForm("Create", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="panel" style="margin: 1% 2%">
@@ -168,76 +203,76 @@
             }
             else
             {
-                <table cellspacing="0" id="gvMain" class="table-striped table-hover">
-                    @*<tr class="GridViewScrollHeader">
-                            <th scope="col" rowspan="2">
+                <table id="unId70" cellspacing="0" width="100%" class="table-striped table-hover table-responsive display compact no-wrap">
+                    <thead>
+                        <tr id="chargedaysheader">
+                            <th class="headcol fijar-headcol">
                                 @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Restaurante)
                             </th>
-                            <th scope="col" colspan="14">
-                                CARACTERISTICAS
+                            <th colspan="14">
+                                PRODUCTO
                             </th>
-                        </tr>*@
-                    <tr class="GridViewScrollHeader">
-                        <th scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Restaurante)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            SEL.
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            <i class="fas fa-barcode"></i>
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Region.Nombre)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Ciudad.Nombre)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.AcomodoDeCajas)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.AreaDeJuegos)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Arroz)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Autoexpress)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.BisquetMiel)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CantidadDePantallas)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CCoFranquicia)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Clasificacion)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CopeteAERemodelado)
-                        </th>
-                        <th style="text-align:center" scope="col">
-                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CopeteAETradicional)
-                        </th>
-                    </tr>
-                    <tbody>
+                        </tr>
+                        <tr id="chargelegendheader">
+                            
+                            <th scope="row" class="headcol">
+                                <div class="sr-only">
+                                    @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Restaurante)
+                                </div>
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                SEL.
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Region.Nombre)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Ciudad.Nombre)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.AcomodoDeCajas)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.AreaDeJuegos)
+                            </th>
+                            <th style="text-align: center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Arroz)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Autoexpress)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.BisquetMiel)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CantidadDePantallas)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CCoFranquicia)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Clasificacion)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CopeteAERemodelado)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CopeteAETradicional)
+                            </th>
+                            <th style="text-align:center" scope="col">
+                                <i class="fas fa-barcode"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="chargetabledata">
                         @foreach (var item in Model.Detalles)
                         {
-                            <tr class="GridViewScrollItem">
-                                <td scope="col">
+                            <tr>
+                                <th scope="row" class="fijar">
                                     @Html.DisplayFor(modelItem => item.Tienda.Restaurante)
-                                </td>
+                                </th>
                                 <td align="center" scope="col">
                                     @Html.CheckBoxFor(modelItem => item.Seleccionada, htmlAttributes: new { @class = "checkTamanio" })
-                                </td>
-                                <td align="center" scope="col">
-                                    <a id="botones" href="@Url.Action("CreateCampArt", "Campañas", new { id = item.TiendaId, campId = item.CampañaTiendaTMPId})" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
-                                        <i class="fas fa-plus-circle"></i>
-                                    </a>
                                 </td>
                                 <td align="center" scope="col">
                                     @Html.DisplayFor(modelItem => item.Tienda.Region.Nombre)
@@ -274,6 +309,11 @@
                                 </td>
                                 <td align="center" scope="col">
                                     @Html.CheckBoxFor(modelItem => item.Tienda.CopeteAETradicional, new { @class = "checkTamanio", disabled = "disabled" })
+                                </td>
+                                <td align="center" scope="col">
+                                    <a id="botones" href="@Url.Action("CreateCampArt", "Campañas", new { id = item.TiendaId})" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </a>
                                 </td>
                             </tr>
                         }

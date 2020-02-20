@@ -19,6 +19,8 @@ namespace CampaniasLito.Models
         [Display(Name = "Articulo")]
         public int ArticuloId { get; set; }
 
+        public double Cantidad { get; set; }
+
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
         [Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
         [Display(Name = "Tienda")]

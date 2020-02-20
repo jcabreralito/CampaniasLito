@@ -36,7 +36,6 @@ namespace CampaniasLito.Classes
                             };
 
                             db.NuevaCampañaViews.Add(nuevaCampañaAdd);
-
                         }
                     }
 
@@ -78,6 +77,56 @@ namespace CampaniasLito.Classes
             }
         }
 
+        public static Response AgregarArticulosTiendas(int compañiaId, string nombreUsuario, int id, int campId)
+        {
+            using (var transaccion = db.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañiaId).ToList();
+
+
+                    foreach (var articulo in articulos)
+                    {
+                        var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == id && cdt.CampañaTiendaTMPId == campId).FirstOrDefault();
+
+                        if (articulosTMPs == null)
+                        {
+                            var articuloDetalle = new CampañaArticuloTMP
+                            {
+                                Compañia = compañiaId,
+                                Usuario = nombreUsuario,
+                                TiendaId = id,
+                                ArticuloKFCId = articulo.ArticuloKFCId,
+                                Cantidad = 0,
+                                Habilitado = true,
+                                CampañaTiendaTMPId = campId,
+                            };
+
+                            db.CampañaArticuloTMPs.Add(articuloDetalle);
+                        }
+
+                    }
+
+
+                    db.SaveChanges();
+                    transaccion.Commit();
+
+                    return new Response { Succeeded = true, };
+                }
+                catch (Exception ex)
+                {
+                    transaccion.Rollback();
+                    return new Response
+                    {
+                        Message = ex.Message,
+                        Succeeded = false,
+                    };
+                }
+            }
+        }
+
         public static Response NuevaCampaña(NuevaCampañaView view, string userName, int compañia)
         {
 
@@ -88,7 +137,7 @@ namespace CampaniasLito.Classes
                     var campaña = new Campaña
                     {
                         CampañaId = compañia,
-                        Descripcion= view.Descripcion,
+                        Descripcion = view.Descripcion,
                         Generada = "NO",
                         Nombre = view.Nombre,
                     };

@@ -52,5 +52,7 @@ namespace CampaniasLito.Models
         public DbSet<CampañaTiendaTMP> CampañaTiendaTMPs { get; set; }
 
         public DbSet<NuevaCampañaView> NuevaCampañaViews { get; set; }
+
+        public DbSet<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
     }
 }

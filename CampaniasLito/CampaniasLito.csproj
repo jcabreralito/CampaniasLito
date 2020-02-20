@@ -213,6 +213,7 @@
     <Compile Include="Models\Bodega.cs" />
     <Compile Include="Models\Campaña.cs" />
     <Compile Include="Models\CampañaArticulo.cs" />
+    <Compile Include="Models\CampañaArticuloTMP.cs" />
     <Compile Include="Models\CampañaTienda.cs" />
     <Compile Include="Models\CampañaTiendaTMP.cs" />
     <Compile Include="Models\Categoria.cs" />
@@ -1069,6 +1070,8 @@
     <Content Include="Views\CampañaTiendaTMPs\Details.cshtml" />
     <Content Include="Views\CampañaTiendaTMPs\Edit.cshtml" />
     <Content Include="Views\CampañaTiendaTMPs\Index.cshtml" />
+    <Content Include="Views\Campañas\CreateCamp2.cshtml" />
+    <Content Include="Views\Campañas\CreateCampArt.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Generic\" />

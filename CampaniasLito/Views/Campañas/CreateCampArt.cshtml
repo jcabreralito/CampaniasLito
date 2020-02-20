@@ -1,0 +1,65 @@
+﻿@model IEnumerable<CampaniasLito.Models.CampañaArticuloTMP>
+
+@{
+    ViewBag.Title = "Articulos Campañas";
+}
+
+    <div class="panel-heading table-responsive" id="panelH">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <table style="width:100%; margin-top: -10px" id="dataTable" cellspacing="0">
+            <tr>
+                <td class=" col-sm-12">
+                    <h2 style="color: white"><i class="fas fa-calendar-alt"></i> @ViewBag.Title</h2>
+                </td>
+                <td class="col-sm-12">
+                    <div id="botones" class="input-group" style="display:flex; float:right">
+                        <a href="@Url.Action("CreateCamp", "Campañas", new { id = Session["CampañaId"] })">
+                            <i class="fas fa-times-circle btn btn-pilares" style="border-radius:10px; text-align: right; font-size: 17px"></i>
+                        </a>
+                    </div>
+                </td>
+                <td class="col-sm-12" align="right">
+                    <div class="input-group">
+                        <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
+                            <i class="fas fa-check-circle"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th colspan="3">
+                @ViewBag.Tienda
+            </th>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticuloKFC.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Habilitado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ArticuloKFC.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Habilitado)
+                </td>
+                <td>
+                    @Html.EditorFor(modelItem => item.Cantidad)
+                </td>
+            </tr>
+        }
+
+    </table>
