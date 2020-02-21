@@ -54,5 +54,7 @@ namespace CampaniasLito.Models
         public DbSet<NuevaCampañaView> NuevaCampañaViews { get; set; }
 
         public DbSet<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
+
+        public System.Data.Entity.DbSet<CampaniasLito.Models.Proveedor> Proveedors { get; set; }
     }
 }

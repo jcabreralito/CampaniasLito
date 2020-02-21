@@ -1376,7 +1376,7 @@ a {
 }
 
     a:focus, a:hover {
-        color: #2BBBAD;
+        color: #71D1C8;
         text-decoration: none;
     }
 
@@ -7280,7 +7280,7 @@ button.close {
 .py-3 {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
-    background-color: #2b3e50 !important;
+    background-color: #F5F5F5 !important;
 }
 
 /*# sourceMappingURL=bootstrap.min.css.map */

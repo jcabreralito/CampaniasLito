@@ -80,6 +80,8 @@ namespace CampaniasLito.Controllers
 
             var articulos = new ArticuloKFC { CompañiaId = usuario.CompañiaId, };
 
+            ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre");
+
             return PartialView(articulos);
         }
 
@@ -106,6 +108,8 @@ namespace CampaniasLito.Controllers
                 ModelState.AddModelError(string.Empty, response.Message);
             }
 
+            ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
+
             return PartialView(articuloKFC);
         }
 
@@ -123,6 +127,8 @@ namespace CampaniasLito.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
 
             return PartialView(articuloKFC);
         }
@@ -147,6 +153,8 @@ namespace CampaniasLito.Controllers
                 ModelState.AddModelError(string.Empty, response.Message);
             }
 
+            ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
+
             return PartialView(articuloKFC);
         }
 
@@ -164,7 +172,9 @@ namespace CampaniasLito.Controllers
             {
                 return HttpNotFound();
             }
-            
+
+            ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
+
             return View(articuloKFC);
         }
 

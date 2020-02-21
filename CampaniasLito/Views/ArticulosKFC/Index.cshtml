@@ -61,23 +61,28 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr style="font-size:12px; text-transform: capitalize">
-                                <td style="width: 75%">
-                                    <a href="@Url.Action("Edit", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
-                                        @Html.DisplayFor(modelItem => item.Descripcion)
-                                    </a>
-                                </td>
-                                <td style="width: 10%" align="center">
-                                    <a href="@Url.Action("Edit", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
-                                        @Html.DisplayFor(modelItem => item.Familia)
-                                    </a>
-                                </td>
-                                <td style="width: 15%" align="center">
-                                    <a id="botones" href="@Url.Action("Delete", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="btn btn-danger dialog-window-medium" style="background-color: transparent; border:none; font-size: 20px">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr style="font-size:12px; text-transform: capitalize">
+                            <td style="width: 50%">
+                                <a href="@Url.Action("Edit", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
+                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                </a>
+                            </td>
+                            <td style="width: 25%">
+                                <a href="@Url.Action("Edit", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
+                                    @Html.DisplayFor(modelItem => item.Proveedor.Nombre)
+                                </a>
+                            </td>
+                            <td style="width: 10%" align="center">
+                                <a href="@Url.Action("Edit", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
+                                    @Html.DisplayFor(modelItem => item.Familia)
+                                </a>
+                            </td>
+                            <td style="width: 15%" align="center">
+                                <a id="botones" href="@Url.Action("Delete", "ArticulosKFC", new { id = item.ArticuloKFCId})" class="btn btn-danger dialog-window-medium" style="background-color: transparent; border:none; font-size: 20px">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

@@ -41,7 +41,7 @@ h6, html, input[type=submit], input[type=button] {
 }
 
 .bgPortada {
-    background: url('../Fotos/lito.jpg') no-repeat;
+    /*background: url('../Fotos/lito.jpg') no-repeat;*/
     background-position: center;
     background-size: 50%;
     width: 100%;
@@ -52,7 +52,7 @@ h6, html, input[type=submit], input[type=button] {
 }
 
 .bgPortadaStarbucks {
-    background: url('../Fotos/starbucks-portal-palermo.jpg') no-repeat;
+    /*background: url('../Fotos/starbucks-portal-palermo.jpg') no-repeat;*/
     background-position: center;
     background-size: 80% 65%;
     width: 100%;
@@ -63,7 +63,7 @@ h6, html, input[type=submit], input[type=button] {
 }
 
 .bgPortadaKrispy {
-    background: url('../Fotos/krispy.jpg') no-repeat;
+    /*background: url('../Fotos/krispy.jpg') no-repeat;*/
     background-position: center;
     background-size: 80% 65%;
     width: 100%;
@@ -74,7 +74,7 @@ h6, html, input[type=submit], input[type=button] {
 }
 
 .bgPortadaKFC {
-    background: url('../Fotos/historia_10.jpg') no-repeat;
+    /*background: url('../Fotos/historia_10.jpg') no-repeat;*/
     background-position: center;
     background-size: 70% 65%;
     width: 100%;

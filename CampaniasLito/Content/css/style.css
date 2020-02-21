@@ -64,19 +64,19 @@
 }
 
 .diario {
-    background: #2B3E50;
+    background: #F5F5F5;
 }
 
 .video {
-    background: #2B3E50;
+    background: #F5F5F5;
 }
 
 .tareas {
-    background: #2B3E50;
+    background: #F5F5F5;
 }
 
 .tareasTotal {
-    background: #2B3E50;
+    background: #F5F5F5;
 }
 
 .genialColor {
@@ -96,19 +96,19 @@
 }
 
 .genial {
-    background: #2B3E50;
+    background: #F5F5F5;
 }
 
 .bien {
-    background: #2B3E50;
+    background: #F5F5F5;
 }
 
 .regular {
-    background: #2B3E50;
+    background: #F5F5F5;
 }
 
 .mal {
-    background: #2B3E50;
+    background: #F5F5F5;
 }
 
 @media (max-width:768px) {
@@ -176,18 +176,18 @@
     }
 
     .diario {
-        background: #2B3E50;
+        background: #F5F5F5;
     }
 
     .video {
-        background: #2B3E50;
+        background: #F5F5F5;
     }
 
     .tareas {
-        background: #2B3E50;
+        background: #F5F5F5;
     }
 
     .tareasTotal {
-        background: #2B3E50;
+        background: #F5F5F5;
     }
 }

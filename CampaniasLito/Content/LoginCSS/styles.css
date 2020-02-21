@@ -19,7 +19,7 @@
 
 body {
     overflow: hidden;
-    background: #2B3E50 !important;
+    background: #F5F5F5 !important;
     color: #fff
 }
 
@@ -75,7 +75,7 @@ body {
         }
 
     #unId32::-webkit-scrollbar-track, #unId40::-webkit-scrollbar-track, #unId35::-webkit-scrollbar-track, #unId70::-webkit-scrollbar-track, #unIdCalender::-webkit-scrollbar-track {
-        background: #01207B;
+        background: #71D1C8;
         border-radius: 10px;
     }
 
@@ -85,7 +85,7 @@ body {
         #unId35::-webkit-scrollbar-track:active, #unId70::-webkit-scrollbar-track:hover,
         #unId70::-webkit-scrollbar-track:active, #unIdCalender::-webkit-scrollbar-track:hover,
         #unIdCalender::-webkit-scrollbar-track:active {
-            background: #01207B;
+            background: #71D1C8;
         }
 
 
@@ -115,14 +115,14 @@ body {
 }
 
 .bg-hero, .btn-hero {
-    background-color: #01207B;
+    background-color: #71D1C8;
     color: white;
 }
 
     .btn-hero:hover {
         background-color: white;
-        color: #01207B;
-        border: solid 1px #01207B;
+        color: #71D1C8;
+        border: solid 1px #71D1C8;
     }
 
 .clickeable {
@@ -158,7 +158,7 @@ body {
 }
 
 .tooltip {
-    background-color: #01207B;
+    background-color: #71D1C8;
     color: white;
     padding-left: 10px;
     padding-right: 10px;
@@ -178,7 +178,7 @@ body {
         left: 20%;
         border-style: solid;
         border-width: 5px;
-        border-color: transparent transparent #01207B transparent;
+        border-color: transparent transparent #71D1C8 transparent;
     }
 
 .txt:hover + .tooltip {
@@ -188,7 +188,7 @@ body {
 }
 
 .tooltip2 {
-    background-color: #01207B;
+    background-color: #71D1C8;
     color: white;
     padding-left: 10px;
     padding-right: 10px;
@@ -208,7 +208,7 @@ body {
         left: 80%;
         border-style: solid;
         border-width: 5px;
-        border-color: transparent transparent #01207B transparent;
+        border-color: transparent transparent #71D1C8 transparent;
     }
 
 .txt:hover + .tooltip2 {
@@ -765,20 +765,20 @@ bs-datepicker-container, bs-daterangepicker-container {
 }
 
 .theme-green .bs-datepicker-head {
-    background-color: #01207B;
+    background-color: #71D1C8;
 }
 
 .theme-green .bs-datepicker-body table td span.selected, .theme-green .bs-datepicker-body table td.selected span, .theme-green .bs-datepicker-body table td span[class*="select-"]:after, .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #01207B;
+    background-color: #71D1C8;
 }
 
 .theme-green .bs-datepicker-body table td.week span {
-    color: #01207B;
+    color: #71D1C8;
 }
 
 .theme-green .bs-datepicker-body table td.active-week span:hover {
     cursor: pointer;
-    background-color: #01207B;
+    background-color: #71D1C8;
     color: #fff;
     opacity: 0.5;
     transition: 0s;

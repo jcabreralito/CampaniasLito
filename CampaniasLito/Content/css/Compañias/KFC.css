@@ -36,7 +36,7 @@ table > tbody > tr > td {
 }
 
 .table-hover > tbody > tr:hover a:hover {
-    background-color: #2B3E50 !important;
+    background-color: #F5F5F5 !important;
     color: #DF2530 !important;
     border-color: #fff !important;
 }

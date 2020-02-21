@@ -170,5 +170,12 @@ namespace CampaniasLito.Classes
             var niveles = db.NivelPrecios.ToList();
             return niveles.OrderBy(c => c.Descripcion).ToList();
         }
+
+        public static List<Proveedor> GetProveedores(bool sw)
+        {
+            var proveedores = db.Proveedors.ToList();
+            return proveedores.OrderBy(c => c.Nombre).ToList();
+        }
+
     }
 }
