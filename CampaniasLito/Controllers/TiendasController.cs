@@ -3,11 +3,11 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CampaniasLito.Classes;
+using CampaniasLito.Filters;
 using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
 {
-    [Authorize(Roles = "User, Admin")]
     public class TiendasController : Controller
     {
         private CampaniasLitoContext db = new CampaniasLitoContext();
@@ -20,6 +20,7 @@ namespace CampaniasLito.Controllers
 
         }
 
+        [AuthorizeUser(idOperacion: 4)]
         public ActionResult Index(string tienda)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -52,6 +53,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Tiendas/Details/5
+        [AuthorizeUser(idOperacion: 9)]
         public ActionResult Details(int? id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -79,6 +81,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Tiendas/Create
+        [AuthorizeUser(idOperacion: 1)]
         public ActionResult Create()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -101,6 +104,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Tiendas/Create
+        [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Tienda tienda)
@@ -134,6 +138,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Tiendas/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
         public ActionResult Edit(int? id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -161,6 +166,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Tiendas/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Tienda tienda)
@@ -188,6 +194,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Tiendas/Delete/5
+        [AuthorizeUser(idOperacion: 3)]
         public ActionResult Delete(int? id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -214,6 +221,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Tiendas/Delete/5
+        [AuthorizeUser(idOperacion: 3)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

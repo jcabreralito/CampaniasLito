@@ -42,11 +42,13 @@
     }
 
     .bg-primary, .btn-primary {
-        background: #71D1C8;
+        background: #ffffff;
+        color: #000;
     }
 
         .btn-primary:hover {
-            background: #2BBBAD;
+            background: #f0f0f0;
+            color: #000;
         }
 
     @@media (max-width:414px) {
@@ -67,8 +69,8 @@
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="card">
                             <div class="mx-auto" style="padding-top: 40px">
-                                <img class="ocultar" style="border-radius: 20%" src="~/Content/Fotos/lito.jpg"
-                                     width="150" height="150">
+                                <img class="ocultar" src="~/Content/Logos/Logo_LIto_gris.png"
+                                     width="400">
                             </div>
                             <div class="card-body">
                                 <div class="form-group">

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CampaniasLito.Classes;
+using CampaniasLito.Filters;
 using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
@@ -19,6 +20,7 @@ namespace CampaniasLito.Controllers
 
         }
 
+        [AuthorizeUser(idOperacion: 4)]
         public ActionResult Index(string ciudad)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -52,6 +54,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Ciudades/Details/5
+        [AuthorizeUser(idOperacion: 9)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -69,6 +72,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Ciudades/Create
+        [AuthorizeUser(idOperacion: 1)]
         public ActionResult Create()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -85,6 +89,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Ciudades/Create
+        [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Ciudad ciudad)
@@ -111,6 +116,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Ciudades/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -131,6 +137,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Ciudades/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Ciudad ciudad)
@@ -158,6 +165,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Ciudades/Delete/5
+        [AuthorizeUser(idOperacion: 3)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -176,6 +184,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Ciudades/Delete/5
+        [AuthorizeUser(idOperacion: 3)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

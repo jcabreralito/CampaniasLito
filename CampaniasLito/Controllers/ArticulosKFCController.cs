@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CampaniasLito.Classes;
+using CampaniasLito.Filters;
 using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
@@ -20,6 +21,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: ArticulosKFC
+        [AuthorizeUser(idOperacion: 4)]
         public ActionResult Index(string articulo)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -44,7 +46,7 @@ namespace CampaniasLito.Controllers
 
             if (!string.IsNullOrEmpty(articulo))
             {
-                return View(articuloKFCs.Where(a => a.Descripcion.Contains(filtro) || a.Familia.Contains(filtro)).ToList());
+                return View(articuloKFCs.Where(a => a.Descripcion.Contains(filtro) || a.Familia.Contains(filtro) || a.Proveedor.Nombre.Contains(filtro)).ToList());
             }
             else
             {
@@ -54,6 +56,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: ArticulosKFC/Details/5
+        [AuthorizeUser(idOperacion: 9)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -69,6 +72,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: ArticulosKFC/Create
+        [AuthorizeUser(idOperacion: 1)]
         public ActionResult Create()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -86,6 +90,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: ArticulosKFC/Create
+        [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(ArticuloKFC articuloKFC)
@@ -114,6 +119,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: ArticulosKFC/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -134,6 +140,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: ArticulosKFC/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ArticuloKFC articuloKFC)
@@ -159,6 +166,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: ArticulosKFC/Delete/5
+        [AuthorizeUser(idOperacion: 3)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -179,6 +187,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: ArticulosKFC/Delete/5
+        [AuthorizeUser(idOperacion: 3)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

@@ -191,6 +191,7 @@
     <Compile Include="Controllers\CategoriasController.cs" />
     <Compile Include="Controllers\CiudadesController.cs" />
     <Compile Include="Controllers\CompañiasController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GenericController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -203,6 +204,8 @@
     <Compile Include="Controllers\TiposCajaController.cs" />
     <Compile Include="Controllers\TiposTiendaController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Filters\AuthorizeUser.cs" />
+    <Compile Include="Filters\VerificaSession.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -221,10 +224,15 @@
     <Compile Include="Models\Ciudad.cs" />
     <Compile Include="Models\Compañia.cs" />
     <Compile Include="Models\CampaniasLitoContext.cs" />
+    <Compile Include="Models\Error.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Modulo.cs" />
     <Compile Include="Models\NivelPrecio.cs" />
     <Compile Include="Models\NuevaCampañaView.cs" />
+    <Compile Include="Models\Operacion.cs" />
+    <Compile Include="Models\RolOperacion.cs" />
+    <Compile Include="Models\Permiso.cs" />
     <Compile Include="Models\Producto.cs" />
     <Compile Include="Models\Proveedor.cs" />
     <Compile Include="Models\Region.cs" />
@@ -729,6 +737,7 @@
     <Content Include="Views\Proveedores\Edit.cshtml" />
     <Content Include="Views\Proveedores\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Error\OperacionNoAutorizada.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Generic\" />

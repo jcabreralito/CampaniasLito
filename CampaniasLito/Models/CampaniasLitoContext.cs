@@ -55,6 +55,13 @@ namespace CampaniasLito.Models
 
         public DbSet<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
 
-        public System.Data.Entity.DbSet<CampaniasLito.Models.Proveedor> Proveedors { get; set; }
+        public DbSet<Proveedor> Proveedors { get; set; }
+
+        public DbSet<Modulo> Modulos { get; set; }
+
+        public DbSet<Operacion> Operaciones { get; set; }
+
+        public DbSet<RolOperacion> RolOperaciones { get; set; }
+
     }
 }

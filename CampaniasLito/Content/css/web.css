@@ -1,14 +1,4 @@
-﻿
-/*BODY {
-    height: 100%;
-    margin: 10px;
-    font-family: Tahoma, Arial, Verdana;
-    font-weight: normal;
-    font-size: 12px;
-    color: #333333;
-}*/
-
-.GridViewScrollHeader TH, .GridViewScrollHeader TD {
+﻿.GridViewScrollHeader TH, .GridViewScrollHeader TD {
     padding: 5px;
     font-weight: normal;
     white-space: nowrap;
@@ -35,13 +25,13 @@
 }
 
 .GridViewScrollItemFreeze {
-    background-color: #A5202A !important;
-    color: #fff !important;
+    background-color: #f0f0f0 !important;
+    color: #000 !important;
 }
 
     .GridViewScrollItemFreeze:hover {
-        background-color: #2B3E50 !important;
-        color: #fff !important;
+        background-color: #ffffff!important;
+        color: #000 !important;
         border-color: #fff !important;
     }
 

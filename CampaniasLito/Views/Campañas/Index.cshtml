@@ -19,11 +19,11 @@
                 <i class="fas fa-plus-circle"></i>
             </a>
 
-            <table style="width:100%" id="dataTable" cellspacing="0">
+            <table id="dataTable" cellspacing="0">
                 <tr>
-                    <th class=" col-xs-4">
-                        <h2 style="color: white"><i class="fas fa-calendar-alt"></i> Campañas</h2>
-                    </th>
+                    <td class=" col-xs-4">
+                        <h2><i class="fas fa-calendar-alt"></i> Campañas</h2>
+                    </td>
                     @using (Html.BeginForm("Index", "Campañas", FormMethod.Get))
                     {
                         <td class="col-xs-7">
@@ -66,25 +66,25 @@
                         {
                             <tr style="font-size:12px; text-transform: capitalize">
                                 <td style="width: 15%">
-                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white">
+                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000">
                                         @Html.DisplayFor(modelItem => item.Nombre)
                                     </a>
                                 </td>
                                 <td style="width: 40%">
-                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white">
+                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000">
                                         @Html.DisplayFor(modelItem => item.Descripcion)
                                     </a>
                                 </td>
                                 <td style="width: 15%" align="center">
                                     @if (item.Generada == "NO")
                                     {
-                                        <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white; font-size: 20px">
+                                        <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000; font-size: 20px">
                                             <i class="fas fa-times-circle"></i>
                                         </a>
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: white; font-size: 20px">
+                                        <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000; font-size: 20px">
                                             <i class="fas fa-check-circle"></i>
                                         </a>
                                     }

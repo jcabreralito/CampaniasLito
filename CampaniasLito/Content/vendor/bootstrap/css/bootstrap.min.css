@@ -2786,8 +2786,7 @@ th {
 }
 
 .table-hover > tbody > tr:hover {
-    background-color: #2B3E50 !important;
-    color: #fff;
+    background-color: #f5f5f5 !important;
     border-color: #fff !important;
 }
 
@@ -3018,7 +3017,7 @@ output {
     }
 
     .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-        background-color: #4E5D6C;
+        background-color: #f0f0f0;
         opacity: 4;
     }
 
@@ -3695,7 +3694,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
     }
 
 .btn-danger {
-    color: #fff;
+    color: indianred;
     background-color: #d9534f;
     border-color: #d43f3a;
 }

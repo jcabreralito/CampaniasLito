@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CampaniasLito.Classes;
+using CampaniasLito.Filters;
 using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
@@ -20,6 +21,7 @@ namespace CampaniasLito.Controllers
 
         }
 
+        [AuthorizeUser(idOperacion: 4)]
         public ActionResult Index(string campaña)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -54,6 +56,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Campañas/Details/5
+        [AuthorizeUser(idOperacion: 9)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -72,6 +75,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Campañas/Create
+        [AuthorizeUser(idOperacion: 1)]
         public ActionResult CreateCamp(int? id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -104,6 +108,7 @@ namespace CampaniasLito.Controllers
 
         }
 
+        [AuthorizeUser(idOperacion: 1)]
         public ActionResult CreateCampArt(int? id, int? campId)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -131,6 +136,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Campañas/Create
+        [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateCamp(NuevaCampañaView campaña)
@@ -171,6 +177,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Campañas/Create
+        [AuthorizeUser(idOperacion: 1)]
         public ActionResult Create()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -189,6 +196,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Campañas/Create
+        [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Campaña campaña)
@@ -219,6 +227,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Campañas/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -237,6 +246,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Campañas/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Campaña campaña)
@@ -262,6 +272,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Campañas/Delete/5
+        [AuthorizeUser(idOperacion: 3)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -280,6 +291,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Campañas/Delete/5
+        [AuthorizeUser(idOperacion: 3)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

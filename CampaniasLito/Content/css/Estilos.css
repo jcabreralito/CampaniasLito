@@ -14,7 +14,7 @@
 
 .nav > li > a, thead, tr, th, tr:hover, .navbar-toggle {
     background-color: #01207B;
-    color: #fff !important;
+    /*color: #fff !important;*/
 }
 
 table > tbody > tr > td {
@@ -150,9 +150,9 @@ table {
 
 
 .inputModal {
-    background: #4E5D6C;
-    color: #ffffff;
-    border: .5px solid #1a36a1;
+    background: #f0f0f0;
+    color: #000;
+    border: .5px solid #fff;
 }
 
 main {
