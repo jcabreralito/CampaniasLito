@@ -20,7 +20,7 @@ namespace CampaniasLito.Controllers
 
         }
 
-        [AuthorizeUser(idOperacion: 4)]
+        [AuthorizeUser(idOperacion: 5)]
         public ActionResult Index(string region)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -54,7 +54,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Regiones/Details/5
-        [AuthorizeUser(idOperacion: 9)]
+        [AuthorizeUser(idOperacion: 6)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -70,7 +70,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Regiones/Create
-        [AuthorizeUser(idOperacion: 1)]
+        [AuthorizeUser(idOperacion: 2)]
         public ActionResult Create()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -85,7 +85,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Regiones/Create
-        [AuthorizeUser(idOperacion: 1)]
+        [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Region region)
@@ -110,7 +110,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Regiones/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
+        [AuthorizeUser(idOperacion: 3)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -129,7 +129,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Regiones/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
+        [AuthorizeUser(idOperacion: 3)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Region region)
@@ -154,7 +154,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Regiones/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
+        [AuthorizeUser(idOperacion: 4)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -173,7 +173,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Regiones/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
+        [AuthorizeUser(idOperacion: 4)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

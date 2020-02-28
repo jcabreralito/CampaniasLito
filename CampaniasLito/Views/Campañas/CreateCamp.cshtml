@@ -215,42 +215,42 @@
                                     <th style="text-align:center" scope="col">
                                         <i class="fas fa-barcode"></i>
                                     </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Region.Nombre)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Ciudad.Nombre)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.AcomodoDeCajas)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.AreaDeJuegos)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Arroz)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Autoexpress)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.BisquetMiel)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CantidadDePantallas)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CCoFranquicia)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Clasificacion)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CopeteAERemodelado)
-                                    </th>
-                                    <th style="text-align:center" scope="col">
-                                        @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CopeteAETradicional)
-                                    </th>
+                                    @*<th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Region.Nombre)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Ciudad.Nombre)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.AcomodoDeCajas)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.AreaDeJuegos)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Arroz)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Autoexpress)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.BisquetMiel)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CantidadDePantallas)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CCoFranquicia)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.Clasificacion)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CopeteAERemodelado)
+                                        </th>
+                                        <th style="text-align:center" scope="col">
+                                            @Html.DisplayNameFor(model => model.Detalles[0].Tienda.CopeteAETradicional)
+                                        </th>*@
                                 </tr>
                                 <tbody>
                                     @foreach (var item in Model.Detalles)
@@ -260,49 +260,50 @@
                                                 @Html.DisplayFor(modelItem => item.Tienda.Restaurante)
                                             </td>
                                             <td align="center" scope="col">
-                                                @Html.CheckBoxFor(modelItem => item.Seleccionada, htmlAttributes: new { @class = "checkTamanio" })
+                                                <input class="form-check checkbox" type="checkbox" value="@item.Seleccionada" name="seleccionada" id="seleccionada" checked="@item.Seleccionada" @item.Seleccionada />
+                                                @*@Html.CheckBoxFor(modelItem => item.Seleccionada, htmlAttributes: new { @class = "checkTamanio" })*@
                                             </td>
                                             <td align="center" scope="col">
                                                 <a id="botones" href="@Url.Action("CreateCampArt", "Campañas", new { id = item.TiendaId, campId = item.CampañaTiendaTMPId})" class="btn btn-danger dialog-window-xtraLarge" style="background-color: transparent; border:none; font-size: 20px">
                                                     <i class="fas fa-plus-circle"></i>
                                                 </a>
                                             </td>
-                                            <td align="center" scope="col">
-                                                @Html.DisplayFor(modelItem => item.Tienda.Region.Nombre)
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.DisplayFor(modelItem => item.Tienda.Ciudad.Nombre)
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.DisplayFor(modelItem => item.Tienda.AcomodoDeCajas)
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.CheckBoxFor(modelItem => item.Tienda.AreaDeJuegos, new { @class = "checkTamanio", disabled = "disabled" })
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.CheckBoxFor(modelItem => item.Tienda.Arroz, new { @class = "checkTamanio", disabled = "disabled" })
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.CheckBoxFor(modelItem => item.Tienda.Autoexpress, new { @class = "checkTamanio", disabled = "disabled" })
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.CheckBoxFor(modelItem => item.Tienda.BisquetMiel, new { @class = "checkTamanio", disabled = "disabled" })
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.DisplayFor(modelItem => item.Tienda.CantidadDePantallas)
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.DisplayFor(modelItem => item.Tienda.CCoFranquicia)
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.DisplayFor(modelItem => item.Tienda.Clasificacion)
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.CheckBoxFor(modelItem => item.Tienda.CopeteAERemodelado, new { @class = "checkTamanio", disabled = "disabled" })
-                                            </td>
-                                            <td align="center" scope="col">
-                                                @Html.CheckBoxFor(modelItem => item.Tienda.CopeteAETradicional, new { @class = "checkTamanio", disabled = "disabled" })
-                                            </td>
+                                            @*<td align="center" scope="col">
+                                                    @Html.DisplayFor(modelItem => item.Tienda.Region.Nombre)
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    @Html.DisplayFor(modelItem => item.Tienda.Ciudad.Nombre)
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    @Html.DisplayFor(modelItem => item.Tienda.AcomodoDeCajas)
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    <input class="form-check checkbox" type="checkbox" value="@item.Tienda.AreaDeJuegos" name="AreaDeJuegos" id="AreaDeJuegos" checked="@item.Tienda.AreaDeJuegos" @item.Tienda.AreaDeJuegos disabled="disabled" />
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    <input class="form-check checkbox" type="checkbox" value="@item.Tienda.Arroz" name="Arroz" id="Arroz" checked="@item.Tienda.Arroz" @item.Tienda.Arroz disabled="disabled" />
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    <input class="form-check checkbox" type="checkbox" value="@item.Tienda.Autoexpress" name="Autoexpress" id="Autoexpress" checked="@item.Tienda.Autoexpress" @item.Tienda.Autoexpress disabled="disabled" />
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    <input class="form-check checkbox" type="checkbox" value="@item.Tienda.BisquetMiel" name="BisquetMiel" id="BisquetMiel" checked="@item.Tienda.BisquetMiel" @item.Tienda.BisquetMiel disabled="disabled" />
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    @Html.DisplayFor(modelItem => item.Tienda.CantidadDePantallas)
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    @Html.DisplayFor(modelItem => item.Tienda.CCoFranquicia)
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    @Html.DisplayFor(modelItem => item.Tienda.Clasificacion)
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    <input class="form-check checkbox" type="checkbox" value="@item.Tienda.CopeteAERemodelado" name="CopeteAERemodelado" id="CopeteAERemodelado" checked="@item.Tienda.CopeteAERemodelado" @item.Tienda.CopeteAERemodelado disabled="disabled" />
+                                                </td>
+                                                <td align="center" scope="col">
+                                                    <input class="form-check checkbox" type="checkbox" value="@item.Tienda.CopeteAETradicional" name="CopeteAETradicional" id="CopeteAETradicional" checked="@item.Tienda.CopeteAETradicional" @item.Tienda.CopeteAETradicional disabled="disabled" />
+                                                </td>*@
                                         </tr>
                                     }
                                 </tbody>

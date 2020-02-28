@@ -106,7 +106,7 @@ var GridViewScroll = /** @class */ (function () {
         this.ContentFixed.style.overflow = "auto";
         this.ContentFixed = this.Content.appendChild(this.ContentFixed);
         this.ContentGrid = this.ContentFixed.appendChild(this.ContentGrid);
-        this.ContentFixed.style.width = String(this.Width + 22) + "px";
+        this.ContentFixed.style.width = String(this.Width) + "px";
         if (this.ContentGrid.offsetWidth > this.Width) {
             this.IsHorizontalScrollbarEnabled = true;
         }
@@ -124,9 +124,9 @@ var GridViewScroll = /** @class */ (function () {
         this.ScrollbarWidth = this.getScrollbarWidth();
         this.prepareHeader();
         this.calculateHeader();
-        this.Header.style.width = String(this.Width - 12) + "px";
+        this.Header.style.width = String(this.Width) + "px";
         if (this.IsVerticalScrollbarEnabled) {
-            //this.HeaderFixed.style.width = String(this.Width) + "px";
+            this.HeaderFixed.style.width = String(this.Width - this.ScrollbarWidth) + "px";
             if (this.IsHorizontalScrollbarEnabled) {
                 this.ContentFixed.style.width = this.HeaderFixed.style.width;
                 if (this.isRTL()) {
@@ -136,8 +136,7 @@ var GridViewScroll = /** @class */ (function () {
                     this.ContentFixed.style.paddingRight = String(this.ScrollbarWidth) + "px";
                 }
             }
-            //this.ContentFixed.style.height = String(this.Height - this.Header.offsetHeight - 18) + "px";
-            this.ContentFixed.style.height = String(this.Height) + "px";
+            this.ContentFixed.style.height = String(this.Height - this.Header.offsetHeight) + "px";
         }
         else {
             this.HeaderFixed.style.width = this.Header.style.width;
@@ -325,8 +324,7 @@ var GridViewScroll = /** @class */ (function () {
             helperElement.style.height = String(freezeCellHeights[i]) + "px";
         }
         if (this.IsVerticalScrollbarEnabled) {
-            //this.ContentFreeze.style.height = String(this.Height - this.Header.offsetHeight - this.ScrollbarWidth - 18) + "px";
-            this.ContentFreeze.style.height = String(this.Height - 18) + "px";
+            this.ContentFreeze.style.height = String(this.Height - this.Header.offsetHeight - this.ScrollbarWidth) + "px";
         }
         else {
             this.ContentFreeze.style.height = String(this.ContentFixed.offsetHeight - this.ScrollbarWidth) + "px";
@@ -482,3 +480,4 @@ var GridViewScroll = /** @class */ (function () {
     };
     return GridViewScroll;
 }());
+//# sourceMappingURL=gridviewscroll.js.map

@@ -10,6 +10,7 @@ namespace CampaniasLito.Models
         [Key]
         public int ProveedorId { get; set; }
 
+        [Display(Name = "Proveedor")]
         public string Nombre { get; set; }
 
         public virtual ICollection<ArticuloKFC> ArticuloKFCs { get; set; }

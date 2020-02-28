@@ -37,5 +37,8 @@ namespace CampaniasLito.Models
         public virtual ICollection<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
 
         public virtual Proveedor Proveedor { get; set; }
+
+        public virtual ICollection<TiendaArticulo> TiendaArticulos { get; set; }
+
     }
 }

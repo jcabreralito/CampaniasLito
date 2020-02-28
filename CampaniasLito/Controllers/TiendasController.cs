@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -20,7 +21,7 @@ namespace CampaniasLito.Controllers
 
         }
 
-        [AuthorizeUser(idOperacion: 4)]
+        [AuthorizeUser(idOperacion: 5)]
         public ActionResult Index(string tienda)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -53,7 +54,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Tiendas/Details/5
-        [AuthorizeUser(idOperacion: 9)]
+        [AuthorizeUser(idOperacion: 6)]
         public ActionResult Details(int? id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -81,7 +82,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Tiendas/Create
-        [AuthorizeUser(idOperacion: 1)]
+        [AuthorizeUser(idOperacion: 2)]
         public ActionResult Create()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -104,7 +105,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Tiendas/Create
-        [AuthorizeUser(idOperacion: 1)]
+        [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Tienda tienda)
@@ -117,6 +118,14 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    var response2 = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId, tienda.CompañiaId);
+
+                    if (response2.Succeeded)
+                    {
+                        //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                    }
+
+
                     TempData["msgTiendaCreada"] = "TIENDA AGREGADA";
 
                     return RedirectToAction("Index");
@@ -138,7 +147,48 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
+        [AuthorizeUser(idOperacion: 3)]
+        public ActionResult AsignarArticulos(int? id)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var tiendaArticulos = db.TiendaArticulos.Where(t => t.TiendaId == id).ToList();
+            //var tiendaArticulos = db.TiendaArticulos.ToList();
+            //var tiendaArticulos2 = db.TiendaArticulos.GroupBy(t => t.ArticuloKFCId).ToList();
+
+            if (tiendaArticulos == null)
+            {
+                return HttpNotFound();
+            }
+
+            //ViewBag.Tiendas = db.Tiendas.ToList();
+
+            //var lista = new List<TiendaArticulo>();
+
+            //foreach (var item in tiendaArticulos2)
+            //{
+            //    lista.Add(new TiendaArticulo
+            //    {
+            //        ArticuloKFC = item.FirstOrDefault().ArticuloKFC,
+            //        ArticuloKFCId = item.FirstOrDefault().ArticuloKFCId,
+            //        Seleccionado = item.FirstOrDefault().Seleccionado,
+            //        Tienda = item.FirstOrDefault().Tienda,
+            //        TiendaId = item.FirstOrDefault().TiendaId
+            //    });
+            //}
+
+            ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
+
+            return PartialView(tiendaArticulos);
+        }
+
+        // GET: Tiendas/Edit/5
+        [AuthorizeUser(idOperacion: 3)]
         public ActionResult Edit(int? id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -166,7 +216,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
+        [AuthorizeUser(idOperacion: 3)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Tienda tienda)
@@ -176,11 +226,23 @@ namespace CampaniasLito.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(tienda).State = EntityState.Modified;
-                db.SaveChanges();
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    var response2 = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId, tienda.CompañiaId);
 
-                TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+                    if (response2.Succeeded)
+                    {
+                        //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                    }
 
-                return RedirectToAction("Index");
+
+                    TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+
+                    return RedirectToAction("Index");
+                }
+
+                ModelState.AddModelError(string.Empty, response.Message);
             }
 
             ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(usuario.CompañiaId, true), "CiudadId", "Nombre", tienda.CiudadId);
@@ -194,7 +256,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Tiendas/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
+        [AuthorizeUser(idOperacion: 4)]
         public ActionResult Delete(int? id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -221,7 +283,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Tiendas/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
+        [AuthorizeUser(idOperacion: 4)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

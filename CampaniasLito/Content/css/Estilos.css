@@ -680,23 +680,34 @@ footer {
 }
 
 .checkTamanio {
-    width: 30% !important;
+    width: 50px !important;
+}
+
+.checkTamanio2 {
+    width: 150% !important;
 }
 
 @media only screen and (max-width: 1024px) {
     .checkTamanio {
         width: 200% !important;
     }
+    .checkTamanio2 {
+        width: 17px !important;
+    }
 }
 
 @media only screen and (min-height: 768px) {
     .checkTamanio {
-        width: 200% !important;
+        width: 20px !important;
     }
 }
 
 @media only screen and (min-width: 1366px) {
     .checkTamanio {
-        width: 100% !important;
+        width: 50px !important;
+    }
+    .checkTamanio2 {
+        width: 17px !important;
+        text-align: center;
     }
 }

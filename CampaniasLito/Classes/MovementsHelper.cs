@@ -127,6 +127,51 @@ namespace CampaniasLito.Classes
             }
         }
 
+        public static Response AgregarArticuloTiendas(int articuloKFCId)
+        {
+            using (var transaccion = db.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId).FirstOrDefault();
+
+                    var tiendas = db.Tiendas.Where(cdt => cdt.CompañiaId == articulos.CompañiaId).ToList();
+
+                    foreach (var tienda in tiendas)
+                    {
+                        var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulos.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
+
+                        if (tiendaArticulos == null)
+                        {
+                            var articuloDetalle = new TiendaArticulo
+                            {
+                                ArticuloKFCId = articulos.ArticuloKFCId,
+                                Seleccionado = true,
+                                TiendaId = tienda.TiendaId,
+                            };
+
+                            db.TiendaArticulos.Add(articuloDetalle);
+                        }
+                    }
+
+                    db.SaveChanges();
+                    transaccion.Commit();
+
+                    return new Response { Succeeded = true, };
+                }
+                catch (Exception ex)
+                {
+                    transaccion.Rollback();
+                    return new Response
+                    {
+                        Message = ex.Message,
+                        Succeeded = false,
+                    };
+                }
+            }
+        }
+
         public static Response NuevaCampaña(NuevaCampañaView view, string userName, int compañia)
         {
 
@@ -161,6 +206,56 @@ namespace CampaniasLito.Classes
                         db.CampañaTiendaTMPs.Remove(detalle);
 
                     }
+
+                    db.SaveChanges();
+                    transaccion.Commit();
+
+                    return new Response { Succeeded = true, };
+                }
+                catch (Exception ex)
+                {
+                    transaccion.Rollback();
+                    return new Response
+                    {
+                        Message = ex.Message,
+                        Succeeded = false,
+                    };
+                }
+            }
+        }
+
+        public static Response AgregarTiendaArticulos(int tiendaId, int compañiaId)
+        {
+            using (var transaccion = db.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañiaId).ToList();
+
+                    //Borrar al terminar
+
+                    //var tiendas = db.Tiendas.Where(cdt => cdt.CompañiaId == compañiaId).ToList();
+
+                    //foreach (var tienda in tiendas)
+                    //{
+                        foreach (var articulo in articulos)
+                        {
+                            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                            if (tiendaArticulos == null)
+                            {
+                                var articuloDetalle = new TiendaArticulo
+                                {
+                                    ArticuloKFCId = articulo.ArticuloKFCId,
+                                    Seleccionado = true,
+                                    TiendaId = tiendaId,
+                                };
+
+                                db.TiendaArticulos.Add(articuloDetalle);
+                            }
+                        }
+                    //}
 
                     db.SaveChanges();
                     transaccion.Commit();

@@ -123,6 +123,11 @@ namespace CampaniasLito.Models
         [Display(Name = "TIPO DE CAJA", Prompt = "[Tipo Caja...]")]
         public int TipoDeCajaId { get; set; }
 
+        [Display(Name = "Observaciones")]
+        public string Observaciones { get; set; }
+
+        //public List<TiendaArticulo> Materiales { get; set; }
+
         public virtual Region Region { get; set; }
 
         public virtual Ciudad Ciudad { get; set; }
@@ -132,6 +137,8 @@ namespace CampaniasLito.Models
         public virtual ICollection<CampañaTienda> CampañaTiendas { get; set; }
 
         public virtual ICollection<CampañaTiendaTMP> CampañaTiendaTMPs { get; set; }
+
+        public virtual ICollection<TiendaArticulo> TiendaArticulos { get; set; }
 
     }
 }

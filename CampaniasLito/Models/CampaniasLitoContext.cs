@@ -63,5 +63,7 @@ namespace CampaniasLito.Models
 
         public DbSet<RolOperacion> RolOperaciones { get; set; }
 
+        public DbSet<TiendaArticulo> TiendaArticulos { get; set; }
+
     }
 }

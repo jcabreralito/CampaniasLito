@@ -31,13 +31,14 @@ namespace CampaniasLito
                       "~/Content/vendor/metisMenu/metisMenu.min.css",
                       "~/Content/dist/css/sb-admin-2.css",
                       "~/Content/vendor/morrisjs/morris.css",
-                      "~/Content/vendor/font-awesome/css/font-awesome.min.css",
+                      "~/Content/vendor/font-awesome/css/all.min.css",
                       "~/Content/bootstrap-datetimepicker.css"
                       //"~/Content/site.css"
                       ));
 
             bundles.Add(new StyleBundle("~/bundles/js").Include(
                       "~/Content/vendor/jquery/jquery.min.js",
+                      "~/Content/vendor/font-awesome/js/fontawesome.min.js",
                       "~/Content/vendor/bootstrap/js/bootstrap.min.js",
                       "~/Content/vendor/metisMenu/metisMenu.min.js",
                       "~/Content/vendor/raphael/raphael.min.js",
