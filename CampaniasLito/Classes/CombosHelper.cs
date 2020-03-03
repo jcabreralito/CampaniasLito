@@ -81,23 +81,6 @@ namespace CampaniasLito.Classes
             return ciudades.OrderBy(r => r.Nombre).ToList();
         }
 
-        public static List<Categoria> GetCategorias(int compañiaId, bool sw)
-        {
-            var categorias = db.Categorias.Where(c => c.CompañiaId == compañiaId).ToList();
-            return categorias.OrderBy(c => c.Descripcion).ToList();
-        }
-
-        public static List<Categoria> GetCategorias(int compañiaId)
-        {
-            var categorias = db.Categorias.Where(c => c.CompañiaId == compañiaId).ToList();
-            categorias.Add(new Categoria
-            {
-                CategoriaId = 0,
-                Descripcion = "[Seleccionar una Categoria...]",
-            });
-            return categorias.OrderBy(c => c.Descripcion).ToList();
-        }
-
         public void Dispose()
         {
             db.Dispose();

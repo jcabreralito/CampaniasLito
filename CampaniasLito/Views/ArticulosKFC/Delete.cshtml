@@ -37,17 +37,30 @@
         <div class="panel-body">
             <div class="form-horizontal row responsivoUsuarioLabel">
                 <div class="col-xs-12">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
                         <div class="col-sm-12">
-                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Descripción" } })
+                            <dl>
+                                <dd class="form-control inputModal">
+                                    @Html.DisplayFor(model => model.Descripcion)
+                                </dd>
+                            </dl>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-9">
-                            @Html.DropDownList("ProveedorId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[3].Watermark, htmlAttributes: new { @class = "form-control", @disabled = "disabled", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
+                            <dl>
+                                <dd class="form-control inputModal">
+                                    @Html.DisplayFor(model => model.Proveedor.Nombre)
+                                </dd>
+                            </dl>
                         </div>
                         <div class="col-sm-3">
-                            @Html.EditorFor(model => model.Familia, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Familia" } })
+                            <dl>
+                                <dd class="form-control inputModal">
+                                    @Html.DisplayFor(model => model.Familia)
+                                </dd>
+                            </dl>
                         </div>
                     </div>
                 </div>

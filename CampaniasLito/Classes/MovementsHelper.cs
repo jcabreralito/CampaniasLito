@@ -13,14 +13,14 @@ namespace CampaniasLito.Classes
         {
             db.Dispose();
         }
-        public static Response AgregarTiendas(int compañia, string userName, int id)
+        public static Response AgregarTiendas(int compañia, string userName, int campañaid)
         {
 
             using (var transaccion = db.Database.BeginTransaction())
             {
                 try
                 {
-                    var campañas = db.Campañas.Where(cdt => cdt.CampañaId == id).FirstOrDefault();
+                    var campañas = db.Campañas.Where(cdt => cdt.CampañaId == campañaid).FirstOrDefault();
 
                     if (campañas != null)
                     {
@@ -49,13 +49,43 @@ namespace CampaniasLito.Classes
                         {
                             var tiendaDetalle = new CampañaTiendaTMP
                             {
-                                Compañia = compañia,
+                                CampañaId = campañaid,
+                                CompañiaId = compañia,
                                 Usuario = userName,
                                 TiendaId = tienda.TiendaId,
                                 Seleccionada = true,
                             };
 
                             db.CampañaTiendaTMPs.Add(tiendaDetalle);
+                        }
+
+                        var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañia).ToList();
+
+                        var articulosTMP = db.CampañaArticuloTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).ToList();
+
+                        if (articulos.Count != articulosTMP.Count)
+                        {
+                            foreach (var articulo in articulos)
+                            {
+                                var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).FirstOrDefault();
+
+                                if (articulosTMPs == null)
+                                {
+                                    var articuloDetalle = new CampañaArticuloTMP
+                                    {
+                                        Compañia = compañia,
+                                        Usuario = userName,
+                                        TiendaId = tienda.TiendaId,
+                                        ArticuloKFCId = articulo.ArticuloKFCId,
+                                        Cantidad = 1,
+                                        Habilitado = true,
+                                        CampañaTiendaTMPId = campañas.CampañaId,
+                                    };
+
+                                    db.CampañaArticuloTMPs.Add(articuloDetalle);
+                                }
+
+                            }
                         }
 
                     }
@@ -77,7 +107,7 @@ namespace CampaniasLito.Classes
             }
         }
 
-        public static Response AgregarArticulosTiendas(int compañiaId, string nombreUsuario, int id, int campId)
+        public static Response AgregarArticulosTiendas(int compañiaId, string nombreUsuario, int tiendaId, int campId)
         {
             using (var transaccion = db.Database.BeginTransaction())
             {
@@ -89,7 +119,7 @@ namespace CampaniasLito.Classes
 
                     foreach (var articulo in articulos)
                     {
-                        var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == id && cdt.CampañaTiendaTMPId == campId).FirstOrDefault();
+                        var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId && cdt.CampañaTiendaTMPId == campId).FirstOrDefault();
 
                         if (articulosTMPs == null)
                         {
@@ -97,7 +127,7 @@ namespace CampaniasLito.Classes
                             {
                                 Compañia = compañiaId,
                                 Usuario = nombreUsuario,
-                                TiendaId = id,
+                                TiendaId = tiendaId,
                                 ArticuloKFCId = articulo.ArticuloKFCId,
                                 Cantidad = 1,
                                 Habilitado = true,
@@ -196,7 +226,7 @@ namespace CampaniasLito.Classes
                     {
                         var tiendaDetalle = new CampañaTienda
                         {
-                            CompañiaId = detalle.Compañia,
+                            CompañiaId = detalle.CompañiaId,
                             CreatedDate = DateTime.Now,
                             CampañaId = campaña.CampañaId,
                             TiendaId = detalle.TiendaId,
@@ -235,20 +265,22 @@ namespace CampaniasLito.Classes
 
                     //Borrar al terminar
 
-                    //var tiendas = db.Tiendas.Where(cdt => cdt.CompañiaId == compañiaId).ToList();
+                    var tiendas = db.Tiendas.Where(cdt => cdt.CompañiaId == compañiaId).ToList();
 
                     //foreach (var tienda in tiendas)
                     //{
                         foreach (var articulo in articulos)
                         {
-                            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
+                        //var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
+                        var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
 
-                            if (tiendaArticulos == null)
+                        if (tiendaArticulos == null)
                             {
                                 var articuloDetalle = new TiendaArticulo
                                 {
                                     ArticuloKFCId = articulo.ArticuloKFCId,
                                     Seleccionado = true,
+                                    //TiendaId = tienda.TiendaId,
                                     TiendaId = tiendaId,
                                 };
 

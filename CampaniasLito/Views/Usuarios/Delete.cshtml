@@ -9,15 +9,15 @@
     @Html.AntiForgeryToken()
     <div class="panel panel-primary">
         <div class="panel-heading" id="panelH">
-            <table>
-                <tr>
+            <table class="headingModal">
+                <tr style="background-color: #01207B !important">
                     <td class="col-xs-6">
                         <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
                     </td>
                     <td class=" col-xs-12"></td>
                     <td align="right" class="col-xs-1">
                         <div class="input-group">
-                            <button type="button" class="botonF2 btn-danger"  style="background-color: #01207B" data-dismiss="modal">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: #01207B" data-dismiss="modal">
                                 <i class="fas fa-times-circle"></i>
                                 @*SALIR*@
                             </button>

@@ -84,7 +84,7 @@ namespace CampaniasLito.Controllers
                 {
                     var rol = db.Roles.Where(r => r.RolId == usuario.RolId).FirstOrDefault();
 
-                    UsuariosHelper.CreateUserASP(usuario.NombreUsuario, rol.Nombre);
+                    UsuariosHelper.CreateUserASP(usuario.NombreUsuario.ToLower(), rol.Nombre);
 
                     Session["Compañia"] = "Litoprocess";
                     TempData["msgUsuarioCreado"] = "USUARIO AGREGADO";
@@ -122,6 +122,9 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index");
             }
 
+            Session["UsuarioEditado"] = usuario.NombreUsuario.ToLower();
+            Session["RolEditado"] = usuario.RolId;
+
             ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
             ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
 
@@ -138,18 +141,15 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-
-                    var db2 = new CampaniasLitoContext();
-                    var currentUser = db2.Usuarios.Find(usuario.UsuarioId);
-                    var currentRol = db2.Roles.Where(r => r.RolId == currentUser.RolId).FirstOrDefault();
+                    var currentUser = Session["UsuarioEditado"].ToString();
+                    var currentRol = (int)Session["RolEditado"];
+                    var currentRolNombre = db.Roles.Where(r => r.RolId == currentRol).FirstOrDefault();
                     var newRol = db.Roles.Where(r => r.RolId == usuario.RolId).FirstOrDefault();
 
-                    if (currentUser.NombreUsuario != usuario.NombreUsuario || currentRol.RolId != newRol.RolId)
+                    if (currentUser == usuario.NombreUsuario || currentRol == newRol.RolId)
                     {
-                        UsuariosHelper.UpdateUserName(currentUser.NombreUsuario, usuario.NombreUsuario, currentRol.Nombre, newRol.Nombre);
+                        UsuariosHelper.UpdateUserName(currentUser, usuario.NombreUsuario.ToLower(), currentRolNombre.Nombre, newRol.Nombre);
                     }
-
-                    db2.Dispose();
 
 
                     Session["Compañia"] = "Litoprocess";
@@ -198,11 +198,16 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+
             var usuario = db.Usuarios.Find(id);
+            var currentRol = db.Roles.Where(r => r.RolId == usuario.RolId).FirstOrDefault();
+
             db.Usuarios.Remove(usuario);
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
+                UsuariosHelper.DeleteUser(usuario.NombreUsuario);
+
                 Session["Compañia"] = "Litoprocess";
                 TempData["msgUsuarioEliminado"] = "USUARIO ELIMINADO";
 

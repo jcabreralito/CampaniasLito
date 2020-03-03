@@ -1,11 +1,9 @@
 ﻿a.inicio {
-    background: url(../../Content/Logos/Logo_LIto_gris.png) center no-repeat;
-    @*background: url('@Session["Logo"].ToString()') center no-repeat !important;
-    *@ display: block;
+    background: url(../../Content/Logos/Logo_LIto_gris.png) left no-repeat;
+    background-size: 190px;
     width: 45px;
     height: 45px;
     text-indent: -9999px; /* hides the link text */
-    /*margin-top: -6px;*/
     margin-left: 25px;
     border-radius: 10px;
 }

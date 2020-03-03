@@ -200,6 +200,7 @@ namespace CampaniasLito.Controllers
             }
 
             ModelState.AddModelError(string.Empty, response.Message);
+
             return PartialView(ciudad);
         }
 

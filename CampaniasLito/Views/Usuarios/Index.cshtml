@@ -22,7 +22,7 @@
             <table style="width:100%" id="dataTable" cellspacing="0">
                 <tr>
                     <td class=" col-xs-4">
-                        <h2 style="color: white"><i class="fas fa-users "></i> @ViewBag.Title</h2>
+                        <h2><i class="fas fa-users "></i> @ViewBag.Title</h2>
                     </td>
                     @using (Html.BeginForm("Index", "Usuarios", FormMethod.Get))
                     {
@@ -63,18 +63,18 @@
                         {
                         <tr style="font-size:12px; text-transform: capitalize">
                             <td style="width: 30%">
-                                <a href="@Url.Action("Edit", "Usuarios", new { id = item.UsuarioId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
+                                <a href="@Url.Action("Edit", "Usuarios", new { id = item.UsuarioId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: #000">
                                     @Html.DisplayFor(modelItem => item.NombreCompleto)
                                 </a>
                             </td>
                             <td style="width: 30%" align="center">
-                                <a href="@Url.Action("Edit", "Usuarios", new { id = item.UsuarioId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
+                                <a href="@Url.Action("Edit", "Usuarios", new { id = item.UsuarioId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: #000">
                                     @Html.DisplayFor(modelItem => item.Compañia.Nombre)
                                 </a>
                             </td>
                             <td style="width: 25%" align="center">
-                                <a href="@Url.Action("Edit", "Usuarios", new { id = item.UsuarioId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: white">
-                                    @Html.DisplayFor(modelItem => item.NombreUsuario, new { style = "text-transform: lowercase !important" })
+                                <a href="@Url.Action("Edit", "Usuarios", new { id = item.UsuarioId})" class="dialog-window-medium" style="text-decoration: none; list-style: none; color: #000 !important; text-transform: lowercase !important">
+                                    @Html.DisplayFor(modelItem => item.NombreUsuario)
                                 </a>
                             </td>
                             <td style="width: 15%" align="center">

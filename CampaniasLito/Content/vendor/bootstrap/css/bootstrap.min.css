@@ -1371,12 +1371,12 @@ button, input, select, textarea {
 }
 
 a {
-    color: #337ab7;
+    color: #000;
     text-decoration: none;
 }
 
     a:focus, a:hover {
-        color: #71D1C8;
+        color: #000;
         text-decoration: none;
     }
 
@@ -2781,13 +2781,13 @@ th {
     }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: #000;
-    color: #fff;
+    background-color: #f0f0f0;
+    color: #000;
 }
 
 .table-hover > tbody > tr:hover {
     background-color: #f5f5f5 !important;
-    border-color: #fff !important;
+    border-color: #000 !important;
 }
 
 table col[class*=col-] {
@@ -5409,7 +5409,7 @@ a.badge:focus, a.badge:hover {
 }
 
     .jumbotron .h1, .jumbotron h1 {
-        color: #fff;
+        color: #01207B;
     }
 
     .jumbotron p {
@@ -6136,7 +6136,7 @@ a.list-group-item-danger, button.list-group-item-danger {
 
     .panel-primary > .panel-heading {
         color: #fff;
-        background-color: #01207B;
+        background-color: #01207B !important;
         border-color: #01207B;
     }
 

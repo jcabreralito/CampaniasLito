@@ -25,15 +25,7 @@ namespace CampaniasLito.Models
         [Display(Name = "Logo")]
         public HttpPostedFileBase LogoFile { get; set; }
 
-        public virtual ICollection<Categoria> Categorias { get; set; }
-
         public virtual ICollection<Usuario> Usuarios { get; set; }
-
-        public virtual ICollection<Producto> Productos { get; set; }
-
-        public virtual ICollection<Articulo> Articulos { get; set; }
-
-        public virtual ICollection<Bodega> Bodegas { get; set; }
 
         public virtual ICollection<Region> Regiones { get; set; }
 

@@ -17,15 +17,7 @@ namespace CampaniasLito.Models
 
         public DbSet<Usuario> Usuarios { get; set; }
 
-        public DbSet<Categoria> Categorias { get; set; }
-
         public DbSet<Rol> Roles { get; set; }
-
-        public DbSet<Producto> Productos { get; set; }
-
-        public DbSet<Bodega> Bodegas { get; set; }
-
-        public DbSet<Articulo> Articuloes { get; set; }
 
         public DbSet<Tienda> Tiendas { get; set; }
 

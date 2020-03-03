@@ -84,14 +84,14 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-                var response = MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id);
+            var response = MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id);
 
-                if (response.Succeeded)
-                {
-                    //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
-                }
+            if (response.Succeeded)
+            {
+                //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+            }
 
-                ModelState.AddModelError(string.Empty, response.Message);
+            ModelState.AddModelError(string.Empty, response.Message);
 
             var view = new NuevaCampañaView
             {
@@ -102,7 +102,7 @@ namespace CampaniasLito.Controllers
             };
 
             Session["CampañaId"] = view.CampañaId;
-            
+
             return View(view);
 
 

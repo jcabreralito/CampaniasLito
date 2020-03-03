@@ -10,10 +10,13 @@ namespace CampaniasLito.Models
 
         public string Usuario { get; set; }
 
-        public int Compañia { get; set; }
+        public int CompañiaId { get; set; }
 
         [Display(Name = "Tienda Id")]
         public int TiendaId { get; set; }
+
+        [Display(Name = "Campaña")]
+        public int CampañaId { get; set; }
 
         public bool Seleccionada { get; set; }
 

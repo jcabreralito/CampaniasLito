@@ -12,13 +12,17 @@
     src: url('../../fonts/Hero Light.otf') format('opentype');
 }
 
-.nav > li > a, thead, tr, th, tr:hover, .navbar-toggle {
+.nav > li > a, thead, th, .navbar-toggle {
     background-color: #01207B;
     /*color: #fff !important;*/
 }
 
 table > tbody > tr > td {
     border-radius: 10px !important
+}
+
+tr, tr:hover {
+    background-color: #ffffff;
 }
 
 table {

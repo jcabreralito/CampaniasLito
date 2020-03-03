@@ -28,8 +28,6 @@ namespace CampaniasLito.Models
 
         public virtual Campaña Campaña { get; set; }
 
-        public virtual Articulo Articulo { get; set; }
-
         public virtual Tienda Tienda { get; set; }
 
         public virtual Compañia Compañia { get; set; }
