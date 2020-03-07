@@ -1,7 +1,10 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using CampaniasLito.Classes;
 using CampaniasLito.Filters;
@@ -76,15 +79,15 @@ namespace CampaniasLito.Controllers
 
         // GET: Campañas/Create
         [AuthorizeUser(idOperacion: 2)]
-        public ActionResult CreateCamp(int? id)
+        public async Task<ActionResult> CreateCamp(int? id)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+            var usuario = await db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefaultAsync();
             if (usuario == null)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var response = MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id);
+            var response = await MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id);
 
             if (response.Succeeded)
             {
@@ -108,27 +111,63 @@ namespace CampaniasLito.Controllers
 
         }
 
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult CreateCampArt(int? id, int? campId)
+        [AuthorizeUser(idOperacion: 3)]
+        [HttpPost]
+        public JsonResult EditarCantidad(int? id, int? q)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+            var result = false;
+            try
+            {
+                CampañaArticuloTMP campañaArticuloTMP = db.CampañaArticuloTMPs.SingleOrDefault(x => x.CampañaArticuloTMPId == id);
+
+                campañaArticuloTMP.Cantidad= (int)q;
+                db.SaveChanges();
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [AuthorizeUser(idOperacion: 2)]
+        public async Task<ActionResult> CreateCampArt(int? tiendaId, int? campId, TiendasArticulosView view)
+        {
+            var usuario = await db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefaultAsync();
             if (usuario == null)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var response = MovementsHelper.AgregarArticulosTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id, (int)campId);
+            var response = await MovementsHelper.AgregarArticulosTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)tiendaId, (int)campId);
 
             if (response.Succeeded)
             {
                 //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
             }
 
+
+
             ModelState.AddModelError(string.Empty, response.Message);
 
-            var view = db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == id).ToList();
+            //var view = db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == id).ToList();
+            view.Tiendas = await db.Tiendas.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
+            view.ArticuloKFCs = await db.ArticuloKFCs.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
+            view.NuevaCampañaViews = await db.NuevaCampañaViews.Where(c => c.CampañaId == campId).ToListAsync();
+            view.CampañaArticuloTMPs = await db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == tiendaId).ToListAsync();
 
-            ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
+            ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == tiendaId).FirstOrDefault().Restaurante;
+
+            //var result2 = view.CampañaArticuloTMPs.Pivot(emp => emp.Cantidad, emp2 => emp2.ArticuloKFC.Descripcion, lst => lst.Count());
+
+            //foreach (var row in result2)
+            //{
+            //    foreach (var column in row.Value)
+            //    {
+
+            //    }
+            //}
 
             return PartialView(view);
 

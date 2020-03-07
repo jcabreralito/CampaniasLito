@@ -6,11 +6,12 @@
     border-bottom: 1px solid #e6e6e6;
     background-color: #DF2530;
     color: #fff;
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
     font-size: 12px;
     border-radius: 10px;
     margin-bottom: 10px !important;
+    height: 30px !important;
 }
 
 .GridViewScrollItem TD {
@@ -73,5 +74,5 @@ th > .gridViewScrollHelper {
 }
 
 td > .gridViewScrollHelper {
-    padding-top: 15px;
+    padding-top: 5px;
 }

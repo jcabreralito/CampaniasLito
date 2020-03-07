@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Student Details";
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+
+<br />
+
+<div id="StudentsTable"></div>
+
+@section scripts{
+
+    @*<link href="~/Content/vendor/bootstrap/css/bootstrap.css" rel="stylesheet" />*@
+
+    <link href="~/Scripts/jtable/themes/metro/red/jtable.min.css" rel="stylesheet" />
+    @*<link href="~/Scripts/jtable/themes/basic/jtable_basic.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/jqueryui/jtable_jqueryui.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/lightcolor/blue/jtable.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/lightcolor/gray/jtable.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/lightcolor/green/jtable.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/lightcolor/red/jtable.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/metro/blue/jtable.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/metro/darkgray/jtable.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/metro/green/jtable.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/metro/lightgray/jtable.min.css" rel="stylesheet" />*@
+    @*<link href="~/Scripts/jtable/themes/metro/purple/jtable.min.css" rel="stylesheet" />*@
+
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+    <!--Adding jTable Plugin-->
+    <script src="~/Scripts/jtable/jquery.jtable.min.js"></script>
+    <script src="~/Scripts/jtable/localization/jquery.jtable.es.js"></script>
+
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#StudentsTable').jtable({
+            title: 'Students Detail',
+            paging: true,
+            pageSize: 10,
+            sorting: true,
+            actions: {
+                listAction: '/Students/GetStudentDetails',
+                createAction: '/Students/Create',
+                updateAction: '/Students/Edit',
+                deleteAction: '/Students/Delete'
+            },
+            fields: {
+                StudentId: {
+                    key: true,
+                    list: false
+                },
+                RollNo: {
+                    title: 'Roll Number',
+                    width: '15%'
+                },
+                FullName: {
+                    title: 'Student Name',
+                    width: '45%'
+                },
+                Gender: {
+                    title: 'Gender',
+                    width: '15%',
+                },
+                City: {
+                    title: 'City',
+                    width: '15%',
+                }
+
+            }
+        });
+        $('#StudentsTable').jtable('reload');
+    });
+</script>

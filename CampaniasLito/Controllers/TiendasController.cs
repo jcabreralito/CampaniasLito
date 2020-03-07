@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -13,7 +14,32 @@ namespace CampaniasLito.Controllers
     {
         private CampaniasLitoContext db = new CampaniasLitoContext();
 
+        [HttpPost]
+        public JsonResult TiendasList()
+        {
+            try
+            {
+                List<ArticuloKFC> tiendas = new List<ArticuloKFC>();
+                tiendas = db.ArticuloKFCs.ToList();
+                
+                return Json(new { Result = "OK", Records = tiendas }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+
         // GET: Tiendas
+        [AuthorizeUser(idOperacion: 5)]
+        public ActionResult IndexTiendas()
+        {
+            return View();
+
+        }
+
+        [AuthorizeUser(idOperacion: 5)]
         public ActionResult GetList()
         {
             var campañasList = db.Campañas.ToList<Campaña>();
@@ -186,6 +212,84 @@ namespace CampaniasLito.Controllers
 
             return PartialView(tiendaArticulos);
         }
+
+        private bool Update(TiendaArticulo product)
+        {
+            return true;
+        }
+
+        [AuthorizeUser(idOperacion: 3)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AsignarArticulos(int id, TiendaArticulo tiendaArticulo)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            TiendaArticulo tiendaArticulo2 = db.TiendaArticulos.SingleOrDefault(x => x.TiendaArticuloId == id);
+
+            tiendaArticulo2.ArticuloKFC = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFC;
+            tiendaArticulo2.ArticuloKFCId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFCId;
+            tiendaArticulo2.TiendaId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().TiendaId;
+            tiendaArticulo2.Tienda = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().Tienda;
+            //tiendaArticulo.ArticuloKFC = Model.ArticuloKFC;
+            //tiendaArticulo.ArticuloKFCId = Model.ArticuloKFCId;
+            //tiendaArticulo.TiendaId = Model.TiendaId;
+            //tiendaArticulo.Tienda = Model.Tienda;
+            tiendaArticulo2.Seleccionado = tiendaArticulo.Seleccionado;
+
+
+            //TiendaArticulo tiendaArticulo2 = new TiendaArticulo();
+
+            //tiendaArticulo2.TiendaArticuloId = (int)id;
+            //tiendaArticulo2.Seleccionado = tiendaArticulo.Seleccionado;
+            //tiendaArticulo2.ArticuloKFCId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFCId;
+            //tiendaArticulo2.ArticuloKFC = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFC;
+            //tiendaArticulo2.TiendaId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().TiendaId;
+            //tiendaArticulo2.Tienda = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().Tienda;
+
+            //if (ModelState.IsValid)
+            //{
+                db.Entry(tiendaArticulo2).State = EntityState.Modified;
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+
+                    return RedirectToAction("Index");
+                }
+
+                ModelState.AddModelError(string.Empty, response.Message);
+            //}
+
+            ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == tiendaArticulo2.Tienda.TiendaId).FirstOrDefault().Restaurante;
+
+            return PartialView(tiendaArticulo);
+        }
+
+        [AuthorizeUser(idOperacion: 3)]
+        [HttpPost]
+        public JsonResult Editar(int? id, bool? sel)
+        {
+            var result = false;
+            try
+            {
+                TiendaArticulo tiendaArticulo = db.TiendaArticulos.SingleOrDefault(x => x.TiendaArticuloId== id);
+
+                tiendaArticulo.ArticuloKFC = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFC;
+                tiendaArticulo.ArticuloKFCId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFCId;
+                tiendaArticulo.TiendaId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().TiendaId;
+                tiendaArticulo.Tienda = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().Tienda;
+                tiendaArticulo.Seleccionado = (bool)sel;
+                db.SaveChanges();
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
 
         // GET: Tiendas/Edit/5
         [AuthorizeUser(idOperacion: 3)]

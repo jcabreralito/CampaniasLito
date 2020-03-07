@@ -437,7 +437,7 @@ namespace CampaniasLito.Controllers
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             Session["Logo"] = null;
-            Session["Compañia"] = null;
+            //Session["Compañia"] = null;
             Session["NombreCompleto"] = null;
             return RedirectToAction("Index", "Home");
         }

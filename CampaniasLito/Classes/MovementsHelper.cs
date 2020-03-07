@@ -13,18 +13,18 @@ namespace CampaniasLito.Classes
         {
             db.Dispose();
         }
-        public static Response AgregarTiendas(int compañia, string userName, int campañaid)
+        public static async System.Threading.Tasks.Task<Response> AgregarTiendas(int compañia, string userName, int campañaid)
         {
 
             using (var transaccion = db.Database.BeginTransaction())
             {
                 try
                 {
-                    var campañas = db.Campañas.Where(cdt => cdt.CampañaId == campañaid).FirstOrDefault();
+                    var campañas = await db.Campañas.Where(cdt => cdt.CampañaId == campañaid).FirstOrDefaultAsync();
 
                     if (campañas != null)
                     {
-                        var nuevaCampaña = db.NuevaCampañaViews.Where(cdt => cdt.CampañaId == campañas.CampañaId).FirstOrDefault();
+                        var nuevaCampaña = await db.NuevaCampañaViews.Where(cdt => cdt.CampañaId == campañas.CampañaId).FirstOrDefaultAsync();
 
                         if (nuevaCampaña == null)
                         {
@@ -39,11 +39,11 @@ namespace CampaniasLito.Classes
                         }
                     }
 
-                    var tiendas = db.Tiendas.Where(cdt => cdt.CompañiaId == compañia).ToList();
+                    var tiendas = await db.Tiendas.Where(cdt => cdt.CompañiaId == compañia).ToListAsync();
 
                     foreach (var tienda in tiendas)
                     {
-                        var tiendasTMPs = db.CampañaTiendaTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
+                        var tiendasTMPs = await db.CampañaTiendaTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId).FirstOrDefaultAsync();
 
                         if (tiendasTMPs == null)
                         {
@@ -59,15 +59,15 @@ namespace CampaniasLito.Classes
                             db.CampañaTiendaTMPs.Add(tiendaDetalle);
                         }
 
-                        var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañia).ToList();
+                        var articulos = await db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañia).ToListAsync();
 
-                        var articulosTMP = db.CampañaArticuloTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).ToList();
+                        var articulosTMP = await db.CampañaArticuloTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).ToListAsync();
 
                         if (articulos.Count != articulosTMP.Count)
                         {
                             foreach (var articulo in articulos)
                             {
-                                var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).FirstOrDefault();
+                                var articulosTMPs = await db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).FirstOrDefaultAsync();
 
                                 if (articulosTMPs == null)
                                 {
@@ -90,7 +90,7 @@ namespace CampaniasLito.Classes
 
                     }
 
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                     transaccion.Commit();
 
                     return new Response { Succeeded = true, };
@@ -107,19 +107,19 @@ namespace CampaniasLito.Classes
             }
         }
 
-        public static Response AgregarArticulosTiendas(int compañiaId, string nombreUsuario, int tiendaId, int campId)
+        public static async System.Threading.Tasks.Task<Response> AgregarArticulosTiendas(int compañiaId, string nombreUsuario, int tiendaId, int campId)
         {
             using (var transaccion = db.Database.BeginTransaction())
             {
                 try
                 {
 
-                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañiaId).ToList();
+                    var articulos = await db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañiaId).ToListAsync();
 
 
                     foreach (var articulo in articulos)
                     {
-                        var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId && cdt.CampañaTiendaTMPId == campId).FirstOrDefault();
+                        var articulosTMPs = await db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId && cdt.CampañaTiendaTMPId == campId).FirstOrDefaultAsync();
 
                         if (articulosTMPs == null)
                         {
@@ -140,7 +140,8 @@ namespace CampaniasLito.Classes
                     }
 
 
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
+
                     transaccion.Commit();
 
                     return new Response { Succeeded = true, };
@@ -184,6 +185,34 @@ namespace CampaniasLito.Classes
                             db.TiendaArticulos.Add(articuloDetalle);
                         }
                     }
+
+                    db.SaveChanges();
+                    transaccion.Commit();
+
+                    return new Response { Succeeded = true, };
+                }
+                catch (Exception ex)
+                {
+                    transaccion.Rollback();
+                    return new Response
+                    {
+                        Message = ex.Message,
+                        Succeeded = false,
+                    };
+                }
+            }
+        }
+
+        public static Response ActualizarTiendaArticulos(int? id)
+        {
+            using (var transaccion = db.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    var articuloTienda = db.TiendaArticulos.Where(ta => ta.TiendaArticuloId == id).FirstOrDefault();
+
+                    db.Entry(articuloTienda).State = EntityState.Modified;
 
                     db.SaveChanges();
                     transaccion.Commit();
@@ -269,24 +298,24 @@ namespace CampaniasLito.Classes
 
                     //foreach (var tienda in tiendas)
                     //{
-                        foreach (var articulo in articulos)
-                        {
+                    foreach (var articulo in articulos)
+                    {
                         //var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
                         var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
 
                         if (tiendaArticulos == null)
+                        {
+                            var articuloDetalle = new TiendaArticulo
                             {
-                                var articuloDetalle = new TiendaArticulo
-                                {
-                                    ArticuloKFCId = articulo.ArticuloKFCId,
-                                    Seleccionado = true,
-                                    //TiendaId = tienda.TiendaId,
-                                    TiendaId = tiendaId,
-                                };
+                                ArticuloKFCId = articulo.ArticuloKFCId,
+                                Seleccionado = true,
+                                //TiendaId = tienda.TiendaId,
+                                TiendaId = tiendaId,
+                            };
 
-                                db.TiendaArticulos.Add(articuloDetalle);
-                            }
+                            db.TiendaArticulos.Add(articuloDetalle);
                         }
+                    }
                     //}
 
                     db.SaveChanges();

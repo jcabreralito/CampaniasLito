@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -42,8 +43,10 @@ namespace CampaniasLito.Models
         [Display(Name = "Usuario")]
         public string NombreCompleto { get { return string.Format("{0} {1}", Nombres, Apellidos); } }
 
+        [JsonIgnore]
         public virtual Rol Rol { get; set; }
 
+        [JsonIgnore]
         public virtual Compañia Compañia { get; set; }
     }
 }

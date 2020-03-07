@@ -128,7 +128,7 @@ var GridViewScroll = /** @class */ (function () {
         if (this.IsVerticalScrollbarEnabled) {
             this.HeaderFixed.style.width = String(this.Width - this.ScrollbarWidth) + "px";
             if (this.IsHorizontalScrollbarEnabled) {
-                this.ContentFixed.style.width = this.HeaderFixed.style.width;
+                this.ContentFixed.style.width = this.HeaderFixed.style.width -10;
                 if (this.isRTL()) {
                     this.ContentFixed.style.paddingLeft = String(this.ScrollbarWidth) + "px";
                 }

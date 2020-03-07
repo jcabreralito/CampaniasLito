@@ -18,8 +18,8 @@ namespace CampaniasLito
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/bootstrap-datetimepicker.js"));
+                      "~/Scripts/bootstrap.js"));
+                      //"~/Scripts/bootstrap-datetimepicker.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
@@ -30,9 +30,9 @@ namespace CampaniasLito
                       "~/Content/DataTables/datatables.min.css",
                       "~/Content/vendor/metisMenu/metisMenu.min.css",
                       "~/Content/dist/css/sb-admin-2.css",
-                      "~/Content/vendor/morrisjs/morris.css",
-                      "~/Content/vendor/font-awesome/css/all.min.css",
-                      "~/Content/bootstrap-datetimepicker.css"
+                      //"~/Content/vendor/morrisjs/morris.css",
+                      "~/Content/vendor/font-awesome/css/all.min.css"
+                      //"~/Content/bootstrap-datetimepicker.css"
                       //"~/Content/site.css"
                       ));
 

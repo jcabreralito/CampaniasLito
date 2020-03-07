@@ -199,7 +199,16 @@ namespace CampaniasLito.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             var articulo = db.ArticuloKFCs.Find(id);
+            var articuloTienda = db.TiendaArticulos.Where(ta => ta.ArticuloKFCId == id).ToList();
+
+            foreach (var item in articuloTienda)
+            {
+                db.TiendaArticulos.Remove(item);
+                db.SaveChanges();
+            }
+
             db.ArticuloKFCs.Remove(articulo);
+
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {

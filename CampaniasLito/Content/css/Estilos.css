@@ -7,9 +7,7 @@
 
 @font-face {
     font-family: 'Hero';
-    src: url('../../fonts/Hero.otf') format('opentype');
-    font-family: 'Hero Light';
-    src: url('../../fonts/Hero Light.otf') format('opentype');
+    src: url('../Fonts/Hero.otf') format('opentype');
 }
 
 .nav > li > a, thead, th, .navbar-toggle {

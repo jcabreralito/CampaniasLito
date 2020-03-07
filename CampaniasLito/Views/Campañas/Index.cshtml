@@ -92,7 +92,7 @@
                                 <td style="width: 15%" align="center">
                                     @if (item.Generada == "NO")
                                     {
-                                        <a id="botones" href="@Url.Action("CreateCamp", "Campañas", new { id = item.CampañaId})" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
+                                        <a id="botones" href="@Url.Action("CreateCampArt", "Campañas", new { tiendaId = item.CampañaId, campId = item.CampañaId })" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
                                             <i class="fas fa-calendar-check"></i>
                                         </a>
                                     }
