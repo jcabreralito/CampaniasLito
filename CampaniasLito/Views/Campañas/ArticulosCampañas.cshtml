@@ -1,0 +1,46 @@
+﻿@*@model List<CampaniasLito.Models.CampañaArticuloTMP>*@
+@model CampaniasLito.Models.TiendasArticulosView
+
+<link href="~/Content/sweetalert.css" rel="stylesheet" />
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <div style="padding-top: 8px; margin-bottom: -8px">
+            @foreach (var item2 in Model.CampañaArticuloTMPs)
+            {
+                <input type="hidden" name="articuloId" value="@item2.CampañaArticuloTMPId" />
+                if (item2.Habilitado == true)
+                {
+                    <input type="text" id="Cantidad" name="Cantidad" value="@item2.Cantidad" style="text-transform:uppercase; text-align: center; background-color: transparent !important; border: none" />
+                }
+                else
+                {
+                    <input type="text" id="Cantidad" name="Cantidad" value="@item2.Cantidad" disabled="disabled" style="text-transform:uppercase; text-align: center; background-color: transparent !important; border: none" />
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/js/sweetalert.js" type="text/javascript"></script>
+<script src="~/Scripts/sweetalert.min.js" type="text/javascript"></script>
+
+
+@if (TempData["mensajeLito"] != null)
+{
+    <script type="text/javascript">
+
+            swal({
+                title: "<span style='color:#fff'>@ViewBag.Title</span>",
+                text: '<span style="color:#fff">@TempData["mensajeLito"].ToString()</span>',
+                html: true,
+                type: "info",
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+                timer: 2000,
+            });
+    </script>
+}

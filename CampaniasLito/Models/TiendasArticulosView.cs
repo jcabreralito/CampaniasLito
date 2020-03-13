@@ -8,7 +8,7 @@ namespace CampaniasLito.Models
 
         public List<ArticuloKFC> ArticuloKFCs { get; set; }
 
-        public List<NuevaCampañaView> NuevaCampañaViews { get; set; }
+        public List<Campaña> Campañas { get; set; }
 
         public List<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
 

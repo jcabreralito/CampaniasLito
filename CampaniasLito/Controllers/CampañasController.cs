@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using CampaniasLito.Classes;
 using CampaniasLito.Filters;
 using CampaniasLito.Models;
+using PagedList;
 
 namespace CampaniasLito.Controllers
 {
@@ -77,6 +78,111 @@ namespace CampaniasLito.Controllers
             return PartialView(campaña);
         }
 
+        // GET: Campañas/Details/5
+        [AuthorizeUser(idOperacion: 2)]
+        public async Task<ActionResult> CreateCampArt(int? id, int? page = null)
+        {
+            var usuario = await db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefaultAsync();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var tiendas = await db.Tiendas.ToListAsync();
+
+
+            foreach (var tienda in tiendas)
+            {
+                var articulosTMPsTienda = await db.CampañaArticuloTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == id).ToListAsync();
+                var articulosTMPsTienda2 = await db.TiendaArticulos.Where(cdt => cdt.TiendaId == tienda.TiendaId).ToListAsync();
+
+                var habilitados1 = articulosTMPsTienda.Where(at => at.Habilitado == false).ToList();
+                var habilitados2 = articulosTMPsTienda2.Where(at => at.Seleccionado == false).ToList();
+
+                if (habilitados1.Count() != habilitados2.Count())
+                {
+                    var response = MovementsHelper.AgregarArticulosTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, tienda.TiendaId, (int)id);
+                }
+            }
+
+            page = (page ?? 1);
+
+            //TiendasArticulosView campañaTiendas = new TiendasArticulosView();
+
+            List<CampañaTiendaTMP> campañaTiendas = await db.CampañaTiendaTMPs.Where(ct => ct.CampañaId == id).ToListAsync();
+
+            //campañaTiendas.Tiendas = await db.Tiendas.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
+            //campañaTiendas.ArticuloKFCs = await db.ArticuloKFCs.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
+            //campañaTiendas.NuevaCampañaViews = await db.NuevaCampañaViews.Where(c => c.CampañaId == id).ToListAsync();
+            //campañaTiendas.CampañaArticuloTMPs = await db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == id).Take(20).ToListAsync();
+
+            if (campañaTiendas == null)
+            {
+                return HttpNotFound();
+            }
+
+            //campañaTiendas.Tiendas.ToPagedList((int)page, 20);
+            return PartialView(campañaTiendas.ToPagedList((int)page, 15));
+        }
+
+        // GET: Campañas/Details/5
+        [AuthorizeUser(idOperacion: 2)]
+        public ActionResult NuevaCampaña(int campañaId)
+        {
+            TiendasArticulosView campañas = new TiendasArticulosView();
+
+            campañas.Campañas = db.Campañas.Where(cat => cat.CampañaId == campañaId).ToList();
+
+            if (campañas == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView(campañas);
+        }
+
+        // GET: Campañas/Details/5
+        [AuthorizeUser(idOperacion: 2)]
+        public ActionResult ArticulosCampañas(int tiendaId, int campañaId)
+        {
+            TiendasArticulosView campañaArticulos = new TiendasArticulosView();
+
+            campañaArticulos.CampañaArticuloTMPs = db.CampañaArticuloTMPs.Where(cat => cat.TiendaId == tiendaId && cat.CampañaTiendaTMPId == campañaId).ToList();
+
+            //List<CampañaArticuloTMP> campañaArticulos = db.CampañaArticuloTMPs.Where(ca => ca.TiendaId == tiendaId).ToList();
+
+            if (campañaArticulos == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView(campañaArticulos);
+        }
+
+        // GET: Campañas/Details/5
+        [AuthorizeUser(idOperacion: 2)]
+        public ActionResult ArticulosCampañasDescripcion()
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            TiendasArticulosView campañaArticulos = new TiendasArticulosView();
+
+            campañaArticulos.ArticuloKFCs = db.ArticuloKFCs.Where(cat => cat.CompañiaId == usuario.CompañiaId).ToList();
+
+            if (campañaArticulos == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView(campañaArticulos);
+        }
+
         // GET: Campañas/Create
         [AuthorizeUser(idOperacion: 2)]
         public async Task<ActionResult> CreateCamp(int? id)
@@ -87,7 +193,7 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var response = await MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id);
+            var response = MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)id);
 
             if (response.Succeeded)
             {
@@ -120,9 +226,9 @@ namespace CampaniasLito.Controllers
             {
                 CampañaArticuloTMP campañaArticuloTMP = db.CampañaArticuloTMPs.SingleOrDefault(x => x.CampañaArticuloTMPId == id);
 
-                campañaArticuloTMP.Cantidad= (int)q;
+                campañaArticuloTMP.Cantidad = (int)q;
                 db.SaveChanges();
-                result = true;
+                result = false;
             }
             catch (Exception ex)
             {
@@ -132,7 +238,7 @@ namespace CampaniasLito.Controllers
         }
 
         [AuthorizeUser(idOperacion: 2)]
-        public async Task<ActionResult> CreateCampArt(int? tiendaId, int? campId, TiendasArticulosView view)
+        public async Task<ActionResult> CreateCampArt2(int? tiendaId, int? campId, TiendasArticulosView view)
         {
             var usuario = await db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefaultAsync();
             if (usuario == null)
@@ -140,7 +246,7 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var response = await MovementsHelper.AgregarArticulosTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)tiendaId, (int)campId);
+            var response = MovementsHelper.AgregarArticulosTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, (int)tiendaId, (int)campId);
 
             if (response.Succeeded)
             {
@@ -154,7 +260,7 @@ namespace CampaniasLito.Controllers
             //var view = db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == id).ToList();
             view.Tiendas = await db.Tiendas.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
             view.ArticuloKFCs = await db.ArticuloKFCs.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
-            view.NuevaCampañaViews = await db.NuevaCampañaViews.Where(c => c.CampañaId == campId).ToListAsync();
+            view.Campañas = await db.Campañas.Where(c => c.CampañaId == campId).ToListAsync();
             view.CampañaArticuloTMPs = await db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == tiendaId).ToListAsync();
 
             ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == tiendaId).FirstOrDefault().Restaurante;
@@ -173,6 +279,49 @@ namespace CampaniasLito.Controllers
 
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateCampañaArticulos(FormCollection fc)
+        {
+
+            //TempData["mensajeLito"] = "ACTUALIZANDO CANTIDADES";
+
+            var nombre = User.Identity.Name;
+            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
+
+            string[] articuloKFCTMPId = fc.GetValues("articuloId");
+            string[] cantidad = fc.GetValues("Cantidad");
+
+            int cantidadNumero = 0;
+
+            for (int i = 0; i < articuloKFCTMPId.Length; i++)
+            {
+
+                CampañaArticuloTMP campañaArticuloTMP = await db.CampañaArticuloTMPs.FindAsync(Convert.ToInt32(articuloKFCTMPId[i]));
+                if (campañaArticuloTMP.Cantidad != Convert.ToInt32(cantidad[i]))
+                {
+                    if (string.IsNullOrEmpty(cantidad[i]))
+                    {
+                        cantidadNumero = 0;
+
+                        campañaArticuloTMP.Cantidad = cantidadNumero;
+                        db.Entry(campañaArticuloTMP).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        campañaArticuloTMP.Cantidad = Convert.ToInt32(cantidad[i]);
+                        db.Entry(campañaArticuloTMP).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+
+            }
+
+            return RedirectToAction("Index", "Campañas");
+        }
+
 
         // POST: Campañas/Create
         [AuthorizeUser(idOperacion: 2)]
@@ -290,12 +439,15 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Campaña campaña)
         {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
             if (ModelState.IsValid)
             {
                 db.Entry(campaña).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    var response2 = MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, campaña.CampañaId);
 
                     TempData["msgCampañaEditada"] = "CAMPAÑA EDITADA";
 

@@ -1,5 +1,7 @@
 ﻿@*@model IEnumerable<CampaniasLito.Models.CampañaArticuloTMP>*@
-@model CampaniasLito.Models.TiendasArticulosView
+@*@model CampaniasLito.Models.TiendasArticulosView*@
+@model PagedList.IPagedList<CampaniasLito.Models.CampañaTiendaTMP>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Articulos Campañas";
@@ -78,7 +80,7 @@
     <link href="~/Content/css/Generales.css" rel="stylesheet" />
     <link href="~/Content/css/web.css" rel="stylesheet" />
 
-    <script src="https://kit.fontawesome.com/8068fd2104.js" crossorigin="anonymous"></script>
+    <link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
 
     <script type="text/javascript" src="~/Content/js/gridviewscroll.js"></script>
 
@@ -130,12 +132,13 @@
                     </div>
                 </div>
 
-                @using (Html.BeginForm("CreateCamp", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("CreateCampañaArticulos", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
+                    @Html.AntiForgeryToken()
                     <div class="panel" style="margin: 1% 2%">
                         <div class="panel-heading table-responsive" id="panelH">
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <table style="width:100%; margin-top: -10px" id="dataTable" cellspacing="0">
+                            <table id="dataTable" cellspacing="0">
                                 <tr>
                                     <td class=" col-sm-12">
                                         <h2><i class="fas fa-calendar-alt"></i> @ViewBag.Title</h2>
@@ -158,87 +161,77 @@
                             </table>
                         </div>
 
-                        <div class="panel-body" style="padding-top: 10px; margin-bottom: -50px">
-                            <div class="form-horizontal row responsivoUsuarioLabel">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            @Html.EditorFor(model => model.NuevaCampañaViews.FirstOrDefault().Nombre, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", disabled = "disabled", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Nombre" } })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-8">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            @Html.EditorFor(model => model.NuevaCampañaViews.FirstOrDefault().Descripcion, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", disabled = "disabled", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Descripción" } })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="panel-body" style="padding-top: 10px; margin-bottom: -40px">
+                            @Html.Action("NuevaCampaña", new { campañaId = Model.FirstOrDefault().CampañaId })
                         </div>
 
-                        <div style="height: 73vh !important; width: 96% !important; margin: 0 2% !important">
+                        <div style="height: 71.5vh !important; width: 96% !important; margin: 0 2% !important">
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                             <table cellspacing="0" id="gvMain" class="table-striped table-hover">
                                 <thead>
                                     <tr class="GridViewScrollHeader">
                                         <th>
-                                            @Html.DisplayNameFor(model => model.Tiendas.FirstOrDefault().Restaurante)
+                                            RESTAURANTE
                                         </th>
-                                        @foreach (var item1 in Model.ArticuloKFCs)
-                                        {
-                                            <th>
-                                                @item1.Descripcion
-                                            </th>
-                                        }
+                                        <th>
+                                            @Html.Action("ArticulosCampañasDescripcion")
+                                        </th>
+                                        @*@foreach (var item in Model)
+                                            {
+                                                <td>
+                                                    @item.CampañaArticuloTMPs.
+                                                </td>
+                                            }*@
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach (var item in Model.Tiendas)
-                                    {
-                                    <tr class="GridViewScrollItem">
-                                        <td>
-                                            @item.Restaurante
-                                        </td>
-                                        @foreach (var item2 in Model.CampañaArticuloTMPs)
-                                        {
-                                            @Html.HiddenFor(m => item2.CampañaArticuloTMPId, new { @id = "ArticuloID" })
-                                            <td align="center">
-                                                <input type="text" id="Cantidad" name="Cantidad" value="@item2.Cantidad" class="inputModal" style="text-transform:uppercase; text-align: center; background-color: transparent; border: none" />
-                                                @*@Html.EditorFor(modelItem => item2.Cantidad, new { htmlAttributes = new { @class = "form-control inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase; text-align: center; background-color: transparent; border-top: none !important; border-left: none !important", placeholder = "Cantidad" } })*@
+                                @foreach (var item2 in Model)
+                                {
+                                    <tbody id="articulosCamp" tiendaId="@item2.TiendaId">
+                                        <tr class="GridViewScrollItem">
+                                            <td style="padding-top: 8px; margin-bottom: -8px">
+                                                @item2.Tienda.Restaurante
                                             </td>
-                                        }
-                                    </tr>
-                                    }
-                                </tbody>
+                                            @*<td align="center">
+                                                    <i class="fas fa-plus-circle"></i>
+                                                </td>*@
+                                            <td>
+                                                @Html.Action("ArticulosCampañas", new { tiendaId = item2.TiendaId, campañaId = item2.CampañaId })
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    @Html.Action("ArticulosCampañas", new { tiendaId = item2.TiendaId })
+                                                </td>
+                                            </tr>*@
+                                    </tbody>
+                                }
                             </table>
 
                         </div>
                     </div>
                 }
-
+            </div>
+            <div style="font-size:12px; margin-top: -17px; margin-left: 4%;">
+                @Html.PagedListPager(Model, page => Url.Action("CreateCampArt", new
+           {
+               page,
+               sortOrder = ViewBag.CurrentSort,
+               currentFilter = ViewBag.CurrentFilter,
+           }))
             </div>
         </div>
     </div>
 
-    <script>
+    @*<script>
 
-        $("#EditarArticuloCantidad").change(function () {
-            //var data = $("#SubmitForm").serialize();
-            var id = $("#ArticuloID").val();
-            var cant = $("#Cantidad").val();
-
-            //if (document.getElementById("EditarArticuloTienda").checked) {
-            //    sel = true;
-            //}
-            //else {
-            //    sel = false;
-            //}
-
+        $("#paginacion").click(function () {
+            var data = $("#SubmitForm").serialize();
             $.ajax({
                 type: "Post",
-                url: "/Campañas/EditarCantidad?id=" + id + "&q=" + cant,
+                url: "/Campañas/CreateCampañaArticulos",
                 data: data,
                 success: function (result) {
                     //alert("Success!..");
@@ -249,8 +242,7 @@
             })
         })
 
-    </script>
-
+    </script>*@
 
     @Scripts.Render("~/bundles/js")
 
@@ -261,70 +253,9 @@
     <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
     <script src="~/Scripts/fileupload.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="~/Content/vendor/font-awesome/js/fontawesome.js"></script>
 
     @Scripts.Render("~/bundles/jqueryval")
-
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-            $("body").on("click", "a.dialog-window-xtraLarge", null, function (e) {
-                e.preventDefault();
-                var $link = $(this);
-                var url = $(this).attr('href');
-                if (url.indexOf('#') == 0) {
-                    $('#xtraLargeModal').modal('show');
-                }
-                else {
-                    $.get(url, function (data) {
-                        $('#xtraLargeModal .te').html(data);
-                        $('#xtraLargeModal').modal();
-                    }).success(function () { $('input:text:visible:first').focus(); });
-
-                }
-            });
-        });
-
-    </script>
-
-
-
-    @if (TempData["msgDetalles"] != null)
-    {
-        <script type="text/javascript">
-
-            swal({
-                title: "<span style='color:#fff'>@ViewBag.Title</span>",
-                text: '<span style="color:#fff">@TempData["msgDetalles"].ToString()</span>',
-                html: true,
-                type: "info",
-                showConfirmButton: false,
-                animation: true,
-                customClass: 'animated swing',
-                background: '#B3C9D8',
-                grow: 'fullscreen',
-                timer: 2000,
-            });
-        </script>
-    }
-
-    @if (TempData["msgCampaña"] != null)
-    {
-        <script type="text/javascript">
-
-            swal({
-                title: "<span style='color:#fff'>@ViewBag.Title</span>",
-                text: '<span style="color:#fff">@TempData["msgCampaña"].ToString()</span>',
-                html: true,
-                type: "info",
-                showConfirmButton: false,
-                animation: true,
-                customClass: 'animated swing',
-                background: '#B3C9D8',
-                grow: 'fullscreen',
-                timer: 2000,
-            });
-        </script>
-    }
 
 </body>
 </html>

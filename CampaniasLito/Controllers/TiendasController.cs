@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using CampaniasLito.Classes;
 using CampaniasLito.Filters;
@@ -21,7 +22,7 @@ namespace CampaniasLito.Controllers
             {
                 List<ArticuloKFC> tiendas = new List<ArticuloKFC>();
                 tiendas = db.ArticuloKFCs.ToList();
-                
+
                 return Json(new { Result = "OK", Records = tiendas }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -89,9 +90,9 @@ namespace CampaniasLito.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             var tienda = db.Tiendas.Find(id);
-            
+
             if (tienda == null)
             {
                 return HttpNotFound();
@@ -221,49 +222,122 @@ namespace CampaniasLito.Controllers
         [AuthorizeUser(idOperacion: 3)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AsignarArticulos(int id, TiendaArticulo tiendaArticulo)
+        public ActionResult AsignarArticulos(FormCollection fc)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+            var nombre = User.Identity.Name;
+            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
 
-            TiendaArticulo tiendaArticulo2 = db.TiendaArticulos.SingleOrDefault(x => x.TiendaArticuloId == id);
+            string[] articuloKFCTMPId = fc.GetValues("item.TiendaArticuloId");
+            string[] seleccionado = fc.GetValues("Seleccionado");
+            //string[] Editados = null;
 
-            tiendaArticulo2.ArticuloKFC = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFC;
-            tiendaArticulo2.ArticuloKFCId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFCId;
-            tiendaArticulo2.TiendaId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().TiendaId;
-            tiendaArticulo2.Tienda = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().Tienda;
-            //tiendaArticulo.ArticuloKFC = Model.ArticuloKFC;
-            //tiendaArticulo.ArticuloKFCId = Model.ArticuloKFCId;
-            //tiendaArticulo.TiendaId = Model.TiendaId;
-            //tiendaArticulo.Tienda = Model.Tienda;
-            tiendaArticulo2.Seleccionado = tiendaArticulo.Seleccionado;
+            var selec = false;
 
+            for (var i = 0; i < articuloKFCTMPId.Length; i++)
+            {
+                TiendaArticulo tiendaArticulo = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[i]));
 
-            //TiendaArticulo tiendaArticulo2 = new TiendaArticulo();
+                selec = false;
 
-            //tiendaArticulo2.TiendaArticuloId = (int)id;
-            //tiendaArticulo2.Seleccionado = tiendaArticulo.Seleccionado;
-            //tiendaArticulo2.ArticuloKFCId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFCId;
-            //tiendaArticulo2.ArticuloKFC = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFC;
-            //tiendaArticulo2.TiendaId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().TiendaId;
-            //tiendaArticulo2.Tienda = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().Tienda;
-
-            //if (ModelState.IsValid)
-            //{
-                db.Entry(tiendaArticulo2).State = EntityState.Modified;
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
+                for (var j = 0; j < seleccionado.Length; j++)
                 {
-                    TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+                    if (articuloKFCTMPId[i] == seleccionado[j])
+                    {
+                        selec = true;
 
-                    return RedirectToAction("Index");
+                        tiendaArticulo.Seleccionado = selec;
+
+                        db.Entry(tiendaArticulo).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        break;
+                    }
                 }
+                if (!selec)
+                {
+                    selec = false;
 
-                ModelState.AddModelError(string.Empty, response.Message);
+                    tiendaArticulo.Seleccionado = selec;
+
+                    db.Entry(tiendaArticulo).State = EntityState.Modified;
+                    var response = DBHelper.SaveChanges(db);
+                    if (response.Succeeded)
+                    {
+
+                        TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+
+                    }
+                }
+            }
+            if (selec)
+            {
+                selec = true;
+            }
+
+            //if (articuloKFCTMPId.Count() == seleccionado.Count())
+            //{
+            //    for (int i = 0; i < articuloKFCTMPId.Length; i++)
+            //    {
+            //        TiendaArticulo tiendaArticulo = await db.TiendaArticulos.FindAsync(Convert.ToInt32(articuloKFCTMPId[i]));
+
+            //        if (tiendaArticulo.Seleccionado == false)
+            //        {
+            //            tiendaArticulo.Seleccionado = true;
+
+            //            db.Entry(tiendaArticulo).State = EntityState.Modified;
+            //            db.SaveChanges();
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < articuloKFCTMPId.Length; i++)
+            //    {
+            //        TiendaArticulo tiendaArticulo = await db.TiendaArticulos.FindAsync(Convert.ToInt32(articuloKFCTMPId[i]));
+
+            //        for (int s = 0; s < seleccionado.Length; s++)
+            //        {
+            //            if (tiendaArticulo.TiendaArticuloId != Convert.ToInt32(seleccionado[s]))
+            //            {
+            //                if (tiendaArticulo.Seleccionado == true)
+            //                {
+            //                    tiendaArticulo.Seleccionado = false;
+
+            //                    db.Entry(tiendaArticulo).State = EntityState.Modified;
+            //                    db.SaveChanges();
+            //                }
+            //                break;
+            //            }
+            //            else
+            //            {
+            //                if (tiendaArticulo.Seleccionado == false)
+            //                {
+            //                    tiendaArticulo.Seleccionado = false;
+
+            //                    db.Entry(tiendaArticulo).State = EntityState.Modified;
+            //                    db.SaveChanges();
+            //                }
+            //                break;
+            //            }
+            //        }
+
+            //        //if (tiendaArticulo.Seleccionado == true)
+            //        //{
+            //        //    tiendaArticulo.Seleccionado = false;
+
+            //        //    db.Entry(tiendaArticulo).State = EntityState.Modified;
+            //        //    db.SaveChanges();
+            //        //}
+
+
+            //    }
+
             //}
 
-            ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == tiendaArticulo2.Tienda.TiendaId).FirstOrDefault().Restaurante;
+            //TempData["msgTiendaCreada"] = "TIENDA ACTUALIZADA";
 
-            return PartialView(tiendaArticulo);
+            return RedirectToAction("Index");
+
         }
 
         [AuthorizeUser(idOperacion: 3)]
@@ -273,7 +347,7 @@ namespace CampaniasLito.Controllers
             var result = false;
             try
             {
-                TiendaArticulo tiendaArticulo = db.TiendaArticulos.SingleOrDefault(x => x.TiendaArticuloId== id);
+                TiendaArticulo tiendaArticulo = db.TiendaArticulos.SingleOrDefault(x => x.TiendaArticuloId == id);
 
                 tiendaArticulo.ArticuloKFC = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFC;
                 tiendaArticulo.ArticuloKFCId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFCId;
@@ -370,7 +444,7 @@ namespace CampaniasLito.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var tienda = db.Tiendas.Find(id);
-            
+
             if (tienda == null)
             {
                 return HttpNotFound();
