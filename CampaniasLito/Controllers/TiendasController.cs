@@ -70,6 +70,7 @@ namespace CampaniasLito.Controllers
             var filtro = Session["tiendaFiltro"].ToString();
 
             var tiendas = db.Tiendas.Where(a => a.CompañiaId == usuario.CompañiaId);
+
             if (!string.IsNullOrEmpty(tienda))
             {
                 return View(tiendas.Where(a => a.Restaurante.Contains(filtro) || a.Ciudad.Nombre.Contains(filtro) || a.CCoFranquicia.Contains(filtro)).ToList());
@@ -227,17 +228,23 @@ namespace CampaniasLito.Controllers
             var nombre = User.Identity.Name;
             var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
 
-            string[] articuloKFCTMPId = fc.GetValues("item.TiendaArticuloId");
+            string[] articuloKFCTMPId = fc.GetValues("TiendaArticuloId");
             string[] seleccionado = fc.GetValues("Seleccionado");
-            //string[] Editados = null;
 
             var selec = false;
+            var cantidad = 0;
 
             for (var i = 0; i < articuloKFCTMPId.Length; i++)
             {
                 TiendaArticulo tiendaArticulo = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[i]));
 
+                var tiendaId = tiendaArticulo.TiendaId;
+                var articuloId = tiendaArticulo.ArticuloKFCId;
+
+                CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId).FirstOrDefault();
+
                 selec = false;
+                cantidad = 0;
 
                 for (var j = 0; j < seleccionado.Length; j++)
                 {
@@ -248,6 +255,19 @@ namespace CampaniasLito.Controllers
                         tiendaArticulo.Seleccionado = selec;
 
                         db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                        if (campañaArticulo.Habilitado == false)
+                        {
+                            cantidad = 1;
+                            campañaArticulo.Cantidad = cantidad;
+                        }
+
+                        campañaArticulo.Habilitado = selec;
+                        //campañaArticulo.Cantidad = cantidad;
+
+                        db.Entry(campañaArticulo).State = EntityState.Modified;
+
+
                         db.SaveChanges();
 
                         break;
@@ -256,85 +276,22 @@ namespace CampaniasLito.Controllers
                 if (!selec)
                 {
                     selec = false;
+                    cantidad = 0;
 
                     tiendaArticulo.Seleccionado = selec;
 
                     db.Entry(tiendaArticulo).State = EntityState.Modified;
-                    var response = DBHelper.SaveChanges(db);
-                    if (response.Succeeded)
-                    {
 
-                        TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+                    campañaArticulo.Habilitado = selec;
+                    campañaArticulo.Cantidad = cantidad;
 
-                    }
+                    db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                    db.SaveChanges();
                 }
             }
-            if (selec)
-            {
-                selec = true;
-            }
 
-            //if (articuloKFCTMPId.Count() == seleccionado.Count())
-            //{
-            //    for (int i = 0; i < articuloKFCTMPId.Length; i++)
-            //    {
-            //        TiendaArticulo tiendaArticulo = await db.TiendaArticulos.FindAsync(Convert.ToInt32(articuloKFCTMPId[i]));
-
-            //        if (tiendaArticulo.Seleccionado == false)
-            //        {
-            //            tiendaArticulo.Seleccionado = true;
-
-            //            db.Entry(tiendaArticulo).State = EntityState.Modified;
-            //            db.SaveChanges();
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < articuloKFCTMPId.Length; i++)
-            //    {
-            //        TiendaArticulo tiendaArticulo = await db.TiendaArticulos.FindAsync(Convert.ToInt32(articuloKFCTMPId[i]));
-
-            //        for (int s = 0; s < seleccionado.Length; s++)
-            //        {
-            //            if (tiendaArticulo.TiendaArticuloId != Convert.ToInt32(seleccionado[s]))
-            //            {
-            //                if (tiendaArticulo.Seleccionado == true)
-            //                {
-            //                    tiendaArticulo.Seleccionado = false;
-
-            //                    db.Entry(tiendaArticulo).State = EntityState.Modified;
-            //                    db.SaveChanges();
-            //                }
-            //                break;
-            //            }
-            //            else
-            //            {
-            //                if (tiendaArticulo.Seleccionado == false)
-            //                {
-            //                    tiendaArticulo.Seleccionado = false;
-
-            //                    db.Entry(tiendaArticulo).State = EntityState.Modified;
-            //                    db.SaveChanges();
-            //                }
-            //                break;
-            //            }
-            //        }
-
-            //        //if (tiendaArticulo.Seleccionado == true)
-            //        //{
-            //        //    tiendaArticulo.Seleccionado = false;
-
-            //        //    db.Entry(tiendaArticulo).State = EntityState.Modified;
-            //        //    db.SaveChanges();
-            //        //}
-
-
-            //    }
-
-            //}
-
-            //TempData["msgTiendaCreada"] = "TIENDA ACTUALIZADA";
+            TempData["msgTiendaEditada"] = "TIENDA EDITADA";
 
             return RedirectToAction("Index");
 

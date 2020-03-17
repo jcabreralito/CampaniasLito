@@ -115,27 +115,27 @@ namespace CampaniasLito.Classes
                 try
                 {
 
-                    //var articulos = await db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañiaId).ToListAsync();
-                    var articulos = db.TiendaArticulos.Where(cdt => cdt.TiendaId == tiendaId).ToList();
+                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañiaId).ToList();
+                    //var articulos = db.TiendaArticulos.Where(cdt => cdt.TiendaId == tiendaId).ToList();
 
 
                     foreach (var articulo in articulos)
                     {
                         var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId && cdt.CampañaTiendaTMPId == campId).FirstOrDefault();
-                        var articulosTMPs2 = db.TiendaArticulos.Where(cdt => cdt.TiendaArticuloId == articulo.TiendaArticuloId).FirstOrDefault();
+                        var articulosTiendas = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
 
-                        var habilitados1 = articulosTMPs.Habilitado;
-                        var habilitados2 = articulosTMPs2.Seleccionado;
+                        var habilitados = articulosTMPs.Habilitado;
+                        var seleccionados = articulosTiendas.Seleccionado;
 
                         int cantidad = 0;
                         bool habilitado = false;
 
-                        if (habilitados1 != habilitados2)
+                        if (habilitados != seleccionados)
                         {
 
                             var articulosTMPsId = db.CampañaArticuloTMPs.Where(cdt => cdt.CampañaArticuloTMPId == articulosTMPs.CampañaArticuloTMPId).FirstOrDefault();
 
-                            if (articulo.Seleccionado == true)
+                            if (articulosTiendas.Seleccionado == true)
                             {
                                 cantidad = 1;
                                 habilitado = true;
@@ -150,12 +150,13 @@ namespace CampaniasLito.Classes
                             articulosTMPsId.Cantidad = cantidad;
 
                             db.Entry(articulosTMPsId).State = EntityState.Modified;
+                            db.SaveChanges();
                         }
 
                         if (articulosTMPs == null)
                         {
 
-                            if (articulo.Seleccionado == true)
+                            if (articulosTiendas.Seleccionado == true)
                             {
                                 cantidad = 1;
                                 habilitado = true;
@@ -178,12 +179,10 @@ namespace CampaniasLito.Classes
                             };
 
                             db.CampañaArticuloTMPs.Add(articuloDetalle);
+                            db.SaveChanges();
                         }
 
                     }
-
-
-                    db.SaveChanges();
 
                     transaccion.Commit();
 

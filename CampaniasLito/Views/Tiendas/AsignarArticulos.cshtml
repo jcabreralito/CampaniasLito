@@ -46,11 +46,12 @@
                 @foreach (var item in Model)
                 {
                 <fieldset id="SubmitForm">
-                    @Html.HiddenFor(m => item.TiendaArticuloId, new { @id = "TiendaArticuloId" })
+                    @*@Html.HiddenFor(m => item.TiendaArticuloId, new { @id = "TiendaArticuloId" })*@
                     @Html.HiddenFor(m => item.ArticuloKFC)
                     @Html.HiddenFor(m => item.ArticuloKFCId)
                     @Html.HiddenFor(m => item.Tienda)
                     @Html.HiddenFor(m => item.TiendaId)
+                    <input type="hidden" name="TiendaArticuloId" value="@item.TiendaArticuloId" />
                     <div class="form-group">
                         <div class="col-sm-10">
                             @Html.DisplayFor(modelItem => item.ArticuloKFC.Descripcion, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @style = "text-transform:uppercase" } })

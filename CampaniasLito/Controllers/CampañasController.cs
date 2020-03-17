@@ -80,9 +80,9 @@ namespace CampaniasLito.Controllers
 
         // GET: Campañas/Details/5
         [AuthorizeUser(idOperacion: 2)]
-        public async Task<ActionResult> CreateCampArt(int? id, int? page = null)
+        public ActionResult CreateCampArt(string tiendaCampania, int? id, int? page = null)
         {
-            var usuario = await db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefaultAsync();
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
             if (usuario == null)
             {
@@ -94,41 +94,39 @@ namespace CampaniasLito.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var tiendas = await db.Tiendas.ToListAsync();
-
-
-            foreach (var tienda in tiendas)
+            if (string.IsNullOrEmpty(tiendaCampania))
             {
-                var articulosTMPsTienda = await db.CampañaArticuloTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == id).ToListAsync();
-                var articulosTMPsTienda2 = await db.TiendaArticulos.Where(cdt => cdt.TiendaId == tienda.TiendaId).ToListAsync();
-
-                var habilitados1 = articulosTMPsTienda.Where(at => at.Habilitado == false).ToList();
-                var habilitados2 = articulosTMPsTienda2.Where(at => at.Seleccionado == false).ToList();
-
-                if (habilitados1.Count() != habilitados2.Count())
-                {
-                    var response = MovementsHelper.AgregarArticulosTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, tienda.TiendaId, (int)id);
-                }
+                Session["tiendaCampaniaFiltro"] = string.Empty;
             }
+            else
+            {
+                Session["tiendaCampaniaFiltro"] = tiendaCampania.ToUpper();
+            }
+
+            var filtro = Session["tiendaCampaniaFiltro"].ToString();
+
+            var tiendas = db.Tiendas.ToList();
 
             page = (page ?? 1);
 
-            //TiendasArticulosView campañaTiendas = new TiendasArticulosView();
-
-            List<CampañaTiendaTMP> campañaTiendas = await db.CampañaTiendaTMPs.Where(ct => ct.CampañaId == id).ToListAsync();
-
-            //campañaTiendas.Tiendas = await db.Tiendas.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
-            //campañaTiendas.ArticuloKFCs = await db.ArticuloKFCs.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
-            //campañaTiendas.NuevaCampañaViews = await db.NuevaCampañaViews.Where(c => c.CampañaId == id).ToListAsync();
-            //campañaTiendas.CampañaArticuloTMPs = await db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == id).Take(20).ToListAsync();
+            List<CampañaTiendaTMP> campañaTiendas = db.CampañaTiendaTMPs.Where(ct => ct.CampañaId == id).ToList();
 
             if (campañaTiendas == null)
             {
                 return HttpNotFound();
             }
 
-            //campañaTiendas.Tiendas.ToPagedList((int)page, 20);
-            return PartialView(campañaTiendas.ToPagedList((int)page, 15));
+            Session["campaniaId"] = id;
+            
+            if (!string.IsNullOrEmpty(tiendaCampania))
+            {
+                return PartialView(campañaTiendas.Where(a => a.Tienda.Restaurante.Contains(filtro)).ToPagedList((int)page, 10));
+            }
+            else
+            {
+                return PartialView(campañaTiendas.ToPagedList((int)page, 10));
+            }
+
         }
 
         // GET: Campañas/Details/5
@@ -154,8 +152,6 @@ namespace CampaniasLito.Controllers
             TiendasArticulosView campañaArticulos = new TiendasArticulosView();
 
             campañaArticulos.CampañaArticuloTMPs = db.CampañaArticuloTMPs.Where(cat => cat.TiendaId == tiendaId && cat.CampañaTiendaTMPId == campañaId).ToList();
-
-            //List<CampañaArticuloTMP> campañaArticulos = db.CampañaArticuloTMPs.Where(ca => ca.TiendaId == tiendaId).ToList();
 
             if (campañaArticulos == null)
             {
@@ -185,9 +181,9 @@ namespace CampaniasLito.Controllers
 
         // GET: Campañas/Create
         [AuthorizeUser(idOperacion: 2)]
-        public async Task<ActionResult> CreateCamp(int? id)
+        public ActionResult CreateCamp(int? id)
         {
-            var usuario = await db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefaultAsync();
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
             if (usuario == null)
             {
                 return RedirectToAction("Index", "Home");
@@ -238,9 +234,9 @@ namespace CampaniasLito.Controllers
         }
 
         [AuthorizeUser(idOperacion: 2)]
-        public async Task<ActionResult> CreateCampArt2(int? tiendaId, int? campId, TiendasArticulosView view)
+        public ActionResult CreateCampArt2(int? tiendaId, int? campId, TiendasArticulosView view)
         {
-            var usuario = await db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefaultAsync();
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
             if (usuario == null)
             {
                 return RedirectToAction("Index", "Home");
@@ -258,67 +254,115 @@ namespace CampaniasLito.Controllers
             ModelState.AddModelError(string.Empty, response.Message);
 
             //var view = db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == id).ToList();
-            view.Tiendas = await db.Tiendas.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
-            view.ArticuloKFCs = await db.ArticuloKFCs.Where(c => c.CompañiaId == usuario.CompañiaId).ToListAsync();
-            view.Campañas = await db.Campañas.Where(c => c.CampañaId == campId).ToListAsync();
-            view.CampañaArticuloTMPs = await db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == tiendaId).ToListAsync();
+            view.Tiendas = db.Tiendas.Where(c => c.CompañiaId == usuario.CompañiaId).ToList();
+            view.ArticuloKFCs = db.ArticuloKFCs.Where(c => c.CompañiaId == usuario.CompañiaId).ToList();
+            view.Campañas = db.Campañas.Where(c => c.CampañaId == campId).ToList();
+            view.CampañaArticuloTMPs = db.CampañaArticuloTMPs.Where(cat => cat.CampañaTiendaTMPId == campId && cat.TiendaId == tiendaId).ToList();
 
             ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == tiendaId).FirstOrDefault().Restaurante;
 
-            //var result2 = view.CampañaArticuloTMPs.Pivot(emp => emp.Cantidad, emp2 => emp2.ArticuloKFC.Descripcion, lst => lst.Count());
-
-            //foreach (var row in result2)
-            //{
-            //    foreach (var column in row.Value)
-            //    {
-
-            //    }
-            //}
-
             return PartialView(view);
-
-
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateCampañaArticulos(FormCollection fc)
+        public ActionResult CreateCampañaArticulos(FormCollection fc)
         {
-
-            //TempData["mensajeLito"] = "ACTUALIZANDO CANTIDADES";
 
             var nombre = User.Identity.Name;
             var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
 
             string[] articuloKFCTMPId = fc.GetValues("articuloId");
-            string[] cantidad = fc.GetValues("Cantidad");
+            string[] cantidad = fc.GetValues("cantidad");
 
-            int cantidadNumero = 0;
+            //var habilitado = false;
+            var cantidadNumero = 0;
 
-            for (int i = 0; i < articuloKFCTMPId.Length; i++)
+            for (var i = 0; i < articuloKFCTMPId.Length; i++)
             {
 
-                CampañaArticuloTMP campañaArticuloTMP = await db.CampañaArticuloTMPs.FindAsync(Convert.ToInt32(articuloKFCTMPId[i]));
-                if (campañaArticuloTMP.Cantidad != Convert.ToInt32(cantidad[i]))
-                {
-                    if (string.IsNullOrEmpty(cantidad[i]))
-                    {
-                        cantidadNumero = 0;
+                CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Find(Convert.ToInt32(articuloKFCTMPId[i]));
 
-                        campañaArticuloTMP.Cantidad = cantidadNumero;
-                        db.Entry(campañaArticuloTMP).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        campañaArticuloTMP.Cantidad = Convert.ToInt32(cantidad[i]);
-                        db.Entry(campañaArticuloTMP).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                }
+                //habilitado = false;
+                cantidadNumero = 0;
 
+                //for (var j = 0; j < cantidad.Length; j++)
+                //{
+                    if (campañaArticulo.Cantidad != Convert.ToInt32(cantidad[i]))
+                    {
+                            cantidadNumero = Convert.ToInt32(cantidad[i]);
+                            campañaArticulo.Cantidad = cantidadNumero;
+
+                        db.Entry(campañaArticulo).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        //break;
+                    }
+                //    break;
+                //}
+                //if (!habilitado)
+                //{
+                //    habilitado = false;
+                //    cantidadNumero = 0;
+
+                //    campañaArticulo.Cantidad = cantidadNumero;
+
+                //    db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                //    db.SaveChanges();
+                //}
             }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //for (int i = 0; i < articuloKFCTMPId.Length; i++)
+            //{
+
+            //    CampañaArticuloTMP campañaArticuloTMP = db.CampañaArticuloTMPs.Find(Convert.ToInt32(articuloKFCTMPId[i]));
+            //    if (campañaArticuloTMP.Cantidad != Convert.ToInt32(cantidad[i]))
+            //    {
+            //        if (string.IsNullOrEmpty(cantidad[i]))
+            //        {
+            //            cantidadNumero = 0;
+
+            //            campañaArticuloTMP.Cantidad = cantidadNumero;
+            //            db.Entry(campañaArticuloTMP).State = EntityState.Modified;
+            //            db.SaveChanges();
+            //        }
+            //        else
+            //        {
+            //            campañaArticuloTMP.Cantidad = Convert.ToInt32(cantidad[i]);
+            //            db.Entry(campañaArticuloTMP).State = EntityState.Modified;
+            //            db.SaveChanges();
+            //        }
+            //    }
+
+            //}
+
+            TempData["mensajeLito"] = "CANTIDADES ACTUALIZADAS";
             return RedirectToAction("Index", "Campañas");
         }
 

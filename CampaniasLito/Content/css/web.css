@@ -25,13 +25,18 @@
     vertical-align: middle;
 }
 
+.GridViewScrollItem:nth-of-type(odd) {
+    background-color: #f0f0f0 !important;
+    color: #000 !important
+}
+
 .GridViewScrollItemFreeze {
     background-color: #f0f0f0 !important;
     color: #000 !important;
 }
 
-    .GridViewScrollItemFreeze:hover {
-        background-color: #ffffff!important;
+    .GridViewScrollItemFreeze:hover, .GridViewScrollItemFreeze:nth-of-type(odd):hover {
+        background-color: #B3C9D8 !important;
         color: #000 !important;
         border-color: #fff !important;
     }
@@ -48,9 +53,9 @@
         vertical-align: middle !important;
     }
 
-    .GridViewScrollItemFreeze > tr:nth-of-type(odd) {
-        background-color: #A5202A !important;
-        color: #fff !important
+    .GridViewScrollItemFreeze:nth-of-type(odd) {
+        background-color: #f0f0f0 !important;
+        color: #000 !important
     }
 
 .GridViewScrollFooterFreeze TD {

@@ -1,8 +1,12 @@
 ﻿@model CampaniasLito.Models.TiendasArticulosView
 
-<div class="col-sm-1" style="width: 100% !important">
-    @foreach (var item2 in Model.ArticuloKFCs)
-    {
-        @item2.Descripcion
-    }
-</div>
+<table>
+    <tr>
+        @foreach (var item2 in Model.ArticuloKFCs)
+        {
+            <th>
+                @item2.Descripcion
+            </th>
+        }
+    </tr>
+</table>

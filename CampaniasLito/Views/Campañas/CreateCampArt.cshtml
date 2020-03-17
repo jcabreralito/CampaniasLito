@@ -4,7 +4,7 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Articulos Campañas";
+    ViewBag.Title = "Articulos Campaña";
     Layout = null;
 }
 
@@ -121,6 +121,22 @@
         }
 
     </script>
+
+    @*<style>
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .static {
+                position: absolute;
+                background-color: white;
+            }
+
+            .first-col {
+                padding-left: 74.5px !important;
+            }
+        </style>*@
 </head>
 
 <body id="body" OnResize="redimensionar()">
@@ -132,24 +148,34 @@
                     </div>
                 </div>
 
-                @using (Html.BeginForm("CreateCampañaArticulos", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="panel" style="margin: 1% 2%">
-                        <div class="panel-heading table-responsive" id="panelH">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <table id="dataTable" cellspacing="0">
-                                <tr>
-                                    <td class=" col-sm-12">
-                                        <h2><i class="fas fa-calendar-alt"></i> @ViewBag.Title</h2>
-                                    </td>
-                                    <td class="col-sm-12">
+                <div class="panel" style="margin: 1% 2%">
+                    <div class="panel-heading table-responsive" id="panelH">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <table cellspacing="0">
+                            <tr>
+                                <td class=" col-sm-12">
+                                    <h2><i class="fas fa-calendar-alt"></i> @ViewBag.Title</h2>
+                                </td>
+                                @using (Html.BeginForm("CreateCampArt", "Campañas", new { id = Session["campaniaId"] }, FormMethod.Get))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <td class="col-xs-7">
                                         <div id="botones" class="input-group" style="display:flex; float:right">
-                                            <a href="@Url.Action("Index", "Campañas")">
-                                                <i class="fas fa-times-circle btn btn-pilares" style="border-radius:10px; text-align: right; font-size: 17px"></i>
-                                            </a>
+                                            <input class="input-group-addon" type="text" name="tiendaCampania" id="tiendaCampania" value="@Session["tiendaCampaniaFiltro"].ToString()" style="color:#01207B; text-transform:uppercase; border-radius:10px 0 0 10px; text-align:center; width:250px" />
+                                            <button type="submit" class="fas fa-search btn btn-pilares" style="border-radius:0 10px 10px 0; text-align: right; font-size: 17px"></button>
                                         </div>
                                     </td>
+                                }
+                                <td class="col-sm-12">
+                                    <div id="botones" class="input-group" style="display:flex; float:right">
+                                        <a href="@Url.Action("Index", "Campañas")">
+                                            <i class="fas fa-times-circle btn btn-pilares" style="border-radius:10px; text-align: right; font-size: 17px"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                                @using (Html.BeginForm("CreateCampañaArticulos", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
                                     <td class="col-sm-12" align="right">
                                         <div class="input-group">
                                             <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
@@ -157,62 +183,46 @@
                                             </button>
                                         </div>
                                     </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div class="panel-body" style="padding-top: 10px; margin-bottom: -40px">
-                            @Html.Action("NuevaCampaña", new { campañaId = Model.FirstOrDefault().CampañaId })
-                        </div>
-
-                        <div style="height: 71.5vh !important; width: 96% !important; margin: 0 2% !important">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                            <table cellspacing="0" id="gvMain" class="table-striped table-hover">
-                                <thead>
-                                    <tr class="GridViewScrollHeader">
-                                        <th>
-                                            RESTAURANTE
-                                        </th>
-                                        <th>
-                                            @Html.Action("ArticulosCampañasDescripcion")
-                                        </th>
-                                        @*@foreach (var item in Model)
-                                            {
-                                                <td>
-                                                    @item.CampañaArticuloTMPs.
-                                                </td>
-                                            }*@
-                                    </tr>
-                                </thead>
-                                @foreach (var item2 in Model)
-                                {
-                                    <tbody id="articulosCamp" tiendaId="@item2.TiendaId">
-                                        <tr class="GridViewScrollItem">
-                                            <td style="padding-top: 8px; margin-bottom: -8px">
-                                                @item2.Tienda.Restaurante
-                                            </td>
-                                            @*<td align="center">
-                                                    <i class="fas fa-plus-circle"></i>
-                                                </td>*@
-                                            <td>
-                                                @Html.Action("ArticulosCampañas", new { tiendaId = item2.TiendaId, campañaId = item2.CampañaId })
-                                            </td>
-                                        </tr>
-                                        @*<tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    @Html.Action("ArticulosCampañas", new { tiendaId = item2.TiendaId })
-                                                </td>
-                                            </tr>*@
-                                    </tbody>
                                 }
-                            </table>
-
-                        </div>
+                            </tr>
+                        </table>
                     </div>
-                }
+
+                    <div class="panel-body" style="padding-top: 10px; margin-bottom: -40px">
+                        @Html.Action("NuevaCampaña", new { campañaId = Model.FirstOrDefault().CampañaId })
+                    </div>
+
+                    <div style="height: 71.5vh !important; width: 96% !important; margin: 0 2% !important">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <table cellspacing="0" id="gvMain" class="table-striped table-hover">
+                            <thead>
+                                <tr class="GridViewScrollHeader">
+                                    <th>
+                                        RESTAURANTE
+                                    </th>
+                                    <th>
+                                        @Html.Action("ArticulosCampañasDescripcion")
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var item2 in Model)
+                            {
+                                <tbody>
+                                    <tr class="GridViewScrollItem">
+                                        <td style="padding-top: 8px; margin-bottom: -8px">
+                                            @item2.Tienda.Restaurante
+                                        </td>
+                                        <td>
+                                            @Html.Action("ArticulosCampañas", new { tiendaId = item2.TiendaId, campañaId = item2.CampañaId })
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            }
+                        </table>
+
+                    </div>
+                </div>
             </div>
             <div style="font-size:12px; margin-top: -17px; margin-left: 4%;">
                 @Html.PagedListPager(Model, page => Url.Action("CreateCampArt", new
@@ -227,22 +237,22 @@
 
     @*<script>
 
-        $("#paginacion").click(function () {
-            var data = $("#SubmitForm").serialize();
-            $.ajax({
-                type: "Post",
-                url: "/Campañas/CreateCampañaArticulos",
-                data: data,
-                success: function (result) {
-                    //alert("Success!..");
-                    //window.location.href = "/Home/index";
-                    //$("#MyModal").modal("hide");
+            $("#paginacion").click(function () {
+                var data = $("#SubmitForm").serialize();
+                $.ajax({
+                    type: "Post",
+                    url: "/Campañas/CreateCampañaArticulos",
+                    data: data,
+                    success: function (result) {
+                        //alert("Success!..");
+                        //window.location.href = "/Home/index";
+                        //$("#MyModal").modal("hide");
 
-                }
+                    }
+                })
             })
-        })
 
-    </script>*@
+        </script>*@
 
     @Scripts.Render("~/bundles/js")
 
