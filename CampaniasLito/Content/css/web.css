@@ -11,7 +11,7 @@
     font-size: 12px;
     border-radius: 10px;
     margin-bottom: 10px !important;
-    height: 30px !important;
+    height: 60px !important;
 }
 
 .GridViewScrollItem TD {
@@ -70,9 +70,9 @@
     vertical-align: middle;
 }
 
-#gvMain_Header_Fixed {
+/*#gvMain_Header_Fixed {
     margin-bottom: 10px;
-}
+}*/
 
 th > .gridViewScrollHelper {
     height: 18px !important;

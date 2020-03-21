@@ -93,7 +93,7 @@ a:focus, a:hover {
     padding: 0 !important;
 }
 
-#carga {
+#carga, #carga2 {
     border-top-color: #DF2530 !important;
 }
 

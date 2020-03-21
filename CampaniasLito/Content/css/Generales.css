@@ -181,7 +181,7 @@
     }
 }
 
-#contenedor_carga {
+/*#contenedor_carga {
     display: block;
     background-color: rgba(255, 245, 255, 0.2);
     height: 100%;
@@ -219,7 +219,7 @@
     to {
         transform: rotate(360deg);
     }
-}
+}*/
 
 
 @media screen and (min-width: 1024px) {

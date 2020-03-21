@@ -58,5 +58,7 @@ namespace CampaniasLito.Models
         public DbSet<TiendaArticulo> TiendaArticulos { get; set; }
 
         public DbSet<Student> Students { get; set; }
+
+        public DbSet<CodigoCampaña> CodigosCampaña { get; set; }
     }
 }

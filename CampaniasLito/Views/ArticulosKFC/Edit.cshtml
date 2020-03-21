@@ -47,11 +47,14 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-9">
+                        <div class="col-sm-8">
                             @Html.DropDownList("ProveedorId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[3].Watermark, htmlAttributes: new { @class = "form-control inputModal", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             @Html.EditorFor(model => model.Familia, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Familia" } })
+                        </div>
+                        <div class="col-sm-2">
+                            @Html.EditorFor(model => model.CantidadDefault, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Cantidad Default" } })
                         </div>
                     </div>
                 </div>

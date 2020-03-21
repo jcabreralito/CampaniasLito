@@ -12,6 +12,7 @@
     <link href="~/Content/sweetalert.css" rel="stylesheet" />
 
     <title>@ViewBag.Title</title>
+
 </head>
 <body>
     <div class="panel" style="margin-right: 2%">
@@ -44,16 +45,22 @@
                     <thead style="font-size:18px; font-weight:bold; background-color:#DF2530; color: #fff; text-transform: uppercase">
                         <tr>
                             <th align="center" style="width: 15%">
+                                CERRADA
+                            </th>
+                            <th align="center" style="width: 10%">
                                 @Html.DisplayNameFor(model => model.Nombre)
                             </th>
-                            <th align="center" style="width: 40%">
+                            <th align="center" style="width: 15%">
                                 @Html.DisplayNameFor(model => model.Descripcion)
                             </th>
                             <th align="center" style="width: 15%">
-                                @Html.DisplayNameFor(model => model.Generada)
+                                CANTIDADES
                             </th>
                             <th align="center" style="width: 15%">
-                                GENERAR
+                                CODIGOS
+                            </th>
+                            <th align="center" style="width: 15%">
+                                CERRAR
                             </th>
                             <th align="center" style="width: 15%">
                             </th>
@@ -66,57 +73,150 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr style="font-size:12px; text-transform: capitalize">
-                                <td style="width: 15%">
-                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000">
+                        <tr style="font-size:12px; text-transform: capitalize">
+                            <td style="width: 15%" align="center">
+                                @if (item.Generada == "NO")
+                                {
+                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000; font-size: 20px">
+                                        <i class="fas fa-times-circle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="#" style="text-decoration: none; list-style: none; color: #000; font-size: 20px">
+                                        <i class="fas fa-check-circle"></i>
+                                    </a>
+                                }
+                            </td>
+                            <td style="width: 10%">
+                                @if (item.Generada == "NO")
+                                {
+                                    <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId })" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000">
                                         @Html.DisplayFor(modelItem => item.Nombre)
                                     </a>
-                                </td>
-                                <td style="width: 40%">
+                                }
+                                else
+                                {
+                                    <a href="#" style="text-decoration: none; list-style: none; color: #000">
+                                        @Html.DisplayFor(modelItem => item.Nombre)
+                                    </a>
+                                }
+                            </td>
+                            <td style="width: 15%">
+                                @if (item.Generada == "NO")
+                                {
                                     <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000">
                                         @Html.DisplayFor(modelItem => item.Descripcion)
                                     </a>
-                                </td>
-                                <td style="width: 15%" align="center">
-                                    @if (item.Generada == "NO")
-                                    {
-                                        <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000; font-size: 20px">
-                                            <i class="fas fa-times-circle"></i>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a href="@Url.Action("Edit", "Campañas", new { id = item.CampañaId})" class="dialog-window-small" style="text-decoration: none; list-style: none; color: #000; font-size: 20px">
-                                            <i class="fas fa-check-circle"></i>
-                                        </a>
-                                    }
-                                </td>
-                                <td style="width: 15%" align="center">
-                                    @if (item.Generada == "NO")
-                                    {
-                                        <a id="botones" href="@Url.Action("CreateCampArt", "Campañas", new { id = item.CampañaId })" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
-                                            <i class="fas fa-calendar-check"></i>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a id="botones" href="#" class="btn btn-danger dialog-window-message" style="background-color: transparent; border:none; font-size: 20px">
-                                            <i class="fas fa-ban"></i>
-                                        </a>
-                                    }
-                                </td>
-                                <td style="width: 15%" align="center">
+                                }
+                                else
+                                {
+                                    <a href="#" style="text-decoration: none; list-style: none; color: #000">
+                                        @Html.DisplayFor(modelItem => item.Descripcion)
+                                    </a>
+                                }
+                            </td>
+                            <td style="width: 15%" align="center">
+                                @if (item.Generada == "NO")
+                                {
+                                    <a id="botones" href="@Url.Action("CreateCampArt", "Campañas", new { id = item.CampañaId })" onclick="mostrar()" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a id="botones" href="#" class="btn btn-danger dialog-window-message" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-ban"></i>
+                                    </a>
+                                }
+                            </td>
+                            <td style="width: 15%" align="center">
+                                @if (item.Generada == "NO")
+                                {
+                                    <a id="botones" href="@Url.Action("CodesCampArt", "Campañas", new { id = item.CampañaId })" onclick="generarCodigos()" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-barcode"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a id="botones" href="#" class="btn btn-danger dialog-window-message" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-ban"></i>
+                                    </a>
+                                }
+                            </td>
+                            <td style="width: 15%" align="center">
+                                @if (item.Generada == "NO")
+                                {
+                                    <a id="botones" href="@Url.Action("CloseCampArt", "Campañas", new { id = item.CampañaId })" class="btn btn-danger dialog-window-small" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a id="botones" href="#" class="btn btn-danger dialog-window-message" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-ban"></i>
+                                    </a>
+                                }
+                            </td>
+                            <td style="width: 15%" align="center">
+                                @if (item.Generada == "NO")
+                                {
                                     <a id="botones" href="@Url.Action("Delete", "Campañas", new { id = item.CampañaId})" class="btn btn-danger dialog-window-small" style="background-color: transparent; border:none; font-size: 20px">
                                         <i class="fas fa-trash"></i>
                                     </a>
-                                </td>
-                            </tr>
+                                }
+                                else
+                                {
+                                    <a id="botones" href="#" class="btn btn-danger" style="background-color: transparent; border:none; font-size: 20px">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <script>
+
+        function mostrar() {
+            document.getElementById('contenedor_carga').style.visibility = 'visible';
+            document.getElementById('contenedor_carga').style.opacity = '1';
+
+            swal({
+                title: "<span style='color:#fff; margin-top: 5%'></span>",
+                //text: '<span style="color:#fff">ACTUALIZANDO CANTIDADES...</span>',
+                html: true,
+                //type: "success",
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+            });
+        };
+
+        function generarCodigos() {
+            document.getElementById('contenedor_carga').style.visibility = 'visible';
+            document.getElementById('contenedor_carga').style.opacity = '1';
+
+            swal({
+                title: "<span style='color:#fff; margin-buttom: -5%'>GENRANDO CODIGOS...</span>",
+                //text: '<span style="color:#fff">ACTUALIZANDO CANTIDADES...</span>',
+                html: true,
+                //type: "info",
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+            });
+        };
+
+    </script>
 
     <div class="modal fade" data-keyboard="false" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); padding-top: 5%; z-index: 999999">
         <div class="modal-dialog modal-dialog-centered mx-auto" id="smallTamanio">
@@ -141,7 +241,7 @@
                     <h5 class="modal-title">Mensaje</h5>
                 </div>
                 <div class="modal-body panel-body">
-                    <p style="color: black; font-size: 16px; font-weight: bold">Esta Campaña ya fue creada.</p>
+                    <p style="color: black; font-size: 16px; font-weight: bold">Esta Campaña ya fue Cerrada.</p>
                 </div>
                 <div class="modal-footer">
                     <div class="input-group" style="margin-top: 30px !important">
@@ -228,4 +328,5 @@
             contenedor.style.opacity = '0';
         }
     </script>
+
 }

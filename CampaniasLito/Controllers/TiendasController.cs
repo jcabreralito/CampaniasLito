@@ -185,30 +185,13 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var tiendaArticulos = db.TiendaArticulos.Where(t => t.TiendaId == id).ToList();
-            //var tiendaArticulos = db.TiendaArticulos.ToList();
-            //var tiendaArticulos2 = db.TiendaArticulos.GroupBy(t => t.ArticuloKFCId).ToList();
+            var tiendaArticulos = db.TiendaArticulos.Where(t => t.TiendaId == id).OrderBy(t => t.ArticuloKFC.Familia).ThenBy(t => t.ArticuloKFCId).ToList();
 
             if (tiendaArticulos == null)
             {
                 return HttpNotFound();
             }
 
-            //ViewBag.Tiendas = db.Tiendas.ToList();
-
-            //var lista = new List<TiendaArticulo>();
-
-            //foreach (var item in tiendaArticulos2)
-            //{
-            //    lista.Add(new TiendaArticulo
-            //    {
-            //        ArticuloKFC = item.FirstOrDefault().ArticuloKFC,
-            //        ArticuloKFCId = item.FirstOrDefault().ArticuloKFCId,
-            //        Seleccionado = item.FirstOrDefault().Seleccionado,
-            //        Tienda = item.FirstOrDefault().Tienda,
-            //        TiendaId = item.FirstOrDefault().TiendaId
-            //    });
-            //}
 
             ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
 
@@ -240,8 +223,9 @@ namespace CampaniasLito.Controllers
 
                 var tiendaId = tiendaArticulo.TiendaId;
                 var articuloId = tiendaArticulo.ArticuloKFCId;
+                var campañas = db.Campañas.Where(ct => ct.Generada == "NO").OrderBy(ct => ct.CampañaId).FirstOrDefault().CampañaId;
 
-                CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId).FirstOrDefault();
+                CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId && ta.CampañaTiendaTMPId == campañas).FirstOrDefault();
 
                 selec = false;
                 cantidad = 0;
@@ -258,7 +242,8 @@ namespace CampaniasLito.Controllers
 
                         if (campañaArticulo.Habilitado == false)
                         {
-                            cantidad = 1;
+                            var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
+                            cantidad = articuloCantidadDefault;
                             campañaArticulo.Cantidad = cantidad;
                         }
 

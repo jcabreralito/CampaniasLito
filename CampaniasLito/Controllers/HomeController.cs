@@ -4,7 +4,7 @@ using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
 {
-    [Authorize(Roles = "User, Admin, SuperAdmin")]
+    [Authorize]
     public class HomeController : Controller
     {
         private CampaniasLitoContext db = new CampaniasLitoContext();

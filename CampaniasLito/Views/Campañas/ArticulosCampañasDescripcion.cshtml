@@ -1,12 +1,9 @@
 ﻿@model CampaniasLito.Models.TiendasArticulosView
 
-<table>
-    <tr>
-        @foreach (var item2 in Model.ArticuloKFCs)
+    <div class="form-group" style="margin-bottom: 5px">
+        @foreach (var item in Model.ArticuloKFCs)
         {
-            <th>
-                @item2.Descripcion
-            </th>
+            <input type="text" disabled="disabled" value="@item.Descripcion" class="txt" style="background-color: transparent !important; border: none; border-right: solid 1px #fff; width: 150px !important; height: 60px !important; margin-top: -20px" />
+            <div class="tooltip">@item.Descripcion</div>
         }
-    </tr>
-</table>
+    </div>

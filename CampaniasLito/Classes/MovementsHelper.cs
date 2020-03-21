@@ -124,36 +124,39 @@ namespace CampaniasLito.Classes
                         var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId && cdt.CampañaTiendaTMPId == campId).FirstOrDefault();
                         var articulosTiendas = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
 
-                        var habilitados = articulosTMPs.Habilitado;
-                        var seleccionados = articulosTiendas.Seleccionado;
-
                         int cantidad = 0;
                         bool habilitado = false;
 
-                        if (habilitados != seleccionados)
+                        if (articulosTMPs != null)
                         {
+                            var habilitados = articulosTMPs.Habilitado;
+                            var seleccionados = articulosTiendas.Seleccionado;
 
-                            var articulosTMPsId = db.CampañaArticuloTMPs.Where(cdt => cdt.CampañaArticuloTMPId == articulosTMPs.CampañaArticuloTMPId).FirstOrDefault();
 
-                            if (articulosTiendas.Seleccionado == true)
+                            if (habilitados != seleccionados)
                             {
-                                cantidad = 1;
-                                habilitado = true;
-                            }
-                            else
-                            {
-                                cantidad = 0;
-                                habilitado = false;
-                            }
 
-                            articulosTMPsId.Habilitado = habilitado;
-                            articulosTMPsId.Cantidad = cantidad;
+                                var articulosTMPsId = db.CampañaArticuloTMPs.Where(cdt => cdt.CampañaArticuloTMPId == articulosTMPs.CampañaArticuloTMPId).FirstOrDefault();
 
-                            db.Entry(articulosTMPsId).State = EntityState.Modified;
-                            db.SaveChanges();
+                                if (articulosTiendas.Seleccionado == true)
+                                {
+                                    cantidad = 1;
+                                    habilitado = true;
+                                }
+                                else
+                                {
+                                    cantidad = 0;
+                                    habilitado = false;
+                                }
+
+                                articulosTMPsId.Habilitado = habilitado;
+                                articulosTMPsId.Cantidad = cantidad;
+
+                                db.Entry(articulosTMPsId).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
                         }
-
-                        if (articulosTMPs == null)
+                        else if (articulosTMPs == null)
                         {
 
                             if (articulosTiendas.Seleccionado == true)
@@ -309,6 +312,80 @@ namespace CampaniasLito.Classes
                     }
 
                     db.SaveChanges();
+                    transaccion.Commit();
+
+                    return new Response { Succeeded = true, };
+                }
+                catch (Exception ex)
+                {
+                    transaccion.Rollback();
+                    return new Response
+                    {
+                        Message = ex.Message,
+                        Succeeded = false,
+                    };
+                }
+            }
+        }
+
+        public static Response GenerarCodigos(int? id, int? compañiaId)
+        {
+            using (var transaccion = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var articulos = db.ArticuloKFCs.Where(a => a.CompañiaId == compañiaId).ToList();
+
+                    foreach (var articulo in articulos.GroupBy(f => f.Familia))
+                    {
+                        var familia = articulo.FirstOrDefault().Familia;
+
+                        var familias = db.ArticuloKFCs.Where(f => f.Familia == familia).ToList();
+
+                        for (int f = 0; f < familias.Count(); f++)
+                        {
+                            var articuloId = familias[f].ArticuloKFCId;
+
+                            var codigosCampañas = db.CodigosCampaña.Where(cc => cc.ArticuloKFCId == articuloId && cc.CampañaId == id).FirstOrDefault();
+
+                            var idCampaña = db.Campañas.Where(c => c.CampañaId == id).FirstOrDefault().Nombre;
+
+                            var consecutivo = string.Empty;
+
+                            if (f >= 0 && f <= 9)
+                            {
+                                consecutivo = "00";
+                            }
+                            else if (f >= 10 && f <= 99)
+                            {
+                                consecutivo = "0";
+                            }
+                            else if (f >= 100)
+                            {
+                                consecutivo = "";
+                            }
+
+                            if (codigosCampañas == null)
+                            {
+                                var codigo = idCampaña + familias[f].Familia + consecutivo + f;
+
+                                var codigoArticulo = new CodigoCampaña
+                                {
+                                    ArticuloKFCId = familias[f].ArticuloKFCId,
+                                    CampañaId = (int)id,
+                                    Codigo = Convert.ToInt32(codigo),
+                                };
+
+                                db.CodigosCampaña.Add(codigoArticulo);
+
+                                db.SaveChanges();
+                            }
+
+                        }
+
+
+                    }
+
                     transaccion.Commit();
 
                     return new Response { Succeeded = true, };

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace CampaniasLito.Models
 {
@@ -22,6 +24,9 @@ namespace CampaniasLito.Models
         public bool Habilitado { get; set; }
 
         public double Cantidad { get; set; }
+
+        [Display(Name = "Código")]
+        public int Codigo { get; set; }
 
         public virtual CampañaTiendaTMP CampañaTiendaTMP { get; set; }
 

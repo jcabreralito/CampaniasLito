@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using CampaniasLito.Classes;
 using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
@@ -51,6 +52,8 @@ namespace CampaniasLito.Controllers
             {
                 db.Roles.Add(rol);
                 db.SaveChanges();
+
+                UsuariosHelper.CrearRoles(rol.Nombre);
 
                 Session["Compañia"] = "Litoprocess";
                 TempData["msgRolCreado"] = "ROL AGREGADO";

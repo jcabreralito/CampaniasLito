@@ -29,12 +29,14 @@ namespace CampaniasLito
             UsuariosHelper.CheckRole("User");
             UsuariosHelper.CheckRole("Servicio");
             UsuariosHelper.CheckRole("Cliente");
+            UsuariosHelper.CheckRole("CONSULTAS");
             UsuariosHelper.CheckSuperUser();
             UsuariosHelper.CrearRoles("SuperAdmin");
             UsuariosHelper.CrearRoles("Admin");
             UsuariosHelper.CrearRoles("User");
             UsuariosHelper.CrearRoles("Servicio");
             UsuariosHelper.CrearRoles("Cliente");
+            UsuariosHelper.CrearRoles("CONSULTAS");
         }
     }
 }

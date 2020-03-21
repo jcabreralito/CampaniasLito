@@ -89,9 +89,10 @@
         var gridViewScroll = null;
 
         window.onload = function () {
+
             var options = new GridViewScrollOptions();
 
-            var contenedor = document.getElementById('contenedor_carga');
+            var contenedor = document.getElementById('contenedor_carga2');
 
             contenedor.style.visibility = 'hidden';
             contenedor.style.opacity = '0';
@@ -143,8 +144,8 @@
     <div>
         <div>
             <div>
-                <div id="contenedor_carga">
-                    <div id="carga">
+                <div id="contenedor_carga2">
+                    <div id="carga2">
                     </div>
                 </div>
 
@@ -153,13 +154,15 @@
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <table cellspacing="0">
                             <tr>
-                                <td class=" col-sm-12">
+                                <td class=" col-sm-6">
                                     <h2><i class="fas fa-calendar-alt"></i> @ViewBag.Title</h2>
                                 </td>
+                                @*<td class="col-xs-7">
+                            </td>*@
                                 @using (Html.BeginForm("CreateCampArt", "Campañas", new { id = Session["campaniaId"] }, FormMethod.Get))
                                 {
                                     @Html.AntiForgeryToken()
-                                    <td class="col-xs-7">
+                                    <td class="col-sm-12" align="right">
                                         <div id="botones" class="input-group" style="display:flex; float:right">
                                             <input class="input-group-addon" type="text" name="tiendaCampania" id="tiendaCampania" value="@Session["tiendaCampaniaFiltro"].ToString()" style="color:#01207B; text-transform:uppercase; border-radius:10px 0 0 10px; text-align:center; width:250px" />
                                             <button type="submit" class="fas fa-search btn btn-pilares" style="border-radius:0 10px 10px 0; text-align: right; font-size: 17px"></button>
@@ -173,67 +176,101 @@
                                         </a>
                                     </div>
                                 </td>
-                                @using (Html.BeginForm("CreateCampañaArticulos", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                                {
-                                    @Html.AntiForgeryToken()
-                                    <td class="col-sm-12" align="right">
-                                        <div class="input-group">
-                                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
-                                                <i class="fas fa-check-circle"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                }
                             </tr>
                         </table>
                     </div>
 
-                    <div class="panel-body" style="padding-top: 10px; margin-bottom: -40px">
-                        @Html.Action("NuevaCampaña", new { campañaId = Model.FirstOrDefault().CampañaId })
-                    </div>
+                    @using (Html.BeginForm("CreateCampañaArticulos", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="input-group">
+                            <button id="actualizarCantidades" type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick=" mostrar()">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
 
-                    <div style="height: 71.5vh !important; width: 96% !important; margin: 0 2% !important">
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="panel-body" style="padding-top: 10px; margin-bottom: -40px">
+                            @Html.Action("NuevaCampaña", new { campañaId = Model.FirstOrDefault().CampañaId })
+                        </div>
 
-                        <table cellspacing="0" id="gvMain" class="table-striped table-hover">
-                            <thead>
-                                <tr class="GridViewScrollHeader">
-                                    <th>
-                                        RESTAURANTE
-                                    </th>
-                                    <th>
-                                        @Html.Action("ArticulosCampañasDescripcion")
-                                    </th>
-                                </tr>
-                            </thead>
-                            @foreach (var item2 in Model)
-                            {
-                                <tbody>
-                                    <tr class="GridViewScrollItem">
-                                        <td style="padding-top: 8px; margin-bottom: -8px">
-                                            @item2.Tienda.Restaurante
-                                        </td>
-                                        <td>
-                                            @Html.Action("ArticulosCampañas", new { tiendaId = item2.TiendaId, campañaId = item2.CampañaId })
-                                        </td>
+
+                        <div style="height: 71.5vh !important; width: 96% !important; margin: 0 2% !important">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            @*<div class="panel-body" style="padding-top: 10px">
+                            @Html.Action("ArticulosCampañasTotales", new { campañaId = Model.FirstOrDefault().CampañaId })
+                        </div>*@
+
+                            <table cellspacing="0" id="gvMain" class="table-striped table-hover">
+                                <thead>
+                                    <tr class="GridViewScrollHeader">
+                                        <th>
+                                            RESTAURANTE
+                                        </th>
+                                        <th style="margin-left: 2px">
+                                            @Html.Action("ArticulosCampañasDescripcion")
+                                        </th>
                                     </tr>
-                                </tbody>
-                            }
-                        </table>
+                                </thead>
+                                @foreach (var item2 in Model)
+                                {
+                                    <tbody>
+                                        <tr class="GridViewScrollItem">
+                                            <td style="margin-bottom: -8px">
+                                                @item2.Tienda.Restaurante
+                                            </td>
+                                            <td>
+                                                @Html.Action("ArticulosCampañas", new { tiendaId = item2.TiendaId, campañaId = item2.CampañaId })
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                }
+                            </table>
 
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
             <div style="font-size:12px; margin-top: -17px; margin-left: 4%;">
-                @Html.PagedListPager(Model, page => Url.Action("CreateCampArt", new
-           {
-               page,
-               sortOrder = ViewBag.CurrentSort,
-               currentFilter = ViewBag.CurrentFilter,
-           }))
+                <div class="col-sm-8">
+                    @Html.PagedListPager(Model, page =>
+                        Url.Action("CreateCampArt", new
+                        {
+                            page,
+                            sortOrder = ViewBag.CurrentSort,
+                            currentFilter = ViewBag.CurrentFilter
+                        }),
+                        PagedListRenderOptions.ClassicPlusFirstAndLast)
+                </div>
+                <div class="col-sm-4" style="font-size:12px; margin-top: -17px; margin-right: 4%">
+                        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+
+        function mostrar() {
+            document.getElementById('contenedor_carga2').style.visibility = 'visible';
+            document.getElementById('contenedor_carga2').style.opacity = '1';
+
+            swal({
+                title: "<span style='color:#fff; margin-top: 5%'>ACTUALIZANDO CANTIDADES...</span>",
+                //text: '<span style="color:#fff">ACTUALIZANDO CANTIDADES...</span>',
+                html: true,
+                //type: "success",
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+                //timer: 2000,
+            });
+
+        };
+
+    </script>
 
     @*<script>
 

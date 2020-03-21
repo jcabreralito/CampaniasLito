@@ -36,6 +36,8 @@ namespace CampaniasLito.Models
 
         public virtual ICollection<CampañaTienda> CampañaTiendas { get; set; }
 
+        public virtual ICollection<CodigoCampaña> CodigoCampañas { get; set; }
+
         public List<CampañaTienda> TiendaDetalles { get; set; }
 
     }

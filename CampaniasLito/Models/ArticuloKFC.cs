@@ -32,6 +32,10 @@ namespace CampaniasLito.Models
         [Display(Name = "Familia")]
         public string Familia { get; set; }
 
+        [Required(ErrorMessage = "El Campo {0} es obligatorio")]
+        [Display(Name = "Cantidad Default")]
+        public int CantidadDefault { get; set; }
+
         public virtual Compañia Compañia { get; set; }
 
         public virtual ICollection<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
@@ -39,6 +43,8 @@ namespace CampaniasLito.Models
         public virtual Proveedor Proveedor { get; set; }
 
         public virtual ICollection<TiendaArticulo> TiendaArticulos { get; set; }
+
+        public virtual ICollection<CodigoCampaña> CodigoCampañas { get; set; }
 
     }
 }

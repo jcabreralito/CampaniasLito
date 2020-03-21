@@ -3,7 +3,7 @@ h6, html, input[type=submit], input[type=button] {
     text-transform: uppercase;
 }
 
-#contenedor_carga {
+#contenedor_carga, #contenedor_carga2 {
     display: block;
     background-color: rgba(255, 245, 255, 0.2);
     height: 100%;
@@ -15,7 +15,7 @@ h6, html, input[type=submit], input[type=button] {
     z-index: 10000;
 }
 
-#carga {
+#carga, #carga2 {
     border: 15px solid #ccc;
     border-top-color: #01207B;
     border-top-style: groove;
@@ -23,11 +23,18 @@ h6, html, input[type=submit], input[type=button] {
     width: 100px;
     border-radius: 100%;
     position: absolute;
-    top: 40%;
-    left: 35%;
+    left: 45%;
     -webkit-animation: girar 1.5s linear infinite;
     -o-animation: girar 1.5s linear infinite;
     animation: girar 1.5s linear infinite;
+}
+
+#carga {
+    top: 32%;
+}
+
+#carga2 {
+    top: 34%;
 }
 
 @keyframes girar {
