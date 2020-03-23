@@ -229,6 +229,64 @@ namespace CampaniasLito.Classes
 
                             db.TiendaArticulos.Add(articuloDetalle);
                         }
+
+                    }
+
+                    db.SaveChanges();
+                    transaccion.Commit();
+
+                    return new Response { Succeeded = true, };
+                }
+                catch (Exception ex)
+                {
+                    transaccion.Rollback();
+                    return new Response
+                    {
+                        Message = ex.Message,
+                        Succeeded = false,
+                    };
+                }
+            }
+        }
+
+        public static Response AgregarArticuloCampañas(int articuloKFCId, int compañaId, string usuario)
+        {
+            using (var transaccion = db.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId).FirstOrDefault();
+
+                    var tiendas = db.Tiendas.Where(cdt => cdt.CompañiaId == articulos.CompañiaId).ToList();
+
+                    foreach (var tienda in tiendas)
+                    {
+                        var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
+
+                        var articulosCampaña = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulos.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
+
+                        if (articulosCampaña == null)
+                        {
+                            foreach (var campa in campaña)
+                            {
+                                var articuloDetalle = new CampañaArticuloTMP
+                                {
+                                    ArticuloKFCId = articulos.ArticuloKFCId,
+                                    Habilitado = true,
+                                    TiendaId = tienda.TiendaId,
+                                    CampañaTiendaTMPId = campa.CampañaId,
+                                    Cantidad = articulos.CantidadDefault,
+                                    Usuario = usuario,
+                                    Compañia = compañaId,
+                                    Codigo = 0
+                                };
+
+                                db.CampañaArticuloTMPs.Add(articuloDetalle);
+
+                            }
+                        }
+
                     }
 
                     db.SaveChanges();

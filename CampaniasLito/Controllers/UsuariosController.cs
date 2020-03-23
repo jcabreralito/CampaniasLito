@@ -5,10 +5,11 @@ using System.Net;
 using System.Web.Mvc;
 using CampaniasLito.Models;
 using CampaniasLito.Classes;
+using System;
 
 namespace CampaniasLito.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
 
     public class UsuariosController : Controller
     {
@@ -74,7 +75,7 @@ namespace CampaniasLito.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Usuario usuario)
+        public async System.Threading.Tasks.Task<ActionResult> Create(Usuario usuario)
         {
             if (ModelState.IsValid)
             {
@@ -84,9 +85,38 @@ namespace CampaniasLito.Controllers
                 {
                     var rol = db.Roles.Where(r => r.RolId == usuario.RolId).FirstOrDefault();
 
-                    UsuariosHelper.CreateUserASP(usuario.NombreUsuario.ToLower(), rol.Nombre);
+                    //UsuariosHelper.CreateUserASP(usuario.NombreUsuario, rol.Nombre);
 
-                    Session["Compañia"] = "Litoprocess";
+                    var random = new Random();
+                    //var password = usuario.NombreUsuario;
+
+                    var password = string.Format("{0}{1}{2:04}*",
+                        usuario.Nombres.Trim().ToUpper().Substring(0, 1),
+                        usuario.Apellidos.Trim().ToLower().Substring(0, 1) + "Lt",
+                        random.Next(10000));
+
+                    UsuariosHelper.CreateUserASP(usuario.NombreUsuario, rol.Nombre, password);
+
+                    var subject = "Bienvenido a la Plataforma de Campañas";
+                    var body = string.Format(@"
+                    <h1>Bienvenido a la Plataforma de Campañas</h1>
+                    <p>Tu Usuario es: <strong>{1}</strong></p>
+                    <p>Tu password es: <strong>{0}</strong></p>
+                    <p>Link de la Plataforma: <a href='portal.litoprocess.com/Campanias'>portal.litoprocess.com/Campanias</a>",
+                    password, usuario.NombreUsuario);
+
+                    //await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", subject, body);
+
+                    await MailHelper.SendMail(usuario.NombreUsuario, "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
+
+                    //var rigistrar = db.Usuarios.Where(r => r.Registrado == null).Where(u => u.UsuarioId == usuario.UsuarioId).FirstOrDefault();
+
+                    //rigistrar.Registrado = "SI";
+                    //db.Entry(rigistrar).State = EntityState.Modified;
+                    //db.SaveChanges();
+
+                    UsuariosHelper.AddRole(usuario.NombreUsuario, rol.Nombre, password);
+
                     TempData["msgUsuarioCreado"] = "USUARIO AGREGADO";
 
                     return RedirectToAction("Index");
@@ -98,7 +128,7 @@ namespace CampaniasLito.Controllers
             ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre", usuario.CompañiaId);
             ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre", usuario.RolId);
 
-            return PartialView(usuario);
+            return View(usuario);
         }
 
         public ActionResult Edit(int? id)
@@ -163,6 +193,32 @@ namespace CampaniasLito.Controllers
 
             ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
             ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
+
+            return PartialView(usuario);
+        }
+
+        public ActionResult Perfil()
+        {
+            var nombre = User.Identity.Name;
+            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
+            int? id = usuarioActual.UsuarioId;
+            var perfilUser = usuarioActual.RolId;
+            var fecha = DateTime.Now;
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var usuario = db.Usuarios.Find(id);
+
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
+            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
 
             return PartialView(usuario);
         }

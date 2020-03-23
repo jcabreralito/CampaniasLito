@@ -1,0 +1,101 @@
+﻿@model CampaniasLito.Models.Usuario
+@{
+    ViewBag.Title = "Perfil Usuario";
+    Layout = null;
+}
+
+<link href="~/Content/css/Vistas.css" rel="stylesheet" />
+<link href="~/Content/css/style.css" rel="stylesheet" />
+<style>
+    .preloader {
+        width: 70px;
+        height: 70px;
+        border: 10px solid #eee;
+        border-radius: 50%;
+        animation-name: girar;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    @@keyframes girar {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<div class="panel panel-primary styledashboard" style="height:90vh">
+
+    @*<div class="coverperfil">
+            <img src="@Url.Content(@Session["FondoPerfil"].ToString())" style="background-size:cover; height:100%; width:100%" />
+        </div>*@
+    <div class="userperfil">
+        @if (Session["Foto"] != null && Session["NombreCompleto"] != null)
+        {
+            <img class="img-circle" src="@Url.Content(Session["Foto"].ToString())" style="width:100%;height:100%;" />
+        }
+        else if (Session["Foto"] == null && Session["NombreCompleto"] != null)
+        {
+            <img class="img-circle" src="@Url.Content("~/Content/Fotos/usuarios.jpg")" style="width:100%;height:100%;" />
+        }
+    </div>
+    <div class="content">
+        <div class="form-horizontal" style="margin-left:125px">
+            <div class="form-group">
+                <h4 class="name" style="color:#000; font-size:30px; ">@Session["NombreCompleto"].ToString()</h4>
+            </div>
+        </div>
+        <br />
+        <div class="gridperfil">
+            <aside class="gridperfilacerca">
+                <div class="panel panel-primary styledashboard" style="height:100%">
+                    <br />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Compañia)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Compañia)
+                        </dd>
+
+                        <dt>
+                            Correo
+                        </dt>
+
+                        <dd style="text-transform:lowercase">
+                            @Html.DisplayFor(model => model.NombreUsuario)
+                        </dd>
+
+                    </dl>
+                </div>
+            </aside>
+        </div>
+    </div>
+    <div class="col-xs-12" style="text-align:center; padding-top:10px">
+        @Html.ActionLink("Cambiar Password", "ResetPassword", "Account", new { id = Session["UserID"] }, new { @class = "btn btn-info dialog-window", style = "font-size:16px; height:34px; text-align:justify; width:200px" })
+        <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:14px"> Cerrar</button>
+    </div>
+</div>
+
+@section Scripts{
+    @*<script type="text/javascript">
+
+        $(function () {
+            $.ajax({
+                url: '/Estadisticas/Details',
+                cache: false,
+                dataType: "html",
+                success: function (data) {
+                    $('#vistaRanking').html(data);
+                }
+            });
+        });
+
+    </script>*@
+}

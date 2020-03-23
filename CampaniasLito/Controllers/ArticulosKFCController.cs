@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -103,12 +104,8 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-                    var response2 = MovementsHelper.AgregarArticuloTiendas(articuloKFC.ArticuloKFCId);
-
-                    if (response2.Succeeded)
-                    {
-                        //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
-                    }
+                    MovementsHelper.AgregarArticuloTiendas(articuloKFC.ArticuloKFCId);
+                    MovementsHelper.AgregarArticuloCampañas(articuloKFC.ArticuloKFCId, usuario.CompañiaId, usuario.NombreUsuario);
 
                     TempData["msgArticuloCreado"] = "ARTICULO AGREGADO";
 
@@ -122,6 +119,114 @@ namespace CampaniasLito.Controllers
             ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
 
             return PartialView(articuloKFC);
+        }
+
+        // GET: Tiendas/Edit/5
+        [AuthorizeUser(idOperacion: 3)]
+        public ActionResult AsignarTiendas(int? id)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var tiendaArticulos = db.TiendaArticulos.Where(t => t.ArticuloKFCId == id).OrderBy(t => t.TiendaId).ToList();
+
+            if (tiendaArticulos == null)
+            {
+                return HttpNotFound();
+            }
+
+
+            ViewBag.Articulo = db.ArticuloKFCs.Where(t => t.ArticuloKFCId == id).FirstOrDefault().Descripcion;
+
+            return PartialView(tiendaArticulos);
+        }
+
+        private bool Update(TiendaArticulo product)
+        {
+            return true;
+        }
+
+        [AuthorizeUser(idOperacion: 3)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AsignarTiendas(FormCollection fc)
+        {
+            var nombre = User.Identity.Name;
+            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
+
+            string[] articuloKFCTMPId = fc.GetValues("TiendaArticuloId");
+            string[] seleccionado = fc.GetValues("Seleccionado");
+
+            var selec = false;
+            var cantidad = 0;
+
+            for (var i = 0; i < articuloKFCTMPId.Length; i++)
+            {
+                TiendaArticulo tiendaArticulo = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[i]));
+
+                var tiendaId = tiendaArticulo.TiendaId;
+                var articuloId = tiendaArticulo.ArticuloKFCId;
+                var campañas = db.Campañas.Where(ct => ct.Generada == "NO").OrderBy(ct => ct.CampañaId).FirstOrDefault().CampañaId;
+
+                CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId && ta.CampañaTiendaTMPId == campañas).FirstOrDefault();
+
+                selec = false;
+                cantidad = 0;
+
+                for (var j = 0; j < seleccionado.Length; j++)
+                {
+                    if (articuloKFCTMPId[i] == seleccionado[j])
+                    {
+                        selec = true;
+
+                        tiendaArticulo.Seleccionado = selec;
+
+                        db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                        if (campañaArticulo.Habilitado == false)
+                        {
+                            var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
+                            cantidad = articuloCantidadDefault;
+                            campañaArticulo.Cantidad = cantidad;
+                        }
+
+                        campañaArticulo.Habilitado = selec;
+                        //campañaArticulo.Cantidad = cantidad;
+
+                        db.Entry(campañaArticulo).State = EntityState.Modified;
+
+
+                        db.SaveChanges();
+
+                        break;
+                    }
+                }
+                if (!selec)
+                {
+                    selec = false;
+                    cantidad = 0;
+
+                    tiendaArticulo.Seleccionado = selec;
+
+                    db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                    campañaArticulo.Habilitado = selec;
+                    campañaArticulo.Cantidad = cantidad;
+
+                    db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                    db.SaveChanges();
+                }
+            }
+
+            TempData["msgTiendaEditada"] = "TIENDAS ASIGNADAS";
+
+            return RedirectToAction("Index");
+
         }
 
         // GET: ArticulosKFC/Edit/5

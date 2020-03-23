@@ -6,6 +6,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CampaniasLito.Models;
+using CampaniasLito.Classes;
+using System.Net;
 
 namespace CampaniasLito.Controllers
 {
@@ -23,7 +25,7 @@ namespace CampaniasLito.Controllers
             var user = db.Usuarios.Where(u => u.NombreUsuario == model.Email).FirstOrDefault();
             if (user != null)
             {
-                    Session["NombreCompleto"] = string.Format("{0}  {1}", user.Nombres, user.Apellidos);
+                Session["NombreCompleto"] = string.Format("{0}  {1}", user.Nombres, user.Apellidos);
             }
             else
             {
@@ -62,7 +64,7 @@ namespace CampaniasLito.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -74,9 +76,9 @@ namespace CampaniasLito.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -164,7 +166,7 @@ namespace CampaniasLito.Controllers
             // Si un usuario introduce códigos incorrectos durante un intervalo especificado de tiempo, la cuenta del usuario 
             // se bloqueará durante un período de tiempo especificado. 
             // Puede configurar el bloqueo de la cuenta en IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -199,8 +201,8 @@ namespace CampaniasLito.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // Para obtener más información sobre cómo habilitar la confirmación de cuenta y el restablecimiento de contraseña, visite http://go.microsoft.com/fwlink/?LinkID=320771
                     // Enviar correo electrónico con este vínculo
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -249,19 +251,12 @@ namespace CampaniasLito.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    // No revelar que el usuario no existe o que no está confirmado
-                    return View("ForgotPasswordConfirmation");
+                    await UsuariosHelper.PasswordRecovery(user.Email);
+                    return RedirectToAction("Login");
                 }
 
-                // Para obtener más información sobre cómo habilitar la confirmación de cuenta y el restablecimiento de contraseña, visite http://go.microsoft.com/fwlink/?LinkID=320771
-                // Enviar correo electrónico con este vínculo
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Restablecer contraseña", "Para restablecer la contraseña, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
-            // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
             return View(model);
         }
 
@@ -276,9 +271,26 @@ namespace CampaniasLito.Controllers
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult ResetPassword(int? id)
         {
-            return code == null ? View("Error") : View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var usuario = db.Usuarios.Find(id);
+
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+
+            ResetPasswordViewModel model = new ResetPasswordViewModel();
+
+            model.Email = usuario.NombreUsuario;
+            ViewBag.Email = usuario.NombreUsuario;
+
+            return View(model);
         }
 
         //
@@ -288,23 +300,25 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    await UsuariosHelper.ChangePassword(user.Email, model.ConfirmPassword);
+
+                    var perfil = db.Usuarios.Where(u => u.NombreUsuario == model.Email).FirstOrDefault();
+
+                    TempData["msgCambiarPassword"] = "PASSWORD CAMBIADO CON EXITO";
+
+                    return RedirectToAction("Index", "Home");
+                }
+
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null)
-            {
-                // No revelar que el usuario no existe
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
-            AddErrors(result);
-            return View();
+
+            TempData["mensajeLito"] = "NO COINCIDE EL PASSWORD CON LA CONFIRMACION DEL PASSWORD, INTENTALO NUEVAMENTE";
+
+            return RedirectToAction("Index", "Home");
         }
 
         //
@@ -436,10 +450,11 @@ namespace CampaniasLito.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            Session["Logo"] = null;
-            //Session["Compañia"] = null;
-            Session["NombreCompleto"] = null;
-            return RedirectToAction("Index", "Home");
+            Session["Logo"] = string.Empty;
+            Session["Compañia"] = string.Empty;
+            Session["NombreCompleto"] = string.Empty;
+
+            return RedirectToAction("Login", "Account");
         }
 
         //

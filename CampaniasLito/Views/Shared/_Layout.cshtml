@@ -213,17 +213,37 @@
 
                             @if (Session["Foto"] != null && Session["NombreCompleto"] != null)
                             {
-                                <i class="fas fa-user fa-2x txt img-circle" style="background-color: #fff; color: #000; padding: 10px"></i>
+                                <i class="fas fa-user fa-2x txt img-circle" style="background-color: #fff; color: #000; padding: 10px">
+                                </i>
                                 @*<img class="img-circle txt" src="@Url.Content(Session["Foto"].ToString())" width="40" height="40" />*@
+
+                                @*<div class="txt" style="margin-top:20px; text-align:center;">
+                                        <ul>
+                                            <li>
+                                                @Html.ActionLink("PERFIL ", "Perfil", "Usuarios", new { }, new { @class = "dialog-window", style = "color: #FFF; text-decoration-line:none; font-size:20px", })
+                                            </li>
+                                        </ul>
+                                    </div>*@
+
                                 <div class="tooltip2">@Session["NombreCompleto"].ToString()</div>
                             }
                             else if (Session["Foto"] == null && Session["NombreCompleto"] != null)
                             {
-                                <i class="fas fa-user fa-2x txt img-circle" style="background-color: #fff; color: #000; padding: 10px"></i>
+                                <i class="fas fa-user fa-2x txt img-circle" style="background-color: #fff; color: #000; padding: 10px">
+                                </i>
 
 
 
                                 @*<img class="img-circle txt" src="~/Content/Fotos/usuarios.jpg" width="40" height="40" />*@
+
+                                @*<div class="txt" style="margin-top:20px; text-align:center;">
+                                        <ul>
+                                            <li>
+                                                @Html.ActionLink("PERFIL ", "Perfil", "Usuarios", new { }, new { @class = "dialog-window", style = "color: #FFF; text-decoration-line:none; font-size:20px", })
+                                            </li>
+                                        </ul>
+                                    </div>*@
+
                                 <div class="tooltip2">@Session["NombreCompleto"].ToString()</div>
                             }
                         </div>

@@ -276,7 +276,7 @@ namespace CampaniasLito.Controllers
                 }
             }
 
-            TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+            TempData["msgTiendaEditada"] = "ARTICULOS ASIGNADOS";
 
             return RedirectToAction("Index");
 

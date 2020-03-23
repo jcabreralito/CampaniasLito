@@ -77,6 +77,21 @@ namespace CampaniasLito.Classes
             }
         }
 
+        public static void AddRole(string email, string roleName, string password)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+
+            var userASP = userManager.FindByName(email);
+
+            if (userASP == null)
+            {
+                CreateUserASP(email, roleName, password);
+                return;
+            }
+
+            userManager.AddToRole(userASP.Id, roleName);
+        }
+
         public static void CheckSuperUser()
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
@@ -135,23 +150,54 @@ namespace CampaniasLito.Classes
                 return;
             }
 
+
             var random = new Random();
             var newPassword = string.Format("{0}{1}{2:04}*",
                 user.Nombres.Trim().ToUpper().Substring(0, 1),
-                user.Apellidos.Trim().ToLower(),
+                user.Apellidos.Trim().ToLower().Substring(0, 1) + "Ac",
                 random.Next(10000));
 
             userManager.RemovePassword(userASP.Id);
             userManager.AddPassword(userASP.Id, newPassword);
 
-            var subject = "Taxes Password Recovery";
+            var subject = "Nuevo Password";
             var body = string.Format(@"
-                <h1>Password Recovery</h1>
-                <p>Yor new password is: <strong>{0}</strong></p>
-                <p>Please change it for one, that you remember easyly",
+                <h1>Nuevo Password</h1>
+                <p>Tu nuevo password es: <strong>{0}</strong></p>",
                 newPassword);
 
-            await MailHelper.SendMail(email, subject, body);
+            //await MailHelper.SendMail(email, "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
+            await MailHelper.SendMail(email, "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
+        }
+
+        public static async Task ChangePassword(string email, string newPassword)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var userASP = userManager.FindByEmail(email);
+            if (userASP == null)
+            {
+                return;
+            }
+
+            var user = db.Usuarios.Where(tp => tp.NombreUsuario == email).FirstOrDefault();
+            if (user == null)
+            {
+                return;
+            }
+
+
+            userManager.RemovePassword(userASP.Id);
+            userManager.AddPassword(userASP.Id, newPassword);
+
+            var subject = "Nuevo Password";
+            var body = string.Format(@"
+                <h1>Nuevo Password</h1>
+                <p>El usuario: <strong>{1}</strong>, ha cambiado su password: <strong>{0}</strong></p>",
+                newPassword, email);
+
+            //await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
+            await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
+            //await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", "info@bitworkelite.com", "sandonet@ymail.com", subject, body);
         }
 
         public void Dispose()

@@ -2557,6 +2557,8 @@
     <Content Include="Views\Campañas\ArticulosCampañasDescripcion.cshtml" />
     <Content Include="Views\Campañas\ArticulosCampañasTotales.cshtml" />
     <Content Include="Views\Campañas\CloseCampArt.cshtml" />
+    <Content Include="Views\ArticulosKFC\AsignarTiendas.cshtml" />
+    <Content Include="Views\Usuarios\Perfil.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
