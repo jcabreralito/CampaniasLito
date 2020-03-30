@@ -78,7 +78,7 @@ namespace CampaniasLito.Classes
                                         Usuario = userName,
                                         TiendaId = tienda.TiendaId,
                                         ArticuloKFCId = articulo.ArticuloKFCId,
-                                        Cantidad = 1,
+                                        Cantidad = articulo.CantidadDefault,
                                         Habilitado = true,
                                         CampañaTiendaTMPId = campañas.CampañaId,
                                     };
@@ -140,7 +140,7 @@ namespace CampaniasLito.Classes
 
                                 if (articulosTiendas.Seleccionado == true)
                                 {
-                                    cantidad = 1;
+                                    cantidad = articulo.CantidadDefault;
                                     habilitado = true;
                                 }
                                 else
@@ -161,7 +161,7 @@ namespace CampaniasLito.Classes
 
                             if (articulosTiendas.Seleccionado == true)
                             {
-                                cantidad = 1;
+                                cantidad = articulo.CantidadDefault;
                                 habilitado = true;
                             }
                             else

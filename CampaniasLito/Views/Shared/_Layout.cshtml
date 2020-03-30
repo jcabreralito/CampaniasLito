@@ -26,16 +26,16 @@
 
 
 
-    @if (Session["Compañia"] != null)
+    @*@if (Session["Compañia"] != null)
     {
         <title>@Session["Compañia"].ToString() - @ViewBag.Title</title>
 
         if (Session["Compañia"].ToString() == "KFC" || Session["Compañia"].ToString() == "kfc")
-        {
+        {*@
             <link href="~/Content/css/Compañias/KFC.css" rel="stylesheet" />
             <link rel="icon" href="~/Content/Logos/KFC-logo.png" sizes="32x32" />
 
-        }
+        @*}
         else if (Session["Compañia"].ToString() == "STARBUCKS" || Session["Compañia"].ToString() == "starbucks")
         {
             <link href="~/Content/css/Compañias/Starbucks.css" rel="stylesheet" />
@@ -50,7 +50,7 @@
     else
     {
         <title>Campañas LITO - @ViewBag.Title</title>
-    }
+    }*@
 
     @*@if (Session["Compañia"] != null)
         {

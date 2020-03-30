@@ -9,39 +9,10 @@ namespace CampaniasLito.Classes
 {
     public class MailHelper
     {
-        public static async Task SendMail(string to, string cc, string cco, string cco2, string subject, string body)
+        public static async Task SendMail(string to, string cco, string subject, string body)
         {
             var message = new MailMessage();
             message.To.Add(new MailAddress(to));
-            message.CC.Add(new MailAddress(cc));
-            message.Bcc.Add(new MailAddress(cco));
-            message.Bcc.Add(new MailAddress(cco2));
-            message.From = new MailAddress(Resources.emailInfo.ToString());
-            message.Subject = subject;
-            message.Body = body;
-            message.IsBodyHtml = true;
-
-            using (var smtp = new SmtpClient())
-            {
-                var credential = new NetworkCredential
-                {
-                    UserName = Resources.emailInfo.ToString(),
-                    Password = Resources.passwordInfo.ToString()
-                };
-
-                smtp.Credentials = credential;
-                smtp.Host = Resources.SMTPName;
-                smtp.Port = int.Parse(Resources.SMTPPort);
-                smtp.EnableSsl = Convert.ToBoolean(Resources.SSL);
-                await smtp.SendMailAsync(message);
-            }
-        }
-
-        public static async Task SendMail(string to, string cc, string cco, string subject, string body)
-        {
-            var message = new MailMessage();
-            message.To.Add(new MailAddress(to));
-            message.CC.Add(new MailAddress(cc));
             message.Bcc.Add(new MailAddress(cco));
             message.From = new MailAddress(Resources.emailInfo.ToString());
             message.Subject = subject;

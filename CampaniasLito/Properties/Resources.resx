@@ -124,22 +124,22 @@
     <value>jescatech73@gmail.com</value>
   </data>
   <data name="email" xml:space="preserve">
-    <value>eljesss@gmail.com</value>
+    <value>jcabrera@litoprocess.com</value>
   </data>
   <data name="emailInfo" xml:space="preserve">
-    <value>eljesss@gmail.com</value>
+    <value>jcabrera@litoprocess.com</value>
   </data>
   <data name="password" xml:space="preserve">
-    <value>j35c4733</value>
+    <value>jc2br33r</value>
   </data>
   <data name="passwordInfo" xml:space="preserve">
-    <value>j35c4733</value>
+    <value>jc2br33r</value>
   </data>
   <data name="SMTPName" xml:space="preserve">
     <value>smtp.gmail.com</value>
   </data>
   <data name="SMTPPort" xml:space="preserve">
-    <value>465</value>
+    <value>587</value>
   </data>
   <data name="SSL" xml:space="preserve">
     <value>true</value>

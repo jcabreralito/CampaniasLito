@@ -107,7 +107,7 @@ namespace CampaniasLito.Controllers
 
                     //await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", subject, body);
 
-                    await MailHelper.SendMail(usuario.NombreUsuario, "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
+                    await MailHelper.SendMail(usuario.NombreUsuario, "jesuscabrerag@yahoo.com.mx", subject, body);
 
                     //var rigistrar = db.Usuarios.Where(r => r.Registrado == null).Where(u => u.UsuarioId == usuario.UsuarioId).FirstOrDefault();
 

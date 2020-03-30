@@ -154,7 +154,7 @@ namespace CampaniasLito.Classes
             var random = new Random();
             var newPassword = string.Format("{0}{1}{2:04}*",
                 user.Nombres.Trim().ToUpper().Substring(0, 1),
-                user.Apellidos.Trim().ToLower().Substring(0, 1) + "Ac",
+                user.Apellidos.Trim().ToLower().Substring(0, 1) + "Lt",
                 random.Next(10000));
 
             userManager.RemovePassword(userASP.Id);
@@ -167,7 +167,7 @@ namespace CampaniasLito.Classes
                 newPassword);
 
             //await MailHelper.SendMail(email, "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
-            await MailHelper.SendMail(email, "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
+            await MailHelper.SendMail(email, "jesuscabrerag@yahoo.com.mx", subject, body);
         }
 
         public static async Task ChangePassword(string email, string newPassword)
@@ -195,9 +195,7 @@ namespace CampaniasLito.Classes
                 <p>El usuario: <strong>{1}</strong>, ha cambiado su password: <strong>{0}</strong></p>",
                 newPassword, email);
 
-            //await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
-            await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", "jesuscabrerag@yahoo.com.mx", subject, body);
-            //await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", "info@bitworkelite.com", "sandonet@ymail.com", subject, body);
+            await MailHelper.SendMail(email, "jesuscabrerag@yahoo.com.mx", subject, body);
         }
 
         public void Dispose()

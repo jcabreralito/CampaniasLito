@@ -236,7 +236,7 @@ namespace CampaniasLito.Controllers
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
-            return View();
+            return PartialView();
         }
 
         //
