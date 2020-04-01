@@ -23,14 +23,14 @@ namespace CampaniasLito.Models
         public int CompañiaId { get; set; }
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
-        [Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Seleccionar un {0}")]
         [Display(Name = "Proveedor", Prompt = "[Seleccionar un Proveedor...]")]
         public int ProveedorId { get; set; }
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
-        [MaxLength(3, ErrorMessage = "El Campo {0} debe tener máximo {1} carácteres de largo")]
-        [Display(Name = "Familia")]
-        public string Familia { get; set; }
+        [Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
+        [Display(Name = "Familia", Prompt = "[Seleccionar una Familia...]")]
+        public int FamiliaId { get; set; }
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
         [Display(Name = "Cantidad Default")]
@@ -41,6 +41,8 @@ namespace CampaniasLito.Models
         public virtual ICollection<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
 
         public virtual Proveedor Proveedor { get; set; }
+
+        public virtual Familia Familia { get; set; }
 
         public virtual ICollection<TiendaArticulo> TiendaArticulos { get; set; }
 

@@ -309,7 +309,7 @@ namespace CampaniasLito.Controllers
 
                     var perfil = db.Usuarios.Where(u => u.NombreUsuario == model.Email).FirstOrDefault();
 
-                    TempData["msgCambiarPassword"] = "PASSWORD CAMBIADO CON EXITO";
+                    TempData["mensajeLito"] = "PASSWORD CAMBIADO CON EXITO";
 
                     return RedirectToAction("Index", "Home");
                 }

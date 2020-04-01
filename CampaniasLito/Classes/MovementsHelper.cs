@@ -44,50 +44,56 @@ namespace CampaniasLito.Classes
 
                     foreach (var tienda in tiendas)
                     {
-                        var tiendasTMPs = db.CampañaTiendaTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaId == campañaid).FirstOrDefault();
+                        var tiendasTMPs = db.TiendaArticulos.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.Seleccionado == true).FirstOrDefault();
+                        //var tiendasTMPs = db.CampañaTiendaTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaId == campañaid).FirstOrDefault();
 
-                        if (tiendasTMPs == null)
+                        if (tiendasTMPs != null)
                         {
-                            var tiendaDetalle = new CampañaTiendaTMP
+                            var tiendasSeleccionadas = db.CampañaTiendaTMPs.Where(cdt => cdt.TiendaId == tiendasTMPs.TiendaId && cdt.CampañaId == campañaid).FirstOrDefault();
+
+                            if (tiendasSeleccionadas == null)
                             {
-                                CampañaId = campañaid,
-                                CompañiaId = compañia,
-                                Usuario = userName,
-                                TiendaId = tienda.TiendaId,
-                                Seleccionada = true,
-                            };
-
-                            db.CampañaTiendaTMPs.Add(tiendaDetalle);
-                        }
-
-                        var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañia).ToList();
-
-                        var articulosTMP = db.CampañaArticuloTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).ToList();
-
-                        if (articulos.Count != articulosTMP.Count)
-                        {
-                            foreach (var articulo in articulos)
-                            {
-                                var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).FirstOrDefault();
-
-                                if (articulosTMPs == null)
+                                var tiendaDetalle = new CampañaTiendaTMP
                                 {
-                                    var articuloDetalle = new CampañaArticuloTMP
-                                    {
-                                        Compañia = compañia,
-                                        Usuario = userName,
-                                        TiendaId = tienda.TiendaId,
-                                        ArticuloKFCId = articulo.ArticuloKFCId,
-                                        Cantidad = articulo.CantidadDefault,
-                                        Habilitado = true,
-                                        CampañaTiendaTMPId = campañas.CampañaId,
-                                    };
+                                    CampañaId = campañaid,
+                                    CompañiaId = compañia,
+                                    Usuario = userName,
+                                    TiendaId = tienda.TiendaId,
+                                    Seleccionada = true,
+                                };
 
-                                    db.CampañaArticuloTMPs.Add(articuloDetalle);
-                                }
-
+                                db.CampañaTiendaTMPs.Add(tiendaDetalle);
                             }
                         }
+
+                        //var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañia).ToList();
+
+                        //var articulosTMP = db.CampañaArticuloTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).ToList();
+
+                        //if (articulos.Count != articulosTMP.Count)
+                        //{
+                        //    foreach (var articulo in articulos)
+                        //    {
+                        //        var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).FirstOrDefault();
+
+                        //        if (articulosTMPs == null)
+                        //        {
+                        //            var articuloDetalle = new CampañaArticuloTMP
+                        //            {
+                        //                Compañia = compañia,
+                        //                Usuario = userName,
+                        //                TiendaId = tienda.TiendaId,
+                        //                ArticuloKFCId = articulo.ArticuloKFCId,
+                        //                Cantidad = articulo.CantidadDefault,
+                        //                Habilitado = true,
+                        //                CampañaTiendaTMPId = campañas.CampañaId,
+                        //            };
+
+                        //            db.CampañaArticuloTMPs.Add(articuloDetalle);
+                        //        }
+
+                        //    }
+                        //}
 
                     }
 
@@ -334,57 +340,56 @@ namespace CampaniasLito.Classes
             }
         }
 
-        public static Response NuevaCampaña(NuevaCampañaView view, string userName, int compañia)
-        {
+        //public static Response NuevaCampaña(NuevaCampañaView view, string userName, int compañia)
+        //{
 
-            using (var transaccion = db.Database.BeginTransaction())
-            {
-                try
-                {
-                    var campaña = new Campaña
-                    {
-                        CampañaId = compañia,
-                        Descripcion = view.Descripcion,
-                        Generada = "NO",
-                        Nombre = view.Nombre,
-                    };
+        //    using (var transaccion = db.Database.BeginTransaction())
+        //    {
+        //        try
+        //        {
+        //            var campaña = new Campaña
+        //            {
+        //                CampañaId = compañia,
+        //                Descripcion = view.Descripcion,
+        //                Generada = "NO",
+        //                Nombre = view.Nombre,
+        //            };
 
-                    db.Campañas.Add(campaña);
-                    db.SaveChanges();
+        //            db.Campañas.Add(campaña);
+        //            db.SaveChanges();
 
-                    var detalles = db.CampañaTiendaTMPs.Where(cdt => cdt.Usuario == userName).ToList();
+        //            var detalles = db.CampañaTiendaTMPs.Where(cdt => cdt.Usuario == userName).ToList();
 
-                    foreach (var detalle in detalles)
-                    {
-                        var tiendaDetalle = new CampañaTienda
-                        {
-                            CompañiaId = detalle.CompañiaId,
-                            CreatedDate = DateTime.Now,
-                            CampañaId = campaña.CampañaId,
-                            TiendaId = detalle.TiendaId,
-                        };
+        //            foreach (var detalle in detalles)
+        //            {
+        //                var tiendaDetalle = new CampañaTiendaTMP
+        //                {
+        //                    CompañiaId = detalle.CompañiaId,
+        //                    CampañaId = campaña.CampañaId,
+        //                    TiendaId = detalle.TiendaId,
+        //                };
 
-                        db.CampañaTiendas.Add(tiendaDetalle);
-                        db.CampañaTiendaTMPs.Remove(detalle);
+        //                db.CampañaTiendas.Add(tiendaDetalle);
+        //                db.CampañaTiendaTMPs.Remove(detalle);
 
-                    }
+        //            }
 
-                    db.SaveChanges();
-                    transaccion.Commit();
+        //            db.SaveChanges();
+        //            transaccion.Commit();
 
-                    return new Response { Succeeded = true, };
-                }
-                catch (Exception ex)
-                {
-                    transaccion.Rollback();
-                    return new Response
-                    {
-                        Message = ex.Message,
-                        Succeeded = false,
-                    };
-                }
-            }
-        }
+        //            return new Response { Succeeded = true, };
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            transaccion.Rollback();
+        //            return new Response
+        //            {
+        //                Message = ex.Message,
+        //                Succeeded = false,
+        //            };
+        //        }
+        //    }
+        //}
 
         public static Response GenerarCodigos(int? id, int? compañiaId)
         {
@@ -394,11 +399,11 @@ namespace CampaniasLito.Classes
                 {
                     var articulos = db.ArticuloKFCs.Where(a => a.CompañiaId == compañiaId).ToList();
 
-                    foreach (var articulo in articulos.GroupBy(f => f.Familia))
+                    foreach (var articulo in articulos.GroupBy(f => f.Familia.Codigo))
                     {
-                        var familia = articulo.FirstOrDefault().Familia;
+                        var familia = articulo.FirstOrDefault().Familia.Codigo;
 
-                        var familias = db.ArticuloKFCs.Where(f => f.Familia == familia).ToList();
+                        var familias = db.ArticuloKFCs.Where(f => f.Familia.Codigo == familia).ToList();
 
                         for (int f = 0; f < familias.Count(); f++)
                         {
@@ -425,7 +430,7 @@ namespace CampaniasLito.Classes
 
                             if (codigosCampañas == null)
                             {
-                                var codigo = idCampaña + familias[f].Familia + consecutivo + f;
+                                var codigo = idCampaña + familias[f].Familia.Codigo + consecutivo + f;
 
                                 var codigoArticulo = new CodigoCampaña
                                 {
@@ -522,7 +527,7 @@ namespace CampaniasLito.Classes
 
                     db.SaveChanges();
 
-                    var detalles = db.CampañaTiendas.Where(cdt => cdt.CampañaId == view.CampañaId).ToList();
+                    var detalles = db.CampañaTiendaTMPs.Where(cdt => cdt.CampañaId == view.CampañaId).ToList();
 
                     foreach (var detalle in detalles)
                     {

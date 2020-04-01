@@ -92,6 +92,23 @@ namespace CampaniasLito.Classes
             return tipos.OrderBy(c => c.Tipo).ToList();
         }
 
+        public static List<Familia> GetFamilias(bool v)
+        {
+            var familias = db.Familias.ToList();
+            return familias.OrderBy(c => c.Codigo).ToList();
+        }
+
+        public static List<Familia> GetFamilias()
+        {
+            var familias = db.Familias.ToList();
+            familias.Add(new Familia
+            {
+                FamiliaId = 0,
+                Codigo = "[Familia]",
+            });
+            return familias.OrderBy(c => c.Codigo).ToList();
+        }
+
         public static List<TipoCaja> GetTiposCaja(bool v)
         {
             var tiposCaja = db.TipoCajas.ToList();

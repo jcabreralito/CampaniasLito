@@ -117,7 +117,7 @@ namespace CampaniasLito.Controllers
 
                     UsuariosHelper.AddRole(usuario.NombreUsuario, rol.Nombre, password);
 
-                    TempData["msgUsuarioCreado"] = "USUARIO AGREGADO";
+                    TempData["mensajeLito"] = "USUARIO AGREGADO";
 
                     return RedirectToAction("Index");
                 }
@@ -183,7 +183,7 @@ namespace CampaniasLito.Controllers
 
 
                     Session["Compañia"] = "Litoprocess";
-                    TempData["msgUsuarioEditado"] = "USUARIO EDITADO";
+                    TempData["mensajeLito"] = "USUARIO EDITADO";
 
                     return RedirectToAction("Index");
                 }
@@ -265,7 +265,7 @@ namespace CampaniasLito.Controllers
                 UsuariosHelper.DeleteUser(usuario.NombreUsuario);
 
                 Session["Compañia"] = "Litoprocess";
-                TempData["msgUsuarioEliminado"] = "USUARIO ELIMINADO";
+                TempData["mensajeLito"] = "USUARIO ELIMINADO";
 
                 return RedirectToAction("Index");
             }

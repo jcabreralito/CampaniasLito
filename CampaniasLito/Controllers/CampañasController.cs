@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -13,6 +14,16 @@ using PagedList;
 
 namespace CampaniasLito.Controllers
 {
+    public class CotizacionDetalleTotales
+    {
+        public int CampañaId { get; set; }
+        public int ArticuloId { get; set; }
+        public double Cantidad { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = false)]
+        public double TotalCantidad { get; set; }
+
+    }
     public class CampañasController : Controller
     {
         private CampaniasLitoContext db = new CampaniasLitoContext();
@@ -128,7 +139,7 @@ namespace CampaniasLito.Controllers
 
             var articulosTMPsId = db.CampañaArticuloTMPs.Where(cdt => cdt.CampañaTiendaTMPId == id).ToList();
 
-            if (articulosTMPsId == null)
+            if (articulosTMPsId.Count == 0)
             {
                 foreach (var item in campañaTiendas)
                 {
@@ -153,6 +164,16 @@ namespace CampaniasLito.Controllers
                 return PartialView(campañaTiendas.ToPagedList((int)page, numeroPaginas));
             }
 
+
+
+            //ViewBag.TotalPrice = totalImporte.ToString("C2");
+            //var totalImporte = detalleCampaña.Sum(m => m.Importe);
+            //ViewBag.FechaCotizacion = cotizacion.FechaCotizacion;
+            //ViewBag.Detalles = detalleCotizaciones;
+            //ViewBag.ClienteId = new SelectList(db.Clientes, "ClienteId", "NombreCliente", cotizacion.ClienteId);
+            //ViewBag.StatusId = new SelectList(db.Status, "StatusId", "Descripcion", cotizacion.StatusId);
+            //return View(cotizacion);
+
         }
 
         // GET: Campañas/Details/5
@@ -162,6 +183,11 @@ namespace CampaniasLito.Controllers
             TiendasArticulosView campañas = new TiendasArticulosView();
 
             campañas.Campañas = db.Campañas.Where(cat => cat.CampañaId == campañaId).ToList();
+
+
+            var detalleCampaña = db.CampañaArticuloTMPs.Where(c => c.CampañaTiendaTMPId == campañaId).ToList();
+
+            ViewBag.TotalCantidad = detalleCampaña.Sum(m => m.Cantidad).ToString("N0");
 
             if (campañas == null)
             {
@@ -179,8 +205,8 @@ namespace CampaniasLito.Controllers
 
             //TiendasArticulosView campañaArticulos = new TiendasArticulosView();
 
-            campañaArticulos.CampañaArticuloTMPs = db.CampañaArticuloTMPs.Where(cat => cat.TiendaId == tiendaId && cat.CampañaTiendaTMPId == campañaId).OrderBy(cat => cat.ArticuloKFC.Familia).ThenBy(cat => cat.ArticuloKFCId).ToList();
-            campañaArticulos.ArticuloKFCs = db.ArticuloKFCs.Where(cat => cat.CompañiaId == usuario.CompañiaId).OrderBy(cat => cat.Familia).ThenBy(cat => cat.ArticuloKFCId).ToList();
+            campañaArticulos.CampañaArticuloTMPs = db.CampañaArticuloTMPs.Where(cat => cat.TiendaId == tiendaId && cat.CampañaTiendaTMPId == campañaId).OrderBy(cat => cat.ArticuloKFC.Familia.Codigo).ThenBy(cat => cat.ArticuloKFCId).ToList();
+            campañaArticulos.ArticuloKFCs = db.ArticuloKFCs.Where(cat => cat.CompañiaId == usuario.CompañiaId).OrderBy(cat => cat.Familia.Codigo).ThenBy(cat => cat.ArticuloKFCId).ToList();
 
             if (campañaArticulos == null)
             {
@@ -198,8 +224,30 @@ namespace CampaniasLito.Controllers
 
             TiendasArticulosView campañaArticulos = new TiendasArticulosView();
 
-            campañaArticulos.ArticuloKFCs = db.ArticuloKFCs.Where(cat => cat.CompañiaId == usuario.CompañiaId).OrderBy(cat => cat.Familia).ThenBy(cat => cat.ArticuloKFCId).ToList();
+            campañaArticulos.ArticuloKFCs = db.ArticuloKFCs.Where(cat => cat.CompañiaId == usuario.CompañiaId).OrderBy(cat => cat.Familia.Codigo).ThenBy(cat => cat.ArticuloKFCId).ToList();
             //campañaArticulos.ArticuloKFCs = db.ArticuloKFCs.Where(cat => cat.CompañiaId == usuario.CompañiaId).ToList();
+
+            //var detalleArticulosCampaña = db.CampañaArticuloTMPs.Where(c => c.CampañaTiendaTMPId == campañaId).ToList();
+
+            //var totales = (from dc in detalleArticulosCampaña
+            //               group new { detalleCot = dc }
+            //               by new { dc.CampañaTiendaTMPId, dc.ArticuloKFCId, dc.Cantidad, } into grupo
+            //               orderby grupo.Key.ArticuloKFCId
+            //               select new CotizacionDetalleTotales
+            //               {
+            //                   ArticuloId = grupo.Key.ArticuloKFCId,
+            //                   TotalCantidad = grupo.Sum(x => x.detalleCot.Cantidad),
+            //               }).ToList();
+
+            //var ta = (from s in totales
+            //          group s by s.ArticuloId into g
+            //          select new CotizacionDetalleTotales
+            //          {
+            //              ArticuloId = g.Key,
+            //              TotalCantidad = g.Sum(p => p.TotalCantidad),
+            //          }).ToList();
+
+            //ViewBag.Totales = ta.ToList();
 
             if (campañaArticulos == null)
             {
@@ -240,7 +288,7 @@ namespace CampaniasLito.Controllers
 
             if (response.Succeeded)
             {
-                //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
             }
 
             ModelState.AddModelError(string.Empty, response.Message);
@@ -285,7 +333,7 @@ namespace CampaniasLito.Controllers
 
             if (response.Succeeded)
             {
-                //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
             }
 
             return RedirectToAction("Index");
@@ -365,7 +413,7 @@ namespace CampaniasLito.Controllers
 
             if (response.Succeeded)
             {
-                //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
             }
 
 
@@ -383,6 +431,7 @@ namespace CampaniasLito.Controllers
             return PartialView(view);
         }
 
+        [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateCampañaArticulos(FormCollection fc)
@@ -436,25 +485,25 @@ namespace CampaniasLito.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        var response = MovementsHelper.NuevaCampaña(campaña, usuario.NombreUsuario, usuario.Compañia.CompañiaId);
-                        if (response.Succeeded)
-                        {
-                            TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                        //var response = MovementsHelper.NuevaCampaña(campaña, usuario.NombreUsuario, usuario.Compañia.CompañiaId);
+                        //if (response.Succeeded)
+                        //{
+                        //    TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
 
-                            return RedirectToAction("Index");
-                        }
+                        return RedirectToAction("Index");
+                        //}
 
-                        ModelState.AddModelError(string.Empty, response.Message);
+                        //ModelState.AddModelError(string.Empty, response.Message);
                     }
                 }
                 else
                 {
-                    TempData["msgDetalles"] = "AUN NO SE HAN AGREGADO TIENDAS";
+                    TempData["mensajeLito"] = "AUN NO SE HAN AGREGADO TIENDAS";
                 }
             }
             else
             {
-                TempData["msgCampaña"] = "CAPTURAR LOS DATOS DE LA CAMPAÑA";
+                TempData["mensajeLito"] = "CAPTURAR LOS DATOS DE LA CAMPAÑA";
             }
 
             return View(campaña);
@@ -499,12 +548,16 @@ namespace CampaniasLito.Controllers
 
                 if (response.Succeeded)
                 {
-                    TempData["msgCampañaCreada"] = "CAMPAÑA CREADA";
+                    MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, campaña.CampañaId);
+
+                    TempData["mensajeLito"] = "CAMPAÑA CREADA";
 
                     return RedirectToAction("Index");
+
                 }
 
                 ModelState.AddModelError(string.Empty, response.Message);
+
             }
 
             return PartialView(campaña);
@@ -546,7 +599,7 @@ namespace CampaniasLito.Controllers
                 {
                     var response2 = MovementsHelper.AgregarTiendas(usuario.Compañia.CompañiaId, usuario.NombreUsuario, campaña.CampañaId);
 
-                    TempData["msgCampañaEditada"] = "CAMPAÑA EDITADA";
+                    TempData["mensajeLito"] = "CAMPAÑA EDITADA";
 
                     return RedirectToAction("Index");
 
@@ -584,13 +637,35 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            var detalleArticulos = db.CampañaArticuloTMPs.Where(da => da.CampañaTiendaTMPId == id).ToList();
+            var detalleTiendas = db.CampañaTiendaTMPs.Where(da => da.CampañaId == id).ToList();
+            var detalleCodigos = db.CodigosCampaña.Where(da => da.CampañaId == id).ToList();
+
+            if (detalleArticulos != null)
+            {
+                db.CampañaArticuloTMPs.RemoveRange(detalleArticulos);
+                db.SaveChanges();
+            }
+
+            if (detalleTiendas != null)
+            {
+                db.CampañaTiendaTMPs.RemoveRange(detalleTiendas);
+                db.SaveChanges();
+            }
+
+            if (detalleCodigos != null)
+            {
+                db.CodigosCampaña.RemoveRange(detalleCodigos);
+                db.SaveChanges();
+            }
+
             var campaña = db.Campañas.Find(id);
             db.Campañas.Remove(campaña);
             var response = DBHelper.SaveChanges(db);
 
             if (response.Succeeded)
             {
-                TempData["msgCampañaEliminada"] = "CAMPAÑA ELIMINADA";
+                TempData["mensajeLito"] = "CAMPAÑA ELIMINADA";
 
                 return RedirectToAction("Index");
             }

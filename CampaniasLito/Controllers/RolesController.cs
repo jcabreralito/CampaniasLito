@@ -56,7 +56,7 @@ namespace CampaniasLito.Controllers
                 UsuariosHelper.CrearRoles(rol.Nombre);
 
                 Session["Compañia"] = "Litoprocess";
-                TempData["msgRolCreado"] = "ROL AGREGADO";
+                TempData["mensajeLito"] = "ROL AGREGADO";
 
                 return RedirectToAction("Index");
             }
@@ -91,7 +91,7 @@ namespace CampaniasLito.Controllers
                 db.SaveChanges();
 
                 Session["Compañia"] = "Litoprocess";
-                TempData["msgRolEditado"] = "ROL EDITADO";
+                TempData["mensajeLito"] = "ROL EDITADO";
 
                 return RedirectToAction("Index");
             }
@@ -125,7 +125,7 @@ namespace CampaniasLito.Controllers
             db.SaveChanges();
 
             Session["Compañia"] = "Litoprocess";
-            TempData["msgRolEliminado"] = "ROL ELIMINADO";
+            TempData["mensajeLito"] = "ROL ELIMINADO";
 
             return RedirectToAction("Index");
         }

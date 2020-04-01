@@ -340,32 +340,13 @@
         }
     </script>
 
-    @if (TempData["msgDetalles"] != null)
+    @if (TempData["mensajeLito"] != null)
     {
         <script type="text/javascript">
 
             swal({
                 title: "<span style='color:#fff'>@ViewBag.Title</span>",
-                text: '<span style="color:#fff">@TempData["msgDetalles"].ToString()</span>',
-                html: true,
-                type: "info",
-                showConfirmButton: false,
-                animation: true,
-                customClass: 'animated swing',
-                background: '#B3C9D8',
-                grow: 'fullscreen',
-                timer: 2000,
-            });
-        </script>
-    }
-
-    @if (TempData["msgCampaña"] != null)
-    {
-        <script type="text/javascript">
-
-            swal({
-                title: "<span style='color:#fff'>@ViewBag.Title</span>",
-                text: '<span style="color:#fff">@TempData["msgCampaña"].ToString()</span>',
+                text: '<span style="color:#fff">@TempData["mensajeLito"].ToString()</span>',
                 html: true,
                 type: "info",
                 showConfirmButton: false,

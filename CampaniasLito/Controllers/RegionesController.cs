@@ -98,7 +98,7 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-                    TempData["msgRegionCreada"] = "REGION AGREGADA";
+                    TempData["mensajeLito"] = "REGION AGREGADA";
 
                     return RedirectToAction("Index");
                 }
@@ -141,7 +141,7 @@ namespace CampaniasLito.Controllers
                 if (response.Succeeded)
                 {
 
-                    TempData["msgRegionEditada"] = "REGION EDITADA";
+                    TempData["mensajeLito"] = "REGION EDITADA";
 
                     return RedirectToAction("Index");
 
@@ -183,7 +183,7 @@ namespace CampaniasLito.Controllers
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
-                TempData["msgRegionEliminada"] = "REGION ELIMINADA";
+                TempData["mensajeLito"] = "REGION ELIMINADA";
 
                 return RedirectToAction("Index");
             }

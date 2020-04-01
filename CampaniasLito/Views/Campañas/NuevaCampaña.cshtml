@@ -9,10 +9,18 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-4">
             <div class="form-group">
                 <div class="col-sm-12">
                     @Html.EditorFor(model => model.Campañas.FirstOrDefault().Descripcion, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", disabled = "disabled", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Descripción" } })
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input type="text"  value="Total Cantidad : @ViewBag.TotalCantidad" class = "form-control responsivoUsuarioText inputModal" disabled = "disabled" />
+                    @*@Html.EditorFor(model => model.Campañas.FirstOrDefault().TotalCantidad, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", disabled = "disabled", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Cantidad Total" } })*@
                 </div>
             </div>
         </div>

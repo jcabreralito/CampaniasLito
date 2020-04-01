@@ -35,8 +35,8 @@ namespace CampaniasLito.Classes
             }
             userASP.Email = newUserName;
             userASP.UserName = newUserName;
-            userManager.RemovePassword(userASP.Id);
-            userManager.AddPassword(userASP.Id, newUserName);
+            //userManager.RemovePassword(userASP.Id);
+            //userManager.AddPassword(userASP.Id, newUserName);
             userManager.RemoveFromRole(userASP.Id, currentRoleName);
             userManager.AddToRole(userASP.Id, newRoleName);
             var response = userManager.Update(userASP);

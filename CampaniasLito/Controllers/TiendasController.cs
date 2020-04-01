@@ -150,11 +150,11 @@ namespace CampaniasLito.Controllers
 
                     if (response2.Succeeded)
                     {
-                        //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                        //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
                     }
 
 
-                    TempData["msgTiendaCreada"] = "TIENDA AGREGADA";
+                    TempData["mensajeLito"] = "TIENDA AGREGADA";
 
                     return RedirectToAction("Index");
                 }
@@ -185,7 +185,7 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var tiendaArticulos = db.TiendaArticulos.Where(t => t.TiendaId == id).OrderBy(t => t.ArticuloKFC.Familia).ThenBy(t => t.ArticuloKFCId).ToList();
+            var tiendaArticulos = db.TiendaArticulos.Where(t => t.TiendaId == id).OrderBy(t => t.ArticuloKFC.Familia.Codigo).ThenBy(t => t.ArticuloKFCId).ToList();
 
             if (tiendaArticulos == null)
             {
@@ -276,7 +276,7 @@ namespace CampaniasLito.Controllers
                 }
             }
 
-            TempData["msgTiendaEditada"] = "ARTICULOS ASIGNADOS";
+            TempData["mensajeLito"] = "ARTICULOS ASIGNADOS";
 
             return RedirectToAction("Index");
 
@@ -353,11 +353,11 @@ namespace CampaniasLito.Controllers
 
                     if (response2.Succeeded)
                     {
-                        //TempData["msgCampañaCreada"] = "CAMPAÑA AGREGADA";
+                        //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
                     }
 
 
-                    TempData["msgTiendaEditada"] = "TIENDA EDITADA";
+                    TempData["mensajeLito"] = "TIENDA EDITADA";
 
                     return RedirectToAction("Index");
                 }
@@ -412,7 +412,7 @@ namespace CampaniasLito.Controllers
             db.Tiendas.Remove(tienda);
             db.SaveChanges();
 
-            TempData["msgTiendaEliminada"] = "TIENDA ELIMINADA";
+            TempData["mensajeLito"] = "TIENDA ELIMINADA";
 
             return RedirectToAction("Index");
         }

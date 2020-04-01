@@ -1,11 +1,11 @@
-﻿@model CampaniasLito.Models.Campaña
+﻿@model CampaniasLito.Models.Familia
 
 @{
     ViewBag.Title = "Agregar";
     Layout = null;
 }
 
-@using (Html.BeginForm("Create", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "Familias", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="panel">
@@ -13,22 +13,20 @@
             <table class="headingModal">
                 <tr style="background-color: #DF2530 !important">
                     <td class="col-xs-6">
-                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">Agregar</h2>
                     </td>
                     <td class=" col-xs-12"></td>
                     <td align="right" class="col-xs-1">
                         <div class="input-group">
                             <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal">
                                 <i class="fas fa-times-circle"></i>
-                                @*SALIR*@
                             </button>
                         </div>
                     </td>
                     <td align="right" class="col-xs-1">
                         <div class="input-group">
-                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage()">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green">
                                 <i class="fas fa-check-circle"></i>
-                                @*ACEPTAR*@
                             </button>
                         </div>
                     </td>
@@ -40,26 +38,20 @@
             <div class="form-horizontal row responsivoUsuarioLabel">
                 <div class="col-xs-12">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.CompañiaId)
-                    @Html.HiddenFor(model => model.Generada)
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Nombre" } })
-                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
                     <div class="form-group">
                         <div class="col-sm-12">
                             @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Descripción" } })
                             @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    @*<div class="form-group">
+
+                    <div class="form-group">
                         <div class="col-sm-12">
-                            @Html.EditorFor(model => model.Generada, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @disabled = "disabled", @readonly = "readonly", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Generada" } })
-                            @Html.ValidationMessageFor(model => model.Generada, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.Codigo, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Código" } })
+                            @Html.ValidationMessageFor(model => model.Codigo, "", new { @class = "text-danger" })
                         </div>
-                    </div>*@
+                    </div>
+
                 </div>
             </div>
         </div>

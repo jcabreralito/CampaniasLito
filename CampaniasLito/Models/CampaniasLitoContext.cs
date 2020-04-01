@@ -27,8 +27,6 @@ namespace CampaniasLito.Models
 
         public DbSet<CampañaArticulo> CampañaArticulos { get; set; }
 
-        public DbSet<CampañaTienda> CampañaTiendas { get; set; }
-
         public DbSet<Campaña> Campañas { get; set; }
 
         public DbSet<NivelPrecio> NivelPrecios { get; set; }
@@ -57,8 +55,8 @@ namespace CampaniasLito.Models
 
         public DbSet<TiendaArticulo> TiendaArticulos { get; set; }
 
-        public DbSet<Student> Students { get; set; }
-
         public DbSet<CodigoCampaña> CodigosCampaña { get; set; }
+
+        public DbSet<Familia> Familias { get; set; }
     }
 }

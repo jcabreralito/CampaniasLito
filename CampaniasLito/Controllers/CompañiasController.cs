@@ -65,7 +65,7 @@ namespace CampaniasLito.Controllers
                     }
 
                     Session["Compañia"] = "Litoprocess";
-                    TempData["msgCompañiaCreada"] = "COMPAÑIA AGREGADA";
+                    TempData["mensajeLito"] = "COMPAÑIA AGREGADA";
 
                     return RedirectToAction("Index");
                 }
@@ -119,7 +119,7 @@ namespace CampaniasLito.Controllers
                     }
 
                     Session["Compañia"] = "Litoprocess";
-                    TempData["msgCompañiaEditada"] = "COMPAÑIA EDITADA";
+                    TempData["mensajeLito"] = "COMPAÑIA EDITADA";
 
                     return RedirectToAction("Index");
                 }
@@ -157,7 +157,7 @@ namespace CampaniasLito.Controllers
             if (response.Succeeded)
             {
                 Session["Compañia"] = "Litoprocess";
-                TempData["msgCompañiaEliminada"] = "COMPAÑIA ELIMINADA";
+                TempData["mensajeLito"] = "COMPAÑIA ELIMINADA";
 
                 return RedirectToAction("Index");
             }

@@ -51,7 +51,7 @@
                             @Html.DropDownList("ProveedorId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[3].Watermark, htmlAttributes: new { @class = "form-control inputModal", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
                         </div>
                         <div class="col-sm-2">
-                            @Html.EditorFor(model => model.Familia, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Familia" } })
+                            @Html.DropDownList("FamiliaId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[4].Watermark, htmlAttributes: new { @class = "form-control inputModal", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
                         </div>
                         <div class="col-sm-2">
                             @Html.EditorFor(model => model.CantidadDefault, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", placeholder = "Cantidad Default" } })

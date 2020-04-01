@@ -191,11 +191,11 @@
     <Compile Include="Controllers\AcomodoCajasController.cs" />
     <Compile Include="Controllers\ArticulosKFCController.cs" />
     <Compile Include="Controllers\CampañasController.cs" />
-    <Compile Include="Controllers\CampañaTiendasController.cs" />
     <Compile Include="Controllers\CampañaTiendaTMPsController.cs" />
     <Compile Include="Controllers\CiudadesController.cs" />
     <Compile Include="Controllers\CompañiasController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FamiliasController.cs" />
     <Compile Include="Controllers\GenericController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -203,7 +203,6 @@
     <Compile Include="Controllers\ProveedoresController.cs" />
     <Compile Include="Controllers\RegionesController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
-    <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\TiendasController.cs" />
     <Compile Include="Controllers\TiposCajaController.cs" />
     <Compile Include="Controllers\TiposTiendaController.cs" />
@@ -213,10 +212,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202002272259035_inicio2.cs" />
-    <Compile Include="Migrations\202002272259035_inicio2.Designer.cs">
-      <DependentUpon>202002272259035_inicio2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AcomodoCaja.cs" />
@@ -224,13 +219,13 @@
     <Compile Include="Models\Campaña.cs" />
     <Compile Include="Models\CampañaArticulo.cs" />
     <Compile Include="Models\CampañaArticuloTMP.cs" />
-    <Compile Include="Models\CampañaTienda.cs" />
     <Compile Include="Models\CampañaTiendaTMP.cs" />
     <Compile Include="Models\Ciudad.cs" />
     <Compile Include="Models\CodigoCampaña.cs" />
     <Compile Include="Models\Compañia.cs" />
     <Compile Include="Models\CampaniasLitoContext.cs" />
     <Compile Include="Models\Error.cs" />
+    <Compile Include="Models\Familia.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Modulo.cs" />
@@ -243,7 +238,6 @@
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\Rol.cs" />
-    <Compile Include="Models\Student.cs" />
     <Compile Include="Models\Tienda.cs" />
     <Compile Include="Models\TiendaArticulo.cs" />
     <Compile Include="Models\TiendasArticulosView.cs" />
@@ -311,7 +305,6 @@
     <Content Include="Content\js\inputfile-custom.js" />
     <Content Include="Content\js\sb-admin-2.js" />
     <Content Include="Content\js\sweetalert.js" />
-    <Content Include="Content\js\TempDataMessage.js" />
     <Content Include="Content\LoginCSS\bootstrap_superhero.min.css" />
     <Content Include="Content\LoginCSS\fullcalendar.min.css" />
     <Content Include="Content\LoginCSS\fullcalendar.print.min.css" />
@@ -2463,11 +2456,6 @@
     <Content Include="Views\Ciudades\Details.cshtml" />
     <Content Include="Views\Ciudades\Edit.cshtml" />
     <Content Include="Views\Ciudades\Index.cshtml" />
-    <Content Include="Views\CampañaTiendas\Create.cshtml" />
-    <Content Include="Views\CampañaTiendas\Delete.cshtml" />
-    <Content Include="Views\CampañaTiendas\Details.cshtml" />
-    <Content Include="Views\CampañaTiendas\Edit.cshtml" />
-    <Content Include="Views\CampañaTiendas\Index.cshtml" />
     <Content Include="Views\Campañas\CreateCamp.cshtml" />
     <Content Include="Views\Campañas\Delete.cshtml" />
     <Content Include="Views\Campañas\Details.cshtml" />
@@ -2546,11 +2534,6 @@
     <Content Include="Scripts\jtable\themes\jqueryui\jtable_jqueryui.less" />
     <Content Include="Scripts\jtable\themes\basic\jtable_basic.less" />
     <Content Include="Views\Tiendas\IndexTiendas.cshtml" />
-    <Content Include="Views\Students\Create.cshtml" />
-    <Content Include="Views\Students\Delete.cshtml" />
-    <Content Include="Views\Students\Details.cshtml" />
-    <Content Include="Views\Students\Edit.cshtml" />
-    <Content Include="Views\Students\Index.cshtml" />
     <Content Include="Views\Campañas\ArticulosCampañas.cshtml" />
     <Content Include="Views\Campañas\NuevaCampaña.cshtml" />
     <Content Include="Views\Campañas\ArticulosCampañasDescripcion.cshtml" />
@@ -2558,6 +2541,11 @@
     <Content Include="Views\Campañas\CloseCampArt.cshtml" />
     <Content Include="Views\ArticulosKFC\AsignarTiendas.cshtml" />
     <Content Include="Views\Usuarios\Perfil.cshtml" />
+    <Content Include="Views\Familias\Create.cshtml" />
+    <Content Include="Views\Familias\Delete.cshtml" />
+    <Content Include="Views\Familias\Details.cshtml" />
+    <Content Include="Views\Familias\Edit.cshtml" />
+    <Content Include="Views\Familias\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2574,9 +2562,6 @@
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202002272259035_inicio2.resx">
-      <DependentUpon>202002272259035_inicio2.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -159,7 +159,7 @@
 
                                 else
                                 {
-                                    <li class="col-xs-6"></li>
+                                    <li class="col-xs-5"></li>
                                     <li class="col-xs-1 ">
                                         <div>
                                             @Html.ActionLink(" ", "Index", "Home", new { }, new { @class = "fa fa-home txt iconomenu" })
@@ -187,6 +187,12 @@
                                     </li>
                                     <li class="col-xs-1 ">
                                         <div>
+                                            @Html.ActionLink(" ", "Index", "Familias", new { }, new { @class = "fas fa-boxes txt iconomenu", @onclick = "viewPage()" })
+                                            <div class="tooltip">Familias</div>
+                                        </div>
+                                    </li>
+                                    <li class="col-xs-1 ">
+                                        <div>
                                             @Html.ActionLink(" ", "Index", "ArticulosKFC", new { }, new { @class = "fas fa-barcode txt iconomenu", @onclick = "viewPage()" })
                                             <div class="tooltip">Articulos</div>
                                         </div>
@@ -198,11 +204,11 @@
                                         </div>
                                     </li>
                                     @*<li class="col-xs-1 ">
-                                            <div>
-                                                @Html.ActionLink(" ", "Index", "Students", new { }, new { @class = "fas fa-users txt iconomenu", @onclick = "viewPage()" })
-                                                <div class="tooltip">Students</div>
-                                            </div>
-                                        </li>*@
+                <div>
+                    @Html.ActionLink(" ", "Index", "Students", new { }, new { @class = "fas fa-users txt iconomenu", @onclick = "viewPage()" })
+                    <div class="tooltip">Students</div>
+                </div>
+            </li>*@
                                 }
 
                             </ul>
@@ -361,13 +367,13 @@
 
     <script>
 
-        //function mostrarMenu(obj) {
-        //    if (document.getElementById("btn-menu").checked)
-        //        document.getElementById('menuNav').style.marginTop = '40px';
+        function mostrarMenu(obj) {
+            if (document.getElementById("btn-menu").checked)
+                document.getElementById('menuNav').style.marginTop = '40px';
 
-        //    else
-        //        document.getElementById('menuNav').style.marginTop = '-180%';
-        //}
+            else
+                document.getElementById('menuNav').style.marginTop = '-180%';
+        }
 
         //function mostrarCarga() {
         //    var contenedor = document.getElementById('contenedor_carga');
@@ -391,7 +397,7 @@
         </script>*@
 
 
-    @if (TempData["msgArticuloCreado"] != null)
+    @*@if (TempData["msgArticuloCreado"] != null)
     {
         <script type="text/javascript">
 
@@ -864,7 +870,7 @@
                 timer: 2000,
             });
         </script>
-    }
+    }*@
 
     @if (TempData["mensajeLito"] != null)
     {

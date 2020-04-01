@@ -33,8 +33,6 @@ namespace CampaniasLito.Models
 
         public virtual ICollection<Campaña> Campañas { get; set; }
 
-        public virtual ICollection<CampañaTienda> CampañaTiendas { get; set; }
-
         public virtual ICollection<CampañaArticulo> CampañaArticulos { get; set; }
 
         public virtual ICollection<ArticuloKFC> ArticulosKFC { get; set; }

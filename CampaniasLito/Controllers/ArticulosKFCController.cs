@@ -43,11 +43,11 @@ namespace CampaniasLito.Controllers
 
             var filtro = Session["articuloFiltro"].ToString();
 
-            var articuloKFCs = db.ArticuloKFCs.Where(a => a.CompañiaId == usuario.CompañiaId).OrderBy(a => a.Familia).ThenBy(a => a.Descripcion);
+            var articuloKFCs = db.ArticuloKFCs.Where(a => a.CompañiaId == usuario.CompañiaId).OrderBy(a => a.Familia.Codigo).ThenBy(a => a.Descripcion);
 
             if (!string.IsNullOrEmpty(articulo))
             {
-                return View(articuloKFCs.Where(a => a.Descripcion.Contains(filtro) || a.Familia.Contains(filtro) || a.Proveedor.Nombre.Contains(filtro)).ToList());
+                return View(articuloKFCs.Where(a => a.Descripcion.Contains(filtro) || a.Familia.Codigo.Contains(filtro) || a.Proveedor.Nombre.Contains(filtro)).ToList());
             }
             else
             {
@@ -85,6 +85,7 @@ namespace CampaniasLito.Controllers
 
             var articulos = new ArticuloKFC { CompañiaId = usuario.CompañiaId, };
 
+            ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo");
             ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre");
 
             return PartialView(articulos);
@@ -107,7 +108,7 @@ namespace CampaniasLito.Controllers
                     MovementsHelper.AgregarArticuloTiendas(articuloKFC.ArticuloKFCId);
                     MovementsHelper.AgregarArticuloCampañas(articuloKFC.ArticuloKFCId, usuario.CompañiaId, usuario.NombreUsuario);
 
-                    TempData["msgArticuloCreado"] = "ARTICULO AGREGADO";
+                    TempData["mensajeLito"] = "ARTICULO AGREGADO";
 
                     return RedirectToAction("Index");
 
@@ -116,6 +117,7 @@ namespace CampaniasLito.Controllers
                 ModelState.AddModelError(string.Empty, response.Message);
             }
 
+            ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", articuloKFC.FamiliaId);
             ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
 
             return PartialView(articuloKFC);
@@ -223,7 +225,7 @@ namespace CampaniasLito.Controllers
                 }
             }
 
-            TempData["msgTiendaEditada"] = "TIENDAS ASIGNADAS";
+            TempData["mensajeLito"] = "TIENDAS ASIGNADAS";
 
             return RedirectToAction("Index");
 
@@ -245,6 +247,7 @@ namespace CampaniasLito.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", articuloKFC.FamiliaId);
             ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
 
             return PartialView(articuloKFC);
@@ -263,7 +266,7 @@ namespace CampaniasLito.Controllers
                 if (response.Succeeded)
                 {
 
-                    TempData["msgArticuloEditado"] = "ARTICULO EDITADO";
+                    TempData["mensajeLito"] = "ARTICULO EDITADO";
                     return RedirectToAction("Index");
 
                 }
@@ -271,6 +274,7 @@ namespace CampaniasLito.Controllers
                 ModelState.AddModelError(string.Empty, response.Message);
             }
 
+            ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", articuloKFC.FamiliaId);
             ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
 
             return PartialView(articuloKFC);
@@ -292,6 +296,7 @@ namespace CampaniasLito.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", articuloKFC.FamiliaId);
             ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", articuloKFC.ProveedorId);
 
             return View(articuloKFC);
@@ -305,6 +310,7 @@ namespace CampaniasLito.Controllers
         {
             var articulo = db.ArticuloKFCs.Find(id);
             var articuloTienda = db.TiendaArticulos.Where(ta => ta.ArticuloKFCId == id).ToList();
+            var articuloCampaña = db.CampañaArticuloTMPs.Where(ca => ca.ArticuloKFCId == id).ToList();
 
             foreach (var item in articuloTienda)
             {
@@ -312,12 +318,19 @@ namespace CampaniasLito.Controllers
                 db.SaveChanges();
             }
 
+            foreach (var item2 in articuloCampaña)
+            {
+                db.CampañaArticuloTMPs.Remove(item2);
+                db.SaveChanges();
+            }
+
+
             db.ArticuloKFCs.Remove(articulo);
 
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
-                TempData["msgArticuloEliminado"] = "ARTICULO ELIMINADO";
+                TempData["mensajeLito"] = "ARTICULO ELIMINADO";
 
                 return RedirectToAction("Index");
             }

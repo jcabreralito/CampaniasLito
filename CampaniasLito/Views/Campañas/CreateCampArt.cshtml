@@ -35,14 +35,14 @@
 
     </script>
 
-    @if (Session["Compañia"] != null)
+    @*@if (Session["Compañia"] != null)
     {
         <title>@Session["Compañia"].ToString() - @ViewBag.Title</title>
 
         if (Session["Compañia"].ToString() == "KFC")
-        {
+        {*@
             <link href="~/Content/css/Compañias/KFC.css" rel="stylesheet" />
-        }
+        @*}
         else if (Session["Compañia"].ToString() == "STARBUCKS")
         {
             <link href="~/Content/css/Compañias/Starbucks.css" rel="stylesheet" />
@@ -55,7 +55,7 @@
     else
     {
         <title>Campañas LITO - @ViewBag.Title</title>
-    }
+    }*@
 
 
     @Styles.Render("~/bundles/jquery")
