@@ -7,7 +7,7 @@ using CampaniasLito.Classes;
 
 namespace CampaniasLito.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
 
     public class CompañiasController : Controller
     {
@@ -15,6 +15,17 @@ namespace CampaniasLito.Controllers
 
         public ActionResult Index()
         {
+            Session["homeB"] = string.Empty;
+            Session["rolesB"] = string.Empty;
+            Session["compañiasB"] = "active";
+            Session["usuariosB"] = string.Empty;
+            Session["regionesB"] = string.Empty;
+            Session["ciudadesB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["familiasB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+
             //var compañia = db.Compañias.Include(c => c.Ciudad).Include(c => c.DelegacionMunicipio).Include(c => c.Colonia);
             return View(db.Compañias.ToList());
         }

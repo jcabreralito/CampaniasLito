@@ -43,6 +43,79 @@ namespace CampaniasLito.Classes
             return response.Succeeded;
         }
 
+        public static void CrearOperaciones(string operacionName, int moduloId)
+        {
+            var operacionExist = db.Operaciones.Where(r => r.Nombre == operacionName).FirstOrDefault();
+
+            if (operacionExist != null)
+            {
+                if (operacionExist.Nombre != operacionName)
+                {
+                    Operacion operacion = new Operacion();
+                    operacion.Nombre = operacionName;
+                    operacion.ModuloId = moduloId;
+                    db.Operaciones.Add(operacion);
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                Operacion operacion = new Operacion();
+                operacion.Nombre = operacionName;
+                operacion.ModuloId = moduloId;
+                db.Operaciones.Add(operacion);
+                db.SaveChanges();
+            }
+        }
+
+        public static void CrearRolOperaciones(int rolId, int operacionId)
+        {
+            var rolOperacionExist = db.RolOperaciones.Where(r => r.RolId == rolId && r.OperacionId == operacionId).FirstOrDefault();
+
+            if (rolOperacionExist != null)
+            {
+                if (rolOperacionExist.RolId != rolId && rolOperacionExist.OperacionId != operacionId)
+                {
+                    RolOperacion rolOperacion = new RolOperacion();
+                    rolOperacion.RolId = rolId;
+                    rolOperacion.OperacionId = operacionId;
+                    db.RolOperaciones.Add(rolOperacion);
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                RolOperacion rolOperacion = new RolOperacion();
+                rolOperacion.RolId = rolId;
+                rolOperacion.OperacionId = operacionId;
+                db.RolOperaciones.Add(rolOperacion);
+                db.SaveChanges();
+            }
+        }
+
+        public static void CrearModulo(string moduloName)
+        {
+            var moduloExist = db.Modulos.Where(r => r.Nombre == moduloName).FirstOrDefault();
+
+            if (moduloExist != null)
+            {
+                if (moduloExist.Nombre != moduloName)
+                {
+                    Modulo modulo = new Modulo();
+                    modulo.Nombre = moduloName;
+                    db.Modulos.Add(modulo);
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                Modulo modulo = new Modulo();
+                modulo.Nombre = moduloName;
+                db.Modulos.Add(modulo);
+                db.SaveChanges();
+            }
+        }
+
         public static void CrearRoles(string rolName)
         {
             var rolExist = db.Roles.Where(r => r.Nombre == rolName).FirstOrDefault();

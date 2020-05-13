@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace CampaniasLito.Models
 {
@@ -19,9 +15,13 @@ namespace CampaniasLito.Models
 
         public bool Seleccionado { get; set; }
 
+        //public string EquityFranquicia { get; set; }
+
         public virtual Tienda Tienda { get; set; }
 
         public virtual ArticuloKFC ArticuloKFC { get; set; }
+
+        public virtual CampañaArticuloTMP CampañaArticuloTMP { get; set; }
 
     }
 }

@@ -1,0 +1,199 @@
+﻿@model CampaniasLito.Models.Tienda
+
+@{
+    ViewBag.Title = "Editar";
+    Layout = null;
+}
+
+@using (Html.BeginForm("Edit", "Restaurantes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel mt-3">
+        <div class="panel-heading">
+            <table class="headingModal">
+                <tr style="background-color: #DF2530 !important">
+                    <td class="col-xs-6">
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
+                    </td>
+                    <td class=" col-xs-12"></td>
+                    <td align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwal()">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td align="center" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage2()">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script src="~/Content/js/site.js"></script>
+
+        <div class="panel-body">
+            <div class="form-horizontal row responsivoUsuarioLabel">
+                <div class="col-xs-12">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.TiendaId)
+                    @Html.HiddenFor(model => model.EquityFranquicia)
+
+
+                    @Html.HiddenFor(model => model.TipoDeCajaId)
+                    @Html.HiddenFor(model => model.AcomodoDeCajas)
+                    @Html.HiddenFor(model => model.NoMesaDeAreaComedor)
+                    @Html.HiddenFor(model => model.NoMesaDeAreaDeJuegos)
+                    @Html.HiddenFor(model => model.NumeroDeVentanas)
+                    @Html.HiddenFor(model => model.TipoId)
+                    @Html.HiddenFor(model => model.NuevoNivelDePrecioId)
+                    @Html.HiddenFor(model => model.MenuDigital)
+                    @Html.HiddenFor(model => model.CantidadDePantallas)
+                    @Html.HiddenFor(model => model.TerceraReceta)
+                    @Html.HiddenFor(model => model.Arroz)
+                    @Html.HiddenFor(model => model.Hamburgesas)
+                    @Html.HiddenFor(model => model.Ensalada)
+                    @Html.HiddenFor(model => model.PET2Litros)
+                    @Html.HiddenFor(model => model.Postres)
+                    @Html.HiddenFor(model => model.BisquetMiel)
+                    @Html.HiddenFor(model => model.MenuBackLigth)
+                    @Html.HiddenFor(model => model.Autoexpress)
+                    @Html.HiddenFor(model => model.CopeteAERemodelado)
+                    @Html.HiddenFor(model => model.CopeteAETradicional)
+                    @Html.HiddenFor(model => model.PanelDeInnovacion)
+                    @Html.HiddenFor(model => model.DisplayDeBurbuja)
+                    @Html.HiddenFor(model => model.Delivery)
+                    @Html.HiddenFor(model => model.MERCADO_DE_PRUEBA)
+                    @Html.HiddenFor(model => model.AreaDeJuegos)
+                    @Html.HiddenFor(model => model.WCMedidaEspecial60_8x85cm)
+                    @Html.HiddenFor(model => model.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm)
+                    @Html.HiddenFor(model => model.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm)
+                    @Html.HiddenFor(model => model.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm)
+                    @Html.HiddenFor(model => model.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm)
+                    @Html.HiddenFor(model => model.MedidaEspecialPanelDeComplementos)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm)
+                    @Html.HiddenFor(model => model.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm)
+                    @Html.HiddenFor(model => model.TipoDeCajaId)
+                    @Html.HiddenFor(model => model.AcomodoDeCajas)
+                    @Html.HiddenFor(model => model.NoMesaDeAreaComedor)
+                    @Html.HiddenFor(model => model.NoMesaDeAreaDeJuegos)
+                    @Html.HiddenFor(model => model.NumeroDeVentanas)
+                    @Html.HiddenFor(model => model.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS)
+                    @Html.HiddenFor(model => model.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L)
+
+                    @Html.HiddenFor(model => model.KeCono)
+                    @Html.HiddenFor(model => model.KREAMBALL)
+                    @Html.HiddenFor(model => model.DisplayDePiso)
+                    @Html.HiddenFor(model => model.WCNACIONAL67X100cm)
+                    @Html.HiddenFor(model => model.UbicacionPantallas)
+
+
+                    <div class="row marginRowCreate" style="margin-top: -15px;">
+                        <div class="mat-input col-sm-2 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Clasificacion, new { htmlAttributes = new { }, @type = "input", @required = "true", @style = "text-transform:uppercase", @oninvalid = "setCustomValidity('¡Este dato es obligatorio!')", @oninput = "setCustomValidity('')" })
+                                <label class="active">Clasific.</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                        <div class="mat-input col-sm-2 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.CCoFranquicia, new { htmlAttributes = new { }, @type = "input", @required = "true", @style = "text-transform:uppercase", @oninvalid = "setCustomValidity('¡Este dato es obligatorio!')", @oninput = "setCustomValidity('')" })
+                                <label class="active">CC</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                        <div class="mat-input col-sm-8 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Restaurante, new { htmlAttributes = new { }, @type = "input", @required = "true", @style = "text-transform:uppercase", @oninvalid = "setCustomValidity('¡Este dato es obligatorio!')", @oninput = "setCustomValidity('')" })
+                                <label class="active">Restaurante</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        <div class="col-sm-6 focus">
+                            @*<div class="col-sm-12 focus" style="margin-top: 0 !important;">
+                    <label for="RegionId" style="font-size: 12px; color: #DF2530; padding: 0 5px;">@Html.DisplayNameFor(m => m.RegionId)</label>
+                    <div class="input-group">
+                        @Html.DropDownList("RegionId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[4].Watermark, htmlAttributes: new { @class = "clgfocus", @type = "select", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
+                        <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+                    </div>
+                </div>*@
+                            <div class="col-sm-12 focus" style="margin-top: 0 !important;">
+                                <label for="RegionId" style="font-size: 12px; color: #DF2530; padding: 0 5px;">@Html.DisplayNameFor(m => m.RegionId)</label>
+                                <div class="customselect">
+                                    @Html.DropDownList("RegionId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[4].Watermark, htmlAttributes: new { @class = "form-control  clgfocus inputModal", @type = "text", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')", @onchange = "filtrar()" })
+                                </div>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 focus">
+                            @*<div class="col-sm-12 focus" style="margin-top: 0 !important;">
+                    <label for="CiudadId" style="font-size: 12px; color: #DF2530; padding: 0 5px;">@Html.DisplayNameFor(m => m.CiudadId)</label>
+                    <div class="input-group col-sm-12">
+                        @Html.DropDownList("CiudadId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[5].Watermark, htmlAttributes: new { @class = "clgfocus", @type = "select", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
+                        <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+                    </div>
+                </div>*@
+
+                            <div class="col-sm-12 focus" style="margin-top: 0 !important;">
+                                <label for="CiudadId" style="font-size: 12px; color: #DF2530; padding: 0 5px;">@Html.DisplayNameFor(m => m.CiudadId)</label>
+                                <div class="customselect">
+                                    @Html.DropDownList("CiudadId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[5].Watermark, htmlAttributes: new { @class = "form-control  clgfocus inputModal", @type = "text", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
+                                </div>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row marginRowCreate">
+                        <div class="mat-input col-sm-12 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Direccion, new { htmlAttributes = new { }, @type = "text", @style = "text-transform:uppercase" })
+                                <label class="active">Dirección</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row marginRowCreate">
+                        <div class="mat-input col-sm-12 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Observaciones, new { htmlAttributes = new { }, @type = "text", @style = "text-transform:uppercase" })
+                                <label class="active">Observaciones</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        var UrlM = '@Url.Action("GetCiudadesXRegion", "Generic")';
+    </script>
+
+}

@@ -33,7 +33,18 @@ namespace CampaniasLito.Controllers
 
             var filtro = Session["familia"].ToString();
 
-            var familias = db.Familias.OrderBy(a => a.Descripcion).ThenBy(a => a.Codigo);
+            var familias = db.Familias.OrderBy(a => a.Codigo).ThenBy(a => a.Descripcion);
+
+            Session["homeB"] = string.Empty;
+            Session["rolesB"] = string.Empty;
+            Session["compañiasB"] = string.Empty;
+            Session["usuariosB"] = string.Empty;
+            Session["regionesB"] = string.Empty;
+            Session["ciudadesB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["familiasB"] = "active";
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
 
             if (!string.IsNullOrEmpty(familia))
             {
@@ -47,7 +58,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Familias/Details/5
-        [AuthorizeUser(idOperacion: 6)]
+        [AuthorizeUser(idOperacion: 4)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -63,13 +74,13 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Familias/Create
-        [AuthorizeUser(idOperacion: 2)]
+        [AuthorizeUser(idOperacion: 1)]
         public ActionResult Create()
         {
             return View();
         }
 
-        [AuthorizeUser(idOperacion: 2)]
+        [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Familia familia)
@@ -85,7 +96,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Familias/Edit/5
-        [AuthorizeUser(idOperacion: 3)]
+        [AuthorizeUser(idOperacion: 2)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -103,7 +114,7 @@ namespace CampaniasLito.Controllers
             return View(familia);
         }
 
-        [AuthorizeUser(idOperacion: 3)]
+        [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Familia familia)
@@ -119,7 +130,7 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: Familias/Delete/5
-        [AuthorizeUser(idOperacion: 4)]
+        [AuthorizeUser(idOperacion: 3)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -138,7 +149,7 @@ namespace CampaniasLito.Controllers
         }
 
         // POST: Familias/Delete/5
-        [AuthorizeUser(idOperacion: 4)]
+        [AuthorizeUser(idOperacion: 3)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

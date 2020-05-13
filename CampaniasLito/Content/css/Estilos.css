@@ -65,8 +65,8 @@ table {
 
 #unIdCalender {
     overflow-y: auto; /*Ajuste automático, agrega scroll según el tamaño del contenido*/
-    height: 87vh; /*Alto del 100% del Viewport*/
-    max-height: 87vh; /*Alto máximo*/
+    height: 85vh; /*Alto del 100% del Viewport*/
+    max-height: 100vh; /*Alto máximo*/
 }
 
 
@@ -375,7 +375,7 @@ footer {
         text-decoration: none;
     }
 
-.tooltip {
+.tooltipOriginal {
     background-color: #2B3E50;
     color: white;
     padding-left: 10px;
@@ -389,7 +389,7 @@ footer {
     font-size: 16px;
 }
 
-    .tooltip::before {
+    .tooltipOriginal::before {
         content: " ";
         position: absolute;
         bottom: 100%;
@@ -399,7 +399,7 @@ footer {
         border-color: transparent transparent #2B3E50 transparent;
     }
 
-.txt:hover + .tooltip {
+.txt:hover + .tooltipOriginal {
     visibility: visible;
     opacity: 1;
     bottom: -35px;
@@ -408,23 +408,22 @@ footer {
 .tooltip2 {
     background-color: #2B3E50;
     color: white;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
     position: absolute;
     border-radius: 5px;
     bottom: -25px;
     visibility: hidden;
     transition: opacity 1s, visibility 1s, bottom 1s;
     opacity: 0;
-    font-size: 12px;
-    margin-left: 30px;
+    font-size: 16px;
 }
 
     .tooltip2::before {
         content: " ";
         position: absolute;
         bottom: 100%;
-        left: 80%;
+        left: 45%;
         border-style: solid;
         border-width: 5px;
         border-color: transparent transparent #2B3E50 transparent;
@@ -533,21 +532,21 @@ footer {
     }
 
     #smallTamanio {
-        width: 30%;
-        left: 30%;
+        width: 50%;
+        left: 25%;
         top: 20%;
     }
 
     #mdialTamanio {
         width: 45%;
         left: 20%;
-        top: 15%;
+        top: 5%;
     }
 
     #largeTamanio {
         width: 70%;
         left: 18%;
-        top: 10%;
+        top: 5%;
     }
 
 
@@ -558,13 +557,43 @@ footer {
         font-size: 10px !important;
     }
 
-    .tooltip {
+    .tooltipOriginal {
+        /*padding-left: 500%;*/
+        margin-top: -40px;
+        font-size: 19px;
+        /*position: unset !important;*/
+        /*visibility: visible !important;*/
+        /*opacity: 1 !important;*/
+    }
+
+    .tooltip2 {
         padding-left: 500%;
         margin-top: -40px;
         font-size: 19px;
         position: unset !important;
         visibility: visible !important;
         opacity: 1 !important;
+    }
+
+    .img-circle {
+        font-size: 37px !important;
+    }
+
+    .actionlinkclose {
+        font-size: 70px !important;
+        margin-top: -18px !important;
+    }
+
+    .col-xs-4 {
+        flex-basis: 41.66666667% !important;
+        max-width: 41.66666667% !important;
+        width: 41.66666667% !important;
+    }
+
+    .col-xs-5 {
+        flex-basis: 33.333333% !important;
+        max-width: 33.333333% !important;
+        width: 33.333333% !important;
     }
 }
 
@@ -576,16 +605,16 @@ footer {
 
     #smallTamanio {
         width: 30%;
-        top: 20%;
+        top: 10%;
     }
 
     #mdialTamanio {
         width: 45%;
-        top: 15%;
+        top: 5%;
     }
 
     #largeTamanio {
-        top: 10%;
+        top: 5%;
     }
 
 
@@ -712,4 +741,10 @@ footer {
         width: 17px !important;
         text-align: center;
     }
+}
+
+.pagination-container {
+    top: 10px;
+    position: relative;
+    height: 0;
 }

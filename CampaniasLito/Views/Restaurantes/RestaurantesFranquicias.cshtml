@@ -1,0 +1,691 @@
+﻿@model IEnumerable<CampaniasLito.Models.Tienda>
+
+@{
+    ViewBag.Title = "Equity";
+    Layout = null;
+
+    var menu = string.Empty;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+
+    <script type="text/javascript">
+        {
+            if (history.forward(1))
+                location.replace(history.forward(1))
+        }
+
+        function nobackbutton() {
+            window.location.hash = "Litoprocess";
+            window.location.hash = "Again-No-back-button" //chrome
+            window.onhashchange = function () { window.location.hash = "Litoprocess"; }
+        }
+
+    </script>
+
+    <link href="~/Content/vendor/DataTables/datatables.min.css" rel="stylesheet" />
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
+    <link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="~/Content/css/Restaurantes.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div>
+        <div>
+            <div>
+                <div class="panel">
+                    <div class="panel-heading table-responsive" id="panelH">
+
+                        <a href="@Url.Action("Create", "Restaurantes", new { id = 2 })" class="botonF1 dialog-window-large" onclick="viewPageSwal()">
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+
+                    <div style="height: 71.5vh !important; max-height: 98vh !important;">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <table id="miTablaFranquicias" class="table-striped row-border compact" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        RESTAURANTE
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CC
+                                    </th>
+                                    <th>
+                                        EDITAR
+                                    </th>
+                                    <th>
+                                        ELIMINAR
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CLASIFICACIÓN
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        REGIÓN
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CIUDAD
+                                    </th>
+                                    <th style="background-color: #000 !important; width: 400px !important">
+                                        DIRECCIÓN
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        TIPO
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        NUEVO NIVEL DE PRECIO
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        MENÚ DIGITAL
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        CANTIDAD DE PANTALLAS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        3RA RECETA
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        ARROZ
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        HAMBURGUESAS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        ENSALADA
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        KE-KONO
+                                    </th>
+                                    <th style="        background-color: #00B0F0 !important">
+                                        KREAMBALL
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        BISQUET MIEL
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        AUTOEXPRESS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        PANEL DE INNNOVACIÓN
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        DISPLAY DE BURBUJA KIDS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        DELIVERY
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        Display De Piso
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        WC NACIONAL 67X100 CM
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                        MEDIDA ESPECIAL AE ZUAZUA 51x71 cm
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important">
+                                        UBICACIÓN PANTALLAS
+                                    </th>
+                                    <th>
+                                        MATERIALES
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item2 in Model.Where(x => x.EquityFranquicia == "FRANQUICIAS"))
+                                {
+                                <tr>
+                                    <td>
+                                        @item2.Restaurante
+                                    </td>
+                                    <td align="center">
+                                        @item2.CCoFranquicia
+                                    </td>
+                                    <td align="center">
+                                        <a href="@Url.Action("Edit", "Restaurantes", new { id = item2.TiendaId})" class="btn-dark dialog-window-large" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                    </td>
+                                    <td align="center">
+                                        <a href="@Url.Action("Delete", "Restaurantes", new { id = item2.TiendaId})" class="btn-dark dialog-window-large" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                    <td align="center">
+                                        @item2.Clasificacion
+                                    </td>
+                                    <td align="center">
+                                        @item2.Region.Nombre
+                                    </td>
+                                    <td align="center">
+                                        @item2.Ciudad.Nombre
+                                    </td>
+                                    <td>
+                                        @item2.Direccion
+                                    </td>
+                                    <td align="center">
+                                        @item2.TipoTienda.Tipo
+                                    </td>
+                                    <td align="center">
+                                        @item2.NivelPrecio.Descripcion
+                                    </td>
+
+                                    @if (@item2.MenuDigital == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    <td align="center">
+                                        @item2.CantidadDePantallas
+                                    </td>
+                                    @if (@item2.TerceraReceta == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.Arroz == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.Hamburgesas == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.Ensalada == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.KeCono == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.KREAMBALL == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.BisquetMiel == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.Autoexpress == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.PanelDeInnovacion == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.DisplayDeBurbuja == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.Delivery == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.DisplayDePiso == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.WCNACIONAL67X100cm == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    @if (@item2.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
+                                    {
+                                        menu = "SI";
+                                    }
+                                    else
+                                    {
+                                        menu = "NO";
+                                    }
+
+                                    <td align="center">
+                                        @menu
+                                    </td>
+                                    <td align="center">
+                                        @item2.UbicacionPantallas
+                                    </td>
+                                    <td align="center">
+                                        <a id="botones" href="@Url.Action("AsignarArticulos", "Restaurantes", new { id = item2.TiendaId})" class="btn-dark dialog-window-medium" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                            <i class="fas fa-plus-circle"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CLASIFICACIÓN
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        REGIÓN
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CIUDAD
+                                    </th>
+                                    <th style="background-color: #000 !important; width: 400px !important">
+                                        DIRECCIÓN
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        TIPO
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        NUEVO NIVEL DE PRECIO
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        MENÚ DIGITAL
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        CANTIDAD DE PANTALLAS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        3RA RECETA
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        ARROZ
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        HAMBURGUESAS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        ENSALADA
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        KE-KONO
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        KREAMBALL
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                        BISQUET MIEL
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        AUTOEXPRESS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        PANEL DE INNNOVACIÓN
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        DISPLAY DE BURBUJA
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        DELIVERY
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        Display De Piso
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                        WC NACIONAL 67X100 CM
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                        MEDIDA ESPECIAL AE ZUAZUA 51x71 cm
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important">
+                                        UBICACIÓN PANTALLAS
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-3.5.0.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#miTablaFranquicias').DataTable({
+                "order": [[1, "asc"]],
+                "pagingType": "full_numbers",
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla =(",
+                    "sInfo": "_END_ registros",
+                    "sInfoEmpty": "Registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "de un total de _MAX_",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "<<",
+                        "sLast": ">>",
+                        "sNext": ">",
+                        "sPrevious": "<"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    "buttons": {
+                        "copy": "Copiar",
+                        "colvis": "Mostrar/Ocultar Columnas"
+                    },
+                    select: {
+                        rows: {
+                            _: "%d registros seleccionados",
+                            0: "",
+                            1: "1 registro seleccionado"
+                        }
+                    },
+                },
+                //"initComplete": function () {
+                //    var api = this.api();
+                //    api.$('td').click(function () {
+                //        api.search(this.innerHTML).draw();
+                //    });
+                //},
+
+                initComplete: function () {
+                    this.api().columns([4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+                        24, 25, 26]).every(function () {
+                        var column = this;
+                            var select = $('<select><option value="">=TODOS=</option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                },
+                dom: 'lfBrtip',
+                autoWidth: false,
+                //responsive: true,
+                buttons: [
+                    'colvis',
+                ],
+                "columnDefs": [
+                    { "orderable": false, "targets": [2, 3, 27] }
+                ],
+                //columnDefs: [
+                //    { width: 400, targets: 5 }],
+                fixedColumns: true,
+                fixedColumns: {
+                    leftColumns: 2,
+                },
+                //fixedHeader: true,
+                select: true,
+                scrollY: [
+                    innerHeight = '54vh',
+                ],
+                scrollX: true,
+                //deferRender: true,
+                //scroller: true,
+                //autoFill: true,
+                keys: true,
+                'bLengthChange': true,
+                'bInfo': true,
+                "lengthMenu": [[-1, 15, 25, 50, 100], ["TODOS", 15, 25, 50, 100]],
+            });
+        });
+    </script>
+
+    <script>
+
+        function viewPageSwal() {
+
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
+
+            swal({
+                title: "<span style='color:#fff; margin-top: 5%'></span>",
+                html: true,
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+            });
+
+        };
+
+
+            //$(document).ready(function () {
+            //    $("body").on("click", "a.dialog-window-medium-tiendas", null, function (e) {
+            //        e.preventDefault();
+            //        var $link = $(this);
+            //        var url = $(this).attr('href');
+            //        if (url.indexOf('#') == 0) {
+            //            $('#mediumModalTienda').modal('show');
+            //        }
+            //        else {
+            //            $.get(url, function (data) {
+            //                $('#mediumModalTienda .te').html(data);
+            //                $('#mediumModalTienda').modal();
+            //            }).success(function () { $('input:text:visible:first').focus(); });
+
+            //        }
+            //    });
+            //});
+
+            //$(document).ready(function () {
+            //    $("body").on("click", "a.dialog-window-large", null, function (e) {
+            //        e.preventDefault();
+            //        var $link = $(this);
+            //        var url = $(this).attr('href');
+            //        if (url.indexOf('#') == 0) {
+            //            $('#largeModal').modal('show');
+            //        }
+            //        else {
+            //            $.get(url, function (data) {
+            //                $('#largeModal .te').html(data);
+            //                $('#largeModal').modal();
+            //            }).success(function () {
+            //                $('input:text:visible:first').focus();
+            //            });
+            //        }
+            //    });
+            //});
+
+            //$(document).ready(function () {
+            //    $("body").on("click", "a.dialog-window-medium", null, function (e) {
+            //        e.preventDefault();
+            //        var $link = $(this);
+            //        var url = $(this).attr('href');
+            //        if (url.indexOf('#') == 0) {
+            //            $('#mediumModal').modal('show');
+            //        }
+            //        else {
+            //            $.get(url, function (data) {
+            //                $('#mediumModal .te').html(data);
+            //                $('#mediumModal').modal();
+            //            }).success(function () { $('input:text:visible:first').focus(); });
+
+            //        }
+            //    });
+            //});
+
+    </script>
+
+    @*@if (TempData["mensajeLito"] != null)
+        {
+            <script type="text/javascript">
+
+                swal({
+                    title: "<span style='color:#fff'>@ViewBag.Title</span>",
+                    text: '<span style="color:#fff">@TempData["mensajeLito"].ToString()</span>',
+                    html: true,
+                    type: "success",
+                    showConfirmButton: false,
+                    animation: true,
+                    customClass: 'animated swing',
+                    background: '#B3C9D8',
+                    grow: 'fullscreen',
+                    timer: 2000,
+                });
+            </script>
+        }*@
+
+    @*<script>
+
+            swal({
+                title: "<span style='color:#fff; margin-top: 5%'></span>",
+                html: true,
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#444',
+                grow: 'fullscreen',
+                timer: 1000,
+            });
+
+            window.onload = function () {
+                var contenedor = document.getElementById('contenedor_carga');
+                contenedor.style.visibility = 'hidden';
+                contenedor.style.opacity = '0';
+            }
+
+        </script>*@
+
+</body>
+</html>

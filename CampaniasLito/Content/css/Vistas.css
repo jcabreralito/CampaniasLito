@@ -5,36 +5,41 @@ h6, html, input[type=submit], input[type=button] {
 
 #contenedor_carga, #contenedor_carga2 {
     display: block;
-    background-color: rgba(255, 245, 255, 0.2);
-    height: 100%;
-    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 100vh;
+    width: 100vw;
     position: fixed;
-    -webkit-transition: all 2s ease;
-    -o-transition: all 2s ease;
-    transition: all 2s ease;
+    -webkit-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    transition: all .2s ease;
     z-index: 10000;
+    top: 0px;
+    left: 0;
 }
 
 #carga, #carga2 {
-    border: 15px solid #ccc;
-    border-top-color: #01207B;
+    border: 10px solid #ccc;
+    border-top-color: #DF2530;
     border-top-style: groove;
     height: 100px;
     width: 100px;
     border-radius: 100%;
     position: absolute;
-    left: 45%;
-    -webkit-animation: girar 1.5s linear infinite;
-    -o-animation: girar 1.5s linear infinite;
-    animation: girar 1.5s linear infinite;
+    -webkit-animation: girar 1s linear infinite;
+    -o-animation: girar 1s linear infinite;
+    animation: girar 1s linear infinite;
 }
 
 #carga {
-    top: 32%;
+    top: 43.1%;
+    left: 47%;
+    /*top: 30.8%;
+    left: 44.8%;*/
 }
 
 #carga2 {
-    top: 34%;
+    top: 43.1%;
+    left: 47%;
 }
 
 @keyframes girar {
@@ -751,7 +756,7 @@ input[type=range] {
     height: 50px;
     border-radius: 100%;
     background: #F44336;
-    right: 45%;
+    right: 47%;
     bottom: 0;
     position: fixed;
     /*margin-right: 36px;*/

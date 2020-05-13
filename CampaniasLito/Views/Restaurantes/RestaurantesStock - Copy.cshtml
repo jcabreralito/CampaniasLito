@@ -1,0 +1,219 @@
+﻿@model IEnumerable<CampaniasLito.Models.Tienda>
+
+@{
+    ViewBag.Title = "Stock";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+</head>
+<body>
+    <div class="panel">
+        <div class="panel-heading table-responsive" id="panelH">
+
+            <a href="@Url.Action("Create", "Restaurantes", new { id = 3 })" class="botonF1 dialog-window-large" onclick="viewPageSwal()">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" style="width:100%" id="dataTable" cellspacing="0">
+                    <thead style="font-size:17px; font-weight:bold; background-color:#DF2530; color: #fff; text-transform: uppercase">
+                        <tr>
+                            <th align="center" style="width: 10%">
+                               C.C.
+                            </th>
+                            <th align="center" style="width: 35%">
+                                @Html.DisplayNameFor(model => model.Restaurante)
+                            </th>
+                            <th align="center" style="width: 25%">
+                                @*<a id="botones" href="@Url.Action("ConfiguracionesIndex", "Restaurantes", new { })"
+                                       class="btn btn-primary"
+                                       style="background-color: transparent; border:none; font-size: 17px"
+                                       data-toggle="myToolTip" data-placement="bottom" title="AGREGAR CONFIGURACIONES" onclick="viewPage()">
+                                        CONFIGURACIONES
+                                        <i class="fas fa-plus-circle"></i>
+                                    </a>*@
+                                CONFIGURACIONES
+                            </th>
+                            <th align="center" style="width: 10%">
+                                Detalle
+                            </th>
+                            <th align="center" style="width: 10%">
+                                Materiales
+                            </th>
+                            <th align="center" style="width: 10%">
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="unId70" class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" style="width:100%; margin-bottom: -40px" id="dataTable" cellspacing="0">
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr style="font-size:12px; text-transform: capitalize">
+                                <td style="width: 10%">
+                                    <a href="@Url.Action("Edit", "Restaurantes", new { id = item.TiendaId})" class="dialog-window-large" style="text-decoration: none; list-style: none; color: #000" onclick="viewPageSwal()">
+                                        @Html.DisplayFor(modelItem => item.CCoFranquicia)
+                                    </a>
+                                </td>
+                                <td style="width: 35%">
+                                    <a href="@Url.Action("Edit", "Restaurantes", new { id = item.TiendaId})" class="dialog-window-large" style="text-decoration: none; list-style: none; color: #000" onclick="viewPageSwal()">
+                                        @Html.DisplayFor(modelItem => item.Restaurante)
+                                    </a>
+                                </td>
+                                <td style="width: 25%" align="center">
+                                    @*<a href="@Url.Action("ConfiguracionesGenerales", "Restaurantes", new { id = item.TiendaId})"
+                                       class="btn btn-primary dialog-window-medium"
+                                       style="font-size: 12px"
+                                       data-toggle="myToolTip" data-placement="bottom" title="CARACTERISTICAS GENERALES" onclick="viewPage()">
+                                        CG
+                                    </a>*@
+                                    <a href="@Url.Action("ConfiguracionesProducto", "Restaurantes", new { id = item.TiendaId})"
+                                       class="btn btn-primary dialog-window-medium"
+                                       style="font-size: 12px"
+                                       data-toggle="myToolTip" data-placement="bottom" title="POR PRODUCTO" onclick="viewPageSwal()">
+                                        CP
+                                    </a>
+                                    <a href="@Url.Action("ConfiguracionesCME", "Restaurantes", new { id = item.TiendaId})"
+                                       class="btn btn-primary dialog-window-medium"
+                                       style="font-size: 12px"
+                                       data-toggle="myToolTip" data-placement="bottom" title="por materiales específicos" onclick="viewPageSwal()">
+                                        CME
+                                    </a>
+                                    @*<a href="@Url.Action("ConfiguracionesCMES", "Restaurantes", new { id = item.TiendaId})"
+                                       class="btn btn-primary dialog-window-medium"
+                                       style="font-size: 12px"
+                                       data-toggle="myToolTip" data-placement="bottom" title="por medidas especiales" onclick="viewPage()">
+                                        CMES
+                                    </a>*@
+                                    <a href="@Url.Action("ConfiguracionesCER", "Restaurantes", new { id = item.TiendaId})"
+                                       class="btn btn-primary dialog-window-medium"
+                                       style="font-size: 12px"
+                                       data-toggle="myToolTip" data-placement="bottom" title="por equipo en el restaurante" onclick="viewPageSwal()">
+                                        CER
+                                    </a>
+                                </td>
+                                <td style="width: 10%" align="center">
+                                    <a id="botones" href="@Url.Action("Details", "Restaurantes", new { id = item.TiendaId})" class="btn btn-danger dialog-window-large" style="background-color: transparent; border:none; font-size: 20px" onclick="viewPageSwal()">
+                                        <i class="fas fa-list-alt"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 10%" align="center">
+                                    <a id="botones" href="@Url.Action("AsignarArticulos", "Restaurantes", new { id = item.TiendaId})" class="btn btn-danger dialog-window-medium" style="background-color: transparent; border:none; font-size: 20px" onclick="viewPageSwal()">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 10%" align="center">
+                                    <a id="botones" href="@Url.Action("Delete", "Restaurantes", new { id = item.TiendaId})" class="btn btn-danger dialog-window-large" style="background-color: transparent; border:none; font-size: 20px" onclick="viewPageSwal()">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="modal fade" data-keyboard="false" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); margin-top: -40px; z-index: 999999">
+            <div class="modal-dialog modal-dialog-centered mx-auto" id="xtralargeTamanio">
+                <div class="modal-content">
+                    <div class="te">Please wait...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" data-keyboard="false" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); margin-top: -120px; z-index: 999999">
+            <div class="modal-dialog modal-dialog-centered mx-auto" id="mdialTamanio">
+                <div class="modal-content">
+                    <div class="te">Please wait...</div>
+                </div>
+            </div>
+        </div>*@
+
+</body>
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/sweetalert.min.js" type="text/javascript"></script>
+
+    <script>
+
+        $("#EditarArticuloTienda").click(function () {
+            var data = $("#SubmitForm").serialize();
+            $.ajax({
+                type: "Post",
+                url: "/Tiendas/Editar",
+                data: data,
+                success: function (result) {
+                    //alert("Success!..");
+                    //window.location.href = "/Home/index";
+                    //$("#MyModal").modal("hide");
+
+                }
+            })
+        })
+
+    </script>
+
+    @*<script type="text/javascript">
+
+            $(document).ready(function () {
+                $("body").on("click", "a.dialog-window-large", null, function (e) {
+                    e.preventDefault();
+                    var $link = $(this);
+                    var url = $(this).attr('href');
+                    if (url.indexOf('#') == 0) {
+                        $('#largeModal').modal('show');
+                    }
+                    else {
+                        $.get(url, function (data) {
+                            $('#largeModal .te').html(data);
+                            $('#largeModal').modal();
+                        }).success(function () { $('input:text:visible:first').focus(); });
+
+                    }
+                });
+            });
+
+            $(document).ready(function () {
+                $("body").on("click", "a.dialog-window-medium", null, function (e) {
+                    e.preventDefault();
+                    var $link = $(this);
+                    var url = $(this).attr('href');
+                    if (url.indexOf('#') == 0) {
+                        $('#mediumModal').modal('show');
+                    }
+                    else {
+                        $.get(url, function (data) {
+                            $('#mediumModal .te').html(data);
+                            $('#mediumModal').modal();
+                        }).success(function () { $('input:text:visible:first').focus(); });
+
+                    }
+                });
+            });
+
+        </script>*@
+
+    <script>
+        window.onload = function () {
+            var contenedor = document.getElementById('contenedor_carga');
+            contenedor.style.visibility = 'hidden';
+            contenedor.style.opacity = '0';
+        }
+    </script>
+}

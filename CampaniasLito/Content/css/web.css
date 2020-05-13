@@ -1,7 +1,7 @@
 ﻿.GridViewScrollHeader TH, .GridViewScrollHeader TD {
     padding: 5px;
     font-weight: normal;
-    white-space: nowrap;
+    white-space: normal;
     border-right: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
     background-color: #DF2530;
@@ -11,7 +11,8 @@
     font-size: 12px;
     border-radius: 10px;
     margin-bottom: 10px !important;
-    height: 60px !important;
+    height: 35px !important;
+    line-height: 1;
 }
 
 .GridViewScrollItem TD {
@@ -70,9 +71,9 @@
     vertical-align: middle;
 }
 
-/*#gvMain_Header_Fixed {
+#gvMain_Header_Fixed {
     margin-bottom: 10px;
-}*/
+}
 
 th > .gridViewScrollHelper {
     height: 18px !important;

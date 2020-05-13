@@ -1,0 +1,91 @@
+﻿@model CampaniasLito.Models.Tienda
+
+@{
+    ViewBag.Title = "Detalle";
+    Layout = null;
+}
+
+<hr style="border: solid 2px #00AFEE" />
+<div class="row" style="margin-top: -20px">
+
+    <div class="col-sm-3 focus">
+        <div class="col-sm-12 focus">
+            <label for="danger" class="btndangerCheck">
+                @Html.DisplayNameFor(m => m.TerceraReceta)
+                <input type="checkbox" id="danger" class="badgebox" checked="@Model.TerceraReceta" disabled="disabled">
+                <span class="badge">&check;</span>
+            </label>
+            <div class="border"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 focus">
+        <div class="col-sm-12 focus">
+            <label for="danger" class="btndangerCheck">
+                @Html.DisplayNameFor(m => m.Arroz)
+                <input type="checkbox" id="danger" class="badgebox" checked="@Model.Arroz" disabled="disabled">
+                <span class="badge">&check;</span>
+            </label>
+            <div class="border"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 focus">
+        <div class="col-sm-12 focus">
+            <label for="danger" class="btndangerCheck">
+                @Html.DisplayNameFor(m => m.Hamburgesas)
+                <input type="checkbox" id="danger" class="badgebox" checked="@Model.Hamburgesas" disabled="disabled">
+                <span class="badge">&check;</span>
+            </label>
+            <div class="border"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 focus">
+        <div class="col-sm-12 focus">
+            <label for="danger" class="btndangerCheck">
+                @Html.DisplayNameFor(m => m.Ensalada)
+                <input type="checkbox" id="danger" class="badgebox" checked="@Model.Ensalada" disabled="disabled">
+                <span class="badge">&check;</span>
+            </label>
+            <div class="border"></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-sm-3 focus">
+        <div class="col-sm-12 focus">
+            <label for="danger" class="btndangerCheck">
+                @Html.DisplayNameFor(m => m.PET2Litros)
+                <input type="checkbox" id="danger" class="badgebox" checked="@Model.PET2Litros" disabled="disabled">
+                <span class="badge">&check;</span>
+            </label>
+            <div class="border"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 focus">
+        <div class="col-sm-12 focus">
+            <label for="danger" class="btndangerCheck">
+                @Html.DisplayNameFor(m => m.Postres)
+                <input type="checkbox" id="danger" class="badgebox" checked="@Model.Postres" disabled="disabled">
+                <span class="badge">&check;</span>
+            </label>
+            <div class="border"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 focus">
+        <div class="col-sm-12 focus">
+            <label for="danger" class="btndangerCheck">
+                @Html.DisplayNameFor(m => m.BisquetMiel)
+                <input type="checkbox" id="danger" class="badgebox" checked="@Model.BisquetMiel" disabled="disabled">
+                <span class="badge">&check;</span>
+            </label>
+            <div class="border"></div>
+        </div>
+    </div>
+</div>

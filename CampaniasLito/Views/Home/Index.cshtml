@@ -5,31 +5,14 @@
 
 @if (Model != null && !string.IsNullOrEmpty(Model.Compañia.Logo))
 {
-    if (Model.Compañia.Nombre == "KFC" || Model.Compañia.Nombre == "kfc")
-    {
-        <div class="jumbotron bgPortadaKFC" align="center" style="height: 86vh">
+        <div align="center">
             <h1 style="text-align:center"><i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas</h1>
             <img src="@Url.Content(Model.Compañia.Logo)" alt="Image" style="width: 250px; height: 250px; max-width: 100%; height: auto; border-radius: 10px" />
         </div>
-    }
-    else if (Model.Compañia.Nombre == "STARBUCKS" || Model.Compañia.Nombre == "starbucks")
-    {
-<div class="jumbotron bgPortadaStarbucks" align="center" style="height: 86vh">
-    <h1 style="text-align:center"><i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas</h1>
-    <img src="@Url.Content(Model.Compañia.Logo)" alt="Image" style="width: 150px; height: 150px; max-width: 100%; height: auto; border-radius: 10px" />
-</div>
-    }
-    else if (Model.Compañia.Nombre == "KRISPY KREME" || Model.Compañia.Nombre == "krispy kreme")
-    {
-<div class="jumbotron bgPortadaKrispy" align="center" style="height: 86vh">
-    <h1 style="text-align:center"><i class="fas fa-calendar-alt"></i> @Model.Compañia.Nombre Campañas</h1>
-    <img src="@Url.Content(Model.Compañia.Logo)" alt="Image" style="width: 200px; height: 200px; max-width: 100%; height: auto; border-radius: 10px" />
-</div>
-    }
 }
 else
 {
-    <div class="jumbotron bgPortada" align="center" style="height: 86vh">
+    <div align="center" style="height: 86vh">
         <h1 style="text-align:center"><i class="fas fa-calendar-alt"></i> Campañas</h1>
     </div>
 

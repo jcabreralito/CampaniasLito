@@ -1,0 +1,100 @@
+﻿@model IEnumerable<CampaniasLito.Controllers.CodigosMaterialesTotal>
+@using CampaniasLito.Controllers
+
+<link href="~/Content/vendor/rotating-card/css/rotating-card.css" rel="stylesheet" />
+<link href="~/Content/vendor/rotating-card/css/pe-icon-7-stroke.css" rel="stylesheet" />
+<link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
+
+<div id="unIdCalender" class="panel-body">
+    <table class="table" cellspacing="0" style="width:100%;">
+        @foreach (var itemTotal in ViewBag.TotalProveedor)
+        {
+            <thead>
+                <tr>
+                    <th>
+                        <h2 class="col-sm-6">Proveedor : @itemTotal.Proveedor</h2>
+                        <h2 class="col-sm-6">Cantidad : @itemTotal.TotalCantidad.ToString("N0")</h2>
+                    </th>
+                </tr>
+                <tr style="background-color: #f5f5f5 !important">
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="displayCard">
+                    @foreach (var item in Model.Where(p => p.Proveedor == @itemTotal.Proveedor))
+                    {
+                        <td style="background-color: #f5f5f5 !important">
+                            <div class="col-sm-12">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="card-container">
+                                        <div class="card">
+                                            <div class="front">
+                                                <div class="cover">
+                                                    @if (!string.IsNullOrEmpty(item.Imagen))
+                                                    {
+                                                        <img src="@Url.Content(item.Imagen)" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@Url.Content("~/Content/Productos/Productos.png")" />
+                                                    }
+                                                </div>
+                                                <div class="user">
+                                                    @if (!string.IsNullOrEmpty(item.Imagen))
+                                                    {
+                                                        <img src="@Url.Content(item.Imagen)" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@Url.Content("~/Content/Productos/Productos.png")" />
+                                                    }
+                                                </div>
+                                                <div class="content">
+                                                    <div class="main">
+                                                        <p class="text-center"><h4 class="text-center" style="color:#132f52; font-weight:bold"> Proveedor : @Html.DisplayFor(modelItem => item.Proveedor)</h4></p>
+                                                        <h3 class="name">@Html.DisplayFor(modelItem => item.ArticuloKFC)</h3>
+                                                        @foreach (var itemTipo in ViewBag.TotalTiendaTipo)
+                                                        {
+                                                            <h4 class="text-center">@itemTipo.ArticuloKFC  @itemTipo.TipoTienda : @itemTipo.TotalCantidadTipo</h4>
+                                                        }
+                                                        @*<h4 class="text-center">EQUITY: @Html.DisplayFor(modelItem => item.TotalCantidad)</h4>*@
+                                                    </div>
+                                                    <div class="footer text-center">
+                                                        <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end front panel -->
+                                            <div class="back">
+                                                <div class="header">
+                                                    <h5 class="motto">"Información"</h5>
+                                                </div>
+                                                <div class="content">
+                                                    <div class="main">
+                                                        <h4 class="text-center">Material</h4>
+                                                        <p class="text-center">Proveedor: @Html.DisplayFor(modelItem => item.Proveedor)</p>
+                                                        <p class="text-center">Material: @Html.DisplayFor(modelItem => item.ArticuloKFC)</p>
+                                                        <p class="text-center">Codigo: @Html.DisplayFor(modelItem => item.Codigo)</p>
+                                                        <p class="text-center">Cantidad: @Html.DisplayFor(modelItem => item.TotalCantidad)</p>
+                                                        <p class="text-center">Campaña: @Html.DisplayFor(modelItem => item.Campaña)</p>
+                                                    </div>
+                                                </div>
+                                                <div class="footer">
+                                                    <div class="social-links text-center">
+                                                        <a href="https://drive.google.com/open?id=1cdUDwTxVhGSeU25jJ9LFzROsWk7ikrSq" target="_blank"><i class="glyphicon glyphicon-open-file"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        }
+    </table>
+</div>

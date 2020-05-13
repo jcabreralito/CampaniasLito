@@ -37,6 +37,17 @@ namespace CampaniasLito.Controllers
 
             var usuarios = db.Usuarios.Include(u => u.Compañia);
 
+            Session["homeB"] = string.Empty;
+            Session["rolesB"] = string.Empty;
+            Session["compañiasB"] = string.Empty;
+            Session["usuariosB"] = "active";
+            Session["regionesB"] = string.Empty;
+            Session["ciudadesB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["familiasB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+
             if (!string.IsNullOrEmpty(usuario))
             {
                 return View(usuarios.Where(a => a.NombreUsuario.Contains(filtro) || a.Nombres.Contains(filtro)).ToList());

@@ -15,6 +15,5 @@ namespace CampaniasLito.Models
 
         public string Nombre { get; set; }
 
-        public virtual ICollection<Operacion> Operaciones { get; set; }
     }
 }

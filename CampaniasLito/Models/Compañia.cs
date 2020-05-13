@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web;
 
@@ -12,7 +11,7 @@ namespace CampaniasLito.Models
         public int CompañiaId { get; set; }
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
-        [MaxLength(50, ErrorMessage = "El Campo {0} debe tener máximo {1} carácteres de largo")]
+        [MaxLength(250, ErrorMessage = "El Campo {0} debe tener máximo {1} carácteres de largo")]
         [Display(Name = "Compañia")]
         [Index("Compañia_Nombre_Index", IsUnique = true)]
         public string Nombre { get; set; }
@@ -24,18 +23,6 @@ namespace CampaniasLito.Models
         [NotMapped]
         [Display(Name = "Logo")]
         public HttpPostedFileBase LogoFile { get; set; }
-
-        public virtual ICollection<Usuario> Usuarios { get; set; }
-
-        public virtual ICollection<Region> Regiones { get; set; }
-
-        public virtual ICollection<Ciudad> Ciudades { get; set; }
-
-        public virtual ICollection<Campaña> Campañas { get; set; }
-
-        public virtual ICollection<CampañaArticulo> CampañaArticulos { get; set; }
-
-        public virtual ICollection<ArticuloKFC> ArticulosKFC { get; set; }
 
     }
 }

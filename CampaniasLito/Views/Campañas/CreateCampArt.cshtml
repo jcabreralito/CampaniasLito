@@ -1,11 +1,12 @@
-﻿@*@model IEnumerable<CampaniasLito.Models.CampañaArticuloTMP>*@
-@*@model CampaniasLito.Models.TiendasArticulosView*@
-@model PagedList.IPagedList<CampaniasLito.Models.CampañaTiendaTMP>
-@using PagedList.Mvc;
+﻿@model IList<CampaniasLito.Controllers.MaterialesTiendasCampaña>
+@*@using PagedList.Mvc;*@
 
 @{
-    ViewBag.Title = "Articulos Campaña";
+    ViewBag.Title = "Materiales Campaña";
     Layout = null;
+
+    var campañaId = Session["campaniaId"];
+    var tipoTienda = 0;
 }
 
 <!DOCTYPE html>
@@ -35,112 +36,90 @@
 
     </script>
 
-    @*@if (Session["Compañia"] != null)
-    {
-        <title>@Session["Compañia"].ToString() - @ViewBag.Title</title>
-
-        if (Session["Compañia"].ToString() == "KFC")
-        {*@
-            <link href="~/Content/css/Compañias/KFC.css" rel="stylesheet" />
-        @*}
-        else if (Session["Compañia"].ToString() == "STARBUCKS")
-        {
-            <link href="~/Content/css/Compañias/Starbucks.css" rel="stylesheet" />
-        }
-        else if (Session["Compañia"].ToString() == "KRISPY KREME")
-        {
-            <link href="~/Content/css/Compañias/KrispyKreme.css" rel="stylesheet" />
-        }
-    }
-    else
-    {
-        <title>Campañas LITO - @ViewBag.Title</title>
-    }*@
-
-
-    @Styles.Render("~/bundles/jquery")
-    @Styles.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/modernizr")
-    @Styles.Render("~/bundles/js")
-    @Styles.Render("~/bundles/css")
-
-
-    <link href="~/Content/css/menuresponsive.css" rel="stylesheet" />
-    <link href="~/Content/icon/style.css" rel="stylesheet" />
-    <link href="~/Content/css/Estilos.css" rel="stylesheet" />
-    <link href="~/Content/css/rotating-card.css" rel="stylesheet" />
-    <link href="~/Content/css/flexboxgrid.min.css" rel="stylesheet" />
-    <link href="~/Content/themes/base/tooltip.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Actor" rel="stylesheet">
+    <link href="~/Content/vendor/bootstrap-4.0.0-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/DataTables/datatables.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/DataTables/DataTables-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/DataTables/DataTables-1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/Content/sweetalert.css" rel="stylesheet" />
-    <link href="~/fonts/flaticon.css" rel="stylesheet" />
-    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">*@
-    <link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
-    <link href="~/Content/css/Vistas.css" rel="stylesheet" />
-    <link href="~/Content/css/Generales.css" rel="stylesheet" />
-    <link href="~/Content/css/web.css" rel="stylesheet" />
+    <link href="~/Content/css/Campañas.css" rel="stylesheet" />
 
     <link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
 
-    <script type="text/javascript" src="~/Content/js/gridviewscroll.js"></script>
-
     <script type="text/javascript">
 
-        var gridViewScroll = null;
-
         window.onload = function () {
-
-            var options = new GridViewScrollOptions();
 
             var contenedor = document.getElementById('contenedor_carga2');
 
             contenedor.style.visibility = 'hidden';
             contenedor.style.opacity = '0';
 
-            options.elementID = "gvMain";
-            options.width = "100% !important";
-            options.height = "100% !important";
-            options.freezeColumn = true;
-            options.freezeFooter = false;
-            options.freezeColumnCssClass = "GridViewScrollItemFreeze";
-            options.freezeFooterCssClass = "GridViewScrollFooterFreeze";
-            options.freezeColumnCount = 1;
-
-            gridViewScroll = new GridViewScroll(options);
-            gridViewScroll.enhance();
-
-        }
-
-    </script>
-
-    <script>
-
-        function redimensionar() {
-
-            gridViewScroll.enhance();
+            swal({
+                title: "<span style='color:#fff; margin-top: 5%'></span>",
+                html: true,
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#444',
+                grow: 'fullscreen',
+                timer: 1000,
+            });
 
         }
 
     </script>
 
-    @*<style>
-            table {
-                display: block;
-                overflow-x: auto;
+    <style>
+        #contenedor_carga, #contenedor_carga2 {
+            display: block;
+            background-color: rgba(0, 0, 0, 0.5);
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            -webkit-transition: all .2s ease;
+            -o-transition: all .2s ease;
+            transition: all .2s ease;
+            z-index: 10000;
+            top: 0px;
+            left: 0;
+        }
+
+        #carga, #carga2 {
+            border: 10px solid #ccc;
+            border-top-color: #DF2530;
+            border-top-style: groove;
+            height: 100px;
+            width: 100px;
+            border-radius: 100%;
+            position: absolute;
+            -webkit-animation: girar 1s linear infinite;
+            -o-animation: girar 1s linear infinite;
+            animation: girar 1s linear infinite;
+        }
+
+        #carga {
+            top: 30.8%;
+            left: 44.8%;
+        }
+
+        #carga2 {
+            top: 43.1%;
+            left: 47%;
+        }
+
+        @@keyframes girar {
+            from {
+                transform: rotate(0deg);
             }
 
-            .static {
-                position: absolute;
-                background-color: white;
+            to {
+                transform: rotate(360deg);
             }
-
-            .first-col {
-                padding-left: 74.5px !important;
-            }
-        </style>*@
+        }
+    </style>
 </head>
 
-<body id="body" OnResize="redimensionar()">
+<body id="body" style="background-color: #f5f5f5">
     <div>
         <div>
             <div>
@@ -149,29 +128,29 @@
                     </div>
                 </div>
 
-                <div class="panel" style="margin: 1% 2%">
-                    <div class="panel-heading table-responsive" id="panelH">
+                <div class="panel" style="margin: 1.5%">
+                    <div class="panel-heading table-responsive" id="panelH" style="background-color: #fff; border-radius: 10px">
+                        @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <table cellspacing="0">
                             <tr>
-                                <td class=" col-sm-6">
-                                    <h2><i class="fas fa-calendar-alt"></i> @ViewBag.Title</h2>
+                                <td class=" col-sm-10">
+                                    @if (Model.FirstOrDefault().TipoTienda == "EQUITY")
+                                    {
+                                        <h2 style="font-size: 25px; font-weight: bold"><i class="fas fa-calendar-alt"></i> @ViewBag.Title EQUITY - CAMPAÑA : @Model.FirstOrDefault().Campaña &nbsp;&nbsp;&nbsp;&nbsp;TOTAL : @ViewBag.Total.ToString("N0")</h2>
+                                    }
+                                    else if (Model.FirstOrDefault().TipoTienda == "FRANQUICIAS")
+                                    {
+                                        <h2 style="font-size: 25px; font-weight: bold"><i class="fas fa-calendar-alt"></i> @ViewBag.Title FRANQUICIAS - CAMPAÑA : @Model.FirstOrDefault().Campaña &nbsp;&nbsp;&nbsp;&nbsp;TOTAL : @ViewBag.Total.ToString("N0")</h2>
+                                    }
+                                    else if (Model.FirstOrDefault().TipoTienda == "STOCK")
+                                    {
+                                        <h2 style="font-size: 25px; font-weight: bold"><i class="fas fa-calendar-alt"></i> @ViewBag.Title STOCK - CAMPAÑA : @Model.FirstOrDefault().Campaña &nbsp;&nbsp;&nbsp;&nbsp;TOTAL : @ViewBag.Total.ToString("N0")</h2>
+                                    }
                                 </td>
-                                @*<td class="col-xs-7">
-                            </td>*@
-                                @using (Html.BeginForm("CreateCampArt", "Campañas", new { id = Session["campaniaId"] }, FormMethod.Get))
-                                {
-                                    @Html.AntiForgeryToken()
-                                    <td class="col-sm-12" align="right">
-                                        <div id="botones" class="input-group" style="display:flex; float:right">
-                                            <input class="input-group-addon" type="text" name="tiendaCampania" id="tiendaCampania" value="@Session["tiendaCampaniaFiltro"].ToString()" style="color:#01207B; text-transform:uppercase; border-radius:10px 0 0 10px; text-align:center; width:250px" />
-                                            <button type="submit" class="fas fa-search btn btn-pilares" style="border-radius:0 10px 10px 0; text-align: right; font-size: 17px"></button>
-                                        </div>
-                                    </td>
-                                }
-                                <td class="col-sm-12">
+                                <td class="col-sm-2">
                                     <div id="botones" class="input-group" style="display:flex; float:right">
-                                        <a href="@Url.Action("Index", "Campañas")">
+                                        <a href="@Url.Action("Index", "Campañas")" onclick="soloMostrar()">
                                             <i class="fas fa-times-circle btn btn-pilares" style="border-radius:10px; text-align: right; font-size: 17px"></i>
                                         </a>
                                     </div>
@@ -180,74 +159,1376 @@
                         </table>
                     </div>
 
-                    @using (Html.BeginForm("CreateCampañaArticulos", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="input-group">
+                    @*@using (Html.BeginForm("CreateCampañaArticulos", "Campañas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {*@
+                    @Html.AntiForgeryToken()
+                    @*<div class="input-group">
                             <button id="actualizarCantidades" type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick=" mostrar()">
                                 <i class="fas fa-check-circle"></i>
                             </button>
-                        </div>
-
-                        <div class="panel-body" style="padding-top: 10px; margin-bottom: -40px">
-                            @Html.Action("NuevaCampaña", new { campañaId = Model.FirstOrDefault().CampañaId })
-                        </div>
-
-
-                        <div style="height: 71.5vh !important; width: 96% !important; margin: 0 2% !important">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                            @*<div class="panel-body" style="padding-top: 10px">
-                            @Html.Action("ArticulosCampañasTotales", new { campañaId = Model.FirstOrDefault().CampañaId })
                         </div>*@
 
-                            <table cellspacing="0" id="gvMain" class="table-striped table-hover">
-                                <thead>
-                                    <tr class="GridViewScrollHeader">
-                                        <th>
-                                            RESTAURANTE
-                                        </th>
-                                        <th style="margin-left: 2px">
-                                            @Html.Action("ArticulosCampañasDescripcion")
-                                        </th>
-                                    </tr>
-                                </thead>
-                                @foreach (var item2 in Model)
-                                {
-                                    <tbody>
-                                        <tr class="GridViewScrollItem">
-                                            <td style="margin-bottom: -8px">
-                                                @item2.Tienda.Restaurante
-                                            </td>
-                                            <td>
-                                                @Html.Action("ArticulosCampañas", new { tiendaId = item2.TiendaId, campañaId = item2.CampañaId })
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                }
-                            </table>
+                    @*<div class="panel-body2">
+                            @Html.Action("NuevaCampaña", new { campañaId = Model.FirstOrDefault().Campaña, Tipo = Model.FirstOrDefault().TipoTienda })
+                        </div>*@
 
-                        </div>
-                    }
-                </div>
-            </div>
-            <div style="font-size:12px; margin-top: -17px; margin-left: 4%;">
-                <div class="col-sm-8">
-                    @Html.PagedListPager(Model, page =>
-                        Url.Action("CreateCampArt", new
-                        {
-                            page,
-                            sortOrder = ViewBag.CurrentSort,
-                            currentFilter = ViewBag.CurrentFilter
-                        }),
-                        PagedListRenderOptions.ClassicPlusFirstAndLast)
-                </div>
-                <div class="col-sm-4" style="font-size:12px; margin-top: -17px; margin-right: 4%">
-                        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+                    <div style="height: 71.5vh !important; max-height: 98vh !important; margin-top: 10px">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @*<table id="miTabla" class="table table-bordered table-striped table-hover nowrap" width="100%">*@
+                        <table id="miTabla" class="table stripe row-border order-column compact" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        RESTAURANTE
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CC
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CLASIFICACIÓN
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        REGIÓN
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CIUDAD
+                                    </th>
+                                    <th style="background-color: #000 !important; width: 400px !important">
+                                        DIRECCIÓN
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        TIPO
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        NUEVO NIVEL DE PRECIO
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        MENÚ DIGITAL
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        CANTIDAD DE PANTALLAS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        3RA RECETA
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        ARROZ
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        HAMBURGUESAS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        ENSALADA
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        PET DE 2 LITROS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        POSTRES
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        BISQUET MIEL
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        KE-KONO
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        KREAMBALL
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        MENÚ BACKLIGHT
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        AUTOEXPRESS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        COPETE AE REMODELADO
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        COPETE AE TRADICIONAL
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        PANEL DE INNNOVACIÓN
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        DISPLAY DE BURBUJA
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        DELIVERY
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        MERCADO DE PRUEBA
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        ÁREA DE JUEGOS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        COPETE ESPECIAL SOPORTE LATERAL 4 VASOS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        COPETE ESPECIAL SOPORTE LATERAL PET 2L
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        Display De Piso
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        WC NACIONAL 67X100 CM
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL  60.8 x 85 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL MALL ORIENTE 100x120 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL ZUAZUA 87x120 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL CORREO MAYOR 60x90 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL ZARAGOZA 90x100 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIA ESPECIAL PNEL DE COMPLEMENTOS
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL PRE MENU AE SAN_ANTONIO 49x67.5 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE TECAMAC 48x67.5 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE VILLA GARCIA 45x65 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE XOLA 49.9x66.9 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE ZUAZUA 51x71 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE VALLE SOLEADO 51x71 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE MIRASIERRA 46x68 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE CELAYA 50x68.5 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE CANDILES 49.5x73.5 cm
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        TIPO DE CAJA
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        ACOMODO DE CAJA
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        # MESA ÁREAS DE COMEDOR
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        # MESA ÁREAS DE JUEGO
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        NUMERO DE VENTANAS
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        UBICACIÓN PANTALLAS
+                                    </th>
+                                    @foreach (var item in Model.GroupBy(x => new { x.ArticuloKFC, x.ArticuloKFCId }))
+                                    {
+                                        <th>
+                                            @if (Model.FirstOrDefault().TipoTienda == "EQUITY")
+                                            {
+                                                tipoTienda = 1;
+                                            }
+                                            else if (Model.FirstOrDefault().TipoTienda == "FRANQUICIAS")
+                                            {
+                                                tipoTienda = 2;
+                                            }
+                                            else if (Model.FirstOrDefault().TipoTienda == "STOCK")
+                                            {
+                                                tipoTienda = 3;
+                                            }
+                                            <a href="@Url.Action("AsignarTiendasCampañas", "Materiales", new { id = item.Key.ArticuloKFCId, Tipo = tipoTienda })" class="btn-danger dialog-window-medium-tiendas" style="background-color: transparent; border:none; font-size: 20px; text-decoration: none" onclick="soloMostrar()">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+                                            @item.Key.ArticuloKFC
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item2 in Model.GroupBy(x => new { x.TiendaId, x.Restaurante }))
+                                {
+                                    <tr>
+                                        <td>
+                                            @item2.Key.Restaurante
+                                        </td>
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.CC }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.CC
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Clasificacion }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.Clasificacion
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Region }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.Region
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Ciudad }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.Ciudad
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Direccion }))
+                                        {
+                                            <td>
+                                                @item.Key.Direccion
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Tipo }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.Tipo
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.NuevoNivelDePrecio }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.NuevoNivelDePrecio
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MenuDigital }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MenuDigital == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.CantidadDePantallas }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.CantidadDePantallas
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.TerceraReceta }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.TerceraReceta == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Arroz }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.Arroz == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Hamburgesas }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.Hamburgesas == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Ensalada }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.Ensalada == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.PET2Litros }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.PET2Litros == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Postres }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.Postres == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.BisquetMiel }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.BisquetMiel == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.KeCono }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.KeCono == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.KREAMBALL }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.KREAMBALL == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MenuBackLigth }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MenuBackLigth == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Autoexpress }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.Autoexpress == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.CopeteAERemodelado }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.CopeteAERemodelado == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.CopeteAETradicional }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.CopeteAETradicional == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.PanelDeInnovacion }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.PanelDeInnovacion == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.DisplayDeBurbuja }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.DisplayDeBurbuja == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Delivery }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.Delivery == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MERCADO_DE_PRUEBA }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MERCADO_DE_PRUEBA == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.AreaDeJuegos }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.AreaDeJuegos == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.DisplayDePiso }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.DisplayDePiso == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.WCNACIONAL67X100cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.WCNACIONAL67X100cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.WCMedidaEspecial60_8x85cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.WCMedidaEspecial60_8x85cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MedidaEspecialPanelDeComplementos }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MedidaEspecialPanelDeComplementos == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm }))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (@item.Key.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.TipoDeCaja }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.TipoDeCaja
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.AcomodoDeCajas }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.AcomodoDeCajas
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.NoMesaDeAreaComedor }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.NoMesaDeAreaComedor
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.NoMesaDeAreaDeJuegos }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.NoMesaDeAreaDeJuegos
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.NumeroDeVentanas }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.NumeroDeVentanas
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.UbicacionPantallas }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.UbicacionPantallas
+                                            </td>
+                                        }
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.ArticuloKFC, x.Restaurante, x.Cantidad, x.Habilitado }))
+                                        {
+                                            <td align="center">
+                                                @item.Key.Cantidad
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th style="text-align: left !important">
+                                        TOTAL
+                                    </th>
+                                    <th style="background-color: #000 !important">
+                                    </th>
+                                    <th style="background-color: #000 !important">
+                                    </th>
+                                    <th style="background-color: #000 !important">
+                                    </th>
+                                    <th style="background-color: #000 !important">
+                                    </th>
+                                    <th style="background-color: #000 !important;">
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important">
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important">
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important">
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #9CD78D !important">
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important">
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important">
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important">
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important">
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important">
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important">
+                                    </th>
+                                    @foreach (var item in ViewBag.TotalMaterial)
+                                    {
+                                        <th align="center">
+                                            @item.TotalCantidad
+                                        </th>
+                                    }
+                                </tr>
+                                <tr>
+                                    <th>
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CC
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CLASIFICACIÓN
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        REGIÓN
+                                    </th>
+                                    <th style="background-color: #000 !important; text-align: center !important">
+                                        CIUDAD
+                                    </th>
+                                    <th style="background-color: #000 !important; width: 400px !important">
+                                        DIRECCIÓN
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        TIPO
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        NUEVO NIVEL DE PRECIO
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        MENÚ DIGITAL
+                                    </th>
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                                        CANTIDAD DE PANTALLAS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        3RA RECETA
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        ARROZ
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        HAMBURGUESAS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        ENSALADA
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        PET DE 2 LITROS
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        POSTRES
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        BISQUET MIEL
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        KE-KONO
+                                    </th>
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                        KREAMBALL
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        MENÚ BACKLIGHT
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        AUTOEXPRESS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        COPETE AE REMODELADO
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        COPETE AE TRADICIONAL
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        PANEL DE INNNOVACIÓN
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        DISPLAY DE BURBUJA
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        DELIVERY
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        MERCADO DE PRUEBA
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        ÁREA DE JUEGOS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        COPETE ESPECIAL SOPORTE LATERAL 4 VASOS
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        COPETE ESPECIAL SOPORTE LATERAL PET 2L
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        Display De Piso
+                                    </th>
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                        WC NACIONAL 67X100 CM
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL  60.8 x 85 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL MALL ORIENTE 100x120 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL ZUAZUA 87x120 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL CORREO MAYOR 60x90 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        WC MEDIDA ESPECIAL ZARAGOZA 90x100 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIA ESPECIAL PNEL DE COMPLEMENTOS
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL PRE MENU AE SAN_ANTONIO 49x67.5 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE TECAMAC 48x67.5 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE VILLA GARCIA 45x65 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE XOLA 49.9x66.9 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE ZUAZUA 51x71 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE VALLE SOLEADO 51x71 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE MIRASIERRA 46x68 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE CELAYA 50x68.5 cm
+                                    </th>
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                        MEDIDA ESPECIAL AE CANDILES 49.5x73.5 cm
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        TIPO DE CAJA
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        ACOMODO DE CAJA
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        # MESA ÁREAS DE COMEDOR
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        # MESA ÁREAS DE JUEGO
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        NUMERO DE VENTANAS
+                                    </th>
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                                        UBICACIÓN PANTALLAS
+                                    </th>
+                                    @foreach (var item in ViewBag.TotalMaterial)
+                                    {
+                                        <th align="center">
+                                            @item.TotalCantidad
+                                        </th>
+                                    }
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                    @*}*@
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" data-keyboard="false" id="mediumModalTienda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8);">
+        <div class="modal-dialog" id="mdialTamanio">
+            <div class="modal-content">
+                <div class="te"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/Scripts/jquery-3.5.0.min.js"></script>
+    <script src="~/Content/vendor/bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+    <script src="~/Content/vendor/DataTables/datatables.min.js"></script>
+    <script src="~/Content/vendor/DataTables/DataTables-1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/sweetalert.min.js" type="text/javascript"></script>
+    <script src="~/Content/js/site.js"></script>
+
+    <script>
+        //$(document).ready(function () {
+        //    var table = $('#miTabla').removeAttr('width').DataTable({
+        //        scrollY: "400px",
+        //        scrollX: true,
+        //        scrollCollapse: true,
+        //        paging: false,
+        //        columnDefs: [
+        //            { width: 200, targets: 5 }
+        //        ],
+        //        fixedColumns: true
+        //    });
+        //});
+
+
+
+
+        $(document).ready(function () {
+            $('#miTabla').DataTable({
+                "order": [[1, "asc"]],
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla =(",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    "buttons": {
+                        "copy": "Copiar",
+                        "colvis": "Mostrar/Ocultar Columnas"
+                    }
+                },
+                //"initComplete": function () {
+                //    var api = this.api();
+                //    api.$('td').click(function () {
+                //        api.search(this.innerHTML).draw();
+                //    });
+                //},
+
+                initComplete: function () {
+                    this.api().columns().every(function () {
+                        var column = this;
+                        var select = $('<select><option value="">=TODOS=</option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                },
+                dom: 'lfBrtip',
+                autoWidth: false,
+                //responsive: true,
+                buttons: [
+                    'colvis',
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel"></i>',
+                        titleAtrr: 'Exportar a Excel',
+                        className: 'btn btn-success',
+                        exportOptions: {
+                            columns: ":visible",
+                        },
+                        body: true,
+                        footer: false,
+                    }],
+                //"columnDefs": [
+                //    { "searchable": false, "targets": 0 }
+                //],
+                //columnDefs: [
+                //    { width: 400, targets: 5 }],
+                fixedColumns: true,
+                fixedColumns: {
+                    leftColumns: 2,
+                },
+                //fixedHeader: true,
+                select: true,
+                scrollY: '60vh',
+                scrollX: true,
+                //deferRender: true,
+                //scroller: true,
+                //autoFill: true,
+                keys: true,
+                'bLengthChange': true,
+                'bInfo': true,
+                "lengthMenu": [[-1, 15, 25, 50, 100], ["TODOS", 15, 25, 50, 100]],
+            });
+        });
+    </script>
 
     <script>
 
@@ -257,7 +1538,6 @@
 
             swal({
                 title: "<span style='color:#fff; margin-top: 5%'>ACTUALIZANDO CANTIDADES...</span>",
-                //text: '<span style="color:#fff">ACTUALIZANDO CANTIDADES...</span>',
                 html: true,
                 //type: "success",
                 showConfirmButton: false,
@@ -268,43 +1548,85 @@
                 //timer: 2000,
             });
 
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
         };
+
+        function soloMostrar() {
+            //document.getElementById('contenedor_carga2').style.visibility = 'visible';
+            //document.getElementById('contenedor_carga2').style.opacity = '1';
+
+            swal({
+                title: "<span style='color:#fff; margin-top: 5%'></span>",
+                html: true,
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+            });
+
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
+        };
+
+        function viewPageSwal() {
+
+            swal({
+                title: "<span style='color:#fff; margin-top: 5%'></span>",
+                html: true,
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+            });
+
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
+
+        };
+
+
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window-medium-tiendas", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#mediumModalTienda').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#mediumModalTienda .te').html(data);
+                        $('#mediumModalTienda').modal();
+                    }).success(function () { $('input:text:visible:first').focus(); });
+
+                }
+            });
+        });
+
 
     </script>
 
-    @*<script>
+    @if (TempData["mensajeLito"] != null)
+    {
+        <script type="text/javascript">
 
-            $("#paginacion").click(function () {
-                var data = $("#SubmitForm").serialize();
-                $.ajax({
-                    type: "Post",
-                    url: "/Campañas/CreateCampañaArticulos",
-                    data: data,
-                    success: function (result) {
-                        //alert("Success!..");
-                        //window.location.href = "/Home/index";
-                        //$("#MyModal").modal("hide");
-
-                    }
-                })
-            })
-
-        </script>*@
-
-    @Scripts.Render("~/bundles/js")
-
-    <script src="~/Scripts/script.js"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script src="~/Content/js/sweetalert.js" type="text/javascript"></script>
-    <script src="~/Scripts/sweetalert.min.js"></script>
-    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
-    <script src="~/Scripts/fileupload.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="~/Content/vendor/font-awesome/js/fontawesome.js"></script>
-
-    @Scripts.Render("~/bundles/jqueryval")
+            swal({
+                title: "<span style='color:#fff'>@ViewBag.Title</span>",
+                text: '<span style="color:#fff">@TempData["mensajeLito"].ToString()</span>',
+                html: true,
+                type: "success",
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+                timer: 2000,
+            });
+        </script>
+    }
 
 </body>
 </html>
-
-@*<a href="@Url.Action("CreateCamp", "Campañas", new { id = Session["CampañaId"] })">*@

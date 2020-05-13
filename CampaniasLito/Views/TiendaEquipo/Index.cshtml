@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CampaniasLito.Models.TiendaEquipo>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TiendaId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TipoDeCajaId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AcomodoDeCajas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoMesaDeAreaComedor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoMesaDeAreaDeJuegos)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumeroDeVentanas)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TiendaId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TipoDeCajaId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AcomodoDeCajas)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoMesaDeAreaComedor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoMesaDeAreaDeJuegos)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumeroDeVentanas)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.TiendaEquipoId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.TiendaEquipoId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.TiendaEquipoId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -37,6 +37,34 @@ namespace CampaniasLito
             UsuariosHelper.CrearRoles("Servicio");
             UsuariosHelper.CrearRoles("Cliente");
             UsuariosHelper.CrearRoles("CONSULTAS");
+            UsuariosHelper.CrearModulo("GENERAL");
+            UsuariosHelper.CrearOperaciones("AGREGAR", 1);
+            UsuariosHelper.CrearOperaciones("EDITAR", 1);
+            UsuariosHelper.CrearOperaciones("ELIMINAR", 1);
+            UsuariosHelper.CrearOperaciones("DETALLE", 1);
+            UsuariosHelper.CrearOperaciones("CONSULTAS", 1);
+            UsuariosHelper.CrearOperaciones("CERRAR", 1);
+            UsuariosHelper.CrearOperaciones("CODIGOS", 1);
+            UsuariosHelper.CrearRolOperaciones(1, 1);
+            UsuariosHelper.CrearRolOperaciones(1, 2);
+            UsuariosHelper.CrearRolOperaciones(1, 3);
+            UsuariosHelper.CrearRolOperaciones(1, 4);
+            UsuariosHelper.CrearRolOperaciones(1, 5);
+            UsuariosHelper.CrearRolOperaciones(1, 6);
+            UsuariosHelper.CrearRolOperaciones(1, 7);
+            UsuariosHelper.CrearRolOperaciones(2, 1);
+            UsuariosHelper.CrearRolOperaciones(2, 2);
+            UsuariosHelper.CrearRolOperaciones(2, 3);
+            UsuariosHelper.CrearRolOperaciones(2, 4);
+            UsuariosHelper.CrearRolOperaciones(2, 5);
+            UsuariosHelper.CrearRolOperaciones(2, 6);
+            UsuariosHelper.CrearRolOperaciones(2, 7);
+            UsuariosHelper.CrearRolOperaciones(6, 4);
+            UsuariosHelper.CrearRolOperaciones(6, 5);
+            UsuariosHelper.CrearRolOperaciones(3, 1);
+            UsuariosHelper.CrearRolOperaciones(3, 2);
+            UsuariosHelper.CrearRolOperaciones(3, 4);
+            UsuariosHelper.CrearRolOperaciones(3, 5);
         }
     }
 }

@@ -1,22 +1,19 @@
 ﻿using CampaniasLito.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
 {
     public class GenericController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
-        //public JsonResult GetMunicipios(int ciudadId)
-        //{
-        //    db.Configuration.ProxyCreationEnabled = false;
-        //    var municipios = db.DelegacionMunicipios.Where(d => d.CiudadId == ciudadId);
-        //    return Json(municipios);
-        //}
+        public JsonResult GetCiudadesXRegion(int regionId)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var ciudades = db.Ciudads.Where(d => d.RegionId == regionId);
+            return Json(new { Data = ciudades }, JsonRequestBehavior.AllowGet);
+        }
 
         //public JsonResult GetColonias(int delegacionId)
         //{

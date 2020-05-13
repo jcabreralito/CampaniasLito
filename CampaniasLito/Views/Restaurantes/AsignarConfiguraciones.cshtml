@@ -1,0 +1,72 @@
+﻿@model IList<CampaniasLito.Models.AsignarConfiguracionTienda>
+
+@{
+    ViewBag.Title = "Asignar Configuraciones";
+}
+
+@using (Html.BeginForm("AsignarConfiguraciones", "Restaurantes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel-heading">
+        <table class="headingModal">
+            <tr style="background-color: #DF2530 !important">
+                <td class="col-xs-12">
+                    <h4 class="responsivoUsuarioLabelFa" style="color: #fff; text-align: center">@ViewBag.Tienda</h4>
+                </td>
+                <td class=" col-xs-12"></td>
+                <td align="right" class="col-xs-1">
+                    <div class="input-group">
+                        <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwal()">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                </td>
+                <td align="center" class="col-xs-1">
+                    <div class="input-group">
+                        <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage2()">
+                            <i class="fas fa-check-circle"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center" style="text-align: center">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Tienda.Restaurante)
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+    <div class="panel-body">
+        <div id="unId40" class="table-responsive">
+
+
+            <form id="form">
+                @foreach (var item in Model)
+                {
+                    @Html.HiddenFor(m => item.Tienda)
+                    @Html.HiddenFor(m => item.TiendaId)
+                    @Html.HiddenFor(m => item.TiendaConfiguracion)
+                    @Html.HiddenFor(m => item.TiendaConfiguracionId)
+                    <input type="hidden" name="AsignarConfiguracionTiendaId" value="@item.AsignarConfiguracionTiendaId" />
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            @Html.DisplayFor(modelItem => item.TiendaConfiguracion.Nombre, new { htmlAttributes = new { @class = "form-control responsivoUsuarioText inputModal", @style = "text-transform:uppercase" } })
+                        </div>
+                        <div class="col-sm-2">
+                            <input class="form-control form-check checkbox" id="Seleccionado" name="Seleccionado" type="checkbox" value="@item.AsignarConfiguracionTiendaId" checked="@item.Seleccionado" style="cursor: pointer" />
+                        </div>
+                    </div>
+                    <hr />
+                }
+            </form>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

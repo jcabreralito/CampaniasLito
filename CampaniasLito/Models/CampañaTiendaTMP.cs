@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CampaniasLito.Models
 {
@@ -7,10 +6,6 @@ namespace CampaniasLito.Models
     {
         [Key]
         public int CampañaTiendaTMPId { get; set; }
-
-        public string Usuario { get; set; }
-
-        public int CompañiaId { get; set; }
 
         [Display(Name = "Tienda Id")]
         public int TiendaId { get; set; }
@@ -21,8 +16,6 @@ namespace CampaniasLito.Models
         public bool Seleccionada { get; set; }
 
         public virtual Tienda Tienda { get; set; }
-
-        public virtual ICollection<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
 
     }
 }

@@ -1,0 +1,85 @@
+﻿#bodyCompañia, #tableKFC, .nav > li > a, thead, tr, tr:hover, th, .navbar-toggle {
+    background-color: #0D6938 !important;
+    color: #fff !important;
+}
+
+table {
+    background-color: transparent !important;
+}
+
+
+    .navbar-toggle:hover, .nav > li > a:hover {
+        background-color: #000 !important;
+        color: #0D6938 !important;
+    }
+
+.sidebar ul li a.active {
+    background-color: #ffffff !important;
+    color: #0D6938 !important;
+}
+
+#panelH {
+    background-color: #0D6938 !important;
+}
+
+table > tbody > tr > td:hover {
+    background-color: transparent !important;
+}
+
+table > tbody > tr > td {
+    border-radius: 10px !important
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #000 !important;
+    color: #0D6938 !important;
+}
+
+.table-hover > tbody > tr:hover a:hover {
+    background-color: #2B3E50 !important;
+    color: #0D6938 !important;
+}
+
+dd, dt {
+    color: #000;
+}
+
+.jumbotron .h1, .jumbotron h1 {
+    color: #0D6938 !important;
+}
+
+.table-bordered:hover > tbody > tr:hover > td {
+    border: 1px solid #000 !important;
+    border-radius: 10px;
+}
+
+.botonF1, .botonF2 {
+    background: #0D6938 !important;
+}
+
+a:focus, a:hover {
+    color: #000 !important;
+    text-decoration: none;
+}
+
+.panel-heading {
+    background-color: #0D6938 !important;
+    border-radius: 10px !important;
+}
+
+#carga {
+    border-top-color: #0D6938 !important;
+}
+
+header {
+    background-color: #0D6938 !important;
+}
+
+a.inicio {
+    background: url(../../Logos/Logo-Kryspy.png) center no-repeat !important;
+    background-size: contain !important;
+}
+
+.menuNav {
+    background-color: rgba(13, 105, 56, 0.8) !important;
+}

@@ -1,0 +1,179 @@
+﻿@model IEnumerable<CampaniasLito.Models.Region>
+
+@{
+    ViewBag.Title = "Equity";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="~/Content/vendor/DataTables/datatables.min.css" rel="stylesheet" />
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
+    <link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="~/Content/css/Restaurantes.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="panel">
+        <div class="panel-heading table-responsive" id="panelH">
+
+            <a href="@Url.Action("Create", "Regiones", new { id = 1 })" class="botonF1 dialog-window-small" onclick="viewPageSwal()">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+
+        </div>
+
+        <div style="height: 71.5vh !important; max-height: 98vh !important;">
+            <table id="miTablaRegion" class="table-striped row-border compact" width="100%">
+                <thead>
+                    <tr>
+                        <th align="center">
+                            @Html.DisplayNameFor(model => model.Nombre)
+                        </th>
+                        <th align="center">
+                            EDITAR
+                        </th>
+                        <th align="center">
+                            ELIMINAR
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.EquityFranquicia == "EQUITY"))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nombre)
+                            </td>
+                            <td align="center">
+                                <a href="@Url.Action("Edit", "Regiones", new { id = item.RegionId})" class="btn-dark dialog-window-small" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                            </td>
+                            <td align="center">
+                                <a id="botones" href="@Url.Action("Delete", "Regiones", new { id = item.RegionId})" class="btn-dark dialog-window-small" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/jquery-3.5.0.min.js"></script>
+    <script src="~/Scripts/sweetalert.min.js" type="text/javascript"></script>
+
+    <script>
+        window.onload = function () {
+            var contenedor = document.getElementById('contenedor_carga');
+            contenedor.style.visibility = 'hidden';
+            contenedor.style.opacity = '0';
+        }
+
+        $(document).ready(function () {
+            $('#miTablaRegion').DataTable({
+                "order": [[0, "asc"]],
+                "pagingType": "full_numbers",
+                language: {
+                    "sProcessing": "Procesando...espere por favor",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla =(",
+                    "sInfo": "_END_ registros",
+                    "sInfoEmpty": "Registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "de un total de _MAX_",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "<<",
+                        "sLast": ">>",
+                        "sNext": ">",
+                        "sPrevious": "<"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    "buttons": {
+                        "copy": "Copiar",
+                        "colvis": "Mostrar/Ocultar Columnas"
+                    },
+                    select: {
+                        rows: {
+                            _: "%d registros seleccionados",
+                            0: "",
+                            1: "1 registro seleccionado"
+                        }
+                    },
+                },
+                //initComplete: function () {
+                //    this.api().columns([0]).every(function () {
+                //        var column = this;
+                //        var select = $('<select><option value=""></option></select>')
+                //            .appendTo($(column.footer()).empty())
+                //            .on('change', function () {
+                //                var val = $.fn.dataTable.util.escapeRegex(
+                //                    $(this).val()
+                //                );
+
+                //                column
+                //                    .search(val ? '^' + val + '$' : '', true, false)
+                //                    .draw();
+                //            });
+
+                //        column.data().unique().sort().each(function (d, j) {
+                //            select.append('<option value="' + d + '">' + d + '</option>')
+                //        });
+                //    });
+                //},
+                dom: 'lfrtip',
+                autoWidth: false,
+                fixedColumns: true,
+                fixedColumns: {
+                    leftColumns: 1,
+                },
+                select: true,
+                scrollY: [
+                    innerHeight = '56vh',
+                ],
+                scrollX: true,
+                keys: true,
+                'bLengthChange': true,
+                'bInfo': true,
+                "lengthMenu": [[-1, 15, 25, 50, 100], ["TODOS", 15, 25, 50, 100]],
+                "columnDefs": [
+                    { "orderable": false, "targets": [1, 2] },
+                    //{ "searchable": false, "targets": [1, 2] },
+                ],
+            });
+        });
+
+    </script>
+
+</body>
+</html>

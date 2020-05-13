@@ -25,7 +25,7 @@ namespace CampaniasLito.Models
 
         public DbSet<Region> Regions { get; set; }
 
-        public DbSet<CampañaArticulo> CampañaArticulos { get; set; }
+        //public DbSet<CampañaArticulo> CampañaArticulos { get; set; }
 
         public DbSet<Campaña> Campañas { get; set; }
 
@@ -40,8 +40,6 @@ namespace CampaniasLito.Models
         public DbSet<ArticuloKFC> ArticuloKFCs { get; set; }
 
         public DbSet<CampañaTiendaTMP> CampañaTiendaTMPs { get; set; }
-
-        public DbSet<NuevaCampañaView> NuevaCampañaViews { get; set; }
 
         public DbSet<CampañaArticuloTMP> CampañaArticuloTMPs { get; set; }
 
@@ -58,5 +56,24 @@ namespace CampaniasLito.Models
         public DbSet<CodigoCampaña> CodigosCampaña { get; set; }
 
         public DbSet<Familia> Familias { get; set; }
+
+        public DbSet<TiendaEquipo> TiendaEquipos { get; set; }
+
+        public DbSet<TiendaGeneral> TiendaGenerales { get; set; }
+
+        public DbSet<TiendaMatEspecifico> TiendaMatEspecificos { get; set; }
+
+        public DbSet<TiendaMedidaEspecial> TiendaMedidaEspeciales { get; set; }
+
+        public DbSet<TiendaProducto> TiendaProductos { get; set; }
+
+        public DbSet<FamiliaTienda> FamiliaTiendas { get; set; }
+
+        public DbSet<TiendaConfiguracion> TiendaConfiguracions { get; set; }
+
+        public DbSet<TipoConfiguracion> TipoConfiguracions { get; set; }
+
+        public DbSet<AsignarConfiguracionTienda> AsignarConfiguracionTiendas { get; set; }
+        
     }
 }

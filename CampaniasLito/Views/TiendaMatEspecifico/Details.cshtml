@@ -1,0 +1,98 @@
+﻿@model CampaniasLito.Models.TiendaMatEspecifico
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TiendaMatEspecifico</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TiendaId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TiendaId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MenuBackLigth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MenuBackLigth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Autoexpress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Autoexpress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CopeteAERemodelado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CopeteAERemodelado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CopeteAETradicional)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CopeteAETradicional)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PanelDeInnovacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PanelDeInnovacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DisplayDeBurbuja)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DisplayDeBurbuja)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Delivery)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Delivery)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MERCADO_DE_PRUEBA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MERCADO_DE_PRUEBA)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AreaDeJuegos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AreaDeJuegos)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TiendaMatEspecificoId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

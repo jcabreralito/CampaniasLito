@@ -1,15 +1,13 @@
 ﻿using CampaniasLito.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace CampaniasLito.Classes
 {
     public class CombosHelper : IDisposable
     {
-        private static CampaniasLitoContext db = new CampaniasLitoContext();
+        private static readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
         public static List<Compañia> GetCompañias(bool sw)
         {
@@ -23,7 +21,7 @@ namespace CampaniasLito.Classes
             compañias.Add(new Compañia
             {
                 CompañiaId = 0,
-                Nombre = "[Seleccionar una Compañia...]",
+                Nombre = "[Seleccionar...]",
             });
             return compañias.OrderBy(c => c.Nombre).ToList();
         }
@@ -40,44 +38,122 @@ namespace CampaniasLito.Classes
             roles.Add(new Rol
             {
                 RolId = 0,
-                Nombre = "[Seleccionar un Rol...]",
+                Nombre = "[Seleccionar...]",
             });
             return roles.OrderBy(r => r.Nombre).ToList();
         }
 
-        public static List<Region> GetRegiones(int compañiaId)
+        public static List<Region> GetRegiones(int equiFran)
         {
-            var regiones = db.Regions.Where(c => c.CompañiaId == compañiaId).ToList();
+            var tipo = string.Empty;
+
+            if (equiFran == 1)
+            {
+                tipo = "EQUITY";
+            }
+            else if (equiFran == 2)
+            {
+                tipo = "FRANQUICIAS";
+            }
+            else if (equiFran == 3)
+            {
+                tipo = "STOCK";
+            }
+
+            var regiones = db.Regions.Where(c => c.EquityFranquicia == tipo).ToList();
             regiones.Add(new Region
             {
                 RegionId = 0,
-                Nombre = "[Región...]",
+                Nombre = "[Seleccionar...]",
             });
             return regiones.OrderBy(r => r.RegionId).ToList();
         }
 
-        public static List<Region> GetRegiones(int compañiaId, bool sw)
+        public static List<Region> GetRegiones(bool sw)
         {
-            var regiones = db.Regions.Where(c => c.CompañiaId == compañiaId).ToList();
+            var regiones = db.Regions.ToList();
             return regiones.OrderBy(r => r.Nombre).ToList();
         }
 
-        public static List<Ciudad> GetCiudades(int compañiaId)
+        public static List<Region> GetRegiones(int equiFran, bool sw)
         {
-            var ciudades = db.Ciudads.Where(c => c.CompañiaId == compañiaId).ToList();
+            var tipo = string.Empty;
+
+            if (equiFran == 1)
+            {
+                tipo = "EQUITY";
+            }
+            else if (equiFran == 2)
+            {
+                tipo = "FRANQUICIAS";
+            }
+            else if (equiFran == 3)
+            {
+                tipo = "STOCK";
+            }
+
+            var regiones = db.Regions.Where(c => c.EquityFranquicia == tipo).ToList();
+            return regiones.OrderBy(r => r.Nombre).ToList();
+        }
+
+        public static List<TipoConfiguracion> GetTipoConfiguracion(bool v)
+        {
+            var configuraciones = db.TipoConfiguracions.ToList();
+            return configuraciones.OrderBy(r => r.Nombre).ToList();
+        }
+
+        public static List<Ciudad> GetCiudades(int equiFran)
+        {
+            var tipo = string.Empty;
+
+            if (equiFran == 1)
+            {
+                tipo = "EQUITY";
+            }
+            else if (equiFran == 2)
+            {
+                tipo = "FRANQUICIAS";
+            }
+            else if (equiFran == 3)
+            {
+                tipo = "STOCK";
+            }
+
+            var ciudades = db.Ciudads.Where(c => c.EquityFranquicia == tipo).ToList();
             ciudades.Add(new Ciudad
             {
                 CiudadId = 0,
-                Nombre = "[Ciudad]",
-                
+                Nombre = "[Seleccionar...]",
+
             });
 
             return ciudades.OrderBy(r => r.Nombre).ToList();
         }
 
-        public static List<Ciudad> GetCiudades(int compañiaId, bool sw)
+        public static List<Ciudad> GetCiudades(bool sw)
         {
-            var ciudades = db.Ciudads.Where(c => c.CompañiaId == compañiaId).ToList();
+            var ciudades = db.Ciudads.ToList();
+            return ciudades.OrderBy(r => r.Nombre).ToList();
+        }
+
+        public static List<Ciudad> GetCiudades(int equiFran, bool sw)
+        {
+            var tipo = string.Empty;
+
+            if (equiFran == 1)
+            {
+                tipo = "EQUITY";
+            }
+            else if (equiFran == 2)
+            {
+                tipo = "FRANQUICIAS";
+            }
+            else if (equiFran == 3)
+            {
+                tipo = "STOCK";
+            }
+
+            var ciudades = db.Ciudads.Where(c => c.EquityFranquicia == tipo).ToList();
             return ciudades.OrderBy(r => r.Nombre).ToList();
         }
 
@@ -104,7 +180,7 @@ namespace CampaniasLito.Classes
             familias.Add(new Familia
             {
                 FamiliaId = 0,
-                Codigo = "[Familia]",
+                Descripcion = "[Seleccionar...]",
             });
             return familias.OrderBy(c => c.Codigo).ToList();
         }
@@ -112,6 +188,11 @@ namespace CampaniasLito.Classes
         public static List<TipoCaja> GetTiposCaja(bool v)
         {
             var tiposCaja = db.TipoCajas.ToList();
+            tiposCaja.Add(new TipoCaja
+            {
+                TipoCajaId = 0,
+                Descripcion = "[Seleccionar...]",
+            });
             return tiposCaja.OrderBy(c => c.Descripcion).ToList();
         }
 
@@ -121,7 +202,7 @@ namespace CampaniasLito.Classes
             tiposCaja.Add(new TipoCaja
             {
                 TipoCajaId = 0,
-                Descripcion = "[Tipo de Caja]",
+                Descripcion = "[Seleccionar...]",
             });
             return tiposCaja.OrderBy(c => c.Descripcion).ToList();
         }
@@ -129,6 +210,11 @@ namespace CampaniasLito.Classes
         public static List<AcomodoCaja> GetAcomodoCajas(bool v)
         {
             var acomodos = db.AcomodoCajas.ToList();
+            acomodos.Add(new AcomodoCaja
+            {
+                AcomodoCajaId = 0,
+                Descripcion = "[Seleccionar...]",
+            });
             return acomodos.OrderBy(c => c.Descripcion).ToList();
         }
 
@@ -138,7 +224,7 @@ namespace CampaniasLito.Classes
             acomodos.Add(new AcomodoCaja
             {
                 AcomodoCajaId = 0,
-                Descripcion = "[Acomodo Caja]",
+                Descripcion = "[Seleccionar...]",
             });
             return acomodos.OrderBy(c => c.Descripcion).ToList();
         }
@@ -149,7 +235,7 @@ namespace CampaniasLito.Classes
             tipos.Add(new TipoTienda
             {
                 TipoTiendaId = 0,
-                Tipo = "[Tipo]",
+                Tipo = "[Seleccionar...]",
             });
             return tipos.OrderBy(c => c.Tipo).ToList();
         }
@@ -160,7 +246,7 @@ namespace CampaniasLito.Classes
             niveles.Add(new NivelPrecio
             {
                 NivelPrecioId = 0,
-                Descripcion = "[Nivel de Precios]",
+                Descripcion = "[Seleccionar...]",
             });
             return niveles.OrderBy(c => c.Descripcion).ToList();
         }

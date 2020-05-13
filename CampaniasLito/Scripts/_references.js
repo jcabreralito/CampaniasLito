@@ -1,5 +1,5 @@
-﻿/// <reference path="jquery-ui-1.12.1.js" />
-/// <reference path="jquery-3.4.1.js" />
+﻿/// <reference path="jquery-3.5.0.js" />
+/// <reference path="jquery-ui-1.12.1.js" />
 /// <autosync enabled="true" />
 /// <reference path="../content/data/flot-data.js" />
 /// <reference path="../content/data/morris-data.js" />

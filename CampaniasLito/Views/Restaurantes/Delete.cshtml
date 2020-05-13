@@ -1,0 +1,123 @@
+﻿@model CampaniasLito.Models.Tienda
+
+@{
+    ViewBag.Title = "Eliminar";
+    Layout = null;
+}
+
+@using (Html.BeginForm("Delete", "Restaurantes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel mt-3">
+        <div class="panel-heading">
+            <table class="headingModal">
+                <tr style="background-color: #DF2530 !important">
+                    <td class="col-xs-6">
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
+                    </td>
+                    <td class=" col-xs-12"></td>
+                    <td align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwal()">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td align="center" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage2()">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script src="~/Content/js/site.js"></script>
+
+        <div class="panel-body">
+            <div class="form-horizontal row responsivoUsuarioLabel">
+                <div class="col-xs-12">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.TiendaId)
+                    @Html.HiddenFor(model => model.EquityFranquicia)
+
+                    <div class="row marginRowCreate" style="margin-top: -15px;">
+                        <div class="mat-input col-sm-2 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Clasificacion, new { htmlAttributes = new { }, @type = "input", @disabled = "disabled", @style = "text-transform:uppercase" })
+                                <label class="active">Clasific.</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                        <div class="mat-input col-sm-2 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.CCoFranquicia, new { htmlAttributes = new { }, @type = "input", @disabled = "disabled", @style = "text-transform:uppercase" })
+                                <label class="active">CC</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                        <div class="mat-input col-sm-8 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Restaurante, new { htmlAttributes = new { }, @type = "input", @disabled = "disabled", @style = "text-transform:uppercase" })
+                                <label class="active">Restaurante</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row marginRowCreate" style="margin-top: -15px;">
+                        <div class="mat-input col-sm-6 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                <input type="text" name="Nombre" value="@Model.Region.Nombre" disabled />
+                                <label class="active">@Html.DisplayNameFor(m => m.RegionId)</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+
+                        <div class="mat-input col-sm-6 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                <input type="text" name="Nombre" value="@Model.Ciudad.Nombre" disabled />
+                                <label class="active">@Html.DisplayNameFor(m => m.CiudadId)</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row marginRowCreate">
+                        <div class="mat-input col-sm-12 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Direccion, new { htmlAttributes = new { }, @type = "text", @disabled = "disabled", @style = "text-transform:uppercase" })
+                                <label class="active">Dirección</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row marginRowCreate">
+                        <div class="mat-input col-sm-12 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Observaciones, new { htmlAttributes = new { }, @type = "text", @disabled = "disabled", @style = "text-transform:uppercase" })
+                                <label class="active">Observaciones</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        var UrlM = '@Url.Action("GetCiudadesXRegion", "Generic")';
+    </script>
+
+}

@@ -19,6 +19,17 @@ namespace CampaniasLito.Controllers
 
         public ActionResult Index()
         {
+            Session["homeB"] = string.Empty;
+            Session["rolesB"] = "active";
+            Session["compañiasB"] = string.Empty;
+            Session["usuariosB"] = string.Empty;
+            Session["regionesB"] = string.Empty;
+            Session["ciudadesB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["familiasB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+
             return View(db.Roles.ToList());
         }
 

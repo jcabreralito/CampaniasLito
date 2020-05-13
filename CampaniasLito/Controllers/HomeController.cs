@@ -22,6 +22,17 @@ namespace CampaniasLito.Controllers
             //    SendKeys.SendWait("{F11}");
             //    Session["F11"] = "NO";
             //}
+            Session["homeB"] = "active";
+            Session["rolesB"] = string.Empty;
+            Session["compañiasB"] = string.Empty;
+            Session["usuariosB"] = string.Empty;
+            Session["regionesB"] = string.Empty;
+            Session["ciudadesB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["familiasB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
             return View(usuario);
         }

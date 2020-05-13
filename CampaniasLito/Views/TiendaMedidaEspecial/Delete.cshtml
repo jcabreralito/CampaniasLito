@@ -1,0 +1,152 @@
+﻿@model CampaniasLito.Models.TiendaMedidaEspecial
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TiendaMedidaEspecial</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TiendaId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TiendaId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WCMedidaEspecial60_8x85cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WCMedidaEspecial60_8x85cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MedidaEspecialPanelDeComplementos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MedidaEspecialPanelDeComplementos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

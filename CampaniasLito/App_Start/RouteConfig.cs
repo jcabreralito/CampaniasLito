@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace CampaniasLito
@@ -12,6 +8,12 @@ namespace CampaniasLito
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            //routes.MapRoute(
+            //    name: "Materiales",
+            //    url: "Materiales",
+            //    defaults: new { controller = "Materiales", action = "Create", id = UrlParameter.Optional }
+            //);
 
             routes.MapRoute(
                 name: "Default",

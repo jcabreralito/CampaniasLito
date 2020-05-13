@@ -236,23 +236,39 @@ body.stop-scrolling {
     border-radius: 10px;
     text-align: center;
     position: fixed;
-    left: 50%;
-    top: 50%;
+    left: 52%;
+    top: 60%;
     margin-left: -256px;
     margin-top: -200px;
     overflow: hidden;
     display: none;
     z-index: 2000;
 }
-@media all and (max-width: 767px) {
-  .sweet-alert {
-    width: auto;
-    margin-left: 0;
-    margin-right: 0;
-    left: 15px;
-    right: 15px;
-  }
+
+@media all and (max-width: 768px) {
+    .sweet-alert {
+        left: 42.5%;
+        top: 50%;
+        width: auto;
+        margin-left: 0;
+        margin-right: 0;
+        /*left: 15px;*/
+        /*right: 15px;*/
+    }
 }
+
+@media all and (max-width: 1024px) {
+    .sweet-alert {
+        left: 42.5%;
+        top: 55%;
+        width: auto;
+        margin-left: 0;
+        margin-right: 0;
+        /*left: 15px;*/
+        /*right: 15px;*/
+    }
+}
+
 .sweet-alert .form-group {
   display: none;
 }

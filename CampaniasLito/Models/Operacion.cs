@@ -19,6 +19,5 @@ namespace CampaniasLito.Models
 
         public virtual Modulo Modulo { get; set; }
 
-        public virtual ICollection<RolOperacion> RolOperaciones { get; set; }
     }
 }

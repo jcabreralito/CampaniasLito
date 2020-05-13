@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "Restaurantes";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+</head>
+<body>
+    <div class="panel">
+        <div class="panel-heading table-responsive" id="panelH">
+
+            <table id="dataTable" cellspacing="0">
+                <tr>
+                    <td class=" col-xs-2">
+                        <h2><i id="iconoTitulo" class="fas fa-store"></i></h2>
+                    </td>
+                    <td class=" col-xs-5" align="center">
+                        <h2 id="titulo"> @ViewBag.Title Equity</h2>
+                    </td>
+
+                    <td class="col-xs-4" align="right">
+                        <input type="submit" value="EQUITY" id="btnEquity" class="btn btn-primary" onclick="mostrarEquity();" />
+                        <input type="submit" value="FRANQUICIAS" id="btnFranquicias" class="btn btn-primary" onclick="mostrarFranquicias();" />
+                        <input type="submit" value="STOCK" id="btnStock" class="btn btn-primary" onclick="mostrarStock();" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="equity" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; height: 78.5vh">
+            @Html.Action("RestaurantesEquity", new { })
+        </div>
+
+        <div id="franquicias" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; visibility: hidden">
+            @Html.Action("RestaurantesFranquicias", new { })
+        </div>
+
+        <div id="stock" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; visibility: hidden">
+            @Html.Action("RestaurantesStock", new { })
+        </div>
+    </div>
+
+    <div class="modal fade" data-keyboard="false" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8);">
+        <div class="modal-dialog" id="largeTamanio">
+            <div class="modal-content">
+                <div class="te">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-keyboard="false" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); margin-top: -40px">
+        <div class="modal-dialog" id="mdialTamanio">
+            <div class="modal-content">
+                <div class="te">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/sweetalert.min.js" type="text/javascript"></script>
+    <script src="~/Content/js/site.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var contenedor = document.getElementById('contenedor_cargaR');
+            contenedor.style.visibility = 'hidden';
+            contenedor.style.opacity = '0';
+        });
+
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window-large", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#largeModal').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#largeModal .te').html(data);
+                        $('#largeModal').modal();
+                    }).success(function () {
+                        $('input:text:visible:first').focus();
+                    });
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window-medium", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#mediumModal').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#mediumModal .te').html(data);
+                        $('#mediumModal').modal();
+                    }).success(function () {
+                        $('input:text:visible:first').focus();
+                    });
+
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+
+        function mostrarEquity() {
+
+            $("#titulo").text(' @ViewBag.Title' + ' EQUITY');
+
+            document.getElementById('equity').style.display = 'block';
+            document.getElementById('franquicias').style.display = 'none';
+            document.getElementById('stock').style.display = 'none';
+            document.getElementById('franquicias').style.visibility = 'visible';
+            document.getElementById('stock').style.visibility = 'visible';
+            document.getElementById('franquicias').style.height = '78.5vh';
+            document.getElementById('stock').style.height = '78.5vh';
+
+            $("#titulo").style.fontFamily = 'Hero';
+
+            var equity = document.getElementByID('btnEquity');
+            equity.classList.add('active');
+
+            var franquicias = document.getElementByID('btnFranquicias');
+            franquicias.classList.remove('active');
+
+            var stock = document.getElementByID('btnStock');
+            stock.classList.remove('active');
+
+        }
+
+        function mostrarFranquicias() {
+
+            $("#titulo").text(' @ViewBag.Title' + ' FRANQUICIAS');
+
+            document.getElementById('equity').style.display = 'none';
+            document.getElementById('franquicias').style.display = 'block';
+            document.getElementById('stock').style.display = 'none';
+            document.getElementById('franquicias').style.visibility = 'visible';
+            document.getElementById('stock').style.visibility = 'visible';
+            document.getElementById('franquicias').style.height = '78.5vh';
+            document.getElementById('stock').style.height = '78.5vh';
+
+            $("#titulo").style.fontFamily = 'Hero';
+
+            var equity = document.getElementByID('btnEquity');
+            equity.classList.remove('active');
+
+            var franquicias = document.getElementByID('btnFranquicias');
+            franquicias.classList.add('active');
+
+            var stock = document.getElementByID('btnStock');
+            stock.classList.remove('active');
+
+        }
+
+        function mostrarStock() {
+
+
+            $("#titulo").text(' @ViewBag.Title' + ' STOCK');
+
+            document.getElementById('equity').style.display = 'none';
+            document.getElementById('franquicias').style.display = 'none';
+            document.getElementById('stock').style.display = 'block';
+            document.getElementById('franquicias').style.visibility = 'visible';
+            document.getElementById('stock').style.visibility = 'visible';
+            document.getElementById('franquicias').style.height = '78.5vh';
+            document.getElementById('stock').style.height = '78.5vh';
+
+            $("#titulo").style.fontFamily = 'Hero';
+
+            var equity = document.getElementByID('btnEquity');
+            equity.classList.remove('active');
+
+            var franquicias = document.getElementByID('btnFranquicias');
+            franquicias.classList.remove('active');
+
+            var stock = document.getElementByID('btnStock');
+            stock.classList.add('active');
+        }
+    </script>
+}

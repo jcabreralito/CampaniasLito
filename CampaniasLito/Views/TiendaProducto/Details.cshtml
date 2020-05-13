@@ -1,0 +1,82 @@
+﻿@model CampaniasLito.Models.TiendaProducto
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TiendaProducto</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TiendaId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TiendaId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TerceraReceta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TerceraReceta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Arroz)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Arroz)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Hamburgesas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hamburgesas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ensalada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ensalada)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PET2Litros)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PET2Litros)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Postres)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Postres)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BisquetMiel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BisquetMiel)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TiendaProductoId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
