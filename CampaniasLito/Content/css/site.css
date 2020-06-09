@@ -616,7 +616,7 @@
         /* Move the check mark away when unchecked */
         text-indent: -999999px;
         /* Makes the badge's width stay the same checked and unchecked */
-        width: 27px;
+        width: 37px;
         float: right
     }
 
@@ -633,7 +633,7 @@
         top: -24px;
         float: left;
         left: 0px;
-        font-size: 17px;
+        font-size: 20px;
         width: 100%;
     }
 
@@ -942,11 +942,35 @@
 }
 
 .loadFile {
-    margin-top: 10px;
+    /*margin-top: 10px;
     width: 32vw;
-    float: left;
+    float: left;*/
+
+    padding: 0 10px;
 }
 
 input[type=text]:focus {
     outline: 0px;
+}
+
+.pagination > li > a {
+    border-radius: 50% !important;
+    margin: 0 5px;
+}
+
+.pagination > li {
+    color: #fff !important;
+    background-color: #fff !important;
+    border: 0px solid #ddd !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: white !important;
+    border: 1px solid #f5f5f5f5;
+    background-color: transparent !important;
+    background: none;
+}
+
+.dataTables_paginate {
+     color: #fff; 
 }

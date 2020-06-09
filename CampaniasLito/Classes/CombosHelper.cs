@@ -168,15 +168,32 @@ namespace CampaniasLito.Classes
             return tipos.OrderBy(c => c.Tipo).ToList();
         }
 
+        public static List<Familia> GetFamiliasC(bool v)
+        {
+            var familias = db.Familias.Where(x => x.Codigo == "995" && x.Codigo == "996" && x.Codigo == "997" && x.Codigo == "998" && x.Codigo == "999").ToList();
+            return familias.OrderBy(c => c.Codigo).ToList();
+        }
+
+        public static List<Familia> GetFamiliasC()
+        {
+            var familias = db.Familias.Where(x => x.Codigo == "995" && x.Codigo == "996" && x.Codigo == "997" && x.Codigo == "998" && x.Codigo == "999").ToList();
+            familias.Add(new Familia
+            {
+                FamiliaId = 0,
+                Descripcion = "[Seleccionar...]",
+            });
+            return familias.OrderBy(c => c.Codigo).ToList();
+        }
+
         public static List<Familia> GetFamilias(bool v)
         {
-            var familias = db.Familias.ToList();
+            var familias = db.Familias.Where(x => x.Codigo != "995" && x.Codigo != "996" && x.Codigo != "997" && x.Codigo != "998" && x.Codigo != "999").ToList();
             return familias.OrderBy(c => c.Codigo).ToList();
         }
 
         public static List<Familia> GetFamilias()
         {
-            var familias = db.Familias.ToList();
+            var familias = db.Familias.Where(x => x.Codigo != "995" && x.Codigo != "996" && x.Codigo != "997" && x.Codigo != "998" && x.Codigo != "999").ToList();
             familias.Add(new Familia
             {
                 FamiliaId = 0,
@@ -259,7 +276,7 @@ namespace CampaniasLito.Classes
 
         public static List<Proveedor> GetProveedores(bool sw)
         {
-            var proveedores = db.Proveedors.ToList();
+            var proveedores = db.Proveedors.Where(x => x.ProveedorId != 5).ToList();
             return proveedores.OrderBy(c => c.Nombre).ToList();
         }
 

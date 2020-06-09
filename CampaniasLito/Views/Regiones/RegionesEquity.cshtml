@@ -20,12 +20,18 @@
     <link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
     <link href="~/Content/css/Restaurantes.css" rel="stylesheet" />
 
+    <style>
+        .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+            height: 56vh !important;
+            max-height: 80vh;
+        }
+    </style>
 </head>
 <body>
     <div class="panel">
         <div class="panel-heading table-responsive" id="panelH">
 
-            <a href="@Url.Action("Create", "Regiones", new { id = 1 })" class="botonF1 dialog-window-small" onclick="viewPageSwal()">
+            <a href="@Url.Action("Create", "Regiones", new { id = 1 })" class="botonF1 dialog-window-small" onclick="viewPageSwalIn()">
                 <i class="fas fa-plus-circle"></i>
             </a>
 
@@ -54,12 +60,12 @@
                                 @Html.DisplayFor(modelItem => item.Nombre)
                             </td>
                             <td align="center">
-                                <a href="@Url.Action("Edit", "Regiones", new { id = item.RegionId})" class="btn-dark dialog-window-small" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                <a href="@Url.Action("Edit", "Regiones", new { id = item.RegionId})" class="btn-dark dialog-window-small" style="background-color: transparent; border:none;" onclick="viewPageSwalIn()">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
                             </td>
                             <td align="center">
-                                <a id="botones" href="@Url.Action("Delete", "Regiones", new { id = item.RegionId})" class="btn-dark dialog-window-small" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                <a id="botones" href="@Url.Action("Delete", "Regiones", new { id = item.RegionId})" class="btn-dark dialog-window-small" style="background-color: transparent; border:none;" onclick="viewPageSwalIn()">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>
@@ -92,10 +98,22 @@
             contenedor.style.opacity = '0';
         }
 
+
         $(document).ready(function () {
             $('#miTablaRegion').DataTable({
                 "order": [[0, "asc"]],
                 "pagingType": "full_numbers",
+                //"ajax": {
+                //    "url": "/Regiones/RegionesEquity",
+                //    "type": "GET",
+                //    "datatype": "json",
+                //},
+                //"columns": [
+                //    { "data": "Nombre", "name": "Nombre" },
+                //],
+                //"serverSide": "false",
+                //"order": [0, "asc"],
+                //"processing": "true",
                 language: {
                     "sProcessing": "Procesando...espere por favor",
                     "sLengthMenu": "Mostrar _MENU_ registros",
@@ -131,26 +149,6 @@
                         }
                     },
                 },
-                //initComplete: function () {
-                //    this.api().columns([0]).every(function () {
-                //        var column = this;
-                //        var select = $('<select><option value=""></option></select>')
-                //            .appendTo($(column.footer()).empty())
-                //            .on('change', function () {
-                //                var val = $.fn.dataTable.util.escapeRegex(
-                //                    $(this).val()
-                //                );
-
-                //                column
-                //                    .search(val ? '^' + val + '$' : '', true, false)
-                //                    .draw();
-                //            });
-
-                //        column.data().unique().sort().each(function (d, j) {
-                //            select.append('<option value="' + d + '">' + d + '</option>')
-                //        });
-                //    });
-                //},
                 dom: 'lfrtip',
                 autoWidth: false,
                 fixedColumns: true,
@@ -158,10 +156,10 @@
                     leftColumns: 1,
                 },
                 select: true,
-                scrollY: [
-                    innerHeight = '56vh',
-                ],
-                scrollX: true,
+                scrollY: true,
+                //scrollY: [
+                //    innerHeight = '56vh',
+                //],
                 keys: true,
                 'bLengthChange': true,
                 'bInfo': true,

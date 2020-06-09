@@ -3466,7 +3466,7 @@ select[multiple].input-lg, textarea.input-lg {
         filter: alpha(opacity=65);
         -webkit-box-shadow: none;
         box-shadow: none;
-        opacity: .65;
+        opacity: 1;
     }
 
 a.btn.disabled, fieldset[disabled] a.btn {
@@ -5182,21 +5182,21 @@ select[multiple].input-group-sm > .form-control, select[multiple].input-group-sm
 
         .pagination > li > a:focus, .pagination > li > a:hover, .pagination > li > span:focus, .pagination > li > span:hover {
             z-index: 2;
-            color: #23527c;
-            background-color: #eee;
-            border-color: #ddd;
+            color: #111 !important;
+            background-color: #DF2530;
+            border-color: #DF2530;
         }
 
     .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
         z-index: 3;
         color: #fff;
         cursor: default;
-        background-color: #337ab7;
-        border-color: #337ab7;
+        background-color: #DF2530;
+        border-color: #DF2530;
     }
 
     .pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
-        color: #777;
+        color: #111;
         cursor: not-allowed;
         background-color: #fff;
         border-color: #ddd;
@@ -5928,8 +5928,8 @@ a.list-group-item-danger, button.list-group-item-danger {
     background-color: transparent;
     border: 0 solid transparent;
     border-radius: 10px;
-    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .panel-body {

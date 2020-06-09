@@ -1,5 +1,9 @@
 ﻿@{
     ViewBag.Title = "Regiones";
+
+    var vistaEquity = string.Empty;
+    var vistaFranquicias = string.Empty;
+    var vistaStock = string.Empty;
 }
 
 <!DOCTYPE html>
@@ -32,15 +36,91 @@
             </table>
         </div>
 
-        <div id="equity" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; height: 78.5vh">
+        @if (string.IsNullOrEmpty(Session["VistaEquity"].ToString()) &&
+            string.IsNullOrEmpty(Session["VistaFranquicias"].ToString()) &&
+            string.IsNullOrEmpty(Session["VistaStock"].ToString()))
+        {
+            <style>
+                .vistaE {
+                    display: table;
+                    width: 100% !important;
+                }
+
+                .vistaF {
+                    display: table;
+                    width: 100% !important;
+                    height: 0px !important;
+                }
+
+                .vistaS {
+                    display: table;
+                    width: 100% !important
+                }
+            </style>
+        }
+        else if (!string.IsNullOrEmpty(Session["VistaEquity"].ToString()))
+        {
+            <style>
+                .vistaE {
+                    display: table;
+                    width: 100% !important
+                }
+
+                .vistaF {
+                    display: table;
+                    width: 100% !important
+                }
+
+                .vistaS {
+                    display: table;
+                    width: 100% !important
+                }
+            </style>
+
+        }
+        else if (!string.IsNullOrEmpty(Session["VistaFranquicias"].ToString()))
+        {
+            <style>
+                .vistaE {
+                    display: normal;
+                }
+
+                .vistaF {
+                    display: block;
+                }
+
+                .vistaS {
+                    display: normal;
+                }
+            </style>
+
+        }
+        else if (!string.IsNullOrEmpty(Session["VistaStock"].ToString()))
+        {
+            <style>
+                .vistaE {
+                    display: normal;
+                }
+
+                .vistaF {
+                    display: normal;
+                }
+
+                .vistaS {
+                    display: block;
+                }
+            </style>
+        }
+
+        <div id="equity" class="panel-body vistaE" style="padding-top: 10px; margin-bottom: -40px; height: 78.5vh; visibility: visible">
             @Html.Action("RegionesEquity", new { })
         </div>
 
-        <div id="franquicias" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; visibility: hidden">
+        <div id="franquicias" class="panel-body vistaF" style="padding-top: 10px; margin-bottom: -40px; visibility: hidden">
             @Html.Action("RegionesFranquicias", new { })
         </div>
 
-        <div id="stock" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; visibility: hidden">
+        <div id="stock" class="panel-body vistaS" style="padding-top: 10px; margin-bottom: -40px; visibility: hidden">
             @Html.Action("RegionesStock", new { })
         </div>
 
@@ -95,49 +175,46 @@
 
             $("#titulo").text(' @ViewBag.Title' + ' EQUITY');
 
-            document.getElementById('equity').style.display = 'block';
+            $('#btnEquity').addClass('active');
+            $('#btnFranquicias').removeClass('active');
+            $('#btnStock').removeClass('active');
+
+            @*var url = '@Url.Action("RegionesEquity", "Regiones")';*@
+
+            document.getElementById('equity').style.display = 'table';
             document.getElementById('franquicias').style.display = 'none';
             document.getElementById('stock').style.display = 'none';
-            document.getElementById('franquicias').style.visibility = 'visible';
-            document.getElementById('stock').style.visibility = 'visible';
+            document.getElementById('equity').style.visibility = 'visible';
             document.getElementById('franquicias').style.height = '78.5vh';
             document.getElementById('stock').style.height = '78.5vh';
 
-            $("#titulo").style.fontFamily = 'Hero';
+            //    $.get(url).done(function (data) {
+            //        $('#equity').append(data);
+            //    }).fail(manjarErrorAjax);
 
-            var equity = document.getElementByID('btnEquity');
-            equity.classList.add('active');
+            //var clickRegion = "SI";
 
-            var franquicias = document.getElementByID('btnFranquicias');
-            franquicias.classList.remove('active');
 
-            var stock = document.getElementByID('btnStock');
-            stock.classList.remove('active');
+        }
 
+        function manejarErrorAjax(err) {
+            console.log(err.responseText)
         }
 
         function mostrarFranquicias() {
 
             $("#titulo").text(' @ViewBag.Title' + ' FRANQUICIAS');
 
+            $('#btnEquity').removeClass('active');
+            $('#btnFranquicias').addClass('active');
+            $('#btnStock').removeClass('active');
+
             document.getElementById('equity').style.display = 'none';
-            document.getElementById('franquicias').style.display = 'block';
+            document.getElementById('franquicias').style.display = 'table';
             document.getElementById('stock').style.display = 'none';
             document.getElementById('franquicias').style.visibility = 'visible';
-            document.getElementById('stock').style.visibility = 'visible';
             document.getElementById('franquicias').style.height = '78.5vh';
             document.getElementById('stock').style.height = '78.5vh';
-
-            $("#titulo").style.fontFamily = 'Hero';
-
-            var equity = document.getElementByID('btnEquity');
-            equity.classList.remove('active');
-
-            var franquicias = document.getElementByID('btnFranquicias');
-            franquicias.classList.add('active');
-
-            var stock = document.getElementByID('btnStock');
-            stock.classList.remove('active');
 
         }
 
@@ -145,24 +222,17 @@
 
             $("#titulo").text(' @ViewBag.Title' + ' STOCK');
 
+            $('#btnEquity').removeClass('active');
+            $('#btnFranquicias').removeClass('active');
+            $('#btnStock').addClass('active');
+
             document.getElementById('equity').style.display = 'none';
             document.getElementById('franquicias').style.display = 'none';
-            document.getElementById('stock').style.display = 'block';
-            document.getElementById('franquicias').style.visibility = 'visible';
+            document.getElementById('stock').style.display = 'table';
             document.getElementById('stock').style.visibility = 'visible';
             document.getElementById('franquicias').style.height = '78.5vh';
             document.getElementById('stock').style.height = '78.5vh';
 
-            $("#titulo").style.fontFamily = 'Hero';
-
-            var equity = document.getElementByID('btnEquity');
-            equity.classList.remove('active');
-
-            var franquicias = document.getElementByID('btnFranquicias');
-            franquicias.classList.remove('active');
-
-            var stock = document.getElementByID('btnStock');
-            stock.classList.add('active');
         }
 
     </script>

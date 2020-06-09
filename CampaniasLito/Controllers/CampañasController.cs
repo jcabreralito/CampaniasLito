@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -24,6 +25,7 @@ namespace CampaniasLito.Controllers
 
         [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = false)]
         public double TotalCantidad { get; set; }
+        public string EquityFranquicia { get; set; }
 
     }
 
@@ -46,6 +48,8 @@ namespace CampaniasLito.Controllers
         public double Cantidad { get; set; }
         public int TiendaId { get; set; }
         public bool Habilitado { get; set; }
+        public int ProveedorId { get; set; }
+        public int FamiliaId { get; set; }
     }
 
     public class TiendasCampaña
@@ -63,50 +67,50 @@ namespace CampaniasLito.Controllers
         public string NuevoNivelDePrecio { get; set; }
         public bool MenuDigital { get; set; }
         public string CantidadDePantallas { get; set; }
-        //00000000000000000000000000 POR PRODUCTO 0000000000000000000000000000000000
-        public bool TerceraReceta { get; set; }
-        public bool Arroz { get; set; }
-        public bool Hamburgesas { get; set; }
-        public bool Ensalada { get; set; }
-        public bool PET2Litros { get; set; }
-        public bool Postres { get; set; }
-        public bool BisquetMiel { get; set; }
-        public bool KeCono { get; set; }
-        public bool KREAMBALL { get; set; }
+        ////00000000000000000000000000 POR PRODUCTO 0000000000000000000000000000000000
+        //public bool TerceraReceta { get; set; }
+        //public bool Arroz { get; set; }
+        //public bool Hamburgesas { get; set; }
+        //public bool Ensalada { get; set; }
+        //public bool PET2Litros { get; set; }
+        //public bool Postres { get; set; }
+        //public bool BisquetMiel { get; set; }
+        //public bool KeCono { get; set; }
+        //public bool KREAMBALL { get; set; }
 
-        //00000000000000000000000000 MATERIALES ESPECIFICOS 0000000000000000000000000000000000
+        ////00000000000000000000000000 MATERIALES ESPECIFICOS 0000000000000000000000000000000000
 
-        public bool MenuBackLigth { get; set; }
-        public bool Autoexpress { get; set; }
-        public bool CopeteAERemodelado { get; set; }
-        public bool CopeteAETradicional { get; set; }
-        public bool PanelDeInnovacion { get; set; }
-        public bool DisplayDeBurbuja { get; set; }
-        public bool Delivery { get; set; }
-        public bool MERCADO_DE_PRUEBA { get; set; }
-        public bool AreaDeJuegos { get; set; }
-        public bool COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS { get; set; }
-        public bool COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L { get; set; }
-        public bool DisplayDePiso { get; set; }
-        public bool WCNACIONAL67X100cm { get; set; }
+        //public bool MenuBackLigth { get; set; }
+        //public bool Autoexpress { get; set; }
+        //public bool CopeteAERemodelado { get; set; }
+        //public bool CopeteAETradicional { get; set; }
+        //public bool PanelDeInnovacion { get; set; }
+        //public bool DisplayDeBurbuja { get; set; }
+        //public bool Delivery { get; set; }
+        //public bool MERCADO_DE_PRUEBA { get; set; }
+        //public bool AreaDeJuegos { get; set; }
+        //public bool COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS { get; set; }
+        //public bool COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L { get; set; }
+        //public bool DisplayDePiso { get; set; }
+        //public bool WCNACIONAL67X100cm { get; set; }
 
-        //00000000000000000000000000 MEDIDAS ESPECIALES 0000000000000000000000000000000000
+        ////00000000000000000000000000 MEDIDAS ESPECIALES 0000000000000000000000000000000000
 
-        public bool WCMedidaEspecial60_8x85cm { get; set; }
-        public bool WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm { get; set; }
-        public bool WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm { get; set; }
-        public bool WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm { get; set; }
-        public bool WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm { get; set; }
-        public bool MedidaEspecialPanelDeComplementos { get; set; }
-        public bool MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm { get; set; }
+        //public bool WCMedidaEspecial60_8x85cm { get; set; }
+        //public bool WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm { get; set; }
+        //public bool WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm { get; set; }
+        //public bool WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm { get; set; }
+        //public bool WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm { get; set; }
+        //public bool MedidaEspecialPanelDeComplementos { get; set; }
+        //public bool MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm { get; set; }
 
 
         //00000000000000000000000000 POR EQUIPO EN EL RESTAURANTE 0000000000000000000000000000000000
@@ -139,49 +143,51 @@ namespace CampaniasLito.Controllers
         public string NuevoNivelDePrecio { get; set; }
         public bool MenuDigital { get; set; }
         public string CantidadDePantallas { get; set; }
-        public bool TerceraReceta { get; set; }
-        public bool Arroz { get; set; }
-        public bool Hamburgesas { get; set; }
-        public bool Ensalada { get; set; }
-        public bool PET2Litros { get; set; }
-        public bool Postres { get; set; }
-        public bool BisquetMiel { get; set; }
-        public bool KeCono { get; set; }
-        public bool KREAMBALL { get; set; }
-        public bool MenuBackLigth { get; set; }
-        public bool Autoexpress { get; set; }
-        public bool CopeteAERemodelado { get; set; }
-        public bool CopeteAETradicional { get; set; }
-        public bool PanelDeInnovacion { get; set; }
-        public bool DisplayDeBurbuja { get; set; }
-        public bool Delivery { get; set; }
-        public bool MERCADO_DE_PRUEBA { get; set; }
-        public bool AreaDeJuegos { get; set; }
-        public bool COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS { get; set; }
-        public bool COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L { get; set; }
-        public bool DisplayDePiso { get; set; }
-        public bool WCNACIONAL67X100cm { get; set; }
-        public bool WCMedidaEspecial60_8x85cm { get; set; }
-        public bool WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm { get; set; }
-        public bool WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm { get; set; }
-        public bool WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm { get; set; }
-        public bool WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm { get; set; }
-        public bool MedidaEspecialPanelDeComplementos { get; set; }
-        public bool MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm { get; set; }
-        public bool MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm { get; set; }
+        //public bool TerceraReceta { get; set; }
+        //public bool Arroz { get; set; }
+        //public bool Hamburgesas { get; set; }
+        //public bool Ensalada { get; set; }
+        //public bool PET2Litros { get; set; }
+        //public bool Postres { get; set; }
+        //public bool BisquetMiel { get; set; }
+        //public bool KeCono { get; set; }
+        //public bool KREAMBALL { get; set; }
+        //public bool MenuBackLigth { get; set; }
+        //public bool Autoexpress { get; set; }
+        //public bool CopeteAERemodelado { get; set; }
+        //public bool CopeteAETradicional { get; set; }
+        //public bool PanelDeInnovacion { get; set; }
+        //public bool DisplayDeBurbuja { get; set; }
+        //public bool Delivery { get; set; }
+        //public bool MERCADO_DE_PRUEBA { get; set; }
+        //public bool AreaDeJuegos { get; set; }
+        //public bool COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS { get; set; }
+        //public bool COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L { get; set; }
+        //public bool DisplayDePiso { get; set; }
+        //public bool WCNACIONAL67X100cm { get; set; }
+        //public bool WCMedidaEspecial60_8x85cm { get; set; }
+        //public bool WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm { get; set; }
+        //public bool WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm { get; set; }
+        //public bool WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm { get; set; }
+        //public bool WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm { get; set; }
+        //public bool MedidaEspecialPanelDeComplementos { get; set; }
+        //public bool MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm { get; set; }
+        //public bool MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm { get; set; }
         public string TipoDeCaja { get; set; }
         public string AcomodoDeCajas { get; set; }
         public string NoMesaDeAreaComedor { get; set; }
         public string NoMesaDeAreaDeJuegos { get; set; }
         public string NumeroDeVentanas { get; set; }
         public string UbicacionPantallas { get; set; }
+        public int ProveedorId { get; set; }
+        public int FamiliaId { get; set; }
     }
 
     public class MaterialTotal
@@ -191,6 +197,7 @@ namespace CampaniasLito.Controllers
 
         [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = false)]
         public double TotalCantidad { get; set; }
+        public int ProveedorId { get; set; }
 
     }
 
@@ -355,6 +362,7 @@ namespace CampaniasLito.Controllers
                                        x.ArticuloKFC.Proveedor.Nombre,
                                        x.ArticuloKFC.Imagen,
                                        x.TiendaId,
+                                       x.ArticuloKFC.EquityFranquicia,
                                    })
                                    .Select(x => new MaterialesTotales()
                                    {
@@ -365,7 +373,10 @@ namespace CampaniasLito.Controllers
                                        Proveedor = x.Key.Nombre,
                                        TiendaId = x.Key.TiendaId,
                                        TotalCantidad = x.Sum(t => t.Cantidad),
+                                       EquityFranquicia = x.Key.EquityFranquicia,
                                    });
+
+            var mismateriales = materialesCampaña.ToList();
 
             var tiendas = db.Tiendas
                             .GroupBy(x => new { x.TiendaId, x.EquityFranquicia })
@@ -394,6 +405,8 @@ namespace CampaniasLito.Controllers
                                 TotalCantidad = x.Sum(d => d.materiales.TotalCantidad),
                             });
 
+            var misMaterialesTipoTienda = materialesTipoTienda.ToList();
+
             var totalTipoTienda = materialesTipoTienda
                                .GroupBy(x => new { x.TipoTienda, x.ArticuloKFC })
                                .Select(x => new TipoTiendaTotal()
@@ -421,7 +434,7 @@ namespace CampaniasLito.Controllers
                                  caliInt => caliInt.ArticuloKFC,
                                  (cali, caliInt) => new { codigos = cali, materiales = caliInt })
                             .Where(x => x.codigos.ArticuloKFC == x.materiales.ArticuloKFC)
-                            .GroupBy(x => new { x.codigos.ArticuloKFC, x.codigos.Campaña, x.codigos.Codigo, x.materiales.Proveedor, x.materiales.Imagen })
+                            .GroupBy(x => new { x.codigos.ArticuloKFC, x.codigos.Campaña, x.codigos.Codigo, x.materiales.Proveedor, x.materiales.Imagen, x.materiales.EquityFranquicia })
                             .Select(x => new CodigosMaterialesTotal()
                             {
                                 ArticuloKFC = x.Key.ArticuloKFC,
@@ -429,9 +442,11 @@ namespace CampaniasLito.Controllers
                                 Campaña = x.Key.Campaña,
                                 Codigo = x.Key.Codigo,
                                 Proveedor = x.Key.Proveedor,
+                                //TipoTienda = x.Key.EquityFranquicia,
                                 TotalCantidad = x.Sum(d => d.materiales.TotalCantidad),
                             });
 
+            var mMateriales = materiales.ToList();
 
             var totalProv = materiales
                                .GroupBy(x => new { x.Proveedor })
@@ -512,6 +527,8 @@ namespace CampaniasLito.Controllers
                                        x.Cantidad,
                                        x.TiendaId,
                                        x.Habilitado,
+                                       x.ArticuloKFC.ProveedorId,
+                                       x.ArticuloKFC.FamiliaId,
                                    })
                                    .Select(x => new MaterialesCampaña()
                                    {
@@ -521,6 +538,8 @@ namespace CampaniasLito.Controllers
                                        Cantidad = x.Key.Cantidad,
                                        TiendaId = x.Key.TiendaId,
                                        Habilitado = x.Key.Habilitado,
+                                       ProveedorId = x.Key.ProveedorId,
+                                       FamiliaId = x.Key.FamiliaId,
                                    }).ToListAsync();
 
             var misMateriales = articulosTMP.ToList();
@@ -540,43 +559,43 @@ namespace CampaniasLito.Controllers
                                 x.Region.Nombre,
                                 NombreCiudad = x.Ciudad.Nombre,
                                 x.Direccion,
-                                x.TerceraReceta,
-                                x.Arroz,
-                                x.Hamburgesas,
-                                x.Ensalada,
-                                x.PET2Litros,
-                                x.Postres,
-                                x.BisquetMiel,
-                                x.KeCono,
-                                x.KREAMBALL,
-                                x.MenuBackLigth,
-                                x.Autoexpress,
-                                x.CopeteAERemodelado,
-                                x.CopeteAETradicional,
-                                x.PanelDeInnovacion,
-                                x.DisplayDeBurbuja,
-                                x.Delivery,
-                                x.MERCADO_DE_PRUEBA,
-                                x.AreaDeJuegos,
-                                x.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS,
-                                x.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L,
-                                x.DisplayDePiso,
-                                x.WCNACIONAL67X100cm,
-                                x.WCMedidaEspecial60_8x85cm,
-                                x.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm,
-                                x.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm,
-                                x.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm,
-                                x.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm,
-                                x.MedidaEspecialPanelDeComplementos,
-                                x.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm,
-                                x.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm,
-                                x.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm,
-                                x.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm,
-                                x.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm,
-                                x.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm,
-                                x.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm,
-                                x.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm,
-                                x.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm,
+                                //x.TerceraReceta,
+                                //x.Arroz,
+                                //x.Hamburgesas,
+                                //x.Ensalada,
+                                //x.PET2Litros,
+                                //x.Postres,
+                                //x.BisquetMiel,
+                                //x.KeCono,
+                                //x.KREAMBALL,
+                                //x.MenuBackLigth,
+                                //x.Autoexpress,
+                                //x.CopeteAERemodelado,
+                                //x.CopeteAETradicional,
+                                //x.PanelDeInnovacion,
+                                //x.DisplayDeBurbuja,
+                                //x.Delivery,
+                                //x.MERCADO_DE_PRUEBA,
+                                //x.AreaDeJuegos,
+                                //x.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS,
+                                //x.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L,
+                                //x.DisplayDePiso,
+                                //x.WCNACIONAL67X100cm,
+                                //x.WCMedidaEspecial60_8x85cm,
+                                //x.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm,
+                                //x.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm,
+                                //x.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm,
+                                //x.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm,
+                                //x.MedidaEspecialPanelDeComplementos,
+                                //x.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm,
+                                //x.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm,
+                                //x.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm,
+                                //x.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm,
+                                //x.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm,
+                                //x.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm,
+                                //x.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm,
+                                //x.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm,
+                                //x.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm,
                                 TipoDeCajaNombre = x.TipoDeCaja.Descripcion,
                                 x.AcomodoDeCajas,
                                 x.NoMesaDeAreaComedor,
@@ -599,49 +618,49 @@ namespace CampaniasLito.Controllers
                                 MenuDigital = x.Key.MenuDigital,
                                 Tipo = x.Key.Tipo,
                                 NuevoNivelDePrecio = x.Key.Descripcion,
-                                TerceraReceta = x.Key.TerceraReceta,
-                                Arroz = x.Key.Arroz,
-                                Hamburgesas = x.Key.Hamburgesas,
-                                Ensalada = x.Key.Ensalada,
-                                PET2Litros = x.Key.PET2Litros,
-                                Postres = x.Key.Postres,
-                                BisquetMiel = x.Key.BisquetMiel,
-                                KeCono = x.Key.KeCono,
-                                KREAMBALL = x.Key.KREAMBALL,
+                                //TerceraReceta = x.Key.TerceraReceta,
+                                //Arroz = x.Key.Arroz,
+                                //Hamburgesas = x.Key.Hamburgesas,
+                                //Ensalada = x.Key.Ensalada,
+                                //PET2Litros = x.Key.PET2Litros,
+                                //Postres = x.Key.Postres,
+                                //BisquetMiel = x.Key.BisquetMiel,
+                                //KeCono = x.Key.KeCono,
+                                //KREAMBALL = x.Key.KREAMBALL,
                                 AcomodoDeCajas = x.Key.AcomodoDeCajas,
-                                AreaDeJuegos = x.Key.AreaDeJuegos,
-                                Autoexpress = x.Key.Autoexpress,
-                                CopeteAERemodelado = x.Key.CopeteAERemodelado,
-                                CopeteAETradicional = x.Key.CopeteAETradicional,
+                                //AreaDeJuegos = x.Key.AreaDeJuegos,
+                                //Autoexpress = x.Key.Autoexpress,
+                                //CopeteAERemodelado = x.Key.CopeteAERemodelado,
+                                //CopeteAETradicional = x.Key.CopeteAETradicional,
                                 UbicacionPantallas = x.Key.UbicacionPantallas,
                                 NumeroDeVentanas = x.Key.NumeroDeVentanas,
                                 NoMesaDeAreaDeJuegos = x.Key.NoMesaDeAreaDeJuegos,
-                                COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS = x.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS,
-                                COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L = x.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L,
-                                Delivery = x.Key.Delivery,
-                                DisplayDeBurbuja = x.Key.DisplayDeBurbuja,
-                                DisplayDePiso = x.Key.DisplayDePiso,
-                                MedidaEspecialPanelDeComplementos = x.Key.MedidaEspecialPanelDeComplementos,
-                                MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm = x.Key.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm,
-                                MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm = x.Key.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm,
-                                MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm = x.Key.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm,
-                                MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm = x.Key.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm,
-                                MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm = x.Key.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm,
-                                MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm = x.Key.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm,
-                                MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm = x.Key.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm,
-                                MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm = x.Key.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm,
-                                MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm = x.Key.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm,
-                                MenuBackLigth = x.Key.MenuBackLigth,
-                                MERCADO_DE_PRUEBA = x.Key.MERCADO_DE_PRUEBA,
+                                //COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS = x.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS,
+                                //COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L = x.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L,
+                                //Delivery = x.Key.Delivery,
+                                //DisplayDeBurbuja = x.Key.DisplayDeBurbuja,
+                                //DisplayDePiso = x.Key.DisplayDePiso,
+                                //MedidaEspecialPanelDeComplementos = x.Key.MedidaEspecialPanelDeComplementos,
+                                //MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm = x.Key.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm,
+                                //MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm = x.Key.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm,
+                                //MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm = x.Key.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm,
+                                //MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm = x.Key.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm,
+                                //MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm = x.Key.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm,
+                                //MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm = x.Key.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm,
+                                //MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm = x.Key.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm,
+                                //MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm = x.Key.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm,
+                                //MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm = x.Key.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm,
+                                //MenuBackLigth = x.Key.MenuBackLigth,
+                                //MERCADO_DE_PRUEBA = x.Key.MERCADO_DE_PRUEBA,
                                 NoMesaDeAreaComedor = x.Key.NoMesaDeAreaComedor,
-                                PanelDeInnovacion = x.Key.PanelDeInnovacion,
+                                //PanelDeInnovacion = x.Key.PanelDeInnovacion,
                                 TipoDeCaja = x.Key.TipoDeCajaNombre,
-                                WCMedidaEspecial60_8x85cm = x.Key.WCMedidaEspecial60_8x85cm,
-                                WCNACIONAL67X100cm = x.Key.WCNACIONAL67X100cm,
-                                WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm = x.Key.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm,
-                                WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm = x.Key.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm,
-                                WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm = x.Key.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm,
-                                WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm = x.Key.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm,
+                                //WCMedidaEspecial60_8x85cm = x.Key.WCMedidaEspecial60_8x85cm,
+                                //WCNACIONAL67X100cm = x.Key.WCNACIONAL67X100cm,
+                                //WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm = x.Key.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm,
+                                //WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm = x.Key.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm,
+                                //WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm = x.Key.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm,
+                                //WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm = x.Key.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm,
                             }).ToListAsync();
 
             var misTiendas = tiendasCampaña.ToList();
@@ -666,54 +685,56 @@ namespace CampaniasLito.Controllers
                                 x.tiendas.MenuDigital,
                                 x.tiendas.Tipo,
                                 x.tiendas.CantidadDePantallas,
-                                x.tiendas.TerceraReceta,
-                                x.tiendas.Arroz,
-                                x.tiendas.Hamburgesas,
-                                x.tiendas.Ensalada,
-                                x.tiendas.PET2Litros,
-                                x.tiendas.Postres,
-                                x.tiendas.BisquetMiel,
-                                x.tiendas.KeCono,
-                                x.tiendas.KREAMBALL,
+                                //x.tiendas.TerceraReceta,
+                                //x.tiendas.Arroz,
+                                //x.tiendas.Hamburgesas,
+                                //x.tiendas.Ensalada,
+                                //x.tiendas.PET2Litros,
+                                //x.tiendas.Postres,
+                                //x.tiendas.BisquetMiel,
+                                //x.tiendas.KeCono,
+                                //x.tiendas.KREAMBALL,
                                 x.tiendas.AcomodoDeCajas,
-                                x.tiendas.AreaDeJuegos,
-                                x.tiendas.Autoexpress,
-                                x.tiendas.CopeteAERemodelado,
-                                x.tiendas.CopeteAETradicional,
-                                x.tiendas.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS,
-                                x.tiendas.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L,
-                                x.tiendas.Delivery,
-                                x.tiendas.DisplayDeBurbuja,
-                                x.tiendas.DisplayDePiso,
-                                x.tiendas.MedidaEspecialPanelDeComplementos,
-                                x.tiendas.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm,
-                                x.tiendas.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm,
-                                x.tiendas.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm,
-                                x.tiendas.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm,
-                                x.tiendas.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm,
-                                x.tiendas.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm,
-                                x.tiendas.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm,
-                                x.tiendas.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm,
-                                x.tiendas.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm,
-                                x.tiendas.MenuBackLigth,
-                                x.tiendas.MERCADO_DE_PRUEBA,
+                                //x.tiendas.AreaDeJuegos,
+                                //x.tiendas.Autoexpress,
+                                //x.tiendas.CopeteAERemodelado,
+                                //x.tiendas.CopeteAETradicional,
+                                //x.tiendas.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS,
+                                //x.tiendas.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L,
+                                //x.tiendas.Delivery,
+                                //x.tiendas.DisplayDeBurbuja,
+                                //x.tiendas.DisplayDePiso,
+                                //x.tiendas.MedidaEspecialPanelDeComplementos,
+                                //x.tiendas.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm,
+                                //x.tiendas.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm,
+                                //x.tiendas.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm,
+                                //x.tiendas.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm,
+                                //x.tiendas.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm,
+                                //x.tiendas.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm,
+                                //x.tiendas.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm,
+                                //x.tiendas.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm,
+                                //x.tiendas.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm,
+                                //x.tiendas.MenuBackLigth,
+                                //x.tiendas.MERCADO_DE_PRUEBA,
                                 x.tiendas.NoMesaDeAreaComedor,
                                 x.tiendas.NoMesaDeAreaDeJuegos,
                                 x.tiendas.NumeroDeVentanas,
-                                x.tiendas.PanelDeInnovacion,
+                                //x.tiendas.PanelDeInnovacion,
                                 x.tiendas.TipoDeCaja,
                                 x.tiendas.UbicacionPantallas,
-                                x.tiendas.WCMedidaEspecial60_8x85cm,
-                                x.tiendas.WCNACIONAL67X100cm,
-                                x.tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm,
-                                x.tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm,
-                                x.tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm,
-                                x.tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm,
+                                //x.tiendas.WCMedidaEspecial60_8x85cm,
+                                //x.tiendas.WCNACIONAL67X100cm,
+                                //x.tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm,
+                                //x.tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm,
+                                //x.tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm,
+                                //x.tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm,
                                 x.materiales.ArticuloKFCId,
                                 x.materiales.ArticuloKFC,
                                 x.materiales.Cantidad,
                                 x.materiales.Campaña,
-                                x.materiales.Habilitado
+                                x.materiales.Habilitado,
+                                x.materiales.ProveedorId,
+                                x.materiales.FamiliaId,
                             })
                             .Select(x => new MaterialesTiendasCampaña()
                             {
@@ -734,64 +755,67 @@ namespace CampaniasLito.Controllers
                                 MenuDigital = x.Key.MenuDigital,
                                 NuevoNivelDePrecio = x.Key.NuevoNivelDePrecio,
                                 Tipo = x.Key.Tipo,
-                                TerceraReceta = x.Key.TerceraReceta,
-                                Arroz = x.Key.Arroz,
-                                Hamburgesas = x.Key.Hamburgesas,
-                                Ensalada = x.Key.Ensalada,
-                                PET2Litros = x.Key.PET2Litros,
-                                Postres = x.Key.Postres,
-                                BisquetMiel = x.Key.BisquetMiel,
-                                KeCono = x.Key.KeCono,
-                                KREAMBALL = x.Key.KREAMBALL,
+                                //TerceraReceta = x.Key.TerceraReceta,
+                                //Arroz = x.Key.Arroz,
+                                //Hamburgesas = x.Key.Hamburgesas,
+                                //Ensalada = x.Key.Ensalada,
+                                //PET2Litros = x.Key.PET2Litros,
+                                //Postres = x.Key.Postres,
+                                //BisquetMiel = x.Key.BisquetMiel,
+                                //KeCono = x.Key.KeCono,
+                                //KREAMBALL = x.Key.KREAMBALL,
                                 AcomodoDeCajas = x.Key.AcomodoDeCajas,
-                                AreaDeJuegos = x.Key.AreaDeJuegos,
-                                Autoexpress = x.Key.Autoexpress,
-                                CopeteAERemodelado = x.Key.CopeteAERemodelado,
-                                CopeteAETradicional = x.Key.CopeteAETradicional,
+                                //AreaDeJuegos = x.Key.AreaDeJuegos,
+                                //Autoexpress = x.Key.Autoexpress,
+                                //CopeteAERemodelado = x.Key.CopeteAERemodelado,
+                                //CopeteAETradicional = x.Key.CopeteAETradicional,
                                 UbicacionPantallas = x.Key.UbicacionPantallas,
                                 NumeroDeVentanas = x.Key.NumeroDeVentanas,
                                 NoMesaDeAreaDeJuegos = x.Key.NoMesaDeAreaDeJuegos,
-                                COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS = x.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS,
-                                COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L = x.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L,
-                                Delivery = x.Key.Delivery,
-                                DisplayDeBurbuja = x.Key.DisplayDeBurbuja,
-                                DisplayDePiso = x.Key.DisplayDePiso,
-                                MedidaEspecialPanelDeComplementos = x.Key.MedidaEspecialPanelDeComplementos,
-                                MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm = x.Key.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm,
-                                MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm = x.Key.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm,
-                                MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm = x.Key.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm,
-                                MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm = x.Key.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm,
-                                MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm = x.Key.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm,
-                                MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm = x.Key.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm,
-                                MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm = x.Key.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm,
-                                MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm = x.Key.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm,
-                                MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm = x.Key.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm,
-                                MenuBackLigth = x.Key.MenuBackLigth,
-                                MERCADO_DE_PRUEBA = x.Key.MERCADO_DE_PRUEBA,
+                                //COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS = x.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS,
+                                //COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L = x.Key.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L,
+                                //Delivery = x.Key.Delivery,
+                                //DisplayDeBurbuja = x.Key.DisplayDeBurbuja,
+                                //DisplayDePiso = x.Key.DisplayDePiso,
+                                //MedidaEspecialPanelDeComplementos = x.Key.MedidaEspecialPanelDeComplementos,
+                                //MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm = x.Key.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm,
+                                //MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm = x.Key.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm,
+                                //MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm = x.Key.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm,
+                                //MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm = x.Key.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm,
+                                //MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm = x.Key.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm,
+                                //MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm = x.Key.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm,
+                                //MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm = x.Key.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm,
+                                //MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm = x.Key.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm,
+                                //MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm = x.Key.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm,
+                                //MenuBackLigth = x.Key.MenuBackLigth,
+                                //MERCADO_DE_PRUEBA = x.Key.MERCADO_DE_PRUEBA,
                                 NoMesaDeAreaComedor = x.Key.NoMesaDeAreaComedor,
-                                PanelDeInnovacion = x.Key.PanelDeInnovacion,
+                                //PanelDeInnovacion = x.Key.PanelDeInnovacion,
                                 TipoDeCaja = x.Key.TipoDeCaja,
-                                WCMedidaEspecial60_8x85cm = x.Key.WCMedidaEspecial60_8x85cm,
-                                WCNACIONAL67X100cm = x.Key.WCNACIONAL67X100cm,
-                                WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm = x.Key.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm,
-                                WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm = x.Key.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm,
-                                WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm = x.Key.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm,
-                                WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm = x.Key.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm,
+                                //WCMedidaEspecial60_8x85cm = x.Key.WCMedidaEspecial60_8x85cm,
+                                //WCNACIONAL67X100cm = x.Key.WCNACIONAL67X100cm,
+                                //WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm = x.Key.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm,
+                                //WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm = x.Key.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm,
+                                //WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm = x.Key.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm,
+                                //WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm = x.Key.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm,
+                                ProveedorId = x.Key.ProveedorId,
+                                FamiliaId = x.Key.FamiliaId,
                             });
 
             var misMaterialesCampaña = materialesCampaña.ToList();
 
             var totalMaterial = materialesCampaña
                                .Where(x => x.TipoTienda == tipoTienda)
-                               .GroupBy(x => new { x.ArticuloKFC, x.ArticuloKFCId })
+                               .GroupBy(x => new { x.ArticuloKFC, x.ArticuloKFCId, x.ProveedorId })
                                .Select(x => new MaterialTotal()
                                {
                                    ArticuloKFCId = x.Key.ArticuloKFCId,
                                    ArticuloKFC = x.Key.ArticuloKFC,
+                                   ProveedorId = x.Key.ProveedorId,
                                    TotalCantidad = x.Sum(t => t.Cantidad),
                                });
 
-            ViewBag.TotalMaterial = totalMaterial.OrderBy(x => x.ArticuloKFC).ToList();
+            ViewBag.TotalMaterial = totalMaterial.Where(x => x.ProveedorId != 5).OrderBy(x => x.ArticuloKFC).ToList();
 
             ViewBag.Total = totalMaterial.Sum(x => x.TotalCantidad);
 
@@ -1286,7 +1310,9 @@ namespace CampaniasLito.Controllers
 
                 var vacio = "";
 
-                using (StreamWriter streamWriter = new StreamWriter("C:\\Articulos" + campaña.Nombre + ".txt"))
+                var folder = "C:\\";
+
+                using (StreamWriter streamWriter = new StreamWriter(folder + "Materiales" + campaña.Nombre + ".txt"))
                 {
                     foreach (var codigo in codigosMateriales)
                     {
@@ -1298,7 +1324,7 @@ namespace CampaniasLito.Controllers
                 var tiendas = db.Tiendas.OrderBy(x => x.TiendaId).ToList();
                 var i = 1;
 
-                using (StreamWriter streamWriter = new StreamWriter("C:\\Tiendas" + campaña.Nombre + ".txt"))
+                using (StreamWriter streamWriter = new StreamWriter(folder + "Tiendas" + campaña.Nombre + ".txt"))
                 {
                     foreach (var tienda in tiendas)
                     {
@@ -1309,7 +1335,7 @@ namespace CampaniasLito.Controllers
                     }
                 }
 
-                using (StreamWriter streamWriter = new StreamWriter("C:\\Ordenes" + campaña.Nombre + ".txt"))
+                using (StreamWriter streamWriter = new StreamWriter(folder + "Ordenes" + campaña.Nombre + ".txt"))
                 {
                     foreach (var codigo in codigosMaterialesOrdenes)
                     {
@@ -1623,27 +1649,35 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var detalleArticulos = db.CampañaArticuloTMPs.Where(da => da.CampañaId == id).ToList();
-            var detalleTiendas = db.CampañaTiendaTMPs.Where(da => da.CampañaId == id).ToList();
-            var detalleCodigos = db.CodigosCampaña.Where(da => da.CampañaId == id).ToList();
+            //var detalleArticulos = db.CampañaArticuloTMPs.Where(da => da.CampañaId == id).ToList();
+            //var detalleTiendas = db.CampañaTiendaTMPs.Where(da => da.CampañaId == id).ToList();
+            //var detalleCodigos = db.CodigosCampaña.Where(da => da.CampañaId == id).ToList();
 
-            if (detalleArticulos.Count > 0)
-            {
-                db.CampañaArticuloTMPs.RemoveRange(detalleArticulos);
-                db.SaveChanges();
-            }
+            db.Database.ExecuteSqlCommand(
+            "spEliminarCampaña @CampañaId",
+            new SqlParameter("@CampañaId", id));
 
-            if (detalleTiendas.Count > 0)
-            {
-                db.CampañaTiendaTMPs.RemoveRange(detalleTiendas);
-                db.SaveChanges();
-            }
+            db.Database.ExecuteSqlCommand(
+            "spEliminarCodigos @CampañaId",
+            new SqlParameter("@CampañaId", id));
 
-            if (detalleCodigos.Count > 0)
-            {
-                db.CodigosCampaña.RemoveRange(detalleCodigos);
-                db.SaveChanges();
-            }
+            //if (detalleArticulos.Count > 0)
+            //{
+            //    db.CampañaArticuloTMPs.RemoveRange(detalleArticulos);
+            //    db.SaveChanges();
+            //}
+
+            //if (detalleTiendas.Count > 0)
+            //{
+            //    db.CampañaTiendaTMPs.RemoveRange(detalleTiendas);
+            //    db.SaveChanges();
+            //}
+
+            //if (detalleCodigos.Count > 0)
+            //{
+            //    db.CodigosCampaña.RemoveRange(detalleCodigos);
+            //    db.SaveChanges();
+            //}
 
             var campaña = db.Campañas.Find(id);
             db.Campañas.Remove(campaña);

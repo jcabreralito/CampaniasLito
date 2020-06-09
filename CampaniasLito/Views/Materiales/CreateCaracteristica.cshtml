@@ -1,0 +1,95 @@
+﻿@model CampaniasLito.Models.ArticuloKFC
+
+@{
+    ViewBag.Title = "Agregar";
+    Layout = null;
+}
+
+    <link href="~/Content/css/Materiales.css" rel="stylesheet" />
+
+@using (Html.BeginForm("CreateCaracteristica", "Materiales", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel">
+        <div class="panel-heading">
+            <table class="headingModal">
+                <tr style="background-color: #DF2530 !important">
+                    <td class="col-xs-12">
+                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
+                    </td>
+                    <td class=" col-xs-12"></td>
+                    <td align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwalOutM()">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td align="right" class="col-xs-1">
+                        <div class="input-group">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage2M()">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script src="~/Content/js/site.js"></script>
+
+        <div class="panel-body">
+            <div class="form-horizontal row responsivoUsuarioLabel">
+                <div class="col-xs-12">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(m => m.EquityFranquicia)
+                    @Html.HiddenFor(m => m.FamiliaId)
+                    @Html.HiddenFor(m => m.ProveedorId)
+                    @Html.HiddenFor(m => m.Activo)
+                    @Html.HiddenFor(m => m.Eliminado)
+                    @Html.HiddenFor(m => m.CantidadDefault)
+
+                    <div class="row">
+                        <div class="mat-input col-sm-12 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.TextBoxFor(model => model.Descripcion, new { htmlAttributes = new { @class = "active" }, @type = "text", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", autofocus = "autofocus", autocomplete = "off" })
+                                <label class="active">Característica</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mat-input col-sm-12 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important">
+                                @Html.TextBoxFor(model => model.Observaciones, new { htmlAttributes = new { }, @type = "text", @style = "text-transform:uppercase", autofocus = "autofocus", autocomplete = "off" })
+                                <label class="">Observaciones</label>
+                                <div class="border"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="mat-input col-sm-12 focus">
+                            <div class="mat-input-outer col-sm-12 focus">
+                                @Html.CheckBoxFor(model => model.Todo, new { htmlAttributes = new { }, @type = "checkbox", @style = "text-transform:uppercase; margin-top: -40px", autofocus = "autofocus", autocomplete = "off" })
+                                <label class="active">Todos los restaurantes?</label>
+                                @*<div class="border"></div>*@
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

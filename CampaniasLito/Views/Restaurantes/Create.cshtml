@@ -18,7 +18,7 @@
                     <td class=" col-xs-12"></td>
                     <td align="right" class="col-xs-1">
                         <div class="input-group">
-                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwal()">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwalOut()">
                                 <i class="fas fa-times-circle"></i>
                             </button>
                         </div>
@@ -124,7 +124,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-12" align="left" style="font-size: 10px;">
+                    @*<div class="col-xs-12" align="left" style="font-size: 10px;">
                         <button id="btnCG" class="col-xs-2 btn-primary" style="height: 60px; border-radius: 10px" onclick="mostrarCG();">
                             Caracterísitcas generales
                         </button>
@@ -140,9 +140,9 @@
                         <button id="btnCRE" class="col-xs-2 btn-primary" style="height: 60px; border-radius: 10px" onclick="mostrarCER();">
                             Configuración por equipo en el restaurante
                         </button>
-                    </div>
+                    </div>*@
 
-                    <div id="detailsCG" class="panel-body">
+                    @*<div id="detailsCG" class="panel-body">
                         @Html.Action("DetailsCG", new { })
                     </div>
 
@@ -160,9 +160,9 @@
 
                     <div id="detailsCER" class="panel-body" style="display: none">
                         @Html.Action("DetailsCER", new { })
-                    </div>
+                    </div>*@
 
-                    <script>
+                    @*<script>
 
                         $(document).ready(function () {
                             document.getElementByID('btnCG').classList.add('active');
@@ -270,14 +270,14 @@
                             });
                         }
 
-                    </script>
+                    </script>*@
 
 
 
 
                     <script>
 
-                        function filtrar() {
+                        @*function filtrar() {
 
                             var UrlR = '@Url.Action("GetCiudadesXRegion", "Generic")';
 
@@ -301,42 +301,42 @@
                                 });
                                 return false;
 
-                        }
+                        }*@
 
-                        $(document).ready(function () {
-                            $('.input-group input[required], .input-group textarea[required], .input-group select[required]').on('keyup change', function () {
-                                var $form = $(this).closest('form'),
-                                    $group = $(this).closest('.input-group'),
-                                    $addon = $group.find('.input-group-addon'),
-                                    $icon = $addon.find('span'),
-                                    state = false;
+                        //$(document).ready(function () {
+                        //    $('.input-group input[required], .input-group textarea[required], .input-group select[required]').on('keyup change', function () {
+                        //        var $form = $(this).closest('form'),
+                        //            $group = $(this).closest('.input-group'),
+                        //            $addon = $group.find('.input-group-addon'),
+                        //            $icon = $addon.find('span'),
+                        //            state = false;
 
-                                if (!$group.data('validate')) {
-                                    state = $(this).val() ? true : false;
-                                } else if ($group.data('validate') == "length") {
-                                    state = $(this).val().length >= $group.data('length') ? true : false;
-                                }
+                        //        if (!$group.data('validate')) {
+                        //            state = $(this).val() ? true : false;
+                        //        } else if ($group.data('validate') == "length") {
+                        //            state = $(this).val().length >= $group.data('length') ? true : false;
+                        //        }
 
-                                if (state) {
-                                    $addon.removeClass('danger');
-                                    $addon.addClass('success');
-                                    $icon.attr('class', 'glyphicon glyphicon-ok');
-                                } else {
-                                    $addon.removeClass('success');
-                                    $addon.addClass('danger');
-                                    $icon.attr('class', 'glyphicon glyphicon-remove');
-                                }
+                        //        if (state) {
+                        //            $addon.removeClass('danger');
+                        //            $addon.addClass('success');
+                        //            $icon.attr('class', 'glyphicon glyphicon-ok');
+                        //        } else {
+                        //            $addon.removeClass('success');
+                        //            $addon.addClass('danger');
+                        //            $icon.attr('class', 'glyphicon glyphicon-remove');
+                        //        }
 
-                                if ($form.find('.input-group-addon.danger').length == 0) {
-                                    $form.find('[type="submit"]').prop('disabled', false);
-                                } else {
-                                    $form.find('[type="submit"]').prop('disabled', true);
-                                }
-                            });
+                        //        if ($form.find('.input-group-addon.danger').length == 0) {
+                        //            $form.find('[type="submit"]').prop('disabled', false);
+                        //        } else {
+                        //            $form.find('[type="submit"]').prop('disabled', true);
+                        //        }
+                        //    });
 
-                            $('.input-group input[required], .input-group textarea[required], .input-group select[required]').trigger('change');
+                        //    $('.input-group input[required], .input-group textarea[required], .input-group select[required]').trigger('change');
 
-                        });
+                        //});
 
                         //function mostrarCG() {
                         //    document.getElementById('detailsCG').style.display = 'block';

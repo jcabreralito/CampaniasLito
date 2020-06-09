@@ -8,6 +8,20 @@ using System.Threading.Tasks;
 
 namespace CampaniasLito.Classes
 {
+    public class spGetTiendaArticulos
+    {
+        public int TiendaArticuloId { get; set; }
+
+        public int TiendaId { get; set; }
+
+        public int ArticuloKFCId { get; set; }
+
+        public bool Seleccionado { get; set; }
+
+        public int CantidadDefault { get; set; }
+
+    }
+
     public class MovementsHelper : IDisposable
     {
         private static CampaniasLitoContext db = new CampaniasLitoContext();
@@ -20,67 +34,52 @@ namespace CampaniasLito.Classes
         public static Response AgregarArticulosNuevaCampaña(int campañaid)
         {
             var cantidadDefault = 0;
-
             var codigo = 0;
 
-            var materiales = db.ArticuloKFCs.ToList();
+            var materialesPrimerCampaña = db.Database.SqlQuery<spGetTiendaArticulos>("spGetTiendaArticulos").ToList();
 
-            var campañaIdActual = campañaid;
+            //List<spGetTiendaArticulos> matCamp = new List<spGetTiendaArticulos>();
 
-            //var articulosCampañas = db.CampañaArticuloTMPs.Where(c => c.CampañaId == campañaIdActual).ToList();
+            //matCamp = materialesPrimerCampaña;
 
-            //if (articulosCampañas.Count == 0)
-            //{
-            //var materialesPrimerCampaña = db.TiendaArticulos.Where(x => x.TiendaArticuloId >= 19441).ToList();
+            //List<CampañaArticuloTMP> campMat = new List<CampañaArticuloTMP>();
 
-            var materialesPrimerCampaña = db.TiendaArticulos.ToList();
+            //campMat.AddRange(matCamp);
+
+            //List<CampañaArticuloTMP>.AddRange(IEnumerable<materialesPrimerCampaña> db);
+
+
+            //db.Database.ExecuteSqlCommand(
+            //"ppInsertMaterialCampañaWithTypeTable @CampañasArticulos",
+            //new SqlParameter("@CampañasArticulos", materialesPrimerCampaña));
+
 
             foreach (var materialCampaña in materialesPrimerCampaña)
             {
+                //var articuloKFCId = materialCampaña.ArticuloKFCId;
+
+                //var materiales = db.Database.SqlQuery<ArticuloKFC>("spGetMateriales @ArticuloKFCId, @Eliminado, @Activo",
+                //new SqlParameter("@ArticuloKFCId", articuloKFCId),
+                //new SqlParameter("@Activo", activo),
+                //new SqlParameter("@Eliminado", eliminado)).FirstOrDefault();
+
+                //var materiales = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == materialCampaña.ArticuloKFCId && x.Eliminado == false).FirstOrDefault();
+
+                //if (materiales != null)
+                //{
+
+
+                //==============================================================================================================================
                 if (materialCampaña.Seleccionado == true)
                 {
-                    //  modelBuilder
-                    //.Entity<Blog>()
-                    //.MapToStoredProcedures(s =>
-                    //  s.Update(u => u.HasName("modify_blog")
-                    //                 .Parameter(b => b.BlogId, "blog_id")
-                    //                 .Parameter(b => b.Name, "blog_name")
-                    //                 .Parameter(b => b.Url, "blog_url"))
-                    //   .Delete(d => d.HasName("delete_blog")
-                    //                 .Parameter(b => b.BlogId, "blog_id"))
-                    //   .Insert(i => i.HasName("insert_blog")
-                    //                 .Parameter(b => b.Name, "blog_name")
-                    //                 .Parameter(b => b.Url, "blog_url")));
-
-                    //var material = db.Database.SqlQuery<CampañaArticuloTMP>(
-                    //    "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
-                    //    new SqlParameter("@ArticuloKFCId", materialCampaña.ArticuloKFCId),
-                    //    new SqlParameter("@TiendaId", materialCampaña.TiendaId),
-                    //    new SqlParameter("@CampañaId", campañaid),
-                    //    new SqlParameter("@Habilitado", materialCampaña.Seleccionado),
-                    //    new SqlParameter("@Cantidad", materialCampaña.ArticuloKFC.CantidadDefault),
-                    //    new SqlParameter("@Codigo", 0));
-
                     db.Database.ExecuteSqlCommand(
                         "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
                         new SqlParameter("@ArticuloKFCId", materialCampaña.ArticuloKFCId),
                         new SqlParameter("@TiendaId", materialCampaña.TiendaId),
                         new SqlParameter("@CampañaId", campañaid),
                         new SqlParameter("@Habilitado", materialCampaña.Seleccionado),
-                        new SqlParameter("@Cantidad", materialCampaña.ArticuloKFC.CantidadDefault),
+                        new SqlParameter("@Cantidad", materialCampaña.CantidadDefault),
                         new SqlParameter("@Codigo", codigo));
-
-                    //var campañaDetalle = new CampañaArticuloTMP
-                    //{
-                    //    ArticuloKFCId = materialCampaña.ArticuloKFCId,
-                    //    Cantidad = materialCampaña.ArticuloKFC.CantidadDefault,
-                    //    Habilitado = materialCampaña.Seleccionado,
-                    //    CampañaId = campañaid,
-                    //    TiendaId = materialCampaña.TiendaId,
-                    //    Codigo = 0,
-                    //};
-
-                    //db.CampañaArticuloTMPs.Add(campañaDetalle);
                 }
                 else
                 {
@@ -92,106 +91,12 @@ namespace CampaniasLito.Classes
                         new SqlParameter("@Habilitado", materialCampaña.Seleccionado),
                         new SqlParameter("@Cantidad", cantidadDefault),
                         new SqlParameter("@Codigo", codigo));
-
-                    //var lects = db.Database.SqlQuery<CampañaArticuloTMP>("spAgregarMaterialCAmpanias @fecha,@idParteMaquina,@inicio,@inicioMasDuracion,@dia", fecha, partemaquina.Id, inicio.TotalSeconds, inicioMasDuracion.TotalSeconds, dia);
-
-                    //var campañaDetalle = new CampañaArticuloTMP
-                    //{
-                    //    ArticuloKFCId = materialCampaña.ArticuloKFCId,
-                    //    Cantidad = materialCampaña.ArticuloKFC.CantidadDefault,
-                    //    Habilitado = materialCampaña.Seleccionado,
-                    //    CampañaId = campañaid,
-                    //    TiendaId = materialCampaña.TiendaId,
-                    //    Codigo = 0,
-                    //};
-
-                    //db.CampañaArticuloTMPs.Add(campañaDetalle);
                 }
 
+                //==================================================================================================================================
 
+                //}
             }
-            //}
-            //else
-            //{
-
-            //}
-
-            //var tiendas = db.Tiendas.ToList();
-
-            //foreach (var tienda in tiendas)
-            //{
-            //    var tiendasTMPs = db.TiendaArticulos.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.Seleccionado == true).FirstOrDefault();
-            //    //var tiendasTMPs = db.CampañaTiendaTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaId == campañaid).FirstOrDefault();
-
-            //    if (tiendasTMPs != null)
-            //    {
-            //        var tiendasSeleccionadas = db.CampañaTiendaTMPs.Where(cdt => cdt.TiendaId == tiendasTMPs.TiendaId && cdt.CampañaId == campañaid).FirstOrDefault();
-
-            //        if (tiendasSeleccionadas == null)
-            //        {
-            //            var tiendaDetalle = new CampañaTiendaTMP
-            //            {
-            //                CampañaId = campañaid,
-            //                TiendaId = tienda.TiendaId,
-            //                Seleccionada = false,
-            //            };
-
-            //            db.CampañaTiendaTMPs.Add(tiendaDetalle);
-            //        }
-            //    }
-
-            //    //var articulos = db.ArticuloKFCs.Where(cdt => cdt.CompañiaId == compañia).ToList();
-
-            //    //var articulosTMP = db.CampañaArticuloTMPs.Where(cdt => cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).ToList();
-
-            //    //if (articulos.Count != articulosTMP.Count)
-            //    //{
-            //    //    foreach (var articulo in articulos)
-            //    //    {
-            //    //        var articulosTMPs = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaTiendaTMPId == campañas.CampañaId).FirstOrDefault();
-
-            //    //        if (articulosTMPs == null)
-            //    //        {
-            //    //            var articuloDetalle = new CampañaArticuloTMP
-            //    //            {
-            //    //                Compañia = compañia,
-            //    //                Usuario = userName,
-            //    //                TiendaId = tienda.TiendaId,
-            //    //                ArticuloKFCId = articulo.ArticuloKFCId,
-            //    //                Cantidad = articulo.CantidadDefault,
-            //    //                Habilitado = true,
-            //    //                CampañaTiendaTMPId = campañas.CampañaId,
-            //    //            };
-
-            //    //            db.CampañaArticuloTMPs.Add(articuloDetalle);
-            //    //        }
-
-            //    //    }
-            //    //}
-
-            //}
-
-
-            //using (var transaccion = db.Database.BeginTransaction())
-            //{
-            //    try
-            //    {
-            //        //db.SaveChanges();
-            //        transaccion.Commit();
-
-            //        return new Response { Succeeded = true, };
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        transaccion.Rollback();
-            //        return new Response
-            //        {
-            //            Message = ex.Message,
-            //            Succeeded = false,
-            //        };
-            //    }
-            //}
-
             return new Response { Succeeded = true, };
         }
 
@@ -379,121 +284,278 @@ namespace CampaniasLito.Classes
 
         public static Response AgregarArticuloTiendas(int articuloKFCId)
         {
-            using (var transaccion = db.Database.BeginTransaction())
+            //using (var transaccion = db.Database.BeginTransaction())
+            //{
+            //try
+            //{
+            var tipoArticulo = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == articuloKFCId).FirstOrDefault().EquityFranquicia;
+
+            var articulos = db.ArticuloKFCs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId).FirstOrDefault();
+
+            var tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == tipoArticulo).ToList();
+
+            if (tipoArticulo == "EQUITY" || tipoArticulo == "STOCK")
             {
-                try
-                {
-                    var tipoArticulo = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == articuloKFCId).FirstOrDefault().EquityFranquicia;
-
-                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId).FirstOrDefault();
-
-                    var tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == tipoArticulo).ToList();
-
-                    foreach (var tienda in tiendas)
-                    {
-                        var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulos.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
-
-                        if (tiendaArticulos == null)
-                        {
-                            var articuloDetalle = new TiendaArticulo
-                            {
-                                ArticuloKFCId = articulos.ArticuloKFCId,
-                                Seleccionado = true,
-                                TiendaId = tienda.TiendaId,
-                            };
-
-                            db.TiendaArticulos.Add(articuloDetalle);
-                        }
-
-                    }
-
-                    db.SaveChanges();
-                    transaccion.Commit();
-
-                    return new Response { Succeeded = true, };
-                }
-                catch (Exception ex)
-                {
-                    transaccion.Rollback();
-                    return new Response
-                    {
-                        Message = ex.Message,
-                        Succeeded = false,
-                    };
-                }
+                tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia != "FRANQUICIAS").ToList();
             }
+            else
+            {
+                tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == "FRANQUICIAS").ToList();
+            }
+
+            var todosRest = articulos.Todo;
+
+            foreach (var tienda in tiendas)
+            {
+
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulos.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
+
+                if (tiendaArticulos == null)
+                {
+
+                    db.Database.ExecuteSqlCommand(
+                    "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                    new SqlParameter("@ArticuloKFCId", articulos.ArticuloKFCId),
+                    new SqlParameter("@TiendaId", tienda.TiendaId),
+                    new SqlParameter("@Seleccionado", todosRest));
+
+                    //var articuloDetalle = new TiendaArticulo
+                    //{
+                    //    ArticuloKFCId = articulos.ArticuloKFCId,
+                    //    Seleccionado = true,
+                    //    TiendaId = tienda.TiendaId,
+                    //};
+
+                    //db.TiendaArticulos.Add(articuloDetalle);
+                }
+
+            }
+
+            //db.SaveChanges();
+            //transaccion.Commit();
+
+            return new Response { Succeeded = true, };
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    transaccion.Rollback();
+            //    return new Response
+            //    {
+            //        Message = ex.Message,
+            //        Succeeded = false,
+            //    };
+            //}
+            //}
         }
 
-        public static Response AgregarArticuloCampañas(int articuloKFCId)
+        public static Response AgregarArticuloPorTiendas(Tienda tienda)
         {
-            using (var transaccion = db.Database.BeginTransaction())
+            var tiendaId = tienda.TiendaId;
+            var tipoTienda = tienda.EquityFranquicia;
+
+            var articulos = db.ArticuloKFCs.Where(cdt => cdt.EquityFranquicia == tipoTienda).ToList();
+
+            var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
+
+            if (campaña.Count == 0)
             {
-                try
+                return new Response { Succeeded = true, };
+            }
+            else
+            {
+                foreach (var campa in campaña)
                 {
-                    var tipoArticulo = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == articuloKFCId).FirstOrDefault().EquityFranquicia;
-
-                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId).FirstOrDefault();
-
-                    var tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == tipoArticulo).ToList();
-
-                    var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
-
-                    if (campaña.Count == 0)
+                    foreach (var articulo in articulos)
                     {
-                        var campañaNueva = new Campaña
-                        {
-                            Descripcion = "Editar Descripción",
-                            Generada = "NO",
-                            Nombre = "Editar Nombre",
-                        };
+                        //var articulosCampaña = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaId == campa.CampañaId).FirstOrDefault();
 
-                        db.Campañas.Add(campañaNueva);
-                        db.SaveChanges();
+                        var articulosCampaña = db.Database.SqlQuery<CampañaArticuloTMP>("spGetArticulosCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId",
+                        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+                        new SqlParameter("@CampañaId", campa.CampañaId),
+                        new SqlParameter("@TiendaId", tiendaId)).FirstOrDefault();
 
-                    }
-
-                    campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
-
-                    foreach (var tienda in tiendas)
-                    {
-                        var articulosCampaña = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articulos.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
                         if (articulosCampaña == null)
                         {
-                            foreach (var campa in campaña)
+                            var materialTienda = db.Database.SqlQuery<TiendaArticulo>("spGetMaterialCAmpanias @ArticuloKFCId, @TiendaId",
+                            new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+                            new SqlParameter("@TiendaId", tiendaId)).FirstOrDefault();
+
+                            var habilitado = materialTienda.Seleccionado;
+
+                            var cantidad = 0;
+
+                            if (habilitado == true)
                             {
-                                var articuloDetalle = new CampañaArticuloTMP
-                                {
-                                    ArticuloKFCId = articulos.ArticuloKFCId,
-                                    Habilitado = true,
-                                    TiendaId = tienda.TiendaId,
-                                    CampañaId = campa.CampañaId,
-                                    Cantidad = articulos.CantidadDefault,
-                                    Codigo = 0
-                                };
+                                cantidad = articulo.CantidadDefault;
+                            }
 
-                                db.CampañaArticuloTMPs.Add(articuloDetalle);
+                            int codigo = 0;
 
+                            if (articulo.Activo == true && articulo.Eliminado == false)
+                            {
+                                db.Database.ExecuteSqlCommand(
+                                "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
+                                new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+                                new SqlParameter("@TiendaId", tiendaId),
+                                new SqlParameter("@CampañaId", campa.CampañaId),
+                                new SqlParameter("@Habilitado", habilitado),
+                                new SqlParameter("@Cantidad", cantidad),
+                                new SqlParameter("@Codigo", codigo));
                             }
                         }
+                        else
+                        {
+                            if (tienda.Activo == false)
+                            {
+                                int campId = campa.CampañaId;
 
+                                db.Database.ExecuteSqlCommand(
+                                "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
+                                new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+                                new SqlParameter("@CampañaId", campId),
+                                new SqlParameter("@TiendaId", tiendaId));
+                            }
+                            else
+                            {
+                                if (articulosCampaña.Habilitado == true)
+                                {
+
+                                    if (articulo.CantidadDefault != articulosCampaña.Cantidad)
+                                    {
+                                        var cantidad = articulo.CantidadDefault;
+
+                                        db.Database.ExecuteSqlCommand(
+                                       "spActualizarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId, @Cantidad",
+                                        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+                                        new SqlParameter("@CampañaId", campa.CampañaId),
+                                        new SqlParameter("@TiendaId", tiendaId),
+                                        new SqlParameter("@Cantidad", cantidad));
+
+                                    }
+                                }
+                            }
+                        }
                     }
-
-                    db.SaveChanges();
-                    transaccion.Commit();
-
-                    return new Response { Succeeded = true, };
-                }
-                catch (Exception ex)
-                {
-                    transaccion.Rollback();
-                    return new Response
-                    {
-                        Message = ex.Message,
-                        Succeeded = false,
-                    };
                 }
             }
+
+            return new Response { Succeeded = true, };
+
+        }
+
+        public static Response AgregarArticuloCampañas(ArticuloKFC articuloKFC)
+        {
+            var articuloKFCId = articuloKFC.ArticuloKFCId;
+            var tipoArticulo = articuloKFC.EquityFranquicia;
+
+            var tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == tipoArticulo && cdt.Activo == true).ToList();
+
+            if (tipoArticulo == "EQUITY" || tipoArticulo == "STOCK")
+            {
+                tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia != "FRANQUICIAS" && cdt.Activo == true).ToList();
+            }
+            else
+            {
+                tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == "FRANQUICIAS" && cdt.Activo == true).ToList();
+            }
+
+            var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
+
+            if (campaña.Count == 0)
+            {
+                return new Response { Succeeded = true, };
+            }
+            else
+            {
+                foreach (var campa in campaña)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        //var articulosCampaña = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaId == campa.CampañaId).FirstOrDefault();
+
+                        var articulosCampaña = db.Database.SqlQuery<CampañaArticuloTMP>("spGetArticulosCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId",
+                        new SqlParameter("@ArticuloKFCId", articuloKFCId),
+                        new SqlParameter("@CampañaId", campa.CampañaId),
+                        new SqlParameter("@TiendaId", tienda.TiendaId)).FirstOrDefault();
+
+
+                        if (articulosCampaña == null)
+                        {
+                            var materialTienda = db.Database.SqlQuery<TiendaArticulo>("spGetMaterialCAmpanias @ArticuloKFCId, @TiendaId",
+                            new SqlParameter("@ArticuloKFCId", articuloKFCId),
+                            new SqlParameter("@TiendaId", tienda.TiendaId)).FirstOrDefault();
+
+                            var habilitado = materialTienda.Seleccionado;
+
+                            var cantidad = 0;
+
+                            if (habilitado == true)
+                            {
+                                cantidad = articuloKFC.CantidadDefault;
+                            }
+
+                            int codigo = 0;
+
+                            db.Database.ExecuteSqlCommand(
+                            "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
+                            new SqlParameter("@ArticuloKFCId", articuloKFCId),
+                            new SqlParameter("@TiendaId", tienda.TiendaId),
+                            new SqlParameter("@CampañaId", campa.CampañaId),
+                            new SqlParameter("@Habilitado", habilitado),
+                            new SqlParameter("@Cantidad", cantidad),
+                            new SqlParameter("@Codigo", codigo));
+                        }
+                        else
+                        {
+                            if (articuloKFC.Activo == false)
+                            {
+                                int campId = campa.CampañaId;
+                                int tiendId = tienda.TiendaId;
+
+                                db.Database.ExecuteSqlCommand(
+                                "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
+                                new SqlParameter("@ArticuloKFCId", articuloKFCId),
+                                new SqlParameter("@CampañaId", campId),
+                                new SqlParameter("@TiendaId", tiendId));
+                            }
+                            else if (articuloKFC.Eliminado == true)
+                            {
+                                int campId = campa.CampañaId;
+                                int tiendId = tienda.TiendaId;
+
+                                db.Database.ExecuteSqlCommand(
+                                "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
+                                new SqlParameter("@ArticuloKFCId", articuloKFCId),
+                                new SqlParameter("@CampañaId", campId),
+                                new SqlParameter("@TiendaId", tiendId));
+                            }
+                            else
+                            {
+                                if (articulosCampaña.Habilitado == true)
+                                {
+
+                                    if (articuloKFC.CantidadDefault != articulosCampaña.Cantidad)
+                                    {
+                                        var cantidad = articuloKFC.CantidadDefault;
+
+                                        db.Database.ExecuteSqlCommand(
+                                       "spActualizarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId, @Cantidad",
+                                        new SqlParameter("@ArticuloKFCId", articuloKFCId),
+                                        new SqlParameter("@CampañaId", campa.CampañaId),
+                                        new SqlParameter("@TiendaId", tienda.TiendaId),
+                                        new SqlParameter("@Cantidad", cantidad));
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return new Response { Succeeded = true, };
         }
 
         public static Response ActualizarTiendaArticulos(int? id)
@@ -577,13 +639,18 @@ namespace CampaniasLito.Classes
 
         public static Response GenerarCodigos(int? id)
         {
+
+            db.Database.ExecuteSqlCommand(
+            "spEliminarCodigos @CampañaId",
+            new SqlParameter("@CampañaId", id));
+
             using (var transaccion = db.Database.BeginTransaction())
             {
                 try
                 {
                     var articulos = db.ArticuloKFCs.ToList();
 
-                    foreach (var articulo in articulos.GroupBy(f => f.Familia.Codigo))
+                    foreach (var articulo in articulos.GroupBy(f => new { f.Familia.Codigo, f.Descripcion }))
                     {
                         var familia = articulo.FirstOrDefault().Familia.Codigo;
 
@@ -591,9 +658,9 @@ namespace CampaniasLito.Classes
 
                         for (int f = 0; f < familias.Count(); f++)
                         {
-                            var articuloId = familias[f].ArticuloKFCId;
+                            var articuloId = familias[f].Descripcion;
 
-                            var codigosCampañas = db.CodigosCampaña.Where(cc => cc.ArticuloKFCId == articuloId && cc.CampañaId == id).FirstOrDefault();
+                            var codigosCampañas = db.CodigosCampaña.Where(cc => cc.ArticuloKFC.Descripcion == articuloId && cc.CampañaId == id).FirstOrDefault();
 
                             var idCampaña = db.Campañas.Where(c => c.CampañaId == id).FirstOrDefault().Nombre;
 
@@ -651,67 +718,53 @@ namespace CampaniasLito.Classes
 
         public static Response AgregarTiendaArticulos(int tiendaId)
         {
-            using (var transaccion = db.Database.BeginTransaction())
+            var tipoTienda = db.Tiendas.Where(a => a.TiendaId == tiendaId).FirstOrDefault().EquityFranquicia;
+
+            var tiendas = db.Tiendas.Where(x => x.TiendaId == tiendaId).FirstOrDefault();
+
+            if (tipoTienda == "STOCK")
             {
-                try
-                {
-                    var tipoTienda = db.Tiendas.Where(t => t.TiendaId == tiendaId).FirstOrDefault().EquityFranquicia;
-
-                    var articulos = db.ArticuloKFCs.Where(cdt => cdt.EquityFranquicia == tipoTienda).ToList();
-
-                    //Borrar al terminar
-
-                    // DE AQUI
-
-                    //var tiendas = db.Tiendas.Where(cdt => cdt.CompañiaId == compañiaId && cdt.EquityFranquicia == tipoTienda).ToList();
-
-                    //foreach (var tienda in tiendas)
-                    //{
-                    // HASTA AQUI
-
-                    foreach (var articulo in articulos)
-                    {
-                        // DE AQUI
-                        //var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
-                        // HASTA AQUI
-
-
-                        var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
-
-                        if (tiendaArticulos == null)
-                        {
-                            var articuloDetalle = new TiendaArticulo
-                            {
-                                ArticuloKFCId = articulo.ArticuloKFCId,
-                                Seleccionado = false,
-                                // DE AQUI
-                                //TiendaId = tienda.TiendaId,
-                                // HASTA AQUI
-                                TiendaId = tiendaId,
-                            };
-
-                            db.TiendaArticulos.Add(articuloDetalle);
-                        }
-                    }
-                    // DE AQUI
-                    //}
-                    // HASTA AQUI
-
-                    db.SaveChanges();
-                    transaccion.Commit();
-
-                    return new Response { Succeeded = true, };
-                }
-                catch (Exception ex)
-                {
-                    transaccion.Rollback();
-                    return new Response
-                    {
-                        Message = ex.Message,
-                        Succeeded = false,
-                    };
-                }
+                tipoTienda = "EQUITY";
             }
+
+            var articulos = db.ArticuloKFCs.Where(cdt => cdt.EquityFranquicia == tipoTienda).ToList();
+
+            foreach (var articulo in articulos)
+            {
+
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                if (tiendaArticulos == null)
+                {
+
+                    db.Database.ExecuteSqlCommand(
+                    "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                    new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Seleccionado", true));
+                }
+                //else
+                //{
+                //    if (tiendas.Activo == false)
+                //    {
+                //        db.Database.ExecuteSqlCommand(
+                //        "spACtualizarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                //        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+                //        new SqlParameter("@TiendaId", tiendaId),
+                //        new SqlParameter("@Seleccionado", false));
+                //    }
+                //    else
+                //    {
+                //        db.Database.ExecuteSqlCommand(
+                //        "spACtualizarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                //        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+                //        new SqlParameter("@TiendaId", tiendaId),
+                //        new SqlParameter("@Seleccionado", true));
+                //    }
+                //}
+            }
+
+            return new Response { Succeeded = true, };
         }
 
         public static Response AgregarTiendaArticulosTodo()

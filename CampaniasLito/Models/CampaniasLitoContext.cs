@@ -74,6 +74,7 @@ namespace CampaniasLito.Models
         public DbSet<TipoConfiguracion> TipoConfiguracions { get; set; }
 
         public DbSet<AsignarConfiguracionTienda> AsignarConfiguracionTiendas { get; set; }
-        
+        public DbSet<Regla> Reglas { get; set; }
+
     }
 }

@@ -713,19 +713,19 @@ input[type=range] {
 /*=============================================================================================================================================================================*/
 
 .botonF1 {
-    width: 60px;
-    height: 60px;
+    width: 43px;
+    height: 43px;
     border-radius: 100%;
     background: #01207B;
     right: 0;
     bottom: 0;
     position: fixed;
-    margin-right: 36px;
+    margin-right: 50px;
     margin-bottom: 1%;
     border: none;
     outline: none;
     color: #FFF;
-    font-size: 46px !important;
+    font-size: 33px !important;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     transition: .3s;
     z-index: 1;

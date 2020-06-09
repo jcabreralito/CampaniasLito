@@ -1,19 +1,18 @@
-﻿using System;
+﻿using CampaniasLito.Classes;
+using CampaniasLito.Filters;
+using CampaniasLito.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using CampaniasLito.Classes;
-using CampaniasLito.Filters;
-using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
 {
     public class RestaurantesController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
         [HttpPost]
         public JsonResult TiendasList()
@@ -197,22 +196,22 @@ namespace CampaniasLito.Controllers
             return PartialView(configuracion);
         }
 
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Index()
-        {
-            Session["homeB"] = string.Empty;
-            Session["rolesB"] = string.Empty;
-            Session["compañiasB"] = string.Empty;
-            Session["usuariosB"] = string.Empty;
-            Session["regionesB"] = string.Empty;
-            Session["ciudadesB"] = string.Empty;
-            Session["restaurantesB"] = "active";
-            Session["familiasB"] = string.Empty;
-            Session["materialesB"] = string.Empty;
-            Session["campañasB"] = string.Empty;
+        //[AuthorizeUser(idOperacion: 5)]
+        //public ActionResult Index()
+        //{
+        //    Session["homeB"] = string.Empty;
+        //    Session["rolesB"] = string.Empty;
+        //    Session["compañiasB"] = string.Empty;
+        //    Session["usuariosB"] = string.Empty;
+        //    Session["regionesB"] = string.Empty;
+        //    Session["ciudadesB"] = string.Empty;
+        //    Session["restaurantesB"] = "active";
+        //    Session["familiasB"] = string.Empty;
+        //    Session["materialesB"] = string.Empty;
+        //    Session["campañasB"] = string.Empty;
 
-            return View();
-        }
+        //    return View();
+        //}
 
         //[AuthorizeUser(idOperacion: 5)]
         //public ActionResult ConfiguracionesGenerales()
@@ -230,8 +229,13 @@ namespace CampaniasLito.Controllers
         //}
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RestaurantesStock(string tienda)
+        public ActionResult Stock(string tienda)
         {
+            Session["restauranteE"] = string.Empty;
+            Session["restauranteF"] = string.Empty;
+            Session["restauranteS"] = "active";
+            Session["restauranteC"] = string.Empty;
+
             string tipo = "STOCK";
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -252,6 +256,8 @@ namespace CampaniasLito.Controllers
 
             var filtro = Session["tiendaFiltroStock"].ToString();
 
+            ViewBag.Titulo = tipo;
+
             var tiendas = db.Tiendas.Where(a => a.EquityFranquicia == tipo);
 
             if (!string.IsNullOrEmpty(tienda))
@@ -265,8 +271,13 @@ namespace CampaniasLito.Controllers
         }
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RestaurantesFranquicias(string tienda)
+        public ActionResult Franquicias(string tienda)
         {
+            Session["restauranteE"] = string.Empty;
+            Session["restauranteF"] = "active";
+            Session["restauranteS"] = string.Empty;
+            Session["restauranteC"] = string.Empty;
+
             string tipo = "FRANQUICIAS";
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -286,6 +297,8 @@ namespace CampaniasLito.Controllers
             }
 
             var filtro = Session["tiendaFiltro"].ToString();
+
+            ViewBag.Titulo = tipo;
 
             var tiendas = db.Tiendas.Where(a => a.EquityFranquicia == tipo);
 
@@ -335,8 +348,38 @@ namespace CampaniasLito.Controllers
         //}
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RestaurantesEquity(string tienda)
+        public ActionResult Configuraciones()
         {
+
+            Session["restauranteE"] = string.Empty;
+            Session["restauranteF"] = string.Empty;
+            Session["restauranteS"] = string.Empty;
+            Session["restauranteC"] = "active";
+
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Titulo = "Configuraciones";
+
+            ViewBag.Campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
+            var articuloKFCs = db.ArticuloKFCs.Where(a => a.Eliminado == false && a.ProveedorId == 5).OrderBy(a => a.Descripcion).ThenBy(a => a.Familia.Descripcion).ToList();
+
+            return View(articuloKFCs.ToList());
+        }
+
+        [AuthorizeUser(idOperacion: 5)]
+        public ActionResult Equity(string tienda)
+        {
+            Session["restauranteE"] = "active";
+            Session["restauranteF"] = string.Empty;
+            Session["restauranteS"] = string.Empty;
+            Session["restauranteC"] = string.Empty;
+
             string tipo = "EQUITY";
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -356,6 +399,8 @@ namespace CampaniasLito.Controllers
             }
 
             var filtro = Session["tiendaFiltroEquity"].ToString();
+
+            ViewBag.Titulo = tipo;
 
             var tiendas = db.Tiendas.Where(a => a.EquityFranquicia == tipo);
 
@@ -702,6 +747,8 @@ namespace CampaniasLito.Controllers
 
             tienda.EquityFranquicia = Session["tipoTienda"].ToString();
 
+            tienda.Activo = true;
+
             if (ModelState.IsValid)
             {
                 db.Tiendas.Add(tienda);
@@ -713,12 +760,28 @@ namespace CampaniasLito.Controllers
                     if (responseATA.Succeeded)
                     {
                         MovementsHelper.ReglasTiendaArticulos(tienda.TiendaId);
+                        MovementsHelper.AgregarArticuloPorTiendas(tienda);
                     }
 
 
                     TempData["mensajeLito"] = "RESTAURANTE AGREGADO";
 
-                    return RedirectToAction("Index");
+                    if (Session["tipoTienda"].ToString() == "EQUITY")
+                    {
+                        return RedirectToAction("Equity");
+                    }
+                    else if (Session["tipoTienda"].ToString() == "FRANQUICIAS")
+                    {
+                        return RedirectToAction("Franquicias");
+                    }
+                    else if (Session["tipoTienda"].ToString() == "STOCK")
+                    {
+                        return RedirectToAction("Stock");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
 
                 ModelState.AddModelError(string.Empty, response.Message);
@@ -857,7 +920,7 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var tiendaArticulos = db.TiendaArticulos.Where(t => t.TiendaId == id).OrderBy(t => t.ArticuloKFC.Familia.Codigo).ThenBy(t => t.ArticuloKFCId).ToList();
+            var tiendaArticulos = db.TiendaArticulos.Where(t => t.TiendaId == id && t.ArticuloKFC.Eliminado == false && t.ArticuloKFC.Activo == true).OrderBy(t => t.ArticuloKFC.Familia.Codigo).ThenBy(t => t.ArticuloKFCId).ToList();
 
             if (tiendaArticulos == null)
             {
@@ -995,6 +1058,47 @@ namespace CampaniasLito.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        // GET: Tiendas/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
+        public ActionResult TiendaConfiguraciones(int? id)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            Session["ConfigId"] = id;
+
+            var cgenerales = new TiendaConfiguracion { };
+
+            return PartialView(cgenerales);
+        }
+
+        [AuthorizeUser(idOperacion: 2)]
+        [HttpPost]
+        public ActionResult TiendaConfiguraciones(TiendaConfiguracion tiendaConfiguracion)
+        {
+            tiendaConfiguracion.TipoConfiguracionId = (int)Session["ConfigId"];
+
+            //if (ModelState.IsValid)
+            //{
+            db.TiendaConfiguracions.Add(tiendaConfiguracion);
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
+            {
+
+                TempData["mensajeLito"] = "CARACTERISTICAS AGREGADAS";
+
+                return RedirectToAction("Equity");
+            }
+
+            ModelState.AddModelError(string.Empty, response.Message);
+            //}
+
+            return PartialView(tiendaConfiguracion);
+        }
 
         // GET: Tiendas/Edit/5
         [AuthorizeUser(idOperacion: 2)]
@@ -1014,6 +1118,7 @@ namespace CampaniasLito.Controllers
                 return HttpNotFound();
             }
 
+            var cgenerales = db.TiendaGenerales.ToList();
             //int tipo = 0;
 
             //if (tienda.EquityFranquicia == "EQUITY")
@@ -1031,8 +1136,8 @@ namespace CampaniasLito.Controllers
 
             //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tipo, true), "CiudadId", "Nombre", tienda.CiudadId);
             //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", tienda.RegionId);
-            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TipoId);
+            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
+            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TipoId);
             //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
             //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
             //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
@@ -1485,13 +1590,30 @@ namespace CampaniasLito.Controllers
 
                     if (response2.Succeeded)
                     {
+                        MovementsHelper.AgregarArticuloPorTiendas(tienda);
                         //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
                     }
 
 
                     TempData["mensajeLito"] = "RESTAURANTE EDITADO";
 
-                    return RedirectToAction("Index");
+                    if (tienda.EquityFranquicia == "EQUITY")
+                    {
+                        return RedirectToAction("Equity");
+                    }
+                    else if (tienda.EquityFranquicia == "FRANQUICIAS")
+                    {
+                        return RedirectToAction("Franquicias");
+                    }
+                    else if (tienda.EquityFranquicia == "STOCK")
+                    {
+                        return RedirectToAction("Stock");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
+
                 }
 
                 ModelState.AddModelError(string.Empty, response.Message);
@@ -1548,7 +1670,22 @@ namespace CampaniasLito.Controllers
 
             TempData["mensajeLito"] = "RESTAURANTE ELIMINADO";
 
-            return RedirectToAction("Index");
+            if (tienda.EquityFranquicia == "EQUITY")
+            {
+                return RedirectToAction("Equity");
+            }
+            else if (tienda.EquityFranquicia == "FRANQUICIAS")
+            {
+                return RedirectToAction("Franquicias");
+            }
+            else if (tienda.EquityFranquicia == "STOCK")
+            {
+                return RedirectToAction("Stock");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         protected override void Dispose(bool disposing)

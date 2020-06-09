@@ -582,7 +582,7 @@ div.DTE_Bubble_Background {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-div.DTE div.editor_upload {
+/*div.DTE div.editor_upload {
   padding-top: 4px;
 }
 div.DTE div.editor_upload div.eu_table {
@@ -900,7 +900,7 @@ div.editor-datetime-error {
   line-height: 1.25em;
   text-align: center;
   color: #b11f1f;
-}
+}*/
 
 div.DTE div.DTE_Processing_Indicator {
   position: absolute;

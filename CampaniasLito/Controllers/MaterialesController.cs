@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -22,30 +23,30 @@ namespace CampaniasLito.Controllers
         }
 
         // GET: ArticulosKFC
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Index()
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+        //[AuthorizeUser(idOperacion: 5)]
+        //public ActionResult Index()
+        //{
+        //    var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+        //    if (usuario == null)
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
 
-            Session["homeB"] = string.Empty;
-            Session["rolesB"] = string.Empty;
-            Session["compañiasB"] = string.Empty;
-            Session["usuariosB"] = string.Empty;
-            Session["regionesB"] = string.Empty;
-            Session["ciudadesB"] = string.Empty;
-            Session["restaurantesB"] = string.Empty;
-            Session["familiasB"] = string.Empty;
-            Session["materialesB"] = "active";
-            Session["campañasB"] = string.Empty;
+        //    Session["homeB"] = string.Empty;
+        //    Session["rolesB"] = string.Empty;
+        //    Session["compañiasB"] = string.Empty;
+        //    Session["usuariosB"] = string.Empty;
+        //    Session["regionesB"] = string.Empty;
+        //    Session["ciudadesB"] = string.Empty;
+        //    Session["restaurantesB"] = string.Empty;
+        //    Session["familiasB"] = string.Empty;
+        //    Session["materialesB"] = "active";
+        //    Session["campañasB"] = string.Empty;
 
-            return View();
+        //    return View();
 
-        }
+        //}
 
         //[AuthorizeUser(idOperacion: 5)]
         //public ActionResult MaterialesStock()
@@ -65,8 +66,11 @@ namespace CampaniasLito.Controllers
         //}
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult MaterialesFranquicias()
+        public ActionResult Franquicias()
         {
+            Session["materialE"] = string.Empty;
+            Session["materialF"] = "active";
+
             string tipo = "FRANQUICIAS";
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -76,14 +80,22 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var articuloKFCs = db.ArticuloKFCs.Where(a => a.EquityFranquicia == tipo).OrderBy(a => a.Descripcion).ThenBy(a => a.Familia.Descripcion).ToList();
+            ViewBag.Titulo = tipo;
+
+            ViewBag.Campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
+            var articuloKFCs = db.ArticuloKFCs.Where(a => a.EquityFranquicia == tipo && a.Eliminado == false).OrderBy(a => a.Descripcion).ThenBy(a => a.Familia.Descripcion).ToList();
 
             return View(articuloKFCs.ToList());
         }
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult MaterialesEquity(string articulo)
+        public ActionResult Equity()
         {
+
+            Session["materialE"] = "active";
+            Session["materialF"] = string.Empty;
+
             string tipo = "EQUITY";
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
@@ -93,7 +105,11 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var articuloKFCs = db.ArticuloKFCs.Where(a => a.EquityFranquicia == tipo).OrderBy(a => a.Descripcion).ThenBy(a => a.Familia.Descripcion).ToList();
+            ViewBag.Titulo = "EQUITY / STOCK";
+
+            ViewBag.Campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
+            var articuloKFCs = db.ArticuloKFCs.Where(a => a.EquityFranquicia == tipo && a.Eliminado == false && a.ProveedorId != 5).OrderBy(a => a.Descripcion).ThenBy(a => a.Familia.Descripcion).ToList();
 
             return View(articuloKFCs.ToList());
         }
@@ -111,6 +127,152 @@ namespace CampaniasLito.Controllers
             {
                 return HttpNotFound();
             }
+            return PartialView(articuloKFC);
+        }
+
+        // GET: ArticulosKFC/Create
+        [AuthorizeUser(idOperacion: 1)]
+        public ActionResult CreateCaracteristica(int id, int tipo)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (tipo == 1)
+            {
+                Session["tipoCaracteristica"] = "EQUITY";
+            }
+            else if (tipo == 2)
+            {
+                Session["tipoCaracteristica"] = "FRANQUICIAS";
+            }
+            else if (tipo == 3)
+            {
+                Session["tipoCaracteristica"] = "STOCK";
+            }
+
+            var tipoMaterial = Session["tipoCaracteristica"].ToString();
+
+            var articulos = new ArticuloKFC { ProveedorId = 5, FamiliaId = id, EquityFranquicia = tipoMaterial, Activo = true, Eliminado = false, CantidadDefault = 0 };
+
+            return PartialView(articulos);
+        }
+
+        // POST: ArticulosKFC/Create
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateCaracteristica(ArticuloKFC articuloKFC)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (ModelState.IsValid)
+            {
+                db.ArticuloKFCs.Add(articuloKFC);
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    MovementsHelper.AgregarArticuloTiendas(articuloKFC.ArticuloKFCId);
+
+                    var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
+                    var campId = 0;
+
+                    if (campaña != null)
+                    {
+                        campId = campaña.CampañaId;
+                        MovementsHelper.AgregarArticuloCampañas(articuloKFC);
+                    }
+
+                    if (articuloKFC.ImagenFile != null)
+                    {
+                        var folder = "~/Content/Productos";
+                        var file = string.Format("{0}.jpg", articuloKFC.Descripcion);
+                        var responseLogo = FilesHelper.UploadPhoto(articuloKFC.ImagenFile, folder, file);
+                        if (responseLogo)
+                        {
+                            var pic = string.Format("{0}/{1}", folder, file);
+                            articuloKFC.Imagen = pic;
+                            db.Entry(articuloKFC).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                    }
+
+                    TempData["mensajeLito"] = "MATERIAL AGREGADO";
+
+                    if (Session["tipoCaracteristica"].ToString() == "EQUITY" || Session["tipoCaracteristica"].ToString() == "STOCK" || Session["tipoCaracteristica"].ToString() == "FRANQUICIAS")
+                    {
+                        return RedirectToAction("Configuraciones", "Restaurantes");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Equity", "Restaurantes");
+                    }
+
+                }
+
+                ModelState.AddModelError(string.Empty, response.Message);
+            }
+
+            return PartialView(articuloKFC);
+        }
+
+        // GET: ArticulosKFC/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
+        public ActionResult EditCaracteristica(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var articuloKFC = db.ArticuloKFCs.Find(id);
+
+            if (articuloKFC == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView(articuloKFC);
+        }
+
+        // POST: ArticulosKFC/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCaracteristica(ArticuloKFC articuloKFC)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(articuloKFC).State = EntityState.Modified;
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    //MovementsHelper.AgregarArticuloTiendas(articuloKFC.ArticuloKFCId);
+                    MovementsHelper.AgregarArticuloCampañas(articuloKFC);
+
+                    TempData["mensajeLito"] = "MATERIAL EDITADO";
+
+                    if (articuloKFC.EquityFranquicia == "EQUITY" || articuloKFC.EquityFranquicia == "STOCK")
+                    {
+                        return RedirectToAction("Equity");
+                    }
+                    else if (articuloKFC.EquityFranquicia == "FRANQUICIAS")
+                    {
+                        return RedirectToAction("Franquicias");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
+
+                }
+
+                ModelState.AddModelError(string.Empty, response.Message);
+            }
+
             return PartialView(articuloKFC);
         }
 
@@ -138,6 +300,8 @@ namespace CampaniasLito.Controllers
                 Session["tipoArticulo"] = "STOCK";
             }
 
+            ViewBag.Campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
             var articulos = new ArticuloKFC { };
 
             ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Descripcion");
@@ -155,6 +319,8 @@ namespace CampaniasLito.Controllers
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
             articuloKFC.EquityFranquicia = Session["tipoArticulo"].ToString();
+            articuloKFC.Activo = true;
+            articuloKFC.Eliminado = false;
 
             if (ModelState.IsValid)
             {
@@ -163,7 +329,15 @@ namespace CampaniasLito.Controllers
                 if (response.Succeeded)
                 {
                     MovementsHelper.AgregarArticuloTiendas(articuloKFC.ArticuloKFCId);
-                    MovementsHelper.AgregarArticuloCampañas(articuloKFC.ArticuloKFCId);
+
+                    var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
+                    var campId = 0;
+
+                    if (campaña != null)
+                    {
+                        campId = campaña.CampañaId;
+                        MovementsHelper.AgregarArticuloCampañas(articuloKFC);
+                    }
 
                     if (articuloKFC.ImagenFile != null)
                     {
@@ -181,7 +355,18 @@ namespace CampaniasLito.Controllers
 
                     TempData["mensajeLito"] = "MATERIAL AGREGADO";
 
-                    return RedirectToAction("Index");
+                    if (Session["tipoArticulo"].ToString() == "EQUITY" || Session["tipoArticulo"].ToString() == "STOCK")
+                    {
+                        return RedirectToAction("Equity");
+                    }
+                    else if (Session["tipoArticulo"].ToString() == "FRANQUICIAS")
+                    {
+                        return RedirectToAction("Franquicias");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
 
                 }
 
@@ -379,8 +564,11 @@ namespace CampaniasLito.Controllers
 
             var tipoTienda = Session["tipoArticulo"].ToString();
 
-            var tiendaArticulos = db.TiendaArticulos.Where(t => t.ArticuloKFCId == id && t.Tienda.EquityFranquicia == tipoTienda).OrderBy(t => t.Tienda.Restaurante).ToList();
+            var tiendaArticulos = db.TiendaArticulos.Where(t => t.ArticuloKFCId == id && t.Tienda.EquityFranquicia == tipoTienda && t.Tienda.Activo == true).OrderBy(t => t.Tienda.Restaurante).ToList();
 
+            var seleccionados = tiendaArticulos.Where(x => x.Seleccionado == true).ToList();
+
+            ViewBag.TotalSeleccionados = seleccionados.Count();
 
             if (tiendaArticulos == null)
             {
@@ -396,6 +584,179 @@ namespace CampaniasLito.Controllers
         private bool Update(TiendaArticulo product)
         {
             return true;
+        }
+
+        // GET: Tiendas/Edit/5
+        [AuthorizeUser(idOperacion: 2)]
+        public ActionResult AsignarTiendasCaracteristicas(int? id, int tipo)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (tipo == 1)
+            {
+                Session["tipoArticulo"] = "EQUITY";
+            }
+            else if (tipo == 2)
+            {
+                Session["tipoArticulo"] = "FRANQUICIAS";
+            }
+            else if (tipo == 3)
+            {
+                Session["tipoArticulo"] = "STOCK";
+            }
+
+            var tipoTienda = Session["tipoArticulo"].ToString();
+
+            var tiendaArticulos = db.TiendaArticulos.Where(t => t.ArticuloKFCId == id && t.Tienda.EquityFranquicia == tipoTienda && t.Tienda.Activo == true).OrderBy(t => t.Tienda.Restaurante).ToList();
+
+            var seleccionados = tiendaArticulos.Where(x => x.Seleccionado).ToList();
+
+            ViewBag.TotalSeleccionados = seleccionados.Count();
+
+            if (tiendaArticulos == null)
+            {
+                return HttpNotFound();
+            }
+
+
+            ViewBag.Articulo = db.ArticuloKFCs.Where(t => t.ArticuloKFCId == id).FirstOrDefault().Descripcion;
+
+            return PartialView(tiendaArticulos);
+        }
+
+        [AuthorizeUser(idOperacion: 2)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AsignarTiendasCaracteristicas(FormCollection fc)
+        {
+            var nombre = User.Identity.Name;
+            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
+
+            string[] articuloKFCTMPId = fc.GetValues("TiendaArticuloId");
+            string[] seleccionado = fc.GetValues("Seleccionado");
+
+            var selec = false;
+            var cantidad = 0;
+            var campId = 0;
+
+            var campañas = db.Campañas.Where(ct => ct.Generada == "NO").OrderBy(ct => ct.CampañaId).FirstOrDefault();
+
+            if (campañas == null)
+            {
+                campId = 0;
+            }
+            else
+            {
+                campId = campañas.CampañaId;
+            }
+
+            for (var i = 0; i < articuloKFCTMPId.Length; i++)
+            {
+                TiendaArticulo tiendaArticulo = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[i]));
+
+                var tiendaId = tiendaArticulo.TiendaId;
+                var articuloId = tiendaArticulo.ArticuloKFCId;
+
+                CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId && ta.CampañaId == campId).FirstOrDefault();
+
+                selec = false;
+                cantidad = 0;
+                if (campañaArticulo == null)
+                {
+                    var codigo = 0;
+
+                    db.Database.ExecuteSqlCommand(
+                    "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
+                    new SqlParameter("@ArticuloKFCId", articuloId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@CampañaId", campId),
+                    new SqlParameter("@Habilitado", false),
+                    new SqlParameter("@Cantidad", cantidad),
+                    new SqlParameter("@Codigo", codigo));
+
+                }
+                else
+                {
+                    if (seleccionado == null)
+                    {
+                        selec = false;
+                        cantidad = 0;
+
+                        tiendaArticulo.Seleccionado = selec;
+
+                        db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                        campañaArticulo.Habilitado = selec;
+                        campañaArticulo.Cantidad = cantidad;
+
+                        db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        for (var j = 0; j < seleccionado.Length; j++)
+                        {
+                            if (articuloKFCTMPId[i] == seleccionado[j])
+                            {
+                                selec = true;
+
+                                tiendaArticulo.Seleccionado = selec;
+
+                                db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
+
+                                cantidad = articuloCantidadDefault;
+                                campañaArticulo.Cantidad = cantidad;
+                                campañaArticulo.Habilitado = selec;
+
+                                db.Entry(campañaArticulo).State = EntityState.Modified;
+                                db.SaveChanges();
+
+                                break;
+                            }
+                        }
+                        if (!selec)
+                        {
+                            selec = false;
+                            cantidad = 0;
+
+                            tiendaArticulo.Seleccionado = selec;
+
+                            db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                            campañaArticulo.Habilitado = selec;
+                            campañaArticulo.Cantidad = cantidad;
+
+                            db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            TempData["mensajeLito"] = "RESTAURANTES ASIGNADOS";
+
+            if (Session["tipoArticulo"].ToString() == "EQUITY" || Session["tipoArticulo"].ToString() == "STOCK")
+            {
+                return RedirectToAction("Equity", "Restaurantes");
+            }
+            else if (Session["tipoArticulo"].ToString() == "FRANQUICIAS")
+            {
+                return RedirectToAction("Franquicias", "Restaurantes");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+
         }
 
         [AuthorizeUser(idOperacion: 2)]
@@ -435,48 +796,23 @@ namespace CampaniasLito.Controllers
 
                 selec = false;
                 cantidad = 0;
-
-                if (seleccionado == null)
+                if (campañaArticulo == null)
                 {
-                    selec = false;
-                    cantidad = 0;
+                    var codigo = 0;
 
-                    tiendaArticulo.Seleccionado = selec;
+                    db.Database.ExecuteSqlCommand(
+                    "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
+                    new SqlParameter("@ArticuloKFCId", articuloId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@CampañaId", campId),
+                    new SqlParameter("@Habilitado", false),
+                    new SqlParameter("@Cantidad", cantidad),
+                    new SqlParameter("@Codigo", codigo));
 
-                    db.Entry(tiendaArticulo).State = EntityState.Modified;
-
-                    campañaArticulo.Habilitado = selec;
-                    campañaArticulo.Cantidad = cantidad;
-
-                    db.Entry(campañaArticulo).State = EntityState.Modified;
-
-                    db.SaveChanges();
                 }
                 else
                 {
-                    for (var j = 0; j < seleccionado.Length; j++)
-                    {
-                        if (articuloKFCTMPId[i] == seleccionado[j])
-                        {
-                            selec = true;
-
-                            tiendaArticulo.Seleccionado = selec;
-
-                            db.Entry(tiendaArticulo).State = EntityState.Modified;
-
-                            var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
-
-                            cantidad = articuloCantidadDefault;
-                            campañaArticulo.Cantidad = cantidad;
-                            campañaArticulo.Habilitado = selec;
-
-                            db.Entry(campañaArticulo).State = EntityState.Modified;
-                            db.SaveChanges();
-
-                            break;
-                        }
-                    }
-                    if (!selec)
+                    if (seleccionado == null)
                     {
                         selec = false;
                         cantidad = 0;
@@ -492,12 +828,64 @@ namespace CampaniasLito.Controllers
 
                         db.SaveChanges();
                     }
+                    else
+                    {
+                        for (var j = 0; j < seleccionado.Length; j++)
+                        {
+                            if (articuloKFCTMPId[i] == seleccionado[j])
+                            {
+                                selec = true;
+
+                                tiendaArticulo.Seleccionado = selec;
+
+                                db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
+
+                                cantidad = articuloCantidadDefault;
+                                campañaArticulo.Cantidad = cantidad;
+                                campañaArticulo.Habilitado = selec;
+
+                                db.Entry(campañaArticulo).State = EntityState.Modified;
+                                db.SaveChanges();
+
+                                break;
+                            }
+                        }
+                        if (!selec)
+                        {
+                            selec = false;
+                            cantidad = 0;
+
+                            tiendaArticulo.Seleccionado = selec;
+
+                            db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                            campañaArticulo.Habilitado = selec;
+                            campañaArticulo.Cantidad = cantidad;
+
+                            db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                            db.SaveChanges();
+                        }
+                    }
                 }
             }
 
             TempData["mensajeLito"] = "RESTAURANTES ASIGNADOS";
 
-            return RedirectToAction("Index");
+            if (Session["tipoArticulo"].ToString() == "EQUITY" || Session["tipoArticulo"].ToString() == "STOCK")
+            {
+                return RedirectToAction("Equity");
+            }
+            else if (Session["tipoArticulo"].ToString() == "FRANQUICIAS")
+            {
+                return RedirectToAction("Franquicias");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
 
         }
 
@@ -535,8 +923,8 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-                    MovementsHelper.AgregarArticuloTiendas(articuloKFC.ArticuloKFCId);
-                    MovementsHelper.AgregarArticuloCampañas(articuloKFC.ArticuloKFCId);
+                    //MovementsHelper.AgregarArticuloTiendas(articuloKFC.ArticuloKFCId);
+                    MovementsHelper.AgregarArticuloCampañas(articuloKFC);
 
                     if (articuloKFC.ImagenFile != null)
                     {
@@ -553,7 +941,19 @@ namespace CampaniasLito.Controllers
                     }
 
                     TempData["mensajeLito"] = "MATERIAL EDITADO";
-                    return RedirectToAction("Index");
+
+                    if (articuloKFC.EquityFranquicia == "EQUITY" || articuloKFC.EquityFranquicia == "STOCK")
+                    {
+                        return RedirectToAction("Equity");
+                    }
+                    else if (articuloKFC.EquityFranquicia == "FRANQUICIAS")
+                    {
+                        return RedirectToAction("Franquicias");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
 
                 }
 
@@ -594,36 +994,55 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var articulo = db.ArticuloKFCs.Find(id);
-            var articuloTienda = db.TiendaArticulos.Where(ta => ta.ArticuloKFCId == id).ToList();
-            var articuloCampaña = db.CampañaArticuloTMPs.Where(ca => ca.ArticuloKFCId == id).ToList();
+            var articuloKFC = db.ArticuloKFCs.Find(id);
+            //var articuloTienda = db.TiendaArticulos.Where(ta => ta.ArticuloKFCId == id).ToList();
+            //var articuloCampaña = db.CampañaArticuloTMPs.Where(ca => ca.ArticuloKFCId == id).ToList();
 
-            foreach (var item in articuloTienda)
-            {
-                db.TiendaArticulos.Remove(item);
-                db.SaveChanges();
-            }
+            //foreach (var item in articuloTienda)
+            //{
+            //    db.TiendaArticulos.Remove(item);
+            //    db.SaveChanges();
+            //}
 
-            foreach (var item2 in articuloCampaña)
-            {
-                db.CampañaArticuloTMPs.Remove(item2);
-                db.SaveChanges();
-            }
+            //foreach (var item2 in articuloCampaña)
+            //{
+            //    db.CampañaArticuloTMPs.Remove(item2);
+            //    db.SaveChanges();
+            //}
 
+            articuloKFC.Eliminado = true;
+            articuloKFC.Activo = false;
 
-            db.ArticuloKFCs.Remove(articulo);
-
+            db.Entry(articuloKFC).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
+                db.Database.ExecuteSqlCommand(
+                "spEliminarMaterialTiendas @ArticuloKFCId",
+                new SqlParameter("@ArticuloKFCId", id));
+
+                MovementsHelper.AgregarArticuloCampañas(articuloKFC);
+
                 TempData["mensajeLito"] = "MATERIAL ELIMINADO";
 
-                return RedirectToAction("Index");
+                if (articuloKFC.EquityFranquicia == "EQUITY" || articuloKFC.EquityFranquicia == "STOCK")
+                {
+                    return RedirectToAction("Equity");
+                }
+                else if (articuloKFC.EquityFranquicia == "FRANQUICIAS")
+                {
+                    return RedirectToAction("Franquicias");
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+
             }
 
             ModelState.AddModelError(string.Empty, response.Message);
 
-            return PartialView(articulo);
+            return PartialView(articuloKFC);
         }
 
         protected override void Dispose(bool disposing)

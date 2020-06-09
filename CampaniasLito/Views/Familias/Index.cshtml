@@ -25,7 +25,7 @@
     <div class="panel">
         <div class="panel-heading table-responsive" id="panelH">
 
-            <a href="@Url.Action("Create", "Familias", new { })" class="botonF1 dialog-window-medium" onclick="viewPageSwal()">
+            <a href="@Url.Action("Create", "Familias", new { })" class="botonF1 dialog-window-medium" onclick="viewPageSwalIn()">
                 <i class="fas fa-plus-circle"></i>
             </a>
 
@@ -67,12 +67,12 @@
                                 @Html.DisplayFor(modelItem => item.Codigo)
                             </td>
                             <td align="center">
-                                <a href="@Url.Action("Edit", "Familias", new { id = item.FamiliaId})" class="btn-dark dialog-window-medium" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                <a href="@Url.Action("Edit", "Familias", new { id = item.FamiliaId})" class="btn-dark dialog-window-medium" style="background-color: transparent; border:none;" onclick="viewPageSwalIn()">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
                             </td>
                             <td align="center">
-                                <a id="botones" href="@Url.Action("Delete", "Familias", new { id = item.FamiliaId})" class="btn-dark dialog-window-medium" style="background-color: transparent; border:none;" onclick="viewPageSwal()">
+                                <a id="botones" href="@Url.Action("Delete", "Familias", new { id = item.FamiliaId})" class="btn-dark dialog-window-medium" style="background-color: transparent; border:none;" onclick="viewPageSwalIn()">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>

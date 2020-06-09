@@ -1,0 +1,362 @@
+﻿@model IEnumerable<CampaniasLito.Models.ArticuloKFC>
+
+@{
+    ViewBag.Title = "Materiales Equity / Stock";
+    Layout = "~/Views/Shared/_Layout_Material.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+
+    <script type="text/javascript">
+        {
+            if (history.forward(1))
+                location.replace(history.forward(1))
+        }
+
+        function nobackbutton() {
+            window.location.hash = "Litoprocess";
+            window.location.hash = "Again-No-back-button" //chrome
+            window.onhashchange = function () { window.location.hash = "Litoprocess"; }
+        }
+
+    </script>
+
+    <link href="~/Content/vendor/DataTables/datatables.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/DataTables/DataTables-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/DataTables/DataTables-1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+    <link href="~/Content/css/Campañas.css" rel="stylesheet" />
+    <link href="~/Content/css/Materiales.css" rel="stylesheet" />
+
+</head>
+
+<body id="body" style="background-color: #f5f5f5; margin: 10px">
+    <div class="panel">
+        <div class="panel-heading table-responsive" id="panelH" style="margin-bottom: 10px">
+
+            @*@if (ViewBag.Campañas.Count <= 1)
+                {
+                    <a href="@Url.Action("Create", "Materiales", new { id = 1 })" class="botonF1 dialog-window-medium" onclick="viewPageSwalInM()">
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
+                }*@
+
+            <a href="@Url.Action("Create", "Materiales", new { id = 1 })" class="botonF1 dialog-window-medium" onclick="viewPageSwalInM()">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+
+            @*<table id="dataTable" cellspacing="0">
+                    <tr>
+                        <td class=" col-xs-2">
+                            <h2><i id="iconoTitulo" class="fas fa-barcode"></i></h2>
+                        </td>
+                        <td class=" col-xs-9" align="center">
+                            <h2 id="titulo"> @ViewBag.Title</h2>
+                        </td>
+                    </tr>
+                </table>*@
+        </div>
+
+        <div style="height: 71.5vh !important; max-height: 98vh !important">
+            <table id="miTablaMaterial" class="table-striped row-border compact" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProveedorId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FamiliaId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CantidadDefault)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Activo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Observaciones)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Imagen)
+                        </th>
+                        <th>
+                            RESTAURANTES
+                        </th>
+                        <th align="center">
+                            EDITAR
+                        </th>
+                        <th align="center">
+                            ELIMINAR
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.EquityFranquicia == "EQUITY"))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Proveedor.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Familia.Descripcion)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.CantidadDefault)
+                            </td>
+                            <td align="center">
+                                <label for="danger" class="btndangerCheckM">
+                                    <input type="checkbox" id="danger" class="badgebox" checked="@item.Activo" disabled="disabled">
+                                    <span class="badge">&check;</span>
+                                </label>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observaciones)
+                            </td>
+                            <td align="center">
+                                @if (!string.IsNullOrEmpty(item.Imagen))
+                                {
+                                    <img src="@Url.Content(item.Imagen)" alt="Image" style="width:50px;height:50px;" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/Content/Productos/Productos.png")" alt="Image" style="width:50px; height:50px;" />
+                                }
+                            </td>
+                            @if (item.Activo == false)
+                            {
+                                <td style="width: 25%" align="center">
+                                    <a id="botones" disabled class="btn btn-danger" style="color: #DF2530; background-color: transparent; border:none; font-size: 18px">
+                                        <i class="fas fa-ban"></i>
+                                    </a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width: 25%" align="center" contenteditable="false">
+                                    <a id="botones" href="@Url.Action("AsignarTiendas", "Materiales", new { id = item.ArticuloKFCId, tipo = 1 })" class="btn btn-danger dialog-window-medium-tiendas" style="color: #DF2530; background-color: transparent; border:none; font-size: 14px" onclick="viewPageSwalInM()">
+                                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;&nbsp;&nbsp;EQUITY
+                                    </a>
+                                    <a id="botones" href="@Url.Action("AsignarTiendas", "Materiales", new { id = item.ArticuloKFCId, tipo = 3 })" class="btn btn-danger dialog-window-medium-tiendas" style="color: #DF2530; background-color: transparent; border:none; font-size: 14px" onclick="viewPageSwalInM()">
+                                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;&nbsp;STOCK
+                                    </a>
+                                </td>
+                            }
+                            @if (item.ProveedorId == 5)
+                            {
+                                <td style="width: 10%" align="center">
+                                    <a id="botones" href="@Url.Action("EditCaracteristica", "Materiales", new { id = item.ArticuloKFCId})" class="btn-dark dialog-window-medium" style="background-color: transparent; border:none; font-size: 20px" onclick="viewPageSwalInM()">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="width: 10%" align="center">
+                                    <a id="botones" href="@Url.Action("Edit", "Materiales", new { id = item.ArticuloKFCId})" class="btn-dark dialog-window-medium" style="background-color: transparent; border:none; font-size: 20px" onclick="viewPageSwalInM()">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                </td>
+                            }
+                            <td style="width: 10%" align="center">
+                                <a id="botones" href="@Url.Action("Delete", "Materiales", new { id = item.ArticuloKFCId})" class="btn-dark dialog-window-medium" style="background-color: transparent; border:none; font-size: 20px" onclick="viewPageSwalInM()">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                @*<tfoot>
+                        <tr>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                            <th align="center">
+                            </th>
+                        </tr>
+
+                    </tfoot>*@
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" data-keyboard="false" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); margin-top: -35px">
+        <div class="modal-dialog" id="mdialTamanio">
+            <div class="modal-content">
+                <div class="te">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-keyboard="false" id="mediumModalTienda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8); margin-top: -35px;">
+        <div class="modal-dialog" id="largeTamanio">
+            <div class="modal-content">
+                <div class="te">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-3.5.0.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#miTablaMaterial').DataTable({
+                stateSave: true,
+                "order": [[0, "asc"]],
+                "pagingType": "full_numbers",
+                language: {
+                    "sProcessing": "Procesando...espere por favor",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla =(",
+                    "sInfo": "_END_ registros",
+                    "sInfoEmpty": "Registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "de un total de _MAX_",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "<<",
+                        "sLast": ">>",
+                        "sNext": ">",
+                        "sPrevious": "<"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    "buttons": {
+                        "copy": "Copiar",
+                        "colvis": "Mostrar/Ocultar Columnas"
+                    },
+                    select: {
+                        rows: {
+                            _: "%d registros seleccionados",
+                            0: "",
+                            1: "1 registro seleccionado"
+                        }
+                    },
+                },
+                //initComplete: function () {
+                //    this.api().columns([1, 2, 3]).every(function () {
+                //        var column = this;
+                //        var select = $('<select><option value="">=TODOS=</option></select>')
+                //            .appendTo($(column.footer()).empty())
+                //            .on('change', function () {
+                //                var val = $.fn.dataTable.util.escapeRegex(
+                //                    $(this).val()
+                //                );
+
+                //                column
+                //                    .search(val ? '^' + val + '$' : '', true, false)
+                //                    .draw();
+                //            });
+
+                //        column.data().unique().sort().each(function (d, j) {
+                //            select.append('<option value="' + d + '">' + d + '</option>')
+                //        });
+                //    });
+                //},
+                dom: 'lfrtip',
+                autoWidth: false,
+                fixedColumns: true,
+                fixedColumns: {
+                    leftColumns: 1,
+                },
+                select: true,
+                scrollY: [
+                    innerHeight = '64vh',
+                ],
+                scrollX: true,
+                keys: true,
+                'bLengthChange': true,
+                'bInfo': true,
+                "lengthMenu": [[-1, 15, 25, 50, 100], ["TODOS", 15, 25, 50, 100]],
+                "columnDefs": [
+                    { "orderable": false, "targets": [5, 6, 7, 8] },
+                    { "searchable": false, "targets": [1, 2, 3, 4, 5, 6, 7, 8] },
+                ],
+            });
+        });
+
+
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window-medium", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#mediumModal').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#mediumModal .te').html(data);
+                        $('#mediumModal').modal();
+                    }).success(function () { $('input:text:visible:first').focus(); });
+
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window-medium-tiendas", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#mediumModalTienda').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#mediumModalTienda .te').html(data);
+                        $('#mediumModalTienda').modal();
+                    }).success(function () { $('input:text:visible:first').focus(); });
+
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>

@@ -33,6 +33,12 @@ namespace CampaniasLito.Models
 
         public string Observaciones { get; set; }
 
+        public bool Eliminado { get; set; }
+
+        public bool Activo { get; set; }
+
+        public bool Todo { get; set; }
+
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Imagen")]
         public string Imagen { get; set; }

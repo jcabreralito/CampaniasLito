@@ -3,11 +3,11 @@
     document.getElementById('contenedor_carga').style.opacity = '1';
 
     swal({
-        title: "<span style='color:#fff; margin-top: 5%'></span>",
+        title: "<span></span>",
         html: true,
         showConfirmButton: false,
-        animation: true,
-        customClass: 'animated swing',
+        //animation: true,
+        //customClass: 'animated swing',
         background: '#B3C9D8',
         grow: 'fullscreen',
     });
@@ -21,14 +21,91 @@
 
 };
 
-function viewPageSwal() {
+function viewPageSwalIn() {
+
+    document.getElementById('contenedor_carga').style.visibility = 'visible';
+    document.getElementById('contenedor_carga').style.opacity = '1';
+
+    //swal({
+    //    title: "<span></span>",
+    //    html: true,
+    //    showConfirmButton: false,
+    //    animation: true,
+    //    customClass: 'animated swing',
+    //    background: '#B3C9D8',
+    //    grow: 'fullscreen',
+    //    timer: 100,
+    //});
+
+    //document.getElementById('contenedor_carga').style.visibility = 'hidden';
+    //document.getElementById('contenedor_carga').style.opacity = '0';
+
+    document.getElementById('contenedor_carga').style.zIndex = '-1';
+    document.getElementById('extraLargeModal').style.zIndex = '99999999';
+    document.getElementById('mediumModal').style.zIndex = '99999999';
+    document.getElementById('smallModal').style.zIndex = '99999999';
+    document.getElementById('largeModal').style.zIndex = '99999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '99999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '99999999';
+
+
+};
+
+function viewPageSwalInCamp() {
+
+    document.getElementById('contenedor_carga').style.visibility = 'visible';
+    document.getElementById('contenedor_carga').style.opacity = '1';
 
     swal({
-        title: "<span style='color:#fff; margin-top: 5%'></span>",
+        title: "<span>Generando Campaña - Este proceso tardará varios minutos...</span>",
         html: true,
         showConfirmButton: false,
-        animation: true,
-        customClass: 'animated swing',
+        //animation: true,
+        //customClass: 'animated swing',
+        background: '#B3C9D8',
+        grow: 'fullscreen',
+        timer: 5000,
+    });
+
+    document.getElementById('contenedor_carga').style.visibility = 'hidden';
+    document.getElementById('contenedor_carga').style.opacity = '0';
+
+    document.getElementById('extraLargeModal').style.zIndex = '99999999';
+    document.getElementById('mediumModal').style.zIndex = '99999999';
+    document.getElementById('smallModal').style.zIndex = '99999999';
+    document.getElementById('largeModal').style.zIndex = '99999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '99999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '99999999';
+
+
+};
+
+function viewPageSwalInM() {
+
+    document.getElementById('contenedor_carga').style.visibility = 'visible';
+    document.getElementById('contenedor_carga').style.opacity = '1';
+
+    document.getElementById('mediumModal').style.zIndex = '99999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '99999999';
+    document.getElementById('smallModal').style.zIndex = '99999999';
+    document.getElementById('extraLargeModal').style.zIndex = '99999999';
+    document.getElementById('largeModal').style.zIndex = '99999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '99999999';
+
+
+};
+
+function viewPageSwalOut() {
+
+    document.getElementById('contenedor_carga').style.visibility = 'hidden';
+    document.getElementById('contenedor_carga').style.opacity = '0';
+
+    swal({
+        title: "<span></span>",
+        html: true,
+        showConfirmButton: false,
+        //animation: true,
+        //customClass: 'animated swing',
         background: '#B3C9D8',
         grow: 'fullscreen',
         timer: 100,
@@ -43,13 +120,49 @@ function viewPageSwal() {
 
 };
 
+function viewPageSwalOutM() {
+
+    document.getElementById('contenedor_carga').style.visibility = 'hidden';
+    document.getElementById('contenedor_carga').style.opacity = '0';
+
+    document.getElementById('extraLargeModal').style.zIndex = '999999';
+    document.getElementById('mediumModal').style.zIndex = '999999';
+    document.getElementById('smallModal').style.zIndex = '999999';
+    document.getElementById('largeModal').style.zIndex = '999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '999999';
+
+};
+
+function viewPage2Camp() {
+
+    document.getElementById('contenedor_carga').style.visibility = 'visible';
+    document.getElementById('contenedor_carga').style.opacity = '1';
+
+    swal({
+        title: "<span>Generando Campaña - Este proceso tardará varios minutos...</span>",
+        html: true,
+        showConfirmButton: false,
+        background: '#B3C9D8',
+        timer: 30000,
+    });
+
+    document.getElementById('extraLargeModal').style.zIndex = '-1';
+    document.getElementById('mediumModal').style.zIndex = '-1';
+    document.getElementById('smallModal').style.zIndex = '-1';
+    document.getElementById('largeModal').style.zIndex = '-1';
+    document.getElementById('mediumModalTienda').style.zIndex = '-1';
+    document.getElementById('mediumModalTienda').style.zIndex = '-1';
+
+};
+
 function viewPage2() {
 
     document.getElementById('contenedor_carga').style.visibility = 'visible';
     document.getElementById('contenedor_carga').style.opacity = '1';
 
     swal({
-        title: "<span style='color:#fff; margin-top: 5%'></span>",
+        title: "<span></span>",
         html: true,
         showConfirmButton: false,
         background: '#B3C9D8',
@@ -62,6 +175,20 @@ function viewPage2() {
     document.getElementById('largeModal').style.zIndex = '-1';
     document.getElementById('mediumModalTienda').style.zIndex = '-1';
     document.getElementById('mediumModalTienda').style.zIndex = '-1';
+
+};
+
+function viewPage2M() {
+
+    document.getElementById('contenedor_carga').style.visibility = 'visible';
+    document.getElementById('contenedor_carga').style.opacity = '1';
+
+    document.getElementById('mediumModal').style.zIndex = '99999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '99999999';
+    document.getElementById('smallModal').style.zIndex = '99999999';
+    document.getElementById('extraLargeModal').style.zIndex = '99999999';
+    document.getElementById('largeModal').style.zIndex = '99999999';
+    document.getElementById('mediumModalTienda').style.zIndex = '99999999';
 
 };
 

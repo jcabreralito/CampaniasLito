@@ -17,28 +17,35 @@
             <table id="dataTable" cellspacing="0">
                 <tr>
                     <td class=" col-xs-2">
-                        <h2><i id="iconoTitulo" class="fas fa-map-marker-alt"></i></h2>
+                        <h2><i id="iconoTitulo" class="fas fa-barcode"></i></h2>
                     </td>
                     <td class=" col-xs-5" align="center">
-                        <h2 id="titulo"> @ViewBag.Title Equity</h2>
+                        <h2 id="titulo"> @ViewBag.Title</h2>
                     </td>
 
                     <td class=" col-xs-4" align="right">
-                        <input type="submit" value="EQUITY" id="btnEquity" class="btn btn-primary" onclick="mostrarEquity();" />
-                        <input type="submit" value="FRANQUICIAS" id="btnFranquicias" class="btn btn-primary" onclick="mostrarFranquicias();" />
+                        <a class="btn btn-primary" style="border-radius:10px; text-align: right; font-size: 17px" href="@Url.Action("Equity", "Materiales")" onclick="viewPage()">
+                            EQUITY
+                        </a>
+                        <a class="btn btn-primary" style="border-radius:10px; text-align: right; font-size: 17px" href="@Url.Action("Franquicias", "Materiales")" onclick="viewPage()">
+                            FRANQUICIAS
+                        </a>
+
+                        @*<input type="submit" value="EQUITY" id="btnEquity" class="btn btn-primary" onclick="mostrarEquity();" />*@
+                        @*<input type="submit" value="FRANQUICIAS" id="btnFranquicias" class="btn btn-primary" onclick="mostrarFranquicias();" />*@
                         @*<input type="submit" value="STOCK" id="btnStock" class="btn btn-primary" onclick="mostrarStock();" />*@
                     </td>
                 </tr>
             </table>
         </div>
 
-        <div id="equity" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; height: 78.5vh">
+        @*<div id="equity" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; height: 78.5vh">
             @Html.Action("MaterialesEquity", new { })
         </div>
 
         <div id="franquicias" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; visibility: hidden">
             @Html.Action("MaterialesFranquicias", new { })
-        </div>
+        </div>*@
 
         @*<div id="stock" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; visibility: hidden">
             @Html.Action("MaterialesStock", new { })
@@ -118,7 +125,7 @@
 
         function mostrarEquity() {
 
-            $("#titulo").text(' @ViewBag.Title' + ' EQUITY');
+            $("#titulo").text(' @ViewBag.Title' + ' EQUITY / STOCK');
 
             document.getElementById('equity').style.display = 'block';
             document.getElementById('franquicias').style.display = 'none';

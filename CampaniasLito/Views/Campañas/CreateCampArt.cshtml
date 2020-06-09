@@ -209,7 +209,7 @@
                                     <th style="background-color: #FFDC5A !important; color: #000 !important">
                                         CANTIDAD DE PANTALLAS
                                     </th>
-                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                    @*<th style="background-color: #00B0F0 !important; color: #000 !important">
                                         3RA RECETA
                                     </th>
                                     <th style="background-color: #00B0F0 !important; color: #000 !important">
@@ -235,8 +235,30 @@
                                     </th>
                                     <th style="background-color: #00B0F0 !important; color: #000 !important">
                                         KREAMBALL
-                                    </th>
-                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                    </th>*@
+                                    @foreach (var item in Model.Where(x => x.ProveedorId == 5).GroupBy(x => new { x.ArticuloKFC, x.ArticuloKFCId }))
+                                    {
+                                        <th align="center" style="background-color: #00B0F0 !important; color: #000 !important">
+                                            @if (Model.FirstOrDefault().TipoTienda == "EQUITY")
+                                            {
+                                                tipoTienda = 1;
+                                            }
+                                            else if (Model.FirstOrDefault().TipoTienda == "FRANQUICIAS")
+                                            {
+                                                tipoTienda = 2;
+                                            }
+                                            else if (Model.FirstOrDefault().TipoTienda == "STOCK")
+                                            {
+                                                tipoTienda = 3;
+                                            }
+                                            <a href="@Url.Action("AsignarTiendasCaracteristicas", "Materiales", new { id = item.Key.ArticuloKFCId, Tipo = tipoTienda })" class="btn-danger dialog-window-medium-tiendas" style="background-color: transparent; border:none; font-size: 20px; text-decoration: none">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+
+                                            @item.Key.ArticuloKFC
+                                        </th>
+                                    }
+                                    @*<th style="background-color: #BB93D0 !important; color: #000 !important">
                                         MENÚ BACKLIGHT
                                     </th>
                                     <th style="background-color: #BB93D0 !important; color: #000 !important">
@@ -319,7 +341,7 @@
                                     </th>
                                     <th style="background-color: #9CD78D !important; color: #000 !important">
                                         MEDIDA ESPECIAL AE CANDILES 49.5x73.5 cm
-                                    </th>
+                                    </th>*@
                                     <th style="background-color: #AAE6FF !important; color: #000 !important">
                                         TIPO DE CAJA
                                     </th>
@@ -338,7 +360,7 @@
                                     <th style="background-color: #AAE6FF !important; color: #000 !important">
                                         UBICACIÓN PANTALLAS
                                     </th>
-                                    @foreach (var item in Model.GroupBy(x => new { x.ArticuloKFC, x.ArticuloKFCId }))
+                                    @foreach (var item in Model.Where(x => x.ProveedorId != 5).GroupBy(x => new { x.ArticuloKFC, x.ArticuloKFCId }))
                                     {
                                         <th>
                                             @if (Model.FirstOrDefault().TipoTienda == "EQUITY")
@@ -353,7 +375,7 @@
                                             {
                                                 tipoTienda = 3;
                                             }
-                                            <a href="@Url.Action("AsignarTiendasCampañas", "Materiales", new { id = item.Key.ArticuloKFCId, Tipo = tipoTienda })" class="btn-danger dialog-window-medium-tiendas" style="background-color: transparent; border:none; font-size: 20px; text-decoration: none" onclick="soloMostrar()">
+                                            <a href="@Url.Action("AsignarTiendasCampañas", "Materiales", new { id = item.Key.ArticuloKFCId, Tipo = tipoTienda })" class="btn-danger dialog-window-medium-tiendas" style="background-color: transparent; border:none; font-size: 20px; text-decoration: none">
                                                 <i class="fas fa-plus-circle"></i>
                                             </a>
                                             @item.Key.ArticuloKFC
@@ -433,7 +455,7 @@
                                                 @item.Key.CantidadDePantallas
                                             </td>
                                         }
-                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.TerceraReceta }))
+                                        @*@foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.TerceraReceta }))
                                         {
                                             var menu = string.Empty;
 
@@ -585,8 +607,25 @@
                                             <td align="center">
                                                 @menu
                                             </td>
+                                        }*@
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId && x.ProveedorId == 5).GroupBy(x => new { x.ArticuloKFC, x.Restaurante, x.Cantidad, x.Habilitado }).OrderBy(x => x.Key.ArticuloKFC))
+                                        {
+                                            var menu = string.Empty;
+
+                                            if (item.Key.Habilitado == true)
+                                            {
+                                                menu = "SI";
+                                            }
+                                            else
+                                            {
+                                                menu = "NO";
+                                            }
+
+                                            <td align="center">
+                                                @menu
+                                            </td>
                                         }
-                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MenuBackLigth }))
+                                        @*@foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.MenuBackLigth }))
                                         {
                                             var menu = string.Empty;
 
@@ -1061,7 +1100,7 @@
                                             <td align="center">
                                                 @menu
                                             </td>
-                                        }
+                                        }*@
                                         @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.TipoDeCaja }))
                                         {
                                             <td align="center">
@@ -1098,7 +1137,7 @@
                                                 @item.Key.UbicacionPantallas
                                             </td>
                                         }
-                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.ArticuloKFC, x.Restaurante, x.Cantidad, x.Habilitado }))
+                                        @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId && x.ProveedorId != 5).GroupBy(x => new { x.ArticuloKFC, x.Restaurante, x.Cantidad, x.Habilitado }))
                                         {
                                             <td align="center">
                                                 @item.Key.Cantidad
@@ -1109,8 +1148,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th style="text-align: left !important">
-                                        TOTAL
+                                    <th style="text-align: left !important; font-weight: bold">
                                     </th>
                                     <th style="background-color: #000 !important">
                                     </th>
@@ -1120,101 +1158,106 @@
                                     </th>
                                     <th style="background-color: #000 !important">
                                     </th>
-                                    <th style="background-color: #000 !important;">
+                                    <th style="background-color: #000 !important">
                                     </th>
-                                    <th style="background-color: #FFDC5A !important">
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #FFDC5A !important">
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #FFDC5A !important">
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #FFDC5A !important">
+                                    <th style="background-color: #FFDC5A !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    @*<th style="background-color: #00B0F0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #00B0F0 !important">
+                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                    </th>*@
+                                    @foreach (var item in Model.Where(x => x.ProveedorId == 5).GroupBy(x => new { x.ArticuloKFC }))
+                                    {
+                                        <th align="center" style="background-color: #00B0F0 !important; color: #000 !important">
+                                        </th>
+                                    }
+                                    @*<th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #BB93D0 !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                                    </th>*@
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #9CD78D !important">
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #AAE6FF !important">
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #AAE6FF !important">
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #AAE6FF !important">
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
                                     </th>
-                                    <th style="background-color: #AAE6FF !important">
-                                    </th>
-                                    <th style="background-color: #AAE6FF !important">
-                                    </th>
-                                    <th style="background-color: #AAE6FF !important">
+                                    <th style="background-color: #AAE6FF !important; color: #000 !important">
                                     </th>
                                     @foreach (var item in ViewBag.TotalMaterial)
                                     {
@@ -1225,6 +1268,7 @@
                                 </tr>
                                 <tr>
                                     <th>
+                                        TOTAL
                                     </th>
                                     <th style="background-color: #000 !important; text-align: center !important">
                                         CC
@@ -1253,7 +1297,7 @@
                                     <th style="background-color: #FFDC5A !important; color: #000 !important">
                                         CANTIDAD DE PANTALLAS
                                     </th>
-                                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                                    @*<th style="background-color: #00B0F0 !important; color: #000 !important">
                                         3RA RECETA
                                     </th>
                                     <th style="background-color: #00B0F0 !important; color: #000 !important">
@@ -1279,8 +1323,14 @@
                                     </th>
                                     <th style="background-color: #00B0F0 !important; color: #000 !important">
                                         KREAMBALL
-                                    </th>
-                                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                                    </th>*@
+                                    @foreach (var item in Model.Where(x => x.ProveedorId == 5).GroupBy(x => new { x.ArticuloKFC }))
+                                    {
+                                        <th align="center" style="background-color: #00B0F0 !important; color: #000 !important">
+                                            @item.Key.ArticuloKFC
+                                        </th>
+                                    }
+                                    @*<th style="background-color: #BB93D0 !important; color: #000 !important">
                                         MENÚ BACKLIGHT
                                     </th>
                                     <th style="background-color: #BB93D0 !important; color: #000 !important">
@@ -1363,7 +1413,7 @@
                                     </th>
                                     <th style="background-color: #9CD78D !important; color: #000 !important">
                                         MEDIDA ESPECIAL AE CANDILES 49.5x73.5 cm
-                                    </th>
+                                    </th>*@
                                     <th style="background-color: #AAE6FF !important; color: #000 !important">
                                         TIPO DE CAJA
                                     </th>
@@ -1429,9 +1479,6 @@
         //    });
         //});
 
-
-
-
         $(document).ready(function () {
             $('#miTabla').DataTable({
                 "order": [[1, "asc"]],
@@ -1473,7 +1520,7 @@
                 initComplete: function () {
                     this.api().columns().every(function () {
                         var column = this;
-                        var select = $('<select><option value="">=TODOS=</option></select>')
+                        var select = $('<select style="font-weight: bold !important; text-align: center !important"><option value="">=TODOS=</option></select>')
                             .appendTo($(column.footer()).empty())
                             .on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(
@@ -1508,6 +1555,10 @@
                     }],
                 //"columnDefs": [
                 //    { "searchable": false, "targets": 0 }
+                //],
+                //"columnDefs": [
+                //    { "orderable": false, "targets": [53, 55, 56, 57, 58, 59, 60, 61] },
+                //    { "searchable": false, "targets": [1] },
                 //],
                 //columnDefs: [
                 //    { width: 400, targets: 5 }],
@@ -1580,6 +1631,24 @@
                 customClass: 'animated swing',
                 background: '#B3C9D8',
                 grow: 'fullscreen',
+            });
+
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
+            document.getElementById('mediumModalTienda').style.zIndex = '999999';
+
+        };
+
+        function viewPageSwalOut() {
+
+            swal({
+                title: "<span style='color:#fff; margin-top: 5%'></span>",
+                html: true,
+                showConfirmButton: false,
+                animation: true,
+                customClass: 'animated swing',
+                background: '#B3C9D8',
+                grow: 'fullscreen',
+                timer: 100,
             });
 
             document.getElementById('mediumModalTienda').style.zIndex = '999999';

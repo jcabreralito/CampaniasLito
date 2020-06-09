@@ -242,7 +242,7 @@ body.stop-scrolling {
     margin-top: -200px;
     overflow: hidden;
     display: none;
-    z-index: 2000;
+    z-index: inherit;
 }
 
 @media all and (max-width: 768px) {

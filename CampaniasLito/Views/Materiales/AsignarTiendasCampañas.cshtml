@@ -306,7 +306,7 @@
                 @*<td class=" col-xs-12"></td>*@
                 <td align="right" class="col-xs-1">
                     <div class="input-group">
-                        <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwal()">
+                        <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwalOut()">
                             <i class="fas fa-times-circle"></i>
                         </button>
                     </div>
@@ -327,8 +327,6 @@
 
         </table>
     </div>
-
-    <script src="~/Content/js/site.js"></script>
 
     <div class="panel-body">
         <div id="unId40" class="table-responsive" style="padding: 10px;">
@@ -377,6 +375,8 @@
             <script src="~/Content/vendor/bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
             <script src="~/Content/vendor/DataTables/datatables.min.js"></script>
             <script src="~/Content/vendor/DataTables/DataTables-1.10.20/js/dataTables.bootstrap4.min.js"></script>
+            <script src="~/Content/js/site.js"></script>
+
 
             <script>
 
@@ -433,6 +433,7 @@
                 });
 
             </script>
+
         </div>
         <br />
         <br />
@@ -440,9 +441,6 @@
     </div>
 }
 
-<script src="~/Scripts/jquery-3.4.1.min.js"></script>
-<script src="~/Scripts/bootstrap.min.js"></script>
-<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

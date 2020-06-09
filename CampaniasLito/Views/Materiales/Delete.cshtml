@@ -1,9 +1,10 @@
 ﻿@model CampaniasLito.Models.ArticuloKFC
 
 @{
-    ViewBag.Title = "Eliminar";
+    ViewBag.Title = "¿Eliminar este registro?";
     Layout = null;
 }
+
 @using (Html.BeginForm("Delete", "Materiales", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -12,20 +13,19 @@
         <div class="panel-heading">
             <table class="headingModal">
                 <tr style="background-color: #DF2530 !important">
-                    <td class="col-xs-6">
+                    <td class="col-xs-10">
                         <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.Title</h2>
                     </td>
-                    <td class=" col-xs-12"></td>
-                    <td align="right" class="col-xs-1">
+                    <td align="right" class="col-xs-2">
                         <div class="input-group">
-                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwal()">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwalOutM()">
                                 <i class="fas fa-times-circle"></i>
                             </button>
                         </div>
                     </td>
                     <td align="center" class="col-xs-1">
                         <div class="input-group">
-                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage2()">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage2M()">
                                 <i class="fas fa-check-circle"></i>
                             </button>
                         </div>
@@ -42,7 +42,7 @@
 
                     <div class="row">
                         <div class="mat-input col-sm-12 focus">
-                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 20px 0 0 0 !important; width: 44vw">
                                 @Html.TextBoxFor(model => model.Descripcion, new { htmlAttributes = new { }, @type = "text", @disabled = "disabled", @style = "text-transform:uppercase" })
                                 <label class="active">Material</label>
                                 <div class="border"></div>
@@ -50,59 +50,8 @@
                         </div>
                     </div>
 
-                    <div class="row">
-
-                        <div class="mat-input col-sm-5 focus">
-                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
-                                <input type="text" name="Proveedor" value="@Model.Proveedor.Nombre " disabled style="text-transform: uppercase" />
-                                <label class="active">Proveedor</label>
-                                <div class="border"></div>
-                            </div>
-                        </div>
-
-                        <div class="mat-input col-sm-4 focus">
-                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
-                                <input type="text" name="Proveedor" value="@Model.Familia.Descripcion " disabled style="text-transform: uppercase" />
-                                <label class="active">Familia</label>
-                                <div class="border"></div>
-                            </div>
-                        </div>
-
-                        <div class="mat-input col-sm-3 focus">
-                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
-                                @Html.TextBoxFor(model => model.CantidadDefault, new { htmlAttributes = new { }, @type = "text", @readonly = "readonly", @style = "text-transform:uppercase" })
-                                <label class="">Cantidad</label>
-                                <div class="border"></div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-                        <div class="mat-input col-sm-12 focus">
-                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
-                                @Html.TextBoxFor(model => model.Observaciones, new { htmlAttributes = new { }, @type = "text", @disabled = "disabled", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", autofocus = "autofocus", autocomplete = "off" })
-                                <label class="active">Observaciones</label>
-                                <div class="border"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="row col-sm-12">
-                    <div class="col-sm-12" style="left: 30%">
-                        @if (!string.IsNullOrEmpty(Model.Imagen))
-                        {
-                            <img src="@Url.Content(Model.Imagen)" width="200" height="200" />
-                        }
-                        else
-                        {
-                            <img src="@Url.Content("~/Content/Productos/Productos.png")" width="200" height="200" />
-                        }
-
-                    </div>
-
-                </div>
             </div>
         </div>
         <br />

@@ -13,7 +13,7 @@ namespace CampaniasLito.Controllers
 
         // GET: Familias
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Index(string familia)
+        public ActionResult Index()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
@@ -22,18 +22,7 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (string.IsNullOrEmpty(familia))
-            {
-                Session["familia"] = string.Empty;
-            }
-            else
-            {
-                Session["familia"] = familia;
-            }
-
-            var filtro = Session["familia"].ToString();
-
-            var familias = db.Familias.OrderBy(a => a.Codigo).ThenBy(a => a.Descripcion);
+            var familias = db.Familias.Where(x => x.Codigo != "995" && x.Codigo != "996" && x.Codigo != "997" && x.Codigo != "998" && x.Codigo != "999").OrderBy(a => a.Codigo).ThenBy(a => a.Descripcion);
 
             Session["homeB"] = string.Empty;
             Session["rolesB"] = string.Empty;
@@ -46,14 +35,8 @@ namespace CampaniasLito.Controllers
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
 
-            if (!string.IsNullOrEmpty(familia))
-            {
-                return View(familias.Where(a => a.Descripcion.Contains(filtro) || a.Codigo.Contains(filtro)).ToList());
-            }
-            else
-            {
-                return View(familias.ToList());
-            }
+
+            return View(familias.ToList());
 
         }
 
@@ -105,12 +88,12 @@ namespace CampaniasLito.Controllers
             }
 
             var familia = db.Familias.Find(id);
-            
+
             if (familia == null)
             {
                 return HttpNotFound();
             }
-            
+
             return View(familia);
         }
 
@@ -139,12 +122,12 @@ namespace CampaniasLito.Controllers
             }
 
             var familia = db.Familias.Find(id);
-            
+
             if (familia == null)
             {
                 return HttpNotFound();
             }
-            
+
             return View(familia);
         }
 

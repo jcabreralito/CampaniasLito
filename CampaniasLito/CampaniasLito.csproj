@@ -559,6 +559,7 @@
     <Compile Include="Models\Modulo.cs" />
     <Compile Include="Models\NivelPrecio.cs" />
     <Compile Include="Models\Operacion.cs" />
+    <Compile Include="Models\Regla.cs" />
     <Compile Include="Models\RolOperacion.cs" />
     <Compile Include="Models\Permiso.cs" />
     <Compile Include="Models\Proveedor.cs" />
@@ -606,6 +607,7 @@
     <Content Include="Content\css\icons.css" />
     <Content Include="Content\css\inputfile.css" />
     <Content Include="Content\css\jquery.datetimepicker.css" />
+    <Content Include="Content\css\Materiales.css" />
     <Content Include="Content\css\Restaurantes.css" />
     <Content Include="Content\LoginCSS\Login.css" />
     <Content Include="Content\css\menuresponsive.css" />
@@ -2867,6 +2869,7 @@
     <Content Include="Content\vendor\bootstrap-4.0.0-dist\js\bootstrap.bundle.min.js.map" />
     <Content Include="Content\vendor\bootstrap-4.0.0-dist\js\bootstrap.js.map" />
     <Content Include="Content\vendor\bootstrap-4.0.0-dist\js\bootstrap.min.js.map" />
+    <Content Include="Content\js\dataTables.scrollResize.min.js" />
     <None Include="Properties\PublishProfiles\CampaniasLito.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -3132,11 +3135,6 @@
     <Content Include="Views\Restaurantes\Delete.cshtml" />
     <Content Include="Views\Restaurantes\Details.cshtml" />
     <Content Include="Views\Restaurantes\Edit.cshtml" />
-    <Content Include="Views\Regiones\Create.cshtml" />
-    <Content Include="Views\Regiones\Delete.cshtml" />
-    <Content Include="Views\Regiones\Details.cshtml" />
-    <Content Include="Views\Regiones\Edit.cshtml" />
-    <Content Include="Views\Regiones\Index.cshtml" />
     <Content Include="Views\Ciudades\Create.cshtml" />
     <Content Include="Views\Ciudades\Delete.cshtml" />
     <Content Include="Views\Ciudades\Details.cshtml" />
@@ -3232,14 +3230,11 @@
     <Content Include="Views\Familias\Details.cshtml" />
     <Content Include="Views\Familias\Edit.cshtml" />
     <Content Include="Views\Familias\Index.cshtml" />
-    <Content Include="Views\Regiones\RegionesEquity.cshtml" />
-    <Content Include="Views\Regiones\RegionesFranquicias.cshtml" />
     <Content Include="Views\Ciudades\CiudadesEquity.cshtml" />
     <Content Include="Views\Ciudades\CiudadesFranquicias.cshtml" />
-    <Content Include="Views\Restaurantes\RestaurantesEquity.cshtml" />
+    <Content Include="Views\Restaurantes\Equity.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Ciudades\CiudadesStock.cshtml" />
-    <Content Include="Views\Regiones\RegionesStock.cshtml" />
     <Content Include="Views\Account\Login - Copy.cshtml" />
     <Content Include="Views\ResumenProveedor\Resumen.cshtml" />
     <Content Include="Views\TiendaEquipo\Create.cshtml" />
@@ -3272,8 +3267,8 @@
     <Content Include="Views\Restaurantes\DetailsCME.cshtml" />
     <Content Include="Views\Restaurantes\DetailsCP.cshtml" />
     <Content Include="Views\Restaurantes\DetailsCG.cshtml" />
-    <Content Include="Views\Materiales\MaterialesEquity.cshtml" />
-    <Content Include="Views\Materiales\MaterialesFranquicias.cshtml" />
+    <Content Include="Views\Materiales\Equity.cshtml" />
+    <Content Include="Views\Materiales\Franquicias.cshtml" />
     <Content Include="Views\FamiliaTiendas\Create.cshtml" />
     <Content Include="Views\FamiliaTiendas\Delete.cshtml" />
     <Content Include="Views\FamiliaTiendas\Details.cshtml" />
@@ -3297,13 +3292,25 @@
     <Content Include="Views\Campañas\ResumenProveedor.cshtml" />
     <Content Include="Views\Campañas\CreateCampArt.cshtml" />
     <Content Include="Views\Materiales\AsignarTiendasCampañas.cshtml" />
-    <Content Include="Views\Restaurantes\RestaurantesEquity - Copy.cshtml" />
     <Content Include="Views\Restaurantes\Index.cshtml" />
-    <Content Include="Views\Restaurantes\RestaurantesFranquicias - Copy.cshtml" />
-    <Content Include="Views\Restaurantes\RestaurantesStock - Copy.cshtml" />
-    <Content Include="Views\Restaurantes\RestaurantesFranquicias.cshtml" />
-    <Content Include="Views\Restaurantes\RestaurantesStock.cshtml" />
+    <Content Include="Views\Restaurantes\Franquicias.cshtml" />
+    <Content Include="Views\Restaurantes\Stock.cshtml" />
     <Content Include="Views\Materiales\MaterialesStock.cshtml" />
+    <Content Include="Views\Regiones\Create.cshtml" />
+    <Content Include="Views\Regiones\Delete.cshtml" />
+    <Content Include="Views\Regiones\Details.cshtml" />
+    <Content Include="Views\Regiones\Edit.cshtml" />
+    <Content Include="Views\Regiones\Index.cshtml" />
+    <Content Include="Views\Regiones\RegionesEquity.cshtml" />
+    <Content Include="Views\Regiones\RegionesFranquicias.cshtml" />
+    <Content Include="Views\Regiones\RegionesStock.cshtml" />
+    <Content Include="Views\Shared\_Layout_Material.cshtml" />
+    <Content Include="Views\Shared\_Layout_Restaurante.cshtml" />
+    <Content Include="Views\Restaurantes\TiendaConfiguraciones.cshtml" />
+    <Content Include="Views\Materiales\CreateCaracteristica.cshtml" />
+    <Content Include="Views\Materiales\EditCaracteristica.cshtml" />
+    <Content Include="Views\Materiales\AsignarTiendasCaracteristicas.cshtml" />
+    <Content Include="Views\Restaurantes\Configuraciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

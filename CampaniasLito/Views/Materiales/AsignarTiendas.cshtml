@@ -21,7 +21,7 @@
                 <td class=" col-xs-12"></td>
                 <td align="right" class="col-xs-1">
                     <div class="input-group">
-                        <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwal()">
+                        <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwalOut()">
                             <i class="fas fa-times-circle"></i>
                         </button>
                     </div>
@@ -50,7 +50,7 @@
                 else if (Model.FirstOrDefault().Tienda.EquityFranquicia == "STOCK")
                 {
                     <td colspan="4" align="center" style="text-align: center">
-                        STOCK
+                        RESTAURANTES STOCK
                     </td>
                 }
             </tr>
@@ -93,11 +93,18 @@
                     </tbody>
                 </table>
             </form>
+            <div style="margin: 10px">
+                <h4><strong>@ViewBag.TotalSeleccionados </strong>Restaurantes Seleccionados</h4>
+            </div>
             <script>
 
                 $(document).ready(function () {
                     $('#miTablaAsignarTiendas').DataTable({
                         "order": [[0, "asc"]],
+                        //buttons: [
+                        //    'selectAll',
+                        //    'selectNone'
+                        //],
                         language: {
                             "sProcessing": "Procesando...",
                             "sLengthMenu": "Mostrar _MENU_ registros",
@@ -126,12 +133,16 @@
                                 "colvis": "Mostrar/Ocultar Columnas"
                             }
                         },
+                        //dom: 'Bfrt',
                         dom: 'frt',
                         autoWidth: false,
                         "columnDefs": [
                             { "searchable": false, "targets": 1 },
                         ],
                         fixedHeader: true,
+                        //select: {
+                        //    items: 'cell'
+                        //},
                         //select: true,
                         scrollY: '48vh',
                         //scrollX: true,

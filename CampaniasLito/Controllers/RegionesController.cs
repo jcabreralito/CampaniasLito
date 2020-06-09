@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using CampaniasLito.Classes;
 using CampaniasLito.Filters;
 using CampaniasLito.Models;
+using Newtonsoft.Json;
 
 namespace CampaniasLito.Controllers
 {
@@ -21,7 +22,7 @@ namespace CampaniasLito.Controllers
         }
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Index()
+        public ActionResult Index(string tipoIndex)
         {
             Session["homeB"] = string.Empty;
             Session["rolesB"] = string.Empty;
@@ -34,11 +35,36 @@ namespace CampaniasLito.Controllers
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
 
+            if (string.IsNullOrEmpty(tipoIndex))
+            {
+            Session["VistaEquity"] = string.Empty;
+            Session["VistaFranquicias"] = string.Empty;
+            Session["VistaStock"] = string.Empty;
+            }
+            else if (tipoIndex == "EQUITY")
+            {
+                Session["VistaEquity"] = "block";
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = string.Empty;
+            }
+            else if (tipoIndex == "FRANQUICIAS")
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = "block";
+                Session["VistaStock"] = string.Empty;
+            }
+            else if (tipoIndex == "STOCK")
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = "block";
+            }
+
             return View();
         }
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RegionesStock(string region)
+        public ActionResult RegionesStock()
         {
             string tipo = "STOCK";
 
@@ -49,31 +75,19 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (string.IsNullOrEmpty(region))
-            {
-                Session["regionFiltro"] = string.Empty;
-            }
-            else
-            {
-                Session["regionFiltro"] = region;
-            }
-
-            var filtro = Session["regionFiltro"].ToString();
 
             var regions = db.Regions.Where(c => c.EquityFranquicia == tipo);
 
-            if (!string.IsNullOrEmpty(region))
+            if (regions == null)
             {
-                return View(regions.Where(a => a.Nombre.Contains(filtro)).ToList());
+                return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                return View(regions.ToList());
-            }
+
+            return View(regions.ToList());
         }
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RegionesFranquicias(string region)
+        public ActionResult RegionesFranquicias()
         {
             string tipo = "FRANQUICIAS";
 
@@ -84,31 +98,18 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (string.IsNullOrEmpty(region))
-            {
-                Session["regionFiltro"] = string.Empty;
-            }
-            else
-            {
-                Session["regionFiltro"] = region;
-            }
-
-            var filtro = Session["regionFiltro"].ToString();
-
             var regions = db.Regions.Where(c => c.EquityFranquicia == tipo);
 
-            if (!string.IsNullOrEmpty(region))
+            if (regions == null)
             {
-                return View(regions.Where(a => a.Nombre.Contains(filtro)).ToList());
+                return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                return View(regions.ToList());
-            }
+
+            return View(regions.ToList());
         }
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RegionesEquity(string region)
+        public ActionResult RegionesEquity()
         {
             string tipo = "EQUITY";
 
@@ -119,28 +120,43 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (string.IsNullOrEmpty(region))
-            {
-                Session["regionFiltroEquity"] = string.Empty;
-            }
-            else
-            {
-                Session["regionFiltroEquity"] = region;
-            }
-
-            var filtro = Session["regionFiltroEquity"].ToString();
-
             var regions = db.Regions.Where(c => c.EquityFranquicia == tipo).ToList();
 
-            if (!string.IsNullOrEmpty(region))
+            if (regions == null)
             {
-                return View(regions.Where(a => a.Nombre.Contains(filtro)).ToList());
+                return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                return View(regions.ToList());
-            }
+
+            //Session["ClickRegion"] = "SI";
+
+            //var json = JsonConvert.SerializeObject(regions);
+
+            //return Json(json, JsonRequestBehavior.AllowGet);
+
+            return PartialView(regions.ToList());
         }
+
+        //[AuthorizeUser(idOperacion: 5)]
+        //public ActionResult RegionesEquity()
+        //{
+        //    string tipo = "EQUITY";
+
+        //    var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+        //    if (usuario == null)
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+
+        //    var regions = db.Regions.Where(c => c.EquityFranquicia == tipo).ToList();
+
+        //    if (regions == null)
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+
+        //    return View(regions.ToList());
+        //}
 
         // GET: Regiones/Details/5
         [AuthorizeUser(idOperacion: 4)]
@@ -160,9 +176,10 @@ namespace CampaniasLito.Controllers
 
         // GET: Regiones/Create
         [AuthorizeUser(idOperacion: 1)]
-        public ActionResult Create( int id)
+        public ActionResult Create(int id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
             if (usuario == null)
             {
                 return RedirectToAction("Index", "Home");
@@ -181,6 +198,7 @@ namespace CampaniasLito.Controllers
                 Session["tipoRegion"] = "STOCK";
             }
 
+
             var regiones = new Region { };
 
             return PartialView(regiones);
@@ -194,6 +212,33 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
+            if (Session["tipoRegion"].ToString() == "EQUITY")
+            {
+                Session["VistaEquity"] = "block";
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = string.Empty;
+            }
+            else if (Session["tipoRegion"].ToString() == "FRANQUICIAS")
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = "block";
+                Session["VistaStock"] = string.Empty;
+            }
+            else if (Session["tipoRegion"].ToString() == "STOCK")
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = "block";
+            }
+            else
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = string.Empty;
+            }
+
+            Session["Create"] = "Create";
+
             region.EquityFranquicia = Session["tipoRegion"].ToString();
 
             if (ModelState.IsValid)
@@ -205,6 +250,7 @@ namespace CampaniasLito.Controllers
                     TempData["mensajeLito"] = "REGION AGREGADA";
 
                     return RedirectToAction("Index");
+                    //return RedirectToAction("Index", new { tipoIndex = Session["tipoRegion"].ToString() });
                 }
 
                 ModelState.AddModelError(string.Empty, response.Message);
@@ -223,7 +269,7 @@ namespace CampaniasLito.Controllers
             }
 
             var region = db.Regions.Find(id);
-            
+
             if (region == null)
             {
                 return HttpNotFound();
@@ -238,6 +284,35 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Region region)
         {
+            var tipo = region.EquityFranquicia;
+
+            if (tipo == "EQUITY")
+            {
+                Session["VistaEquity"] = "block";
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = string.Empty;
+            }
+            else if (tipo == "FRANQUICIAS")
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = "block";
+                Session["VistaStock"] = string.Empty;
+            }
+            else if (tipo == "STOCK")
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = "block";
+            }
+            else
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = string.Empty;
+            }
+
+            Session["Edit"] = "Edit";
+
             if (ModelState.IsValid)
             {
                 db.Entry(region).State = EntityState.Modified;
@@ -265,14 +340,14 @@ namespace CampaniasLito.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             var region = db.Regions.Find(id);
-            
+
             if (region == null)
             {
                 return HttpNotFound();
             }
-            
+
             return PartialView(region);
         }
 
@@ -282,7 +357,38 @@ namespace CampaniasLito.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+
             var region = db.Regions.Find(id);
+
+            var tipo = region.EquityFranquicia;
+
+            if (tipo == "EQUITY")
+            {
+                Session["VistaEquity"] = "block";
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = string.Empty;
+            }
+            else if (tipo == "FRANQUICIAS")
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = "block";
+                Session["VistaStock"] = string.Empty;
+            }
+            else if (tipo == "STOCK")
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = "block";
+            }
+            else
+            {
+                Session["VistaEquity"] = string.Empty;
+                Session["VistaFranquicias"] = string.Empty;
+                Session["VistaStock"] = string.Empty;
+            }
+
+            Session["Delete"] = "Delete";
+
             db.Regions.Remove(region);
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
@@ -290,6 +396,7 @@ namespace CampaniasLito.Controllers
                 TempData["mensajeLito"] = "REGION ELIMINADA";
 
                 return RedirectToAction("Index");
+                //return RedirectToAction("Index", new { tipoIndex = tipo });
             }
 
             ModelState.AddModelError(string.Empty, response.Message);

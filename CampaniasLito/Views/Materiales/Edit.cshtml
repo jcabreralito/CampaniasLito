@@ -17,14 +17,14 @@
                     <td class=" col-xs-12"></td>
                     <td align="right" class="col-xs-1">
                         <div class="input-group">
-                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwal()">
+                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal" onclick="viewPageSwalOutM()">
                                 <i class="fas fa-times-circle"></i>
                             </button>
                         </div>
                     </td>
                     <td align="right" class="col-xs-1">
                         <div class="input-group">
-                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage2()">
+                            <button type="submit" class="botonF1Modal btn-success" style="background-color: green" onclick="viewPage2M()">
                                 <i class="fas fa-check-circle"></i>
                             </button>
                         </div>
@@ -41,11 +41,12 @@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.ArticuloKFCId)
                     @Html.HiddenFor(model => model.EquityFranquicia)
+                    @Html.HiddenFor(model => model.Eliminado)
                     @Html.HiddenFor(model => model.Imagen)
 
                     <div class="row">
                         <div class="mat-input col-sm-12 focus">
-                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important">
                                 @Html.TextBoxFor(model => model.Descripcion, new { htmlAttributes = new { @class = "active" }, @type = "text", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", autofocus = "autofocus", autocomplete = "off" })
                                 <label class="active">Material</label>
                                 <div class="border"></div>
@@ -73,8 +74,8 @@
 
                     <div class="row">
                         <div class="mat-input col-sm-12 focus">
-                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
-                                @Html.TextBoxFor(model => model.Observaciones, new { htmlAttributes = new { }, @type = "text", @style = "text-transform:uppercase", autofocus = "autofocus", autocomplete = "off" })
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 20px 0 0 0 !important;">
+                                @Html.TextBoxFor(model => model.Observaciones, new { htmlAttributes = new { @class = "active" }, @type = "text", @style = "text-transform:uppercase", autofocus = "autofocus", autocomplete = "off" })
                                 <label class="active">Observaciones</label>
                                 <div class="border"></div>
                             </div>
@@ -82,7 +83,7 @@
                     </div>
 
                     <div class="row" style="margin-top: 10px">
-                        <div class="mat-input col-sm-3 focus">
+                        <div class="mat-input col-sm-6 focus">
                             <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
                                 @Html.TextBoxFor(model => model.CantidadDefault, new { htmlAttributes = new { }, @type = "text", @required = "true", @oninvalid = "setCustomValidity('Este campo es obligatorio')", @oninput = "setCustomValidity('')", @style = "text-transform:uppercase", autofocus = "autofocus", autocomplete = "off" })
                                 <label class="active">Cantidad</label>
@@ -90,10 +91,21 @@
                             </div>
                         </div>
 
+                        <div class="mat-input col-sm-6 focus">
+                            <div class="mat-input-outer col-sm-12 focus" style="margin: 0 !important;">
+                                @Html.CheckBoxFor(model => model.Activo, new { htmlAttributes = new { }, @type = "checkbox", @style = "text-transform:uppercase", autofocus = "autofocus", autocomplete = "off" })
+                                <label class="active">Activo</label>
+                                @*<div class="border"></div>*@
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row" style="margin-top: 10px">
                         <script src="~/Scripts/fileupload.js"></script>
 
-                        <div class="form-group col-sm-9" style="width: 100%; margin-bottom: 60px">
-                            <div class="col-sm-7">
+                        <div class="form-group col-sm-12" style="width: 100%; margin-bottom: 60px">
+                            <div class="col-sm-12">
                                 <div class="file-input-new">
                                     <div class="input-group loadFile">
                                         <div tabindex="500" class="form-control file-caption">
@@ -116,11 +128,11 @@
                         <div class="text-center col-sm-12" style="top: -45px">
                             @if (!string.IsNullOrEmpty(Model.Imagen))
                             {
-                                <img src="@Url.Content(Model.Imagen)" width="200" height="200" />
+                                <img src="@Url.Content(Model.Imagen)" width="150" height="150" />
                             }
                             else
                             {
-                                <img src="@Url.Content("~/Content/Productos/Productos.png")" width="200" height="200" />
+                                <img src="@Url.Content("~/Content/Productos/Productos.png")" width="150" height="150" />
                             }
 
                         </div>
