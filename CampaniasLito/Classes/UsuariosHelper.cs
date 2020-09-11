@@ -10,8 +10,8 @@ namespace CampaniasLito.Classes
 {
     public class UsuariosHelper : IDisposable
     {
-        private static ApplicationDbContext userContext = new ApplicationDbContext();
-        private static CampaniasLitoContext db = new CampaniasLitoContext();
+        private static readonly ApplicationDbContext userContext = new ApplicationDbContext();
+        private static readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
         public static bool DeleteUser(string userName)
         {
@@ -51,18 +51,22 @@ namespace CampaniasLito.Classes
             {
                 if (operacionExist.Nombre != operacionName)
                 {
-                    Operacion operacion = new Operacion();
-                    operacion.Nombre = operacionName;
-                    operacion.ModuloId = moduloId;
+                    Operacion operacion = new Operacion
+                    {
+                        Nombre = operacionName,
+                        ModuloId = moduloId
+                    };
                     db.Operaciones.Add(operacion);
                     db.SaveChanges();
                 }
             }
             else
             {
-                Operacion operacion = new Operacion();
-                operacion.Nombre = operacionName;
-                operacion.ModuloId = moduloId;
+                Operacion operacion = new Operacion
+                {
+                    Nombre = operacionName,
+                    ModuloId = moduloId
+                };
                 db.Operaciones.Add(operacion);
                 db.SaveChanges();
             }
@@ -76,19 +80,50 @@ namespace CampaniasLito.Classes
             {
                 if (rolOperacionExist.RolId != rolId && rolOperacionExist.OperacionId != operacionId)
                 {
-                    RolOperacion rolOperacion = new RolOperacion();
-                    rolOperacion.RolId = rolId;
-                    rolOperacion.OperacionId = operacionId;
+                    RolOperacion rolOperacion = new RolOperacion
+                    {
+                        RolId = rolId,
+                        OperacionId = operacionId
+                    };
                     db.RolOperaciones.Add(rolOperacion);
                     db.SaveChanges();
                 }
             }
             else
             {
-                RolOperacion rolOperacion = new RolOperacion();
-                rolOperacion.RolId = rolId;
-                rolOperacion.OperacionId = operacionId;
+                RolOperacion rolOperacion = new RolOperacion
+                {
+                    RolId = rolId,
+                    OperacionId = operacionId
+                };
                 db.RolOperaciones.Add(rolOperacion);
+                db.SaveChanges();
+            }
+        }
+
+        internal static void CrearCategorias(string categoria)
+        {
+            var categoriaExist = db.TipoCampanias.Where(r => r.Nombre == categoria).FirstOrDefault();
+
+            if (categoriaExist != null)
+            {
+                if (categoriaExist.Nombre != categoria)
+                {
+                    TipoCampania tipoCampania = new TipoCampania
+                    {
+                        Nombre = categoria
+                    };
+                    db.TipoCampanias.Add(tipoCampania);
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                TipoCampania tipoCampania = new TipoCampania
+                {
+                    Nombre = categoria
+                };
+                db.TipoCampanias.Add(tipoCampania);
                 db.SaveChanges();
             }
         }
@@ -101,16 +136,20 @@ namespace CampaniasLito.Classes
             {
                 if (moduloExist.Nombre != moduloName)
                 {
-                    Modulo modulo = new Modulo();
-                    modulo.Nombre = moduloName;
+                    Modulo modulo = new Modulo
+                    {
+                        Nombre = moduloName
+                    };
                     db.Modulos.Add(modulo);
                     db.SaveChanges();
                 }
             }
             else
             {
-                Modulo modulo = new Modulo();
-                modulo.Nombre = moduloName;
+                Modulo modulo = new Modulo
+                {
+                    Nombre = moduloName
+                };
                 db.Modulos.Add(modulo);
                 db.SaveChanges();
             }
@@ -124,19 +163,32 @@ namespace CampaniasLito.Classes
             {
                 if (rolExist.Nombre != rolName)
                 {
-                    Rol rol = new Rol();
-                    rol.Nombre = rolName;
+                    Rol rol = new Rol
+                    {
+                        Nombre = rolName
+                    };
                     db.Roles.Add(rol);
                     db.SaveChanges();
                 }
             }
             else
             {
-                Rol rol = new Rol();
-                rol.Nombre = rolName;
+                Rol rol = new Rol
+                {
+                    Nombre = rolName
+                };
                 db.Roles.Add(rol);
                 db.SaveChanges();
             }
+        }
+
+        public static void UpdateRole(string currentRoleName, string newRoleName)
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(userContext));
+            var rolASP = roleManager.FindByName(currentRoleName);
+
+            rolASP.Name = newRoleName;
+            roleManager.Update(rolASP);
         }
 
         public static void CheckRole(string roleName)

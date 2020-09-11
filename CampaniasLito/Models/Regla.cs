@@ -9,14 +9,12 @@ namespace CampaniasLito.Models
         [Key]
         public int ReglaId { get; set; }
 
-        public int TiendaId { get; set; }
-
+        [Display(Name = "Material", Prompt = "[Seleccionar...]")]
         public int ArticuloKFCId { get; set; }
 
-        public bool Seleccionado { get; set; }
-
-        public virtual Tienda Tienda { get; set; }
+        public string NombreRegla { get; set; }
 
         public virtual ArticuloKFC ArticuloKFC { get; set; }
+
     }
 }

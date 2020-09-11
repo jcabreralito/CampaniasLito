@@ -1,42 +1,22 @@
-﻿using System.Data;
+﻿using CampaniasLito.Classes;
+using CampaniasLito.Models;
+using System;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using CampaniasLito.Models;
-using CampaniasLito.Classes;
-using System;
 
 namespace CampaniasLito.Controllers
 {
-    [Authorize(Roles = "SuperAdmin, Admin")]
-
+    [Authorize(Roles = "SuperAdmin")]
     public class UsuariosController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
-        public ActionResult GetList()
+        // GET: Usuarios
+        public ActionResult Index()
         {
-            var userList = db.Usuarios.ToList<Usuario>();
-            return Json(new { data = userList }, JsonRequestBehavior.AllowGet);
-
-        }
-
-        public ActionResult Index(string usuario)
-        {
-            if (string.IsNullOrEmpty(usuario))
-            {
-                Session["usuarioFiltro"] = string.Empty;
-            }
-            else
-            {
-                Session["usuarioFiltro"] = usuario;
-            }
-
-            var filtro = Session["usuarioFiltro"].ToString();
-
-            var usuarios = db.Usuarios.Include(u => u.Compañia);
-
+            Session["iconoTitulo"] = "fas fa-users";
             Session["homeB"] = string.Empty;
             Session["rolesB"] = string.Empty;
             Session["compañiasB"] = string.Empty;
@@ -48,59 +28,52 @@ namespace CampaniasLito.Controllers
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
 
-            if (!string.IsNullOrEmpty(usuario))
+            return View();
+        }
+        public ActionResult GetData()
+        {
+            var usuarioList = db.Usuarios.ToList();
+
+            return Json(new { data = usuarioList }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult AddOrEdit(int id = 0)
+        {
+            if (id == 0)
             {
-                return View(usuarios.Where(a => a.NombreUsuario.Contains(filtro) || a.Nombres.Contains(filtro)).ToList());
+                ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre");
+                ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre");
+
+                return PartialView(new Usuario());
             }
             else
             {
-                return View(usuarios.ToList());
+                var nombreUsuario = db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault().NombreUsuario;
+                var rolId = db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault().RolId;
+                var compañiaId = db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault().CompañiaId;
+
+                Session["UsuarioEditado"] = nombreUsuario.ToLower();
+                Session["RolEditado"] = rolId;
+
+                ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre", compañiaId);
+                ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre", rolId);
+
+                return PartialView(db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault());
             }
-        }
-
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var usuario = db.Usuarios.Find(id);
-
-            if (usuario == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(usuario);
-        }
-
-        public ActionResult Create()
-        {
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre");
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre");
-
-            var usuario = new Usuario { };
-            return PartialView(usuario);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async System.Threading.Tasks.Task<ActionResult> Create(Usuario usuario)
+        public async Task<ActionResult> AddOrEdit(Usuario usuario)
         {
-            if (ModelState.IsValid)
+            if (usuario.UsuarioId == 0)
             {
                 db.Usuarios.Add(usuario);
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
                     var rol = db.Roles.Where(r => r.RolId == usuario.RolId).FirstOrDefault();
-
-                    //UsuariosHelper.CreateUserASP(usuario.NombreUsuario, rol.Nombre);
-
                     var random = new Random();
-                    //var password = usuario.NombreUsuario;
-
                     var password = string.Format("{0}{1}{2:04}*",
                         usuario.Nombres.Trim().ToUpper().Substring(0, 1),
                         usuario.Apellidos.Trim().ToLower().Substring(0, 1) + "Lt",
@@ -116,67 +89,21 @@ namespace CampaniasLito.Controllers
                     <p>Link de la Plataforma: <a href='portal.litoprocess.com/Campanias'>portal.litoprocess.com/Campanias</a>",
                     password, usuario.NombreUsuario);
 
-                    //await MailHelper.SendMail("jesuscabrerag@yahoo.com.mx", subject, body);
-
                     await MailHelper.SendMail(usuario.NombreUsuario, "jesuscabrerag@yahoo.com.mx", subject, body);
-
-                    //var rigistrar = db.Usuarios.Where(r => r.Registrado == null).Where(u => u.UsuarioId == usuario.UsuarioId).FirstOrDefault();
-
-                    //rigistrar.Registrado = "SI";
-                    //db.Entry(rigistrar).State = EntityState.Modified;
-                    //db.SaveChanges();
 
                     UsuariosHelper.AddRole(usuario.NombreUsuario, rol.Nombre, password);
 
-                    TempData["mensajeLito"] = "USUARIO AGREGADO";
+                    return Json(new { success = true, message = "USUARIO AGREGADO" }, JsonRequestBehavior.AllowGet);
 
-                    return RedirectToAction("Index");
+                }
+                else
+                {
+
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
             }
-
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre", usuario.CompañiaId);
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre", usuario.RolId);
-
-            return View(usuario);
-        }
-
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var usuario = db.Usuarios.Find(id);
-
-            if (usuario == null)
-            {
-                return HttpNotFound();
-            }
-
-            var currentUsuario = User.Identity.Name;
-
-            if (currentUsuario.ToString() == usuario.NombreUsuario)
-            {
-                return RedirectToAction("Index");
-            }
-
-            Session["UsuarioEditado"] = usuario.NombreUsuario.ToLower();
-            Session["RolEditado"] = usuario.RolId;
-
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
-
-            return PartialView(usuario);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Usuario usuario)
-        {
-            if (ModelState.IsValid)
+            else
             {
                 db.Entry(usuario).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
@@ -192,109 +119,30 @@ namespace CampaniasLito.Controllers
                         UsuariosHelper.UpdateUserName(currentUser, usuario.NombreUsuario.ToLower(), currentRolNombre.Nombre, newRol.Nombre);
                     }
 
-
-                    Session["Compañia"] = "Litoprocess";
-                    TempData["mensajeLito"] = "USUARIO EDITADO";
-
-                    return RedirectToAction("Index");
+                    return Json(new { success = true, message = "USUARIO ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
                 }
-
-                ModelState.AddModelError(string.Empty, response.Message);
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
-
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
-
-            return PartialView(usuario);
         }
 
-        public ActionResult Perfil()
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            var nombre = User.Identity.Name;
-            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
-            int? id = usuarioActual.UsuarioId;
-            var perfilUser = usuarioActual.RolId;
-            var fecha = DateTime.Now;
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var usuario = db.Usuarios.Find(id);
-
-            if (usuario == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
-
-            return PartialView(usuario);
-        }
-
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var usuario = db.Usuarios.Find(id);
-
-            if (usuario == null)
-            {
-                return HttpNotFound();
-            }
-
-
-            var currentUsuario = User.Identity.Name;
-
-            if (currentUsuario.ToString() == usuario.NombreUsuario)
-            {
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
-            return PartialView(usuario);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-
-            var usuario = db.Usuarios.Find(id);
-            var currentRol = db.Roles.Where(r => r.RolId == usuario.RolId).FirstOrDefault();
-
+            Usuario usuario = db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault();
             db.Usuarios.Remove(usuario);
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
                 UsuariosHelper.DeleteUser(usuario.NombreUsuario);
-
-                Session["Compañia"] = "Litoprocess";
-                TempData["mensajeLito"] = "USUARIO ELIMINADO";
-
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "USUARIO ELIMINADO" }, JsonRequestBehavior.AllowGet);
             }
-
-            ModelState.AddModelError(string.Empty, response.Message);
-
-            ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(), "CompañiaId", "Nombre", usuario.CompañiaId);
-            ViewBag.RolId = new SelectList(CombosHelper.GetRoles(), "RolId", "Nombre", usuario.RolId);
-            return PartialView(usuario);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            else
             {
-                db.Dispose();
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
             }
-            base.Dispose(disposing);
         }
     }
 }

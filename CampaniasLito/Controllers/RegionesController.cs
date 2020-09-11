@@ -1,29 +1,25 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-using CampaniasLito.Classes;
+﻿using CampaniasLito.Classes;
 using CampaniasLito.Filters;
 using CampaniasLito.Models;
-using Newtonsoft.Json;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
 {
+    [Authorize]
     public class RegionesController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
+
+        public string modulo = "Regiones";
+        public string movimiento = string.Empty;
 
         // GET: Regiones
-        public ActionResult GetList()
-        {
-            var regionesList = db.Regions.ToList<Region>();
-            return Json(new { data = regionesList }, JsonRequestBehavior.AllowGet);
-
-        }
-
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Index(string tipoIndex)
+        public ActionResult Index()
         {
+            Session["iconoTitulo"] = "fas fa-map-marked";
             Session["homeB"] = string.Empty;
             Session["rolesB"] = string.Empty;
             Session["compañiasB"] = string.Empty;
@@ -34,382 +30,96 @@ namespace CampaniasLito.Controllers
             Session["familiasB"] = string.Empty;
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
-
-            if (string.IsNullOrEmpty(tipoIndex))
-            {
-            Session["VistaEquity"] = string.Empty;
-            Session["VistaFranquicias"] = string.Empty;
-            Session["VistaStock"] = string.Empty;
-            }
-            else if (tipoIndex == "EQUITY")
-            {
-                Session["VistaEquity"] = "block";
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = string.Empty;
-            }
-            else if (tipoIndex == "FRANQUICIAS")
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = "block";
-                Session["VistaStock"] = string.Empty;
-            }
-            else if (tipoIndex == "STOCK")
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = "block";
-            }
+            Session["reglasB"] = string.Empty;
+            Session["bitacoraB"] = string.Empty;
 
             return View();
         }
-
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RegionesStock()
+        public ActionResult GetData()
         {
-            string tipo = "STOCK";
+            var regionList = db.Database.SqlQuery<Region>("spGetRegiones").ToList();
+            //var regionList = db.Regions.ToList();
 
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-
-            var regions = db.Regions.Where(c => c.EquityFranquicia == tipo);
-
-            if (regions == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View(regions.ToList());
+            return Json(new { data = regionList }, JsonRequestBehavior.AllowGet);
         }
 
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RegionesFranquicias()
-        {
-            string tipo = "FRANQUICIAS";
-
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var regions = db.Regions.Where(c => c.EquityFranquicia == tipo);
-
-            if (regions == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View(regions.ToList());
-        }
-
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult RegionesEquity()
-        {
-            string tipo = "EQUITY";
-
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var regions = db.Regions.Where(c => c.EquityFranquicia == tipo).ToList();
-
-            if (regions == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            //Session["ClickRegion"] = "SI";
-
-            //var json = JsonConvert.SerializeObject(regions);
-
-            //return Json(json, JsonRequestBehavior.AllowGet);
-
-            return PartialView(regions.ToList());
-        }
-
-        //[AuthorizeUser(idOperacion: 5)]
-        //public ActionResult RegionesEquity()
-        //{
-        //    string tipo = "EQUITY";
-
-        //    var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-        //    if (usuario == null)
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-
-        //    var regions = db.Regions.Where(c => c.EquityFranquicia == tipo).ToList();
-
-        //    if (regions == null)
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-
-        //    return View(regions.ToList());
-        //}
-
-        // GET: Regiones/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Region region = db.Regions.Find(id);
-            if (region == null)
-            {
-                return HttpNotFound();
-            }
-            return View(region);
-        }
-
-        // GET: Regiones/Create
         [AuthorizeUser(idOperacion: 1)]
-        public ActionResult Create(int id)
+        [HttpGet]
+        public ActionResult AddOrEdit(int id = 0)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
+            if (id == 0)
             {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (id == 1)
-            {
-                Session["tipoRegion"] = "EQUITY";
-            }
-            else if (id == 2)
-            {
-                Session["tipoRegion"] = "FRANQUICIAS";
-            }
-            else if (id == 3)
-            {
-                Session["tipoRegion"] = "STOCK";
-            }
-
-
-            var regiones = new Region { };
-
-            return PartialView(regiones);
-        }
-
-        // POST: Regiones/Create
-        [AuthorizeUser(idOperacion: 1)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Region region)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (Session["tipoRegion"].ToString() == "EQUITY")
-            {
-                Session["VistaEquity"] = "block";
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = string.Empty;
-            }
-            else if (Session["tipoRegion"].ToString() == "FRANQUICIAS")
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = "block";
-                Session["VistaStock"] = string.Empty;
-            }
-            else if (Session["tipoRegion"].ToString() == "STOCK")
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = "block";
+                ViewBag.EquityFranquicia = new SelectList(CombosHelper.GetTipoCampañas(true), "Nombre", "Nombre");
+                return PartialView(new Region());
             }
             else
             {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = string.Empty;
+                var tipo = db.Regions.Where(x => x.RegionId == id).FirstOrDefault().EquityFranquicia;
+                ViewBag.EquityFranquicia = new SelectList(CombosHelper.GetTipoCampañas(true), "Nombre", "Nombre", tipo);
+                return PartialView(db.Regions.Where(x => x.RegionId == id).FirstOrDefault());
             }
+        }
 
-            Session["Create"] = "Create";
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult AddOrEdit(Region region)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            region.EquityFranquicia = Session["tipoRegion"].ToString();
-
-            if (ModelState.IsValid)
+            if (region.RegionId == 0)
             {
                 db.Regions.Add(region);
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-                    TempData["mensajeLito"] = "REGION AGREGADA";
+                    movimiento = "Agregar Región " + region.RegionId + " " + region.Nombre + " / " + region.EquityFranquicia;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
-                    return RedirectToAction("Index");
-                    //return RedirectToAction("Index", new { tipoIndex = Session["tipoRegion"].ToString() });
+                    return Json(new { success = true, message = "REGIÓN AGREGADA" }, JsonRequestBehavior.AllowGet);
                 }
-
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            return PartialView(region);
-        }
-
-        // GET: Regiones/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var region = db.Regions.Find(id);
-
-            if (region == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(region);
-        }
-
-        // POST: Regiones/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Region region)
-        {
-            var tipo = region.EquityFranquicia;
-
-            if (tipo == "EQUITY")
-            {
-                Session["VistaEquity"] = "block";
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = string.Empty;
-            }
-            else if (tipo == "FRANQUICIAS")
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = "block";
-                Session["VistaStock"] = string.Empty;
-            }
-            else if (tipo == "STOCK")
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = "block";
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
             else
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = string.Empty;
-            }
-
-            Session["Edit"] = "Edit";
-
-            if (ModelState.IsValid)
             {
                 db.Entry(region).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    movimiento = "Actualizar Región " + region.RegionId + " " + region.Nombre + " / " + region.EquityFranquicia;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
-                    TempData["mensajeLito"] = "REGION EDITADA";
-
-                    return RedirectToAction("Index");
-
+                    return Json(new { success = true, message = "REGIÓN ACTUALIZADA" }, JsonRequestBehavior.AllowGet);
                 }
-
-                ModelState.AddModelError(string.Empty, response.Message);
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
-
-            return View(region);
         }
 
-        // GET: Regiones/Delete/5
         [AuthorizeUser(idOperacion: 3)]
-        public ActionResult Delete(int? id)
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            var region = db.Regions.Find(id);
-
-            if (region == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(region);
-        }
-
-        // POST: Regiones/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-
-            var region = db.Regions.Find(id);
-
-            var tipo = region.EquityFranquicia;
-
-            if (tipo == "EQUITY")
-            {
-                Session["VistaEquity"] = "block";
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = string.Empty;
-            }
-            else if (tipo == "FRANQUICIAS")
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = "block";
-                Session["VistaStock"] = string.Empty;
-            }
-            else if (tipo == "STOCK")
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = "block";
-            }
-            else
-            {
-                Session["VistaEquity"] = string.Empty;
-                Session["VistaFranquicias"] = string.Empty;
-                Session["VistaStock"] = string.Empty;
-            }
-
-            Session["Delete"] = "Delete";
-
+            Region region = db.Regions.Where(x => x.RegionId == id).FirstOrDefault();
             db.Regions.Remove(region);
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
-                TempData["mensajeLito"] = "REGION ELIMINADA";
+                movimiento = "Eliminar Región " + region.RegionId + " " + region.Nombre + " / " + region.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
-                return RedirectToAction("Index");
-                //return RedirectToAction("Index", new { tipoIndex = tipo });
+                return Json(new { success = true, message = "REGIÓN ELIMINADA" }, JsonRequestBehavior.AllowGet);
             }
-
-            ModelState.AddModelError(string.Empty, response.Message);
-            return PartialView(region);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            else
             {
-                db.Dispose();
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
             }
-            base.Dispose(disposing);
         }
     }
 }

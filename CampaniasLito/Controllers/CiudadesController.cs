@@ -1,35 +1,33 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-using CampaniasLito.Classes;
+﻿using CampaniasLito.Classes;
 using CampaniasLito.Filters;
 using CampaniasLito.Models;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
 {
+    [Authorize]
     public class CiudadesController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
-        // GET: Ciudades
-        public ActionResult GetList()
+        public string modulo = "Ciudades";
+        public string movimiento = string.Empty;
+
+        public class spCiudades
         {
-            var ciudadesList = db.Ciudads.ToList<Ciudad>();
-            return Json(new { data = ciudadesList }, JsonRequestBehavior.AllowGet);
+            public int CiudadId { get; set; }
+            public string Nombre { get; set; }
+            public string Region { get; set; }
+            public string EquityFranquicia { get; set; }
 
         }
-
+        // GET: Regiones
         [AuthorizeUser(idOperacion: 5)]
         public ActionResult Index()
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
+            Session["iconoTitulo"] = "fas fa-map-marker-alt";
             Session["homeB"] = string.Empty;
             Session["rolesB"] = string.Empty;
             Session["compañiasB"] = string.Empty;
@@ -40,303 +38,101 @@ namespace CampaniasLito.Controllers
             Session["familiasB"] = string.Empty;
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
+            Session["reglasB"] = string.Empty;
+            Session["bitacoraB"] = string.Empty;
 
             return View();
         }
-
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult CiudadesStock(string ciudad)
+        public ActionResult GetData()
         {
-            string tipo = "STOCK";
+            var ciudadList = db.Database.SqlQuery<spCiudades>("spGetCiudades").ToList();
+            //var ciudadList = db.Ciudads.ToList();
 
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (string.IsNullOrEmpty(ciudad))
-            {
-                Session["ciudadFiltro"] = string.Empty;
-            }
-            else
-            {
-                Session["ciudadFiltro"] = ciudad;
-            }
-
-            var filtro = Session["ciudadFiltro"].ToString();
-
-            var ciudads = db.Ciudads.Include(c => c.Region).Where(c => c.EquityFranquicia == tipo).OrderBy(c => c.Nombre);
-
-            if (!string.IsNullOrEmpty(ciudad))
-            {
-                return View(ciudads.Where(a => a.Nombre.Contains(filtro) || a.Region.Nombre.Contains(filtro)).ToList());
-            }
-            else
-            {
-                return View(ciudads.ToList());
-            }
+            return Json(new { data = ciudadList }, JsonRequestBehavior.AllowGet);
         }
 
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult CiudadesFranquicias(string ciudad)
-        {
-            string tipo = "FRANQUICIAS";
 
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (string.IsNullOrEmpty(ciudad))
-            {
-                Session["ciudadFiltro"] = string.Empty;
-            }
-            else
-            {
-                Session["ciudadFiltro"] = ciudad;
-            }
-
-            var filtro = Session["ciudadFiltro"].ToString();
-
-            var ciudads = db.Ciudads.Include(c => c.Region).Where(c => c.EquityFranquicia == tipo).OrderBy(c => c.Nombre);
-
-            if (!string.IsNullOrEmpty(ciudad))
-            {
-                return View(ciudads.Where(a => a.Nombre.Contains(filtro) || a.Region.Nombre.Contains(filtro)).ToList());
-            }
-            else
-            {
-                return View(ciudads.ToList());
-            }
-        }
-
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult CiudadesEquity(string ciudad)
-        {
-            string tipo = "EQUITY";
-
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (string.IsNullOrEmpty(ciudad))
-            {
-                Session["ciudadFiltroEquity"] = string.Empty;
-            }
-            else
-            {
-                Session["ciudadFiltroEquity"] = ciudad;
-            }
-
-            var filtro = Session["ciudadFiltroEquity"].ToString();
-
-            var ciudads = db.Ciudads.Include(c => c.Region).Where(c => c.EquityFranquicia == tipo).OrderBy(c => c.Nombre);
-
-            if (!string.IsNullOrEmpty(ciudad))
-            {
-                return View(ciudads.Where(a => a.Nombre.Contains(filtro) || a.Region.Nombre.Contains(filtro)).ToList());
-            }
-            else
-            {
-                return View(ciudads.ToList());
-            }
-        }
-
-        // GET: Ciudades/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var ciudad = db.Ciudads.Find(id);
-            
-            if (ciudad == null)
-            {
-                return HttpNotFound();
-            }
-            return PartialView(ciudad);
-        }
-
-        // GET: Ciudades/Create
         [AuthorizeUser(idOperacion: 1)]
-        public ActionResult Create(int id)
+        [HttpGet]
+        public ActionResult AddOrEdit(int id = 0)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-            if (usuario == null)
+            if (id == 0)
             {
-                return RedirectToAction("Index", "Home");
+                ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre");
+                return PartialView(new Ciudad());
             }
-
-            if (id == 1)
+            else
             {
-                Session["tipoCiudad"] = "EQUITY";
+                var tipo = db.Ciudads.Where(x => x.CiudadId == id).FirstOrDefault().EquityFranquicia;
+                var regionId = db.Ciudads.Where(x => x.CiudadId == id && x.EquityFranquicia == tipo).FirstOrDefault().RegionId;
+                ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", regionId);
+                return PartialView(db.Ciudads.Where(x => x.CiudadId == id).FirstOrDefault());
             }
-            else if (id == 2)
-            {
-                Session["tipoCiudad"] = "FRANQUICIAS";
-            }
-            else if (id == 3)
-            {
-                Session["tipoCiudad"] = "STOCK";
-            }
-
-            var ciudades = new Ciudad { };
-
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(id, true), "RegionId", "Nombre");
-
-            return PartialView(ciudades);
         }
 
-        // POST: Ciudades/Create
         [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Ciudad ciudad)
+        public ActionResult AddOrEdit(Ciudad ciudad)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            ciudad.EquityFranquicia = Session["tipoCiudad"].ToString();
+            ciudad.EquityFranquicia = db.Regions.Where(x => x.RegionId == ciudad.RegionId).FirstOrDefault().EquityFranquicia;
 
-            if (ModelState.IsValid)
+            if (ciudad.CiudadId == 0)
             {
+
                 db.Ciudads.Add(ciudad);
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-                    TempData["mensajeLito"] = "CIUDAD AGREGADA";
+                    movimiento = "Agregar Ciudad " + ciudad.CiudadId + " " + ciudad.Nombre + " / " + ciudad.EquityFranquicia;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
-                    return RedirectToAction("Index");
+                    return Json(new { success = true, message = "CIUDAD AGREGADA" }, JsonRequestBehavior.AllowGet);
                 }
-
-                ModelState.AddModelError(string.Empty, response.Message);
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
-
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", ciudad.RegionId);
-
-            return PartialView(ciudad);
-        }
-
-        // GET: Ciudades/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var ciudad = db.Ciudads.Find(id);
-            
-            if (ciudad == null)
-            {
-                return HttpNotFound();
-            }
-
-            int tipo = 0;
-
-            if (ciudad.EquityFranquicia == "EQUITY")
-            {
-                tipo = 1;
-            }
-            else if (ciudad.EquityFranquicia == "FRANQUICIAS")
-            {
-                tipo = 2;
-            }
-            else if (ciudad.EquityFranquicia == "STOCK")
-            {
-                tipo = 3;
-            }
-
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", ciudad.RegionId);
-
-            return PartialView(ciudad);
-        }
-
-        // POST: Ciudades/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Ciudad ciudad)
-        {
-            if (ModelState.IsValid)
+            else
             {
                 db.Entry(ciudad).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    movimiento = "Actualizar Ciudad " + ciudad.CiudadId + " " + ciudad.Nombre + " / " + ciudad.EquityFranquicia;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
-                    TempData["mensajeLito"] = "CIUDAD EDITADA";
-
-                    return RedirectToAction("Index");
-
+                    return Json(new { success = true, message = "CIUDAD ACTUALIZADA" }, JsonRequestBehavior.AllowGet);
                 }
-
-                ModelState.AddModelError(string.Empty, response.Message);
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
-
-
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", ciudad.RegionId);
-
-            return View(ciudad);
         }
 
-        // GET: Ciudades/Delete/5
         [AuthorizeUser(idOperacion: 3)]
-        public ActionResult Delete(int? id)
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            var ciudad = db.Ciudads.Find(id);
-            
-            if (ciudad == null)
-            {
-                return HttpNotFound();
-            }
-            
-            return PartialView(ciudad);
-        }
-
-        // POST: Ciudades/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var ciudad = db.Ciudads.Find(id);
+            Ciudad ciudad = db.Ciudads.Where(x => x.CiudadId == id).FirstOrDefault();
             db.Ciudads.Remove(ciudad);
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
-                TempData["mensajeLito"] = "CIUDAD ELIMINADA";
+                movimiento = "Eliminar Ciudad " + ciudad.CiudadId + " " + ciudad.Nombre + " / " + ciudad.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "CIUDAD ELIMINADA" }, JsonRequestBehavior.AllowGet);
             }
-
-            ModelState.AddModelError(string.Empty, response.Message);
-
-            return PartialView(ciudad);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            else
             {
-                db.Dispose();
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
             }
-            base.Dispose(disposing);
         }
     }
 }

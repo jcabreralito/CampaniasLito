@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CampaniasLito.Models
 {
     public class CampañaArticuloTMP
     {
         [Key]
-        public int CampañaArticuloTMPId { get; set; }
+        public long CampañaArticuloTMPId { get; set; }
 
         //public string Usuario { get; set; }
 

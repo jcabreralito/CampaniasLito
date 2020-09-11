@@ -27,6 +27,12 @@ namespace CampaniasLito.Classes
                 {
                     response.Message = "No se puede eliminar el registro, existen movimientos relacionados";
                 }
+                else if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("IX_"))
+                {
+                    response.Message = "Registro Duplicado";
+                }
                 else
                 {
                     response.Message = ex.Message;

@@ -39,6 +39,9 @@ namespace CampaniasLito.Models
 
         public bool Todo { get; set; }
 
+        [Display(Name = "Liga Imagen")]
+        public string LigaImagen { get; set; }
+
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Imagen")]
         public string Imagen { get; set; }

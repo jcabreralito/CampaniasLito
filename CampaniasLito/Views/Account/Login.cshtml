@@ -15,26 +15,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href="~/Content/vendor/materialize/css/materialize.min.css" rel="stylesheet" />
+    <link href="~/Content/materialize/css/materialize.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="~/Content/LoginCSS/Login.css" rel="stylesheet" />
 
     <title>Lito - @ViewBag.Title </title>
-
-    <style>
-
-        @@font-face {
-            font-family: 'Hero';
-            src: url('../../Content/Fonts/Hero.otf') format('opentype');
-        }
-
-    </style>
 </head>
-<body style="font-family: Hero">
+<body>
     <div class="had-container">
 
         <div class="text-center center" style="padding-top: 40px">
-            <img class="ocultar" src="~/Content/Logos/Logo_LIto_azul.png"
+            <img class="ocultar" src="~/Content/images/Logo_LIto_azul.png"
                  width="200">
         </div>
         <div class="row login">
@@ -48,16 +39,16 @@
                 <div class="row">
                     <div class="input-field col m12 s12">
                         <i class="material-icons prefix">account_circle</i>
-                        @Html.TextBoxFor(m => m.Email, new { @class = "validate", @type = "text", @required = "true" })
-                        <label class="mat-label" for="Email">Usuario</label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "validate", @type = "text", @required = "true", autofocus = "true" })
+                        <label for="Email">Usuario</label>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="input-field col m12 s12">
                         <i class="material-icons prefix">lock</i>
-                        @Html.TextBoxFor(m => m.Password, new { @class = "validate", @type = "password", @required = "true" })
-                        <label class="mat-label" for="Password">Password</label>
+                        @Html.TextBoxFor(m => m.Password, new { @class = "validate", @type = "password", @required = "true", autofocus = "true" })
+                        <label for="Password">Password</label>
                     </div>
                 </div>
 
@@ -75,8 +66,8 @@
         </div>
     </footer>
 
-    <script src="~/Content/vendor/materialize/js/materialize.js"></script>
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery-3.5.1.js"></script>
+    <script src="~/Scripts/materialize/materialize.js"></script>
 
 </body>
 </html>

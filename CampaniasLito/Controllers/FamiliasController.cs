@@ -1,29 +1,25 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
+﻿using CampaniasLito.Classes;
 using CampaniasLito.Filters;
 using CampaniasLito.Models;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
 {
+    [Authorize]
     public class FamiliasController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
-        // GET: Familias
+        public string modulo = "Familias";
+        public string movimiento = string.Empty;
+
+        // GET: /Employee/
         [AuthorizeUser(idOperacion: 5)]
         public ActionResult Index()
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var familias = db.Familias.Where(x => x.Codigo != "995" && x.Codigo != "996" && x.Codigo != "997" && x.Codigo != "998" && x.Codigo != "999").OrderBy(a => a.Codigo).ThenBy(a => a.Descripcion);
-
+            Session["iconoTitulo"] = "fas fa-boxes";
             Session["homeB"] = string.Empty;
             Session["rolesB"] = string.Empty;
             Session["compañiasB"] = string.Empty;
@@ -34,122 +30,95 @@ namespace CampaniasLito.Controllers
             Session["familiasB"] = "active";
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
+            Session["reglasB"] = string.Empty;
+            Session["bitacoraB"] = string.Empty;
 
-
-            return View(familias.ToList());
-
-        }
-
-        // GET: Familias/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Familia familia = db.Familias.Find(id);
-            if (familia == null)
-            {
-                return HttpNotFound();
-            }
-            return View(familia);
-        }
-
-        // GET: Familias/Create
-        [AuthorizeUser(idOperacion: 1)]
-        public ActionResult Create()
-        {
             return View();
         }
 
+        public ActionResult GetData()
+        {
+            var famList = db.Database.SqlQuery<Familia>("spGetFamilias").ToList();
+            var familias = famList.Where(x => x.Codigo != "995" && x.Codigo != "996" && x.Codigo != "997" && x.Codigo != "998" && x.Codigo != "999").ToList();
+
+            return Json(new { data = familias }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult AddOrEdit(int id = 0)
+        {
+            if (id == 0)
+            {
+                return PartialView(new Familia());
+            }
+            else
+            {
+                return PartialView(db.Familias.Where(x => x.FamiliaId == id).FirstOrDefault());
+            }
+        }
+
         [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Familia familia)
+        public ActionResult AddOrEdit(Familia fam)
         {
-            if (ModelState.IsValid)
-            {
-                db.Familias.Add(familia);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            return View(familia);
+            if (fam.FamiliaId == 0)
+            {
+                db.Familias.Add(fam);
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    movimiento = "Agregar Familia " + fam.FamiliaId + " " + fam.Descripcion + " / " + fam.Codigo;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                    return Json(new { success = true, message = "FAMILIA AGREGADA" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                db.Entry(fam).State = EntityState.Modified;
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    movimiento = "Actualizar Familia " + fam.FamiliaId + " " + fam.Descripcion + " / " + fam.Codigo;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                    return Json(new { success = true, message = "FAMILIA ACTUALIZADA" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
         }
 
-        // GET: Familias/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var familia = db.Familias.Find(id);
-
-            if (familia == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(familia);
-        }
-
-        [AuthorizeUser(idOperacion: 2)]
+        [AuthorizeUser(idOperacion: 3)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Familia familia)
+        public ActionResult Delete(int id)
         {
-            if (ModelState.IsValid)
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            Familia fam = db.Familias.Where(x => x.FamiliaId == id).FirstOrDefault();
+            db.Familias.Remove(fam);
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
             {
-                db.Entry(familia).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                movimiento = "Eliminar Familia " + fam.FamiliaId + " " + fam.Descripcion + " / " + fam.Codigo;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                return Json(new { success = true, message = "FAMILIA ELIMINADA" }, JsonRequestBehavior.AllowGet);
             }
-
-            return View(familia);
-        }
-
-        // GET: Familias/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
+            else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
             }
-
-            var familia = db.Familias.Find(id);
-
-            if (familia == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(familia);
-        }
-
-        // POST: Familias/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var familia = db.Familias.Find(id);
-            db.Familias.Remove(familia);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

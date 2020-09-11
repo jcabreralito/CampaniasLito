@@ -1,20 +1,21 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
+﻿using CampaniasLito.Classes;
 using CampaniasLito.Models;
-using CampaniasLito.Classes;
+using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
 {
-    [Authorize(Roles = "SuperAdmin, Admin")]
-
+    [Authorize(Roles = "SuperAdmin")]
     public class CompañiasController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
+        // GET: Compañias
         public ActionResult Index()
         {
+            Session["iconoTitulo"] = "fas fa-building";
             Session["homeB"] = string.Empty;
             Session["rolesB"] = string.Empty;
             Session["compañiasB"] = "active";
@@ -25,165 +26,103 @@ namespace CampaniasLito.Controllers
             Session["familiasB"] = string.Empty;
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
+            Session["reglasB"] = string.Empty;
 
-            //var compañia = db.Compañias.Include(c => c.Ciudad).Include(c => c.DelegacionMunicipio).Include(c => c.Colonia);
-            return View(db.Compañias.ToList());
+            return View();
+        }
+        public ActionResult GetData()
+        {
+            var compañiaList = db.Compañias.ToList();
+
+            return Json(new { data = compañiaList }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Details(int? id)
+
+        [HttpGet]
+        public ActionResult AddOrEdit(int id = 0)
         {
-            if (id == null)
+            if (id == 0)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return PartialView(new Compañia());
             }
-
-            var compañia = db.Compañias.Find(id);
-
-            if (compañia == null)
+            else
             {
-                return HttpNotFound();
+                return PartialView(db.Compañias.Where(x => x.CompañiaId == id).FirstOrDefault());
             }
-            return PartialView(compañia);
-        }
-
-        public ActionResult Create()
-        {
-            return PartialView();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Compañia compañia)
+        public ActionResult AddOrEdit(Compañia compañia)
         {
-            if (ModelState.IsValid)
+
+            if (compañia.CompañiaId == 0)
             {
                 db.Compañias.Add(compañia);
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-                    if (compañia.LogoFile != null)
-                    {
-                        var folder = "~/Content/Logos";
-                        var file = string.Format("{0}.jpg", compañia.CompañiaId);
-                        var responseLogo = FilesHelper.UploadPhoto(compañia.LogoFile, folder, file);
-                        if (responseLogo)
-                        {
-                            var pic = string.Format("{0}/{1}", folder, file);
-                            compañia.Logo = pic;
-                            db.Entry(compañia).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    }
+                        CargarImagen(compañia);
 
-                    Session["Compañia"] = "Litoprocess";
-                    TempData["mensajeLito"] = "COMPAÑIA AGREGADA";
-
-                    return RedirectToAction("Index");
+                    //return View("Index");
+                    return Json(new { success = true, message = "COMPAÑIA AGREGADA" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
             }
-
-            return PartialView(compañia);
-        }
-
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var compañia = db.Compañias.Find(id);
-
-            if (compañia == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(compañia);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Compañia compañia)
-        {
-            if (ModelState.IsValid)
+            else
             {
                 db.Entry(compañia).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
-
                 if (response.Succeeded)
                 {
-                    if (compañia.LogoFile != null)
-                    {
-                        var folder = "~/Content/Logos";
-                        var file = string.Format("{0}.jpg", compañia.CompañiaId);
-                        var responseLogo = FilesHelper.UploadPhoto(compañia.LogoFile, folder, file);
-                        if (responseLogo)
-                        {
-                            var pic = string.Format("{0}/{1}", folder, file);
-                            compañia.Logo = pic;
-                            db.Entry(compañia).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    }
+                    CargarImagen(compañia);
 
-                    Session["Compañia"] = "Litoprocess";
-                    TempData["mensajeLito"] = "COMPAÑIA EDITADA";
-
-                    return RedirectToAction("Index");
+                    //return View("Index");
+                    return Json(new { success = true, message = "COMPAÑIA ACTUALIZADA" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
             }
-
-            return PartialView(compañia);
         }
 
-        public ActionResult Delete(int? id)
+        private void CargarImagen(Compañia compañia)
         {
-            if (id == null)
+            if (compañia.LogoFile != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var folder = "~/Content/images/Logos";
+                var local = "/";
+                var file = string.Format("{0}{1}.jpg", compañia.CompañiaId, compañia.Nombre);
+                var responseLogo = FilesHelper.UploadPhoto(compañia.LogoFile, folder, file);
+                if (responseLogo)
+                {
+                    var pic = string.Format("{0}/{1}", local, file);
+                    compañia.Logo = pic;
+                    db.Entry(compañia).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
             }
-
-            var compañia = db.Compañias.Find(id);
-
-            if (compañia == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(compañia);
         }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            var compañia = db.Compañias.Find(id);
+            Compañia compañia = db.Compañias.Where(x => x.CompañiaId == id).FirstOrDefault();
             db.Compañias.Remove(compañia);
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
-                Session["Compañia"] = "Litoprocess";
-                TempData["mensajeLito"] = "COMPAÑIA ELIMINADA";
-
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "COMPAÑIA ELIMINADA" }, JsonRequestBehavior.AllowGet);
             }
-
-            ModelState.AddModelError(string.Empty, response.Message);
-            return View(compañia);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            else
             {
-                db.Dispose();
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
             }
-            base.Dispose(disposing);
         }
     }
 }

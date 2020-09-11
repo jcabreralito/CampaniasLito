@@ -3,84 +3,31 @@
     //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div class="panel mt-3">
-        <div class="panel-heading">
-            <table class="headingModal">
-                <tr style="background-color: #DF2530 !important">
-                    <td class="col-xs-6">
-                        <h2 class="responsivoUsuarioLabelFa" style="color: #fff">@ViewBag.operacion</h2>
+<div class="panel-body">
+    <div class="form-horizontal row responsivoUsuarioLabel">
+        <div class="col-xs-12">
+            <table>
+                <tr>
+                    <td align="center">
+                        @if (ViewBag.operacion != "")
+                        {
+                            <h5>¡ No estás Autorizado para @ViewBag.operacion Registros !</h5>
+                        }
                     </td>
-                    <td class=" col-xs-12"></td>
-                    <td align="right" class="col-xs-1">
-                        <div class="input-group">
-                            <button type="button" class="botonF2 btn-danger" style="background-color: red" data-dismiss="modal">
-                                <i class="fas fa-times-circle"></i>
-                            </button>
-                        </div>
+                    <td align="right" class="red-text">
+                        <i class="fas fa-exclamation-triangle fa-5x"></i>
                     </td>
                 </tr>
             </table>
-        </div>
 
-        <div class="panel-body">
-            <div class="form-horizontal row responsivoUsuarioLabel">
-                <div class="col-xs-12">
-                    <table>
-                        @*<tr>
-                            <td colspan="2" align="center">
-                                <h2>Sin autorización</h2>
-                            </td>
-                        </tr>*@
-                        <tr>
-                            <td align="center">
-                                @if (ViewBag.operacion != "")
-                                {
-                                    <h3>¡ No estás Autorizado para @ViewBag.operacion Registros !</h3>
-                                }
-                            </td>
-                            <td align="right">
-                                <i class="fas fa-warning fa-5x"></i>
-                            </td>
-                        </tr>
-                    </table>
-
-
-
-
-
-
-
-                    @*<div class="form-group">
-                        <div class="col-sm-12">
-                            @if (ViewBag.operacion != "")
-                            {
-                            <h3>No estás Autorizado para @ViewBag.operacion @ViewBag.modulo</h3>
-                            }
-                        </div>
-                    </div>*@
-
-                    @*<div class="form-group">
-                        <div class="col-sm-12">
-                            @if (ViewBag.modulo != "")
-                            {
-                                <p>Modulo @ViewBag.modulo</p>
-                            }
-                        </div>
-                    </div>*@
-
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            @if (ViewBag.msjeErrorExcepcion != "")
-                            {
-                                <p>@ViewBag.msjeErrorExcepcion</p>
-                            }
-                        </div>
-                    </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    @if (ViewBag.msjeErrorExcepcion != "")
+                    {
+                        <p>@ViewBag.msjeErrorExcepcion</p>
+                    }
                 </div>
             </div>
         </div>
     </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+</div>

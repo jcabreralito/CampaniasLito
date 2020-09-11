@@ -1193,7 +1193,7 @@ div.dtk-focus-alt div.dt-autofill-handle {
 div.dt-autofill-select {
     position: absolute;
     z-index: 1001;
-    background-color: #0275d8;
+    background-color: #000;
     background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255, 255, 255, 0.5) 5px, rgba(255, 255, 255, 0.5) 10px);
 }
 

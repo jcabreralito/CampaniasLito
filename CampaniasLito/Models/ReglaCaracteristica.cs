@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CampaniasLito.Models
+{
+    [Table("ReglasCaracteristicas")]
+    public class ReglaCaracteristica
+    {
+        public int ReglaCaracteristicaId { get; set; }
+
+        public int ReglaId { get; set; }
+
+        public int ReglaCatalogoId { get; set; }
+
+        public bool Seleccionado { get; set; }
+
+    }
+}

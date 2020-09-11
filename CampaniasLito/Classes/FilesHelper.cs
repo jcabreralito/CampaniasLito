@@ -19,6 +19,11 @@ namespace CampaniasLito.Classes
                 if (file != null)
                 {
                     path = Path.Combine(HttpContext.Current.Server.MapPath(folder), name);
+                    //if (!Directory.Exists(path))
+                    //{
+                    //    Directory.CreateDirectory(path);
+                    //}
+
                     file.SaveAs(path);
                     using (MemoryStream ms = new MemoryStream())
                     {

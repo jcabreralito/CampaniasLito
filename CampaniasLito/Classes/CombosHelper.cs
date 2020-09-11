@@ -1,6 +1,8 @@
 ﻿using CampaniasLito.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace CampaniasLito.Classes
@@ -96,9 +98,20 @@ namespace CampaniasLito.Classes
             return regiones.OrderBy(r => r.Nombre).ToList();
         }
 
+        public static List<Region> GetRegiones(string equiFran, bool sw)
+        {
+            var regiones = db.Regions.Where(c => c.EquityFranquicia == equiFran).ToList();
+            return regiones.OrderBy(r => r.Nombre).ToList();
+        }
+
         public static List<TipoConfiguracion> GetTipoConfiguracion(bool v)
         {
             var configuraciones = db.TipoConfiguracions.ToList();
+            configuraciones.Add(new TipoConfiguracion
+            {
+                TipoConfiguracionId = 0,
+                Nombre = "[Seleccionar...]",
+            });
             return configuraciones.OrderBy(r => r.Nombre).ToList();
         }
 
@@ -130,9 +143,42 @@ namespace CampaniasLito.Classes
             return ciudades.OrderBy(r => r.Nombre).ToList();
         }
 
+        public static List<ArticuloKFC> GetMateriales(int familiaId, bool sw)
+        {
+            var materiales = db.ArticuloKFCs.Where(x => x.FamiliaId == familiaId).ToList();
+            return materiales.OrderBy(r => r.Descripcion).ToList();
+        }
+
+        public static List<ArticuloKFC> GetMateriales(string cat, bool sw)
+        {
+                var materiales = db.Database.SqlQuery<ArticuloKFC>("spGetReglasAsignadas @Categoria",
+                                    new SqlParameter("@Categoria", cat)).ToList();
+  
+                return materiales.OrderBy(r => r.Descripcion).ToList();
+
+        }
+
+        public static List<ArticuloKFC> GetMateriales(string cat)
+        {
+                var materiales = db.ArticuloKFCs.Where(x => x.EquityFranquicia == cat && x.Eliminado == false).ToList();
+                return materiales.OrderBy(r => r.Descripcion).ToList();
+        }
+
+        public static List<ArticuloKFC> GetMateriales(bool sw)
+        {
+            var materiales = db.ArticuloKFCs.ToList();
+            return materiales.OrderBy(r => r.Descripcion).ToList();
+        }
+
         public static List<Ciudad> GetCiudades(bool sw)
         {
             var ciudades = db.Ciudads.ToList();
+            return ciudades.OrderBy(r => r.Nombre).ToList();
+        }
+
+        public static List<Ciudad> GetCiudades(string cat, bool sw)
+        {
+            var ciudades = db.Ciudads.Where(x => x.EquityFranquicia == cat).ToList();
             return ciudades.OrderBy(r => r.Nombre).ToList();
         }
 
@@ -162,9 +208,25 @@ namespace CampaniasLito.Classes
             db.Dispose();
         }
 
+        public static List<ReglaCatalogo> GetTiposTienda(string cat, bool v)
+        {
+            var tipos = db.ReglasCatalogo.Where(x => x.Categoria == cat && x.Nombre.Equals("TIPO")).ToList();
+            tipos.Add(new ReglaCatalogo
+            {
+                ReglaCatalogoId = 0,
+                Valor = "[Seleccionar...]",
+            });
+            return tipos.OrderBy(c => c.Valor).ToList();
+        }
+
         public static List<TipoTienda> GetTiposTienda(bool v)
         {
             var tipos = db.TipoTiendas.ToList();
+            //tipos.Add(new TipoTienda
+            //{
+            //    TipoTiendaId = 0,
+            //    Tipo = "[Seleccionar...]",
+            //});
             return tipos.OrderBy(c => c.Tipo).ToList();
         }
 
@@ -271,6 +333,11 @@ namespace CampaniasLito.Classes
         public static List<NivelPrecio> GetNivelesPrecio(bool sw)
         {
             var niveles = db.NivelPrecios.ToList();
+            //niveles.Add(new NivelPrecio
+            //{
+            //    NivelPrecioId = 0,
+            //    Descripcion = "[Seleccionar...]",
+            //});
             return niveles.OrderBy(c => c.Descripcion).ToList();
         }
 
@@ -280,5 +347,62 @@ namespace CampaniasLito.Classes
             return proveedores.OrderBy(c => c.Nombre).ToList();
         }
 
+        public static List<TipoCampania> GetTipoCampañas(bool v)
+        {
+            var tipos = db.TipoCampanias.Where(x => x.Nombre != "EQUITY / FRANQUICIAS").ToList();
+            tipos.Add(new TipoCampania
+            {
+                TipoCampaniaId = 0,
+                Nombre = "[Seleccionar...]",
+            });
+            return tipos.OrderBy(c => c.Nombre).ToList();
+        }
+
+        public static List<TipoCampania> GetTipoCampañasAll(bool v)
+        {
+            var tipos = db.TipoCampanias.ToList();
+            tipos.Add(new TipoCampania
+            {
+                TipoCampaniaId = 0,
+                Nombre = "[Seleccionar...]",
+            });
+            return tipos.OrderBy(c => c.Nombre).ToList();
+        }
+
+        public static List<TiendaConfiguracion> GetConfiguracionesG(int id, string tipo, bool v)
+        {
+            var asignados = db.AsignarConfiguracionTiendas.Where(x => x.TiendaId == id && x.TiendaConfiguracionId == 3).ToList();
+
+            if (asignados.Count == 0)
+            {
+                var configuraciones = db.TiendaConfiguracions.Where(x => x.EquityFranquicia == tipo && x.Eliminado == false && x.TipoConfiguracion == "CARACTERISTICAS GENERALES").ToList();
+                return configuraciones.OrderBy(r => r.Nombre).ToList();
+            }
+            else
+            {
+                var configuraciones = db.TiendaConfiguracions.Where(x => x.EquityFranquicia == tipo && x.Eliminado == false && x.TipoConfiguracion == "CARACTERISTICAS GENERALES").ToList();
+
+                foreach (var item in asignados)
+                {
+                    configuraciones = db.TiendaConfiguracions.Where(x => x.EquityFranquicia == tipo && x.Eliminado == false && x.TipoConfiguracion == "CARACTERISTICAS GENERALES" && x.TiendaConfiguracionId != item.TiendaConfiguracionId).ToList();
+                }
+                return configuraciones.OrderBy(r => r.Nombre).ToList();
+            }
+        }
+        public static List<TiendaConfiguracion> GetConfiguracionesP(string tipo, bool v)
+        {
+            var configuraciones = db.TiendaConfiguracions.Where(x => x.EquityFranquicia == tipo && x.Eliminado == false && x.TipoConfiguracion == "CONFIGURACIÓN POR PRODUCTO").ToList();
+            return configuraciones.OrderBy(r => r.Nombre).ToList();
+        }
+        public static List<TiendaConfiguracion> GetConfiguracionesME(string tipo, bool v)
+        {
+            var configuraciones = db.TiendaConfiguracions.Where(x => x.EquityFranquicia == tipo && x.Eliminado == false && x.TipoConfiguracion == "CONFIGURACIÓN POR MATERIALES ESPECÍFICOS").ToList();
+            return configuraciones.OrderBy(r => r.Nombre).ToList();
+        }
+        public static List<TiendaConfiguracion> GetConfiguracionesMedE(string tipo, bool v)
+        {
+            var configuraciones = db.TiendaConfiguracions.Where(x => x.EquityFranquicia == tipo && x.Eliminado == false && x.TipoConfiguracion == "CONFIGURACIÓN POR MEDIDAS ESPECIALES").ToList();
+            return configuraciones.OrderBy(r => r.Nombre).ToList();
+        }
     }
 }

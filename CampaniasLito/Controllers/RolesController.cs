@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using CampaniasLito.Classes;
+using CampaniasLito.Models;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using CampaniasLito.Classes;
-using CampaniasLito.Models;
 
 namespace CampaniasLito.Controllers
 {
     [Authorize(Roles = "SuperAdmin")]
-
     public class RolesController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private static readonly ApplicationDbContext userContext = new ApplicationDbContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
+        // GET: Roles
         public ActionResult Index()
         {
+            Session["iconoTitulo"] = "fas fa-user-lock";
             Session["homeB"] = string.Empty;
             Session["rolesB"] = "active";
             Session["compañiasB"] = string.Empty;
@@ -29,125 +26,84 @@ namespace CampaniasLito.Controllers
             Session["familiasB"] = string.Empty;
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
+            Session["reglasB"] = string.Empty;
 
-            return View(db.Roles.ToList());
+            return View();
+        }
+        public ActionResult GetData()
+        {
+            var rolList = db.Roles.Where(x => x.Nombre != "SuperAdmin" && x.Nombre != "Admin").ToList();
+
+            return Json(new { data = rolList }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Details(int? id)
+
+        [HttpGet]
+        public ActionResult AddOrEdit(int id = 0)
         {
-            if (id == null)
+            if (id == 0)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return PartialView(new Rol());
             }
-
-            var rol = db.Roles.Find(id);
-
-            if (rol == null)
+            else
             {
-                return HttpNotFound();
+                var currentRol = db.Roles.Where(x => x.RolId == id).FirstOrDefault().Nombre;
+
+                Session["CurrentRol"] = currentRol;
+
+                return PartialView(db.Roles.Where(x => x.RolId == id).FirstOrDefault());
             }
-
-            return PartialView(rol);
-        }
-
-        public ActionResult Create()
-        {
-            return PartialView();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Rol rol)
+        public ActionResult AddOrEdit(Rol rol)
         {
-            if (ModelState.IsValid)
+
+            if (rol.RolId == 0)
             {
                 db.Roles.Add(rol);
-                db.SaveChanges();
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    UsuariosHelper.CheckRole(rol.Nombre);
 
-                UsuariosHelper.CrearRoles(rol.Nombre);
-
-                Session["Compañia"] = "Litoprocess";
-                TempData["mensajeLito"] = "ROL AGREGADO";
-
-                return RedirectToAction("Index");
+                    return Json(new { success = true, message = "ROL AGREGADO" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
-
-            return PartialView(rol);
-        }
-
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
+            else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                db.Entry(rol).State = EntityState.Modified;
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    UsuariosHelper.UpdateRole(Session["CurrentRol"].ToString(), rol.Nombre);
+                    return Json(new { success = true, message = "ROL ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
-
-            var rol = db.Roles.Find(id);
-
-            if (rol == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(rol);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Rol rol)
+        public ActionResult Delete(int id)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(rol).State = EntityState.Modified;
-                db.SaveChanges();
-
-                Session["Compañia"] = "Litoprocess";
-                TempData["mensajeLito"] = "ROL EDITADO";
-
-                return RedirectToAction("Index");
-            }
-
-            return PartialView(rol);
-        }
-
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var rol = db.Roles.Find(id);
-
-            if (rol == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(rol);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var rol = db.Roles.Find(id);
+            Rol rol = db.Roles.Where(x => x.RolId == id).FirstOrDefault();
             db.Roles.Remove(rol);
-            db.SaveChanges();
-
-            Session["Compañia"] = "Litoprocess";
-            TempData["mensajeLito"] = "ROL ELIMINADO";
-
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
             {
-                db.Dispose();
+                return Json(new { success = true, message = "ROL ELIMINADO" }, JsonRequestBehavior.AllowGet);
             }
-            base.Dispose(disposing);
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

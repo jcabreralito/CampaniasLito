@@ -9,6 +9,7 @@ namespace CampaniasLito.Models
         [Key]
         public int AsignarConfiguracionTiendaId { get; set; }
 
+        [Display(Name = "Caracteristica", Prompt = "[Seleccionar...]")]
         public int TiendaConfiguracionId { get; set; }
 
         public int TiendaId { get; set; }

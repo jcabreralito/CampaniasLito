@@ -57,24 +57,27 @@ namespace CampaniasLito.Models
 
         public DbSet<Familia> Familias { get; set; }
 
-        public DbSet<TiendaEquipo> TiendaEquipos { get; set; }
-
-        public DbSet<TiendaGeneral> TiendaGenerales { get; set; }
-
-        public DbSet<TiendaMatEspecifico> TiendaMatEspecificos { get; set; }
-
-        public DbSet<TiendaMedidaEspecial> TiendaMedidaEspeciales { get; set; }
-
-        public DbSet<TiendaProducto> TiendaProductos { get; set; }
-
-        public DbSet<FamiliaTienda> FamiliaTiendas { get; set; }
-
         public DbSet<TiendaConfiguracion> TiendaConfiguracions { get; set; }
 
         public DbSet<TipoConfiguracion> TipoConfiguracions { get; set; }
 
         public DbSet<AsignarConfiguracionTienda> AsignarConfiguracionTiendas { get; set; }
+
         public DbSet<Regla> Reglas { get; set; }
+
+        public DbSet<TipoCampania> TipoCampanias { get; set; }
+
+        public DbSet<ReglaMaterial> ReglaMateriales { get; set; }
+
+        public DbSet<ReglaCatalogo> ReglasCatalogo { get; set; }
+
+        public DbSet<ReglaCatalogoValor> ReglasCatalogoValor { get; set; }
+
+        public DbSet<ReglaCaracteristica> ReglasCaracteristicas { get; set; }
+
+        public DbSet<TiendaCaracteristica> TiendaCaracteristicas { get; set; }
+
+        public DbSet<Bitacora> Bitacora { get; set; }
 
     }
 }

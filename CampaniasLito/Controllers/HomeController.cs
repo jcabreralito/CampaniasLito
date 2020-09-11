@@ -7,21 +7,38 @@ namespace CampaniasLito.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
+
+        public RedirectToRouteResult IndexL()
+        {
+            return RedirectToRoute("Login");
+        }
 
         public ActionResult Index()
         {
-            //var f11 = Session["F11"].ToString();
+            Session["iconoTitulo"] = "fas fa-calendar-alt";
+            Session["homeB"] = "active";
+            Session["rolesB"] = string.Empty;
+            Session["compañiasB"] = string.Empty;
+            Session["usuariosB"] = string.Empty;
+            Session["regionesB"] = string.Empty;
+            Session["ciudadesB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["familiasB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+            Session["reglasB"] = string.Empty;
+            Session["bitacoraB"] = string.Empty;
 
-            //if (string.IsNullOrEmpty(f11))
-            //{
-            //    Session["F11"] = "NO";
-            //}
-            //else if(f11 == "SI")
-            //{
-            //    SendKeys.SendWait("{F11}");
-            //    Session["F11"] = "NO";
-            //}
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            return View(usuario);
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        public ActionResult IndexAdmin()
+        {
+            Session["iconoTitulo"] = "fas fa-calendar-alt";
             Session["homeB"] = "active";
             Session["rolesB"] = string.Empty;
             Session["compañiasB"] = string.Empty;
@@ -34,21 +51,8 @@ namespace CampaniasLito.Controllers
             Session["campañasB"] = string.Empty;
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
             return View(usuario);
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Descripción de la Aplicación.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Contacto de la Aplicación.";
-
-            return View();
         }
     }
 }

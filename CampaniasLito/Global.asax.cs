@@ -4,7 +4,6 @@ using CampaniasLito.Models;
 using System.Data.Entity;
 using System.Web.Http;
 using System.Web.Mvc;
-using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace CampaniasLito
@@ -18,8 +17,9 @@ namespace CampaniasLito
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            //BundleConfig.RegisterBundles(BundleTable.Bundles);
+            AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
         private void CheckRolesAndSuperUser()
@@ -65,6 +65,9 @@ namespace CampaniasLito
             UsuariosHelper.CrearRolOperaciones(3, 2);
             UsuariosHelper.CrearRolOperaciones(3, 4);
             UsuariosHelper.CrearRolOperaciones(3, 5);
+            UsuariosHelper.CrearCategorias("EQUITY");
+            UsuariosHelper.CrearCategorias("FRANQUICIAS");
+            UsuariosHelper.CrearCategorias("STOCK");
         }
     }
 }

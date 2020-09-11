@@ -2,1012 +2,774 @@
 using CampaniasLito.Filters;
 using CampaniasLito.Models;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
 {
+    [Authorize]
     public class RestaurantesController : Controller
     {
         private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
-        [HttpPost]
-        public JsonResult TiendasList()
-        {
-            try
-            {
-                List<ArticuloKFC> tiendas = new List<ArticuloKFC>();
-                tiendas = db.ArticuloKFCs.ToList();
+        public string modulo = "Restaurantes";
+        public string movimiento = string.Empty;
 
-                return Json(new { Result = "OK", Records = tiendas }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { Result = "ERROR", Message = ex.Message });
-            }
+        public class spTiendasArticulos
+        {
+            public long TiendaArticuloId { get; set; }
+            public int ArticuloKFCId { get; set; }
+            public int TiendaId { get; set; }
+            public bool Seleccionado { get; set; }
+            public int CantidadDefault { get; set; }
+            public string Restaurante { get; set; }
+            public string Material { get; set; }
         }
 
-
-        // GET: Tiendas
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult IndexTiendas()
+        public class spTiendasCaracteristicas
         {
+            public int TiendaId { get; set; }
+            public string Clasificacion { get; set; }
+            public string CCoFranquicia { get; set; }
+            public string Restaurante { get; set; }
+            public string Region { get; set; }
+            public string Ciudad { get; set; }
+            public string Direccion { get; set; }
+            public string Observaciones { get; set; }
+            public bool Activo { get; set; }
+            public string Nombre { get; set; }
+            public string Categoria { get; set; }
+            public string Valor { get; set; }
+            public int TipoConfiguracionId { get; set; }
+            public int ReglaCatalogoId { get; set; }
+        }
+
+        public class spRestaurantesCaracteristicas
+        {
+            public int TiendaCaracteristicaId { get; set; }
+            public int TiendaId { get; set; }
+            public string Nombre { get; set; }
+            public string Valor { get; set; }
+            public int TipoConfiguracionId { get; set; }
+            public string CCoFranquicia { get; set; }
+            public string Restaurante { get; set; }
+            public int ReglaCatalogoId { get; set; }
+        }
+
+        public class spTiendas
+        {
+            public int TiendaId { get; set; }
+            public string Clasificacion { get; set; }
+            public string CCoFranquicia { get; set; }
+            public string Restaurante { get; set; }
+            public string Region { get; set; }
+            public string Ciudad { get; set; }
+            public string Direccion { get; set; }
+            public string Observaciones { get; set; }
+            public bool Activo { get; set; }
+
+            //00000000000000000000000000 GENERALES 0000000000000000000000000000000000
+
+            public string Tipo { get; set; }
+            public string NivelPrecio { get; set; }
+            public bool MenuDigital { get; set; }
+            public string CantidadDePantallas { get; set; }
+
+            //00000000000000000000000000 POR PRODUCTO 0000000000000000000000000000000000
+
+            public bool TerceraReceta { get; set; }
+            public bool Arroz { get; set; }
+            public bool Hamburgesas { get; set; }
+            public bool Ensalada { get; set; }
+            public bool PET2Litros { get; set; }
+            public bool Postres { get; set; }
+            public bool BisquetMiel { get; set; }
+            public bool KeCono { get; set; }
+            public bool KREAMBALL { get; set; }
+
+            //00000000000000000000000000 MATERIALES ESPECIFICOS 0000000000000000000000000000000000
+
+            public bool MenuBackLigth { get; set; }
+            public bool Autoexpress { get; set; }
+            public bool CopeteAERemodelado { get; set; }
+            public bool CopeteAETradicional { get; set; }
+            public bool PanelDeInnovacion { get; set; }
+            public bool DisplayDeBurbuja { get; set; }
+            public bool Delivery { get; set; }
+            public bool MERCADO_DE_PRUEBA { get; set; }
+            public bool AreaDeJuegos { get; set; }
+            public bool COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS { get; set; }
+            public bool COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L { get; set; }
+            public bool DisplayDePiso { get; set; }
+            public bool WCNACIONAL67X100cm { get; set; }
+            public bool AEMedidaEspecial { get; set; }
+            public bool AEHolding { get; set; }
+            public bool AECaribe { get; set; }
+            public bool PanelComplementosHolding { get; set; }
+            public bool PanelDeComplementosSinArrozSin3raReceta { get; set; }
+            public bool PanelALaCartaCaribe { get; set; }
+            public bool PanelALaCartaCaribeSin3raReceta { get; set; }
+            public bool PanelALaCartaHolding { get; set; }
+            public bool PanelALaCartaHoldingSin3raReceta { get; set; }
+            public bool PanelDeComplementosDigital { get; set; }
+            public bool PanelComplementosHoldingMR { get; set; }
+            public bool Telefono { get; set; }
+            public bool TelefonoPersonalizado { get; set; }
+
+            //00000000000000000000000000 MEDIDAS ESPECIALES 0000000000000000000000000000000000
+            public bool WCMedidaEspecial60_8x85cm { get; set; }
+            public bool WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm { get; set; }
+            public bool WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm { get; set; }
+            public bool WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm { get; set; }
+            public bool WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm { get; set; }
+            public bool MedidaEspecialPanelDeComplementos { get; set; }
+            public bool MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm { get; set; }
+            public bool MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm { get; set; }
+            public bool MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm { get; set; }
+            public bool MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm { get; set; }
+            public bool MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm { get; set; }
+            public bool MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm { get; set; }
+            public bool MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm { get; set; }
+            public bool MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm { get; set; }
+            public bool MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm { get; set; }
+            public bool MEDIDA_BACKLIGHT_55_5X75_5CM { get; set; }
+            public bool MEDIDA_BACKLIGHT_59_5X79CM { get; set; }
+            public bool MEDIDAS_ESPECIALES_MENU { get; set; }
+
+            //00000000000000000000000000 POR EQUIPO EN EL RESTAURANTE 0000000000000000000000000000000000
+
+            public string TipoDeCaja { get; set; }
+            public string AcomodoDeCajas { get; set; }
+            public string NoMesaDeAreaComedor { get; set; }
+            public string NoMesaDeAreaDeJuegos { get; set; }
+            public string NumeroDeVentanas { get; set; }
+            public string UbicacionPantallas { get; set; }
+
+        }
+
+        // GET: Restaurantes
+        [AuthorizeUser(idOperacion: 5)]
+        public ActionResult Index()
+        {
+            Session["iconoTitulo"] = "fas fa-store";
+            Session["homeB"] = string.Empty;
+            Session["equityB"] = "active";
+            Session["franquiciasB"] = string.Empty;
+            Session["stockB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+            Session["caracteristicasB"] = string.Empty;
+
+            //var equityList = db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicas").ToList();
+
+            //return PartialView(equityList);
+
             return View();
-
         }
 
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult GetList()
+        public ActionResult GetDataEquity()
         {
-            var campañasList = db.Campañas.ToList<Campaña>();
-            return Json(new { data = campañasList }, JsonRequestBehavior.AllowGet);
+            var equityList = db.Database.SqlQuery<spTiendas>("spGetRestaurantesEquity").ToList();
 
+            return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
         }
 
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult ConfiguracionesIndex()
+        public ActionResult GetDataFranquicias()
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+            var equityList = db.Database.SqlQuery<spTiendas>("spGetRestaurantesFranquicias").ToList();
 
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var configuraciones = db.TiendaConfiguracions.ToList();
-
-            return View(configuraciones.ToList());
+            return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Ciudades/Create
+        public ActionResult GetDataStock()
+        {
+            var equityList = db.Database.SqlQuery<spTiendas>("spGetRestaurantesStock").ToList();
+
+            return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetMateriales()
+        {
+            var id = (int)Session["TiendaIdMaterial"];
+
+            var materialesList = db.Database.SqlQuery<spTiendasArticulos>("spGetTiendaArticulos @TiendaId",
+                                new SqlParameter("@TiendaID", id)).ToList();
+
+            return Json(new { data = materialesList }, JsonRequestBehavior.AllowGet);
+        }
+
         [AuthorizeUser(idOperacion: 1)]
-        public ActionResult CreateConfiguracion()
+        [HttpGet]
+        public ActionResult AddOrEdit(int? cat, int id = 0)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-            if (usuario == null)
+            var categoria = string.Empty;
+            if (id == 0)
             {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var configuraciones = new TiendaConfiguracion { };
-
-            ViewBag.TipoConfiguracionId = new SelectList(CombosHelper.GetTipoConfiguracion(true), "TipoConfiguracionId", "Nombre");
-
-            return PartialView(configuraciones);
-        }
-
-        // POST: Ciudades/Create
-        [AuthorizeUser(idOperacion: 1)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateConfiguracion(TiendaConfiguracion tiendaConfiguracion)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (ModelState.IsValid)
-            {
-                db.TiendaConfiguracions.Add(tiendaConfiguracion);
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
+                if (cat == 1)
                 {
-                    TempData["mensajeLito"] = "CONFIGURACIÓN AGREGADA";
-
-                    return RedirectToAction("ConfiguracionesIndex");
+                    categoria = "EQUITY";
+                }
+                else if (cat == 2)
+                {
+                    categoria = "FRANQUICIAS";
+                }
+                else if (cat == 3)
+                {
+                    categoria = "STOCK";
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
+                Session["Categoria"] = categoria;
 
-            ViewBag.TipoConfiguracionId = new SelectList(CombosHelper.GetTipoConfiguracion(true), "TipoConfiguracionId", "Nombre");
+                ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(categoria, true), "RegionId", "Nombre");
+                ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(categoria, true), "CiudadId", "Nombre");
 
-
-            return PartialView(tiendaConfiguracion);
-        }
-
-        // GET: Ciudades/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult EditConfiguracion(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var configuraciones = db.TiendaConfiguracions.Find(id);
-
-            if (configuraciones == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.TipoConfiguracionId = new SelectList(CombosHelper.GetTipoConfiguracion(true), "TipoConfiguracionId", "Nombre", configuraciones.TipoConfiguracionId);
-
-            return PartialView(configuraciones);
-        }
-
-        // POST: Ciudades/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditConfiguracion(TiendaConfiguracion tiendaConfiguracion)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(tiendaConfiguracion).State = EntityState.Modified;
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
-                {
-
-                    TempData["mensajeLito"] = "CONFIGURACIÓN EDITADA";
-
-                    return RedirectToAction("Index");
-
-                }
-
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-
-            ViewBag.TipoConfiguracionId = new SelectList(CombosHelper.GetTipoConfiguracion(true), "TipoConfiguracionId", "Nombre", tiendaConfiguracion.TipoConfiguracionId);
-
-            return View(tiendaConfiguracion);
-        }
-
-        // GET: Ciudades/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
-        public ActionResult DeleteConfiguracion(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var configuraciones = db.TiendaConfiguracions.Find(id);
-
-            if (configuraciones == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(configuraciones);
-        }
-
-        // POST: Ciudades/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
-        [HttpPost, ActionName("DeleteConfiguracion")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmedConfiguracion(int id)
-        {
-            var configuracion = db.TiendaConfiguracions.Find(id);
-            db.TiendaConfiguracions.Remove(configuracion);
-            var response = DBHelper.SaveChanges(db);
-            if (response.Succeeded)
-            {
-                TempData["mensajeLito"] = "CONFIGURACIÓN ELIMINADA";
-
-                return RedirectToAction("Index");
-            }
-
-            ModelState.AddModelError(string.Empty, response.Message);
-
-            return PartialView(configuracion);
-        }
-
-        //[AuthorizeUser(idOperacion: 5)]
-        //public ActionResult Index()
-        //{
-        //    Session["homeB"] = string.Empty;
-        //    Session["rolesB"] = string.Empty;
-        //    Session["compañiasB"] = string.Empty;
-        //    Session["usuariosB"] = string.Empty;
-        //    Session["regionesB"] = string.Empty;
-        //    Session["ciudadesB"] = string.Empty;
-        //    Session["restaurantesB"] = "active";
-        //    Session["familiasB"] = string.Empty;
-        //    Session["materialesB"] = string.Empty;
-        //    Session["campañasB"] = string.Empty;
-
-        //    return View();
-        //}
-
-        //[AuthorizeUser(idOperacion: 5)]
-        //public ActionResult ConfiguracionesGenerales()
-        //{
-        //    var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-        //    if (usuario == null)
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-
-        //    var configuraciones = db.TiendaGenerales.ToList();
-
-        //        return View(configuraciones.ToList());
-        //}
-
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Stock(string tienda)
-        {
-            Session["restauranteE"] = string.Empty;
-            Session["restauranteF"] = string.Empty;
-            Session["restauranteS"] = "active";
-            Session["restauranteC"] = string.Empty;
-
-            string tipo = "STOCK";
-
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (string.IsNullOrEmpty(tienda))
-            {
-                Session["tiendaFiltroStock"] = string.Empty;
+                return PartialView(new Tienda());
             }
             else
             {
-                Session["tiendaFiltroStock"] = tienda;
-            }
 
-            var filtro = Session["tiendaFiltroStock"].ToString();
+                var tipo = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().EquityFranquicia;
+                Session["Categoria"] = tipo;
 
-            ViewBag.Titulo = tipo;
+                var regionId = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().RegionId;
+                var ciudadId = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().CiudadId;
 
-            var tiendas = db.Tiendas.Where(a => a.EquityFranquicia == tipo);
+                ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", regionId);
+                ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tipo, true), "CiudadId", "Nombre", ciudadId);
 
-            if (!string.IsNullOrEmpty(tienda))
-            {
-                return View(tiendas.Where(a => a.Restaurante.Contains(filtro) || a.Ciudad.Nombre.Contains(filtro) || a.CCoFranquicia.Contains(filtro)).ToList());
-            }
-            else
-            {
-                return View(tiendas.ToList());
+                return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
             }
         }
 
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Franquicias(string tienda)
-        {
-            Session["restauranteE"] = string.Empty;
-            Session["restauranteF"] = "active";
-            Session["restauranteS"] = string.Empty;
-            Session["restauranteC"] = string.Empty;
-
-            string tipo = "FRANQUICIAS";
-
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (string.IsNullOrEmpty(tienda))
-            {
-                Session["tiendaFiltro"] = string.Empty;
-            }
-            else
-            {
-                Session["tiendaFiltro"] = tienda;
-            }
-
-            var filtro = Session["tiendaFiltro"].ToString();
-
-            ViewBag.Titulo = tipo;
-
-            var tiendas = db.Tiendas.Where(a => a.EquityFranquicia == tipo);
-
-            if (!string.IsNullOrEmpty(tienda))
-            {
-                return View(tiendas.Where(a => a.Restaurante.Contains(filtro) || a.Ciudad.Nombre.Contains(filtro) || a.CCoFranquicia.Contains(filtro)).ToList());
-            }
-            else
-            {
-                return View(tiendas.ToList());
-            }
-        }
-
-        //[AuthorizeUser(idOperacion: 5)]
-        //public ActionResult RestaurantesEquity(string tienda)
-        //{
-        //    string tipo = "EQUITY";
-
-        //    var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-        //    if (usuario == null)
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-
-        //    if (string.IsNullOrEmpty(tienda))
-        //    {
-        //        Session["tiendaFiltroEquity"] = string.Empty;
-        //    }
-        //    else
-        //    {
-        //        Session["tiendaFiltroEquity"] = tienda;
-        //    }
-
-        //    var filtro = Session["tiendaFiltroEquity"].ToString();
-
-        //    var tiendas = db.Tiendas.Where(a => a.EquityFranquicia == tipo).ToList<Tienda>();
-
-        //    if (!string.IsNullOrEmpty(tienda))
-        //    {
-        //        return View(tiendas.Where(a => a.Restaurante.Contains(filtro) || a.Ciudad.Nombre.Contains(filtro) || a.CCoFranquicia.Contains(filtro)).ToList());
-        //    }
-        //    else
-        //    {
-        //        return Json(new { data = tiendas }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
-
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Configuraciones()
-        {
-
-            Session["restauranteE"] = string.Empty;
-            Session["restauranteF"] = string.Empty;
-            Session["restauranteS"] = string.Empty;
-            Session["restauranteC"] = "active";
-
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            ViewBag.Titulo = "Configuraciones";
-
-            ViewBag.Campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
-
-            var articuloKFCs = db.ArticuloKFCs.Where(a => a.Eliminado == false && a.ProveedorId == 5).OrderBy(a => a.Descripcion).ThenBy(a => a.Familia.Descripcion).ToList();
-
-            return View(articuloKFCs.ToList());
-        }
-
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Equity(string tienda)
-        {
-            Session["restauranteE"] = "active";
-            Session["restauranteF"] = string.Empty;
-            Session["restauranteS"] = string.Empty;
-            Session["restauranteC"] = string.Empty;
-
-            string tipo = "EQUITY";
-
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (string.IsNullOrEmpty(tienda))
-            {
-                Session["tiendaFiltroEquity"] = string.Empty;
-            }
-            else
-            {
-                Session["tiendaFiltroEquity"] = tienda;
-            }
-
-            var filtro = Session["tiendaFiltroEquity"].ToString();
-
-            ViewBag.Titulo = tipo;
-
-            var tiendas = db.Tiendas.Where(a => a.EquityFranquicia == tipo);
-
-            if (!string.IsNullOrEmpty(tienda))
-            {
-                return View(tiendas.Where(a => a.Restaurante.Contains(filtro) || a.Ciudad.Nombre.Contains(filtro) || a.CCoFranquicia.Contains(filtro)).ToList());
-            }
-            else
-            {
-                return View(tiendas.ToList());
-            }
-        }
-
-        // GET: Tiendas/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult Details(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre", tienda.CiudadId);
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Descripcion", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult DetailsCG(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult DetailsCP(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult DetailsCME(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult DetailsCMEs(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Details/5
-        [AuthorizeUser(idOperacion: 4)]
-        public ActionResult DetailsCER(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Create
-        [AuthorizeUser(idOperacion: 1)]
-        public ActionResult Create(int id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (id == 1)
-            {
-                Session["tipoTienda"] = "EQUITY";
-            }
-            else if (id == 2)
-            {
-                Session["tipoTienda"] = "FRANQUICIAS";
-            }
-            else if (id == 3)
-            {
-                Session["tipoTienda"] = "STOCK";
-            }
-
-            var tienda = new Tienda { };
-
-            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(id, true), "CiudadId", "Nombre");
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(id, true), "RegionId", "Nombre");
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion");
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo");
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion");
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion");
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo");
-
-            return View(tienda);
-        }
-
-        // GET: Tiendas/Create
-        [AuthorizeUser(idOperacion: 1)]
-        public ActionResult CreateCG(int id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (id == 1)
-            {
-                Session["tipoTienda"] = "EQUITY";
-            }
-            else if (id == 2)
-            {
-                Session["tipoTienda"] = "FRANQUICIAS";
-            }
-            else if (id == 3)
-            {
-                Session["tipoTienda"] = "STOCK";
-            }
-
-            var tienda = new Tienda { };
-
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion");
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo");
-
-            return View(tienda);
-        }
-
-        // GET: Tiendas/Create
-        [AuthorizeUser(idOperacion: 1)]
-        public ActionResult CreateCP(int id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (id == 1)
-            {
-                Session["tipoTienda"] = "EQUITY";
-            }
-            else if (id == 2)
-            {
-                Session["tipoTienda"] = "FRANQUICIAS";
-            }
-            else if (id == 3)
-            {
-                Session["tipoTienda"] = "STOCK";
-            }
-
-            var tienda = new Tienda { };
-
-            return View(tienda);
-        }
-
-        // GET: Tiendas/Create
-        [AuthorizeUser(idOperacion: 1)]
-        public ActionResult CreateCME(int id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (id == 1)
-            {
-                Session["tipoTienda"] = "EQUITY";
-            }
-            else if (id == 2)
-            {
-                Session["tipoTienda"] = "FRANQUICIAS";
-            }
-            else if (id == 3)
-            {
-                Session["tipoTienda"] = "STOCK";
-            }
-
-            var tienda = new Tienda { };
-
-            return View(tienda);
-        }
-
-        // GET: Tiendas/Create
-        [AuthorizeUser(idOperacion: 1)]
-        public ActionResult CreateCMEs(int id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (id == 1)
-            {
-                Session["tipoTienda"] = "EQUITY";
-            }
-            else if (id == 2)
-            {
-                Session["tipoTienda"] = "FRANQUICIAS";
-            }
-            else if (id == 3)
-            {
-                Session["tipoTienda"] = "STOCK";
-            }
-
-            var tienda = new Tienda { };
-
-            return View(tienda);
-        }
-
-        // GET: Tiendas/Create
-        [AuthorizeUser(idOperacion: 1)]
-        public ActionResult CreateCER(int id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (id == 1)
-            {
-                Session["tipoTienda"] = "EQUITY";
-            }
-            else if (id == 2)
-            {
-                Session["tipoTienda"] = "FRANQUICIAS";
-            }
-            else if (id == 3)
-            {
-                Session["tipoTienda"] = "STOCK";
-            }
-
-            var tienda = new Tienda { };
-
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion");
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion");
-
-            return View(tienda);
-        }
-
-        // POST: Tiendas/Create
         [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Tienda tienda)
+        public ActionResult AddOrEdit(Tienda tienda)
         {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            tienda.EquityFranquicia = Session["tipoTienda"].ToString();
-
-            tienda.Activo = true;
-
-            if (ModelState.IsValid)
+            if (tienda.TiendaId == 0)
             {
+                var tipo = Session["Categoria"].ToString();
+
+                tienda.Activo = true;
+                tienda.EquityFranquicia = tipo;
+
                 db.Tiendas.Add(tienda);
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
-                    var responseATA = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
+                    MovimientosRestaurantes(tienda);
 
-                    if (responseATA.Succeeded)
-                    {
-                        MovementsHelper.ReglasTiendaArticulos(tienda.TiendaId);
-                        MovementsHelper.AgregarArticuloPorTiendas(tienda);
-                    }
+                    movimiento = "Agregar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
+                    return Json(new { success = true, message = "RESTAURANTE AGREGADO" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var tipo = Session["Categoria"].ToString();
 
-                    TempData["mensajeLito"] = "RESTAURANTE AGREGADO";
+                tienda.EquityFranquicia = tipo;
 
-                    if (Session["tipoTienda"].ToString() == "EQUITY")
+                db.Entry(tienda).State = EntityState.Modified;
+                var response = DBHelper.SaveChanges(db);
+                if (response.Succeeded)
+                {
+                    MovimientosRestaurantes(tienda);
+
+                    movimiento = "Actualizar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                    return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        private void MovimientosRestaurantes(Tienda tienda)
+        {
+            if (tienda.Activo == true)
+            {
+                if (tienda.EquityFranquicia == "FRANQUICIAS")
+                {
+                    var response = MovementsHelper.AgregarTiendaArticulosF(tienda.TiendaId);
+
+                    //==========================TODAS INICIO=======================
+
+                    //var tiendas = db.Tiendas.Where(x => x.EquityFranquicia == "FRANQUICIAS").ToList();
+
+                    //foreach (var tiendaInd in tiendas)
+                    //{
+                    //    var id = tiendaInd.TiendaId;
+
+                    //    var response = MovementsHelper.AgregarTiendaArticulosF(id);
+
+                    //    if (response.Succeeded)
+                    //    {
+                    //        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
+                    //        if (campaña.Count >= 1)
+                    //        {
+                    //            MovementsHelper.AgregarArticuloPorTiendas(tiendaInd);
+                    //        }
+                    //    }
+                    //}
+
+                    //==========================TODAS FIN=======================
+
+                    if (response.Succeeded)
                     {
-                        return RedirectToAction("Equity");
+                        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
+                        if (campaña.Count >= 1)
+                        {
+                            MovementsHelper.AgregarArticuloPorTiendas(tienda);
+                        }
                     }
-                    else if (Session["tipoTienda"].ToString() == "FRANQUICIAS")
+                }
+                else
+                {
+                    var response = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
+
+                    //==========================TODAS INICIO=======================
+
+                    //var tiendas = db.Tiendas.Where(x => x.EquityFranquicia == "EQUITY").ToList();
+
+                    //foreach (var tiendaInd in tiendas)
+                    //{
+                    //    var id = tiendaInd.TiendaId;
+
+                    //    var response = MovementsHelper.AgregarTiendaArticulos(id);
+
+                    //    if (response.Succeeded)
+                    //    {
+                    //        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
+                    //        if (campaña.Count >= 1)
+                    //        {
+                    //            MovementsHelper.AgregarArticuloPorTiendas(tiendaInd);
+                    //        }
+                    //    }
+                    //}
+
+                    //==========================TODAS FIN=======================
+
+                    if (response.Succeeded)
                     {
-                        return RedirectToAction("Franquicias");
-                    }
-                    else if (Session["tipoTienda"].ToString() == "STOCK")
-                    {
-                        return RedirectToAction("Stock");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index");
+                        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
+                        if (campaña.Count >= 1)
+                        {
+                            MovementsHelper.AgregarArticuloPorTiendas(tienda);
+                        }
                     }
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
             }
-
-            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre");
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre");
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion");
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo");
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion");
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion");
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo");
-
-
-            return PartialView(tienda);
-
+            else
+            {
+                EliminarTodo(tienda);
+            }
         }
 
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult AsignarConfiguraciones(int? id)
+        private void EliminarTodo(Tienda tienda)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+            var id = tienda.TiendaId;
 
-            if (usuario == null)
+            db.Database.ExecuteSqlCommand(
+            "spEliminarArticulosTiendas @TiendaId",
+            new SqlParameter("@TiendaId", id));
+
+            var campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
+            if (campañas != null)
             {
-                return RedirectToAction("Index", "Home");
+                foreach (var campaña in campañas)
+                {
+                    var campId = campaña.CampañaId;
+
+                    db.Database.ExecuteSqlCommand(
+                    "spEliminarTiendaCampanias @TiendaId, @CampañaId",
+                    new SqlParameter("@TiendaId", id),
+                    new SqlParameter("@CampañaId", campId));
+                }
+            }
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCG(int id)
+        {
+
+            //var restauranteCG = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasG @TiendaID",
+            //                    new SqlParameter("@TiendaId", id)).ToList();
+
+            //var tipo = restauranteCG.Where(x => x.ReglaCatalogoId == 1 || x.ReglaCatalogoId == 104).FirstOrDefault().Valor;
+            //var tipoId = db.TipoTiendas.Where(x => x.Tipo == tipo).FirstOrDefault().TipoTiendaId;
+            //var nivel = restauranteCG.Where(x => x.ReglaCatalogoId == 5 || x.ReglaCatalogoId == 113).FirstOrDefault().Valor;
+            //var nivelPrecioId = db.NivelPrecios.Where(x => x.Descripcion == nivel).FirstOrDefault().NivelPrecioId;
+
+            var tipoId = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().TipoId;
+            var nivelPrecioId = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().NuevoNivelDePrecioId;
+
+            if (tipoId == 0)
+            {
+                ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo");
+            }
+            else
+            {
+                ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tipoId);
             }
 
-            var asignarConfiguraciones = db.AsignarConfiguracionTiendas.Where(t => t.TiendaId == id).OrderBy(t => t.TiendaConfiguracion.TipoConfiguracionId).ThenBy(t => t.TiendaConfiguracionId).ToList();
-
-            if (asignarConfiguraciones == null)
+            if (nivelPrecioId == 0)
             {
-                return HttpNotFound();
+                ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion");
+            }
+            else
+            {
+                ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", nivelPrecioId);
             }
 
-            ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
+            return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
 
-            //=================================================ASIGNAR TODO=============================
-            //var tiendas = db.Tiendas.ToList();
+            //return PartialView(restauranteCG);
+        }
 
-            //foreach (var tienda in tiendas)
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCG(Tienda tiendas, FormCollection formCollection)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            db.Entry(tiendas).State = EntityState.Modified;
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
+            {
+                EliminarTodo(tiendas);
+
+                MovimientosRestaurantes(tiendas);
+
+                movimiento = "Actualizar CG " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            //string[] restauranteId = formCollection.GetValues("TiendaId");
+            //string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
+            //string[] tipo = formCollection.GetValues("TipoId");
+            //string[] nivel = formCollection.GetValues("NuevoNivelDePrecioId");
+            //string[] valorMD = formCollection.GetValues("ValorMD");
+            //string[] valorP = formCollection.GetValues("ValorP");
+
+            //for (var i = 0; i < restauranteId.Length; i++)
             //{
-            //    var tiendaConfiguracion = db.TiendaConfiguracions.ToList();
+            //    var tiendaId = Convert.ToInt32(restauranteId[i]);
+            //    var reglaCatalogoId = Convert.ToInt32(catalogoId[i]);
 
-            //    foreach (var asignar in tiendaConfiguracion)
+            //    if (catalogoId[i] == "1")
             //    {
-            //        var configuraciones = new AsignarConfiguracionTienda
-            //        {
-            //            Seleccionado = false,
-            //            TiendaId = tienda.TiendaId,
-            //            TiendaConfiguracionId = asignar.TiendaConfiguracionId
-            //        };
+            //        var tipoId = Convert.ToInt32(tipo[0]);
 
-            //        db.AsignarConfiguracionTiendas.Add(configuraciones);
-            //        db.SaveChanges();
+            //        var tipoValor = db.TipoTiendas.Where(x => x.TipoTiendaId == tipoId).FirstOrDefault().Tipo;
+
+            //        db.Database.ExecuteSqlCommand(
+            //        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+            //        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+            //        new SqlParameter("@TiendaId", tiendaId),
+            //        new SqlParameter("@Valor", tipoValor));
+
+            //    }
+            //    else if (catalogoId[i] == "5")
+            //    {
+            //        var nivelId = Convert.ToInt32(nivel[0]);
+
+            //        var tipoValor = db.NivelPrecios.Where(x => x.NivelPrecioId == nivelId).FirstOrDefault().Descripcion;
+
+            //        db.Database.ExecuteSqlCommand(
+            //        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+            //        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+            //        new SqlParameter("@TiendaId", tiendaId),
+            //        new SqlParameter("@Valor", tipoValor));
+
+            //    }
+            //    else if (catalogoId[i] == "21")
+            //    {
+            //        var tipoValor = "NO";
+
+            //        if (valorMD == null)
+            //        {
+            //            tipoValor = "NO";
+            //        }
+            //        else
+            //        {
+            //            tipoValor = "SI";
+            //        }
+
+            //        db.Database.ExecuteSqlCommand(
+            //        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+            //        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+            //        new SqlParameter("@TiendaId", tiendaId),
+            //        new SqlParameter("@Valor", tipoValor));
+
+            //    }
+            //    else if (catalogoId[i] == "22")
+            //    {
+            //        var tipoValor = valorP[0];
+
+            //        db.Database.ExecuteSqlCommand(
+            //        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+            //        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+            //        new SqlParameter("@TiendaId", tiendaId),
+            //        new SqlParameter("@Valor", tipoValor));
+
             //    }
 
             //}
 
-            return PartialView(asignarConfiguraciones);
+            //var tiendaIdA = Convert.ToInt32(restauranteId[0]);
+
+            //var tienda = db.Tiendas.Where(x => x.TiendaId == tiendaIdA).FirstOrDefault();
+
+            //EliminarTodo(tienda);
+
+            //MovimientosRestaurantes(tienda);
+
+            //return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
         }
 
-        [AuthorizeUser(idOperacion: 2)]
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCP(int id)
+        {
+
+            return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AsignarConfiguraciones(FormCollection fc)
+        public ActionResult EditCP(Tienda tienda)
         {
-            var nombre = User.Identity.Name;
-            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            string[] tiendaConfiguracionId = fc.GetValues("TiendaConfiguracionId");
-            string[] seleccionado = fc.GetValues("Seleccionado");
-
-            var selec = false;
-
-            for (var i = 0; i < tiendaConfiguracionId.Length; i++)
+            db.Entry(tienda).State = EntityState.Modified;
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
             {
-                AsignarConfiguracionTienda configuracionTienda = db.AsignarConfiguracionTiendas.Find(Convert.ToInt32(tiendaConfiguracionId[i]));
+                EliminarTodo(tienda);
 
-                var tiendaId = configuracionTienda.TiendaId;
-                var configuracioTiendaId = configuracionTienda.AsignarConfiguracionTiendaId;
+                MovimientosRestaurantes(tienda);
 
-                selec = false;
+                movimiento = "Actualizar CP " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
-                if (seleccionado == null)
-                {
-                    selec = false;
-
-                    configuracionTienda.Seleccionado = selec;
-
-                    db.Entry(configuracionTienda).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    for (var j = 0; j < seleccionado.Length; j++)
-                    {
-                        if (tiendaConfiguracionId[i] == seleccionado[j])
-                        {
-                            selec = true;
-
-                            configuracionTienda.Seleccionado = selec;
-
-                            db.Entry(configuracionTienda).State = EntityState.Modified;
-                            db.SaveChanges();
-
-                            break;
-                        }
-                    }
-                    if (!selec)
-                    {
-                        selec = false;
-
-                        configuracionTienda.Seleccionado = selec;
-
-                        db.Entry(configuracionTienda).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                }
+                return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
             }
-
-            TempData["mensajeLito"] = "CONFIGURACIONES ASIGNADAS";
-
-            return RedirectToAction("Index");
-
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
-        // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult AsignarArticulos(int? id)
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCME(int id)
         {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
-            if (usuario == null)
+            return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCME(Tienda tienda)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            db.Entry(tienda).State = EntityState.Modified;
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                EliminarTodo(tienda);
+
+                MovimientosRestaurantes(tienda);
+
+                movimiento = "Actualizar CME " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
             }
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
-            var tiendaArticulos = db.TiendaArticulos.Where(t => t.TiendaId == id && t.ArticuloKFC.Eliminado == false && t.ArticuloKFC.Activo == true).OrderBy(t => t.ArticuloKFC.Familia.Codigo).ThenBy(t => t.ArticuloKFCId).ToList();
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCMES(int id)
+        {
+            return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
+        }
 
-            if (tiendaArticulos == null)
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCMES(Tienda tienda)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            db.Entry(tienda).State = EntityState.Modified;
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
+            {
+                EliminarTodo(tienda);
+
+                MovimientosRestaurantes(tienda);
+
+                movimiento = "Actualizar CMES " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCER(int id)
+        {
+
+            var tipocajaId = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().TipoDeCajaId;
+            var acomodoCaja = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().AcomodoDeCajas;
+
+            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tipocajaId);
+            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "AcomodoCajaId", "Descripcion", acomodoCaja);
+
+            return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCER(Tienda tienda)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            db.Entry(tienda).State = EntityState.Modified;
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
+            {
+                EliminarTodo(tienda);
+
+                MovimientosRestaurantes(tienda);
+
+                movimiento = "Actualizar CER " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //[AuthorizeUser(idOperacion: 2)]
+        //[HttpGet]
+        //public ActionResult Materiales2(int id)
+        //{
+        //    Session["TiendaIdMaterial"] = id;
+
+        //    var materialesList = db.Database.SqlQuery<spTiendasArticulos>("spGetTiendaArticulos @TiendaId",
+        //        new SqlParameter("@TiendaID", id)).ToList();
+
+
+        //    ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
+
+        //    return PartialView(materialesList);
+        //}
+
+        //[AuthorizeUser(idOperacion: 2)]
+        //[HttpPost]
+        //public ActionResult Materiales2(int id, bool sel)
+        //{
+        //    var material = db.TiendaArticulos.Where(x => x.TiendaArticuloId == id).FirstOrDefault();
+
+        //    material.Seleccionado = sel;
+
+        //    db.Entry(material).State = EntityState.Modified;
+        //    var response = DBHelper.SaveChanges(db);
+        //    if (response.Succeeded)
+        //    {
+        //        return Json(new { success = true, message = "MATERIAL ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else
+        //    {
+        //        return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
+
+        [AuthorizeUser(idOperacion: 2)]
+        [HttpGet]
+        public ActionResult Materiales(long? id, string cat)
+        {
+
+            var materialesList = db.Database.SqlQuery<spTiendasArticulos>("spGetTiendaArticulos @TiendaId",
+                new SqlParameter("@TiendaID", id)).ToList();
+
+            if (materialesList == null)
             {
                 return HttpNotFound();
             }
 
+            ViewBag.Campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
 
-            ViewBag.Tienda = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
+            ViewBag.Restaurante = db.Tiendas.Where(t => t.TiendaId == id).FirstOrDefault().Restaurante;
 
-            return PartialView(tiendaArticulos);
-        }
-
-        private bool Update(TiendaArticulo product)
-        {
-            return true;
+            return PartialView(materialesList);
         }
 
         [AuthorizeUser(idOperacion: 2)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AsignarArticulos(FormCollection fc)
+        public ActionResult Materiales(FormCollection fc)
         {
-            var nombre = User.Identity.Name;
-            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == nombre).FirstOrDefault();
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            string[] campañaId = fc.GetValues("Campaña");
             string[] articuloKFCTMPId = fc.GetValues("TiendaArticuloId");
             string[] seleccionado = fc.GetValues("Seleccionado");
 
             var selec = false;
             var cantidad = 0;
+            var campId = 0;
 
-            for (var i = 0; i < articuloKFCTMPId.Length; i++)
+            if (campañaId == null)
             {
-                TiendaArticulo tiendaArticulo = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[i]));
-
-                var tiendaId = tiendaArticulo.TiendaId;
-                var articuloId = tiendaArticulo.ArticuloKFCId;
-                var campañas = db.Campañas.Where(ct => ct.Generada == "NO").OrderBy(ct => ct.CampañaId).FirstOrDefault().CampañaId;
-
-                CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId && ta.CampañaId == campañas).FirstOrDefault();
-
-                selec = false;
-                cantidad = 0;
-
-                if (campañaArticulo != null)
+                for (var i = 0; i < articuloKFCTMPId.Length; i++)
                 {
-                    if (seleccionado == null)
+                    TiendaArticulo tiendaArticulo = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[i]));
+
+                    var tiendaId = tiendaArticulo.TiendaId;
+                    var articuloId = tiendaArticulo.ArticuloKFCId;
+
+                    var campañas = db.Campañas.Where(ct => ct.Generada == "NO" && ct.CampañaId == campId).OrderBy(ct => ct.CampañaId).FirstOrDefault();
+
+                    if (campañas == null)
                     {
-                        selec = false;
-                        cantidad = 0;
 
-                        tiendaArticulo.Seleccionado = selec;
-
-                        db.Entry(tiendaArticulo).State = EntityState.Modified;
-
-                        campañaArticulo.Habilitado = selec;
-                        campañaArticulo.Cantidad = cantidad;
-
-                        db.Entry(campañaArticulo).State = EntityState.Modified;
-
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        for (var j = 0; j < seleccionado.Length; j++)
-                        {
-                            if (articuloKFCTMPId[i] == seleccionado[j])
-                            {
-                                selec = true;
-
-                                tiendaArticulo.Seleccionado = selec;
-
-                                db.Entry(tiendaArticulo).State = EntityState.Modified;
-
-                                var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
-
-                                cantidad = articuloCantidadDefault;
-                                campañaArticulo.Cantidad = cantidad;
-                                campañaArticulo.Habilitado = selec;
-
-                                db.Entry(campañaArticulo).State = EntityState.Modified;
-                                db.SaveChanges();
-
-                                break;
-                            }
-                        }
-                        if (!selec)
+                        if (seleccionado == null)
                         {
                             selec = false;
                             cantidad = 0;
@@ -1016,685 +778,435 @@ namespace CampaniasLito.Controllers
 
                             db.Entry(tiendaArticulo).State = EntityState.Modified;
 
-                            campañaArticulo.Habilitado = selec;
-                            campañaArticulo.Cantidad = cantidad;
-
-                            db.Entry(campañaArticulo).State = EntityState.Modified;
-
                             db.SaveChanges();
                         }
-                    }
-                }
-
-            }
-
-            TempData["mensajeLito"] = "MATERIALES ASIGNADOS";
-
-            return RedirectToAction("Index");
-
-        }
-
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        public JsonResult Editar(int? id, bool? sel)
-        {
-            var result = false;
-            try
-            {
-                TiendaArticulo tiendaArticulo = db.TiendaArticulos.SingleOrDefault(x => x.TiendaArticuloId == id);
-
-                tiendaArticulo.ArticuloKFC = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFC;
-                tiendaArticulo.ArticuloKFCId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().ArticuloKFCId;
-                tiendaArticulo.TiendaId = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().TiendaId;
-                tiendaArticulo.Tienda = db.TiendaArticulos.Where(a => a.TiendaArticuloId == id).FirstOrDefault().Tienda;
-                tiendaArticulo.Seleccionado = (bool)sel;
-                db.SaveChanges();
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult TiendaConfiguraciones(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            Session["ConfigId"] = id;
-
-            var cgenerales = new TiendaConfiguracion { };
-
-            return PartialView(cgenerales);
-        }
-
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        public ActionResult TiendaConfiguraciones(TiendaConfiguracion tiendaConfiguracion)
-        {
-            tiendaConfiguracion.TipoConfiguracionId = (int)Session["ConfigId"];
-
-            //if (ModelState.IsValid)
-            //{
-            db.TiendaConfiguracions.Add(tiendaConfiguracion);
-            var response = DBHelper.SaveChanges(db);
-            if (response.Succeeded)
-            {
-
-                TempData["mensajeLito"] = "CARACTERISTICAS AGREGADAS";
-
-                return RedirectToAction("Equity");
-            }
-
-            ModelState.AddModelError(string.Empty, response.Message);
-            //}
-
-            return PartialView(tiendaConfiguracion);
-        }
-
-        // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult ConfiguracionesGenerales(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            var cgenerales = db.TiendaGenerales.ToList();
-            //int tipo = 0;
-
-            //if (tienda.EquityFranquicia == "EQUITY")
-            //{
-            //    tipo = 1;
-            //}
-            //else if (tienda.EquityFranquicia == "FRANQUICIAS")
-            //{
-            //    tipo = 2;
-            //}
-            //else if (tienda.EquityFranquicia == "STOCK")
-            //{
-            //    tipo = 3;
-            //}
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tipo, true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // POST: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ConfiguracionesGenerales(Tienda tienda)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (ModelState.IsValid)
-            {
-                db.Entry(tienda).State = EntityState.Modified;
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
-                {
-                    //var response2 = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
-
-                    //if (response2.Succeeded)
-                    //{
-                    //    //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
-                    //}
-
-
-                    TempData["mensajeLito"] = "CARACTERISTICAS AGREGADAS";
-
-                    return RedirectToAction("Index");
-                }
-
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", tienda.RegionId);
-            ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult ConfiguracionesProducto(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            //int tipo = 0;
-
-            //if (tienda.EquityFranquicia == "EQUITY")
-            //{
-            //    tipo = 1;
-            //}
-            //else if (tienda.EquityFranquicia == "FRANQUICIAS")
-            //{
-            //    tipo = 2;
-            //}
-            //else if (tienda.EquityFranquicia == "STOCK")
-            //{
-            //    tipo = 3;
-            //}
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tipo, true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // POST: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ConfiguracionesProducto(Tienda tienda)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (ModelState.IsValid)
-            {
-                db.Entry(tienda).State = EntityState.Modified;
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
-                {
-                    //var response2 = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
-
-                    //if (response2.Succeeded)
-                    //{
-                    //    //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
-                    //}
-
-
-                    TempData["mensajeLito"] = "CARACTERISTICAS AGREGADAS";
-
-                    return RedirectToAction("Index");
-                }
-
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult ConfiguracionesCME(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            //int tipo = 0;
-
-            //if (tienda.EquityFranquicia == "EQUITY")
-            //{
-            //    tipo = 1;
-            //}
-            //else if (tienda.EquityFranquicia == "FRANQUICIAS")
-            //{
-            //    tipo = 2;
-            //}
-            //else if (tienda.EquityFranquicia == "STOCK")
-            //{
-            //    tipo = 3;
-            //}
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tipo, true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // POST: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ConfiguracionesCME(Tienda tienda)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (ModelState.IsValid)
-            {
-                db.Entry(tienda).State = EntityState.Modified;
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
-                {
-                    //var response2 = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
-
-                    //if (response2.Succeeded)
-                    //{
-                    //    //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
-                    //}
-
-
-                    TempData["mensajeLito"] = "CARACTERISTICAS AGREGADAS";
-
-                    return RedirectToAction("Index");
-                }
-
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult ConfiguracionesCMES(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            //int tipo = 0;
-
-            //if (tienda.EquityFranquicia == "EQUITY")
-            //{
-            //    tipo = 1;
-            //}
-            //else if (tienda.EquityFranquicia == "FRANQUICIAS")
-            //{
-            //    tipo = 2;
-            //}
-            //else if (tienda.EquityFranquicia == "STOCK")
-            //{
-            //    tipo = 3;
-            //}
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tipo, true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // POST: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ConfiguracionesCMES(Tienda tienda)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (ModelState.IsValid)
-            {
-                db.Entry(tienda).State = EntityState.Modified;
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
-                {
-                    //var response2 = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
-
-                    //if (response2.Succeeded)
-                    //{
-                    //    //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
-                    //}
-
-
-                    TempData["mensajeLito"] = "CARACTERISTICAS AGREGADAS";
-
-                    return RedirectToAction("Index");
-                }
-
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult ConfiguracionesCER(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            //int tipo = 0;
-
-            //if (tienda.EquityFranquicia == "EQUITY")
-            //{
-            //    tipo = 1;
-            //}
-            //else if (tienda.EquityFranquicia == "FRANQUICIAS")
-            //{
-            //    tipo = 2;
-            //}
-            //else if (tienda.EquityFranquicia == "STOCK")
-            //{
-            //    tipo = 3;
-            //}
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tipo, true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(), "TipoTiendaId", "Tipo", tienda.TipoId);
-            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // POST: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ConfiguracionesCER(Tienda tienda)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (ModelState.IsValid)
-            {
-                db.Entry(tienda).State = EntityState.Modified;
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
-                {
-                    //var response2 = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
-
-                    //if (response2.Succeeded)
-                    //{
-                    //    //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
-                    //}
-
-
-                    TempData["mensajeLito"] = "CARACTERISTICAS AGREGADAS";
-
-                    return RedirectToAction("Index");
-                }
-
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            //ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre", tienda.CiudadId);
-            //ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-            ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        public ActionResult Edit(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            int tipo = 0;
-
-            if (tienda.EquityFranquicia == "EQUITY")
-            {
-                tipo = 1;
-            }
-            else if (tienda.EquityFranquicia == "FRANQUICIAS")
-            {
-                tipo = 2;
-            }
-            else if (tienda.EquityFranquicia == "STOCK")
-            {
-                tipo = 3;
-            }
-
-            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(tipo, true), "CiudadId", "Nombre", tienda.CiudadId);
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(tipo, true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // POST: Tiendas/Edit/5
-        [AuthorizeUser(idOperacion: 2)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Tienda tienda)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (ModelState.IsValid)
-            {
-                db.Entry(tienda).State = EntityState.Modified;
-                var response = DBHelper.SaveChanges(db);
-                if (response.Succeeded)
-                {
-                    //MovementsHelper.AgregarTiendaArticulosTodo();
-
-                    var response2 = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
-
-                    if (response2.Succeeded)
-                    {
-                        MovementsHelper.AgregarArticuloPorTiendas(tienda);
-                        //TempData["mensajeLito"] = "CAMPAÑA AGREGADA";
-                    }
-
-
-                    TempData["mensajeLito"] = "RESTAURANTE EDITADO";
-
-                    if (tienda.EquityFranquicia == "EQUITY")
-                    {
-                        return RedirectToAction("Equity");
-                    }
-                    else if (tienda.EquityFranquicia == "FRANQUICIAS")
-                    {
-                        return RedirectToAction("Franquicias");
-                    }
-                    else if (tienda.EquityFranquicia == "STOCK")
-                    {
-                        return RedirectToAction("Stock");
+                        else
+                        {
+                            for (var j = 0; j < seleccionado.Length; j++)
+                            {
+                                if (articuloKFCTMPId[i] == seleccionado[j])
+                                {
+                                    selec = true;
+
+                                    tiendaArticulo.Seleccionado = selec;
+
+                                    db.Entry(tiendaArticulo).State = EntityState.Modified;
+                                    db.SaveChanges();
+
+                                    break;
+                                }
+                            }
+                            if (!selec)
+                            {
+                                selec = false;
+                                cantidad = 0;
+
+                                tiendaArticulo.Seleccionado = selec;
+
+                                db.Entry(tiendaArticulo).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("Index");
+                        campId = campañas.CampañaId;
+                        CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId && ta.CampañaId == campId).FirstOrDefault();
+
+                        selec = false;
+                        cantidad = 0;
+                        if (campañaArticulo == null)
+                        {
+                            var codigo = 0;
+
+                            db.Database.ExecuteSqlCommand(
+                            "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
+                            new SqlParameter("@ArticuloKFCId", articuloId),
+                            new SqlParameter("@TiendaId", tiendaId),
+                            new SqlParameter("@CampañaId", campId),
+                            new SqlParameter("@Habilitado", false),
+                            new SqlParameter("@Cantidad", cantidad),
+                            new SqlParameter("@Codigo", codigo));
+
+                        }
+                        else
+                        {
+                            if (seleccionado == null)
+                            {
+                                selec = false;
+                                cantidad = 0;
+
+                                tiendaArticulo.Seleccionado = selec;
+
+                                db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                campañaArticulo.Habilitado = selec;
+                                campañaArticulo.Cantidad = cantidad;
+
+                                db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                for (var j = 0; j < seleccionado.Length; j++)
+                                {
+                                    if (articuloKFCTMPId[i] == seleccionado[j])
+                                    {
+                                        selec = true;
+
+                                        tiendaArticulo.Seleccionado = selec;
+
+                                        db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                        var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
+
+                                        cantidad = articuloCantidadDefault;
+                                        campañaArticulo.Cantidad = cantidad;
+                                        campañaArticulo.Habilitado = selec;
+
+                                        db.Entry(campañaArticulo).State = EntityState.Modified;
+                                        db.SaveChanges();
+
+                                        break;
+                                    }
+                                }
+                                if (!selec)
+                                {
+                                    selec = false;
+                                    cantidad = 0;
+
+                                    tiendaArticulo.Seleccionado = selec;
+
+                                    db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                    campañaArticulo.Habilitado = selec;
+                                    campañaArticulo.Cantidad = cantidad;
+
+                                    db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
                     }
 
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre", tienda.CiudadId);
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // GET: Tiendas/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
-        public ActionResult Delete(int? id)
-        {
-            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var tienda = db.Tiendas.Find(id);
-
-            if (tienda == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.CiudadId = new SelectList(CombosHelper.GetCiudades(true), "CiudadId", "Nombre", tienda.CiudadId);
-            ViewBag.RegionId = new SelectList(CombosHelper.GetRegiones(true), "RegionId", "Nombre", tienda.RegionId);
-            //ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", tienda.NuevoNivelDePrecioId);
-            //ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tienda.TipoId);
-            //ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "Descripcion", "Descripcion", tienda.AcomodoDeCajas);
-            //ViewBag.TipoDeCajaId = new SelectList(CombosHelper.GetTiposCaja(true), "TipoCajaId", "Descripcion", tienda.TipoDeCajaId);
-            //ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Codigo", tienda.FamiliaId);
-
-            return PartialView(tienda);
-        }
-
-        // POST: Tiendas/Delete/5
-        [AuthorizeUser(idOperacion: 3)]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var tienda = db.Tiendas.Find(id);
-            db.Tiendas.Remove(tienda);
-            db.SaveChanges();
-
-            TempData["mensajeLito"] = "RESTAURANTE ELIMINADO";
-
-            if (tienda.EquityFranquicia == "EQUITY")
-            {
-                return RedirectToAction("Equity");
-            }
-            else if (tienda.EquityFranquicia == "FRANQUICIAS")
-            {
-                return RedirectToAction("Franquicias");
-            }
-            else if (tienda.EquityFranquicia == "STOCK")
-            {
-                return RedirectToAction("Stock");
             }
             else
             {
-                return RedirectToAction("Index");
+                for (int c = 0; c < campañaId.Length; c++)
+                {
+                    Campaña campañaArtId = db.Campañas.Find(Convert.ToInt32(campañaId[c]));
+                    campId = campañaArtId.CampañaId;
+
+                    for (var i = 0; i < articuloKFCTMPId.Length; i++)
+                    {
+                        TiendaArticulo tiendaArticulo = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[i]));
+
+                        var tiendaId = tiendaArticulo.TiendaId;
+                        var articuloId = tiendaArticulo.ArticuloKFCId;
+
+                        var campañas = db.Campañas.Where(ct => ct.Generada == "NO" && ct.CampañaId == campId).OrderBy(ct => ct.CampañaId).FirstOrDefault();
+
+                        if (campañas == null)
+                        {
+
+                            if (seleccionado == null)
+                            {
+                                selec = false;
+                                cantidad = 0;
+
+                                tiendaArticulo.Seleccionado = selec;
+
+                                db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                for (var j = 0; j < seleccionado.Length; j++)
+                                {
+                                    if (articuloKFCTMPId[i] == seleccionado[j])
+                                    {
+                                        selec = true;
+
+                                        tiendaArticulo.Seleccionado = selec;
+
+                                        db.Entry(tiendaArticulo).State = EntityState.Modified;
+                                        db.SaveChanges();
+
+                                        break;
+                                    }
+                                }
+                                if (!selec)
+                                {
+                                    selec = false;
+                                    cantidad = 0;
+
+                                    tiendaArticulo.Seleccionado = selec;
+
+                                    db.Entry(tiendaArticulo).State = EntityState.Modified;
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            campId = campañas.CampañaId;
+                            CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId && ta.CampañaId == campId).FirstOrDefault();
+
+                            selec = false;
+                            cantidad = 0;
+                            if (campañaArticulo == null)
+                            {
+                                var codigo = 0;
+
+                                db.Database.ExecuteSqlCommand(
+                                "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
+                                new SqlParameter("@ArticuloKFCId", articuloId),
+                                new SqlParameter("@TiendaId", tiendaId),
+                                new SqlParameter("@CampañaId", campId),
+                                new SqlParameter("@Habilitado", false),
+                                new SqlParameter("@Cantidad", cantidad),
+                                new SqlParameter("@Codigo", codigo));
+
+                            }
+                            else
+                            {
+                                if (seleccionado == null)
+                                {
+                                    selec = false;
+                                    cantidad = 0;
+
+                                    tiendaArticulo.Seleccionado = selec;
+
+                                    db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                    campañaArticulo.Habilitado = selec;
+                                    campañaArticulo.Cantidad = cantidad;
+
+                                    db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    for (var j = 0; j < seleccionado.Length; j++)
+                                    {
+                                        if (articuloKFCTMPId[i] == seleccionado[j])
+                                        {
+                                            selec = true;
+
+                                            tiendaArticulo.Seleccionado = selec;
+
+                                            db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                            var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
+
+                                            cantidad = articuloCantidadDefault;
+                                            campañaArticulo.Cantidad = cantidad;
+                                            campañaArticulo.Habilitado = selec;
+
+                                            db.Entry(campañaArticulo).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            break;
+                                        }
+                                    }
+                                    if (!selec)
+                                    {
+                                        selec = false;
+                                        cantidad = 0;
+
+                                        tiendaArticulo.Seleccionado = selec;
+
+                                        db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                                        campañaArticulo.Habilitado = selec;
+                                        campañaArticulo.Cantidad = cantidad;
+
+                                        db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                                        db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+
+
+
+                        //if (campañaArticulo != null)
+                        //{
+                        //    if (seleccionado == null)
+                        //    {
+                        //        selec = false;
+                        //        cantidad = 0;
+
+                        //        tiendaArticulo.Seleccionado = selec;
+
+                        //        db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                        //        campañaArticulo.Habilitado = selec;
+                        //        campañaArticulo.Cantidad = cantidad;
+
+                        //        db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                        //        db.SaveChanges();
+                        //    }
+                        //    else
+                        //    {
+                        //        for (var j = 0; j < seleccionado.Length; j++)
+                        //        {
+                        //            if (articuloKFCTMPId[i] == seleccionado[j])
+                        //            {
+                        //                selec = true;
+
+                        //                tiendaArticulo.Seleccionado = selec;
+
+                        //                db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                        //                var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
+
+                        //                cantidad = articuloCantidadDefault;
+                        //                campañaArticulo.Cantidad = cantidad;
+                        //                campañaArticulo.Habilitado = selec;
+
+                        //                db.Entry(campañaArticulo).State = EntityState.Modified;
+                        //                db.SaveChanges();
+
+                        //                break;
+                        //            }
+                        //        }
+                        //        if (!selec)
+                        //        {
+                        //            selec = false;
+                        //            cantidad = 0;
+
+                        //            tiendaArticulo.Seleccionado = selec;
+
+                        //            db.Entry(tiendaArticulo).State = EntityState.Modified;
+
+                        //            campañaArticulo.Habilitado = selec;
+                        //            campañaArticulo.Cantidad = cantidad;
+
+                        //            db.Entry(campañaArticulo).State = EntityState.Modified;
+
+                        //            db.SaveChanges();
+                        //        }
+                        //    }
+                        //}
+
+                    }
+                }
             }
+            TiendaArticulo tienda = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[0]));
+
+            movimiento = "Asignar Materiales / " + tienda.TiendaId + " / " + tienda.Tienda.Restaurante;
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = "MATERIALES ASIGNADOS" }, JsonRequestBehavior.AllowGet);
+
         }
 
-        protected override void Dispose(bool disposing)
+        //[AuthorizeUser(idOperacion: 1)]
+        //[HttpGet]
+        //public ActionResult AsignarCaracteristicaG(int id)
+        //{
+        //    var tipo = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().EquityFranquicia;
+        //    ViewBag.TiendaId = id;
+
+        //    ViewBag.TiendaConfiguracionId = new SelectList(CombosHelper.GetConfiguracionesG(id, tipo, true), "TiendaConfiguracionId", "Nombre");
+
+        //    return PartialView(new AsignarConfiguracionTienda());
+        //}
+
+        //[AuthorizeUser(idOperacion: 1)]
+        //[HttpPost]
+        //public ActionResult AsignarCaracteristicaG(AsignarConfiguracionTienda asignarConfiguracionTienda)
+        //{
+        //    db.AsignarConfiguracionTiendas.Add(asignarConfiguracionTienda);
+        //    var response = DBHelper.SaveChanges(db);
+        //    if (response.Succeeded)
+        //    {
+        //        return Json(new { success = true, message = "CARACTERÍSTICA ASIGNADA" }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else
+        //    {
+        //        return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
+
+        [AuthorizeUser(idOperacion: 3)]
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            if (disposing)
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            db.Database.ExecuteSqlCommand(
+            "spEliminarArticulosTiendas @TiendaId",
+            new SqlParameter("@TiendaId", id));
+
+            Tienda tienda = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault();
+            db.Tiendas.Remove(tienda);
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
             {
-                db.Dispose();
+                movimiento = "Eliminar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                return Json(new { success = true, message = "RESTAURANTE ELIMINADO" }, JsonRequestBehavior.AllowGet);
             }
-            base.Dispose(disposing);
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
+        //public void ExportCSV()
+        //{
+        //}
+
+        //public ActionResult ExportExcel()
+        //{
+        //    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+        //    var tipo = "EQUITY";
+        //    var restaurantes = db.Tiendas.Where(x => x.Activo == true && x.EquityFranquicia == tipo).ToList();
+        //    using (var package = new ExcelPackage())
+        //    {
+        //        var worksheet = package.Workbook.Worksheets.Add("Restaurantes");
+        //        var tableBody = worksheet.Cells["A1:A1"].LoadFromCollection(
+        //            from f in restaurantes
+        //            select new { f.Restaurante, f.CCoFranquicia, f.Region.Nombre, f.Clasificacion, f.Observaciones, f.Direccion }, true);
+        //        var header = worksheet.Cells["A1:F1"];
+        //        worksheet.Cells["A1:F1"].AutoFitColumns();
+        //        tableBody.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+        //        tableBody.Style.Fill.PatternType = ExcelFillStyle.Solid;
+        //        tableBody.Style.Fill.BackgroundColor.SetColor(Color.WhiteSmoke);
+        //        tableBody.Style.Border.BorderAround(ExcelBorderStyle.Medium);
+        //        header.Style.Font.Bold = true;
+        //        header.Style.Font.Color.SetColor(Color.White);
+        //        header.Style.Fill.PatternType = ExcelFillStyle.Solid;
+        //        header.Style.Fill.BackgroundColor.SetColor(Color.DarkBlue);
+
+        //        for (int i = 1; i <= worksheet.Dimension.End.Column; i++)
+        //        {
+        //            worksheet.Column(i).AutoFit();
+        //        }
+
+        //        string path = @"C:\Restaurantes.xlsx";
+        //        var fi1 = new FileInfo(path);
+
+        //        package.SaveAs(fi1);
+
+        //        return Json(new { success = true, message = "Archivo Exportado" }, JsonRequestBehavior.AllowGet);
+
+
+
+        //        //await IJSExtensions.GuardarComo("Restaurantes.xlsx", package.GetAsByteArray());
+
+        //    }
+        //}
     }
 }

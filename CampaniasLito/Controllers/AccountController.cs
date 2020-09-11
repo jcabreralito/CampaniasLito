@@ -8,6 +8,7 @@ using Microsoft.Owin.Security;
 using CampaniasLito.Models;
 using CampaniasLito.Classes;
 using System.Net;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CampaniasLito.Controllers
 {
@@ -18,7 +19,7 @@ namespace CampaniasLito.Controllers
         private ApplicationUserManager _userManager;
 
 
-        private CampaniasLitoContext db = new CampaniasLitoContext();
+        private readonly CampaniasLitoContext db = new CampaniasLitoContext();
 
         public void NombreCompleto(LoginViewModel model)
         {
@@ -97,13 +98,12 @@ namespace CampaniasLito.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            ViewBag.ReturnUrl = returnUrl;
+            //ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
-        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -129,7 +129,7 @@ namespace CampaniasLito.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, rememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Intento de inicio de sesión no válido.");
@@ -285,9 +285,10 @@ namespace CampaniasLito.Controllers
                 return HttpNotFound();
             }
 
-            ResetPasswordViewModel model = new ResetPasswordViewModel();
-
-            model.Email = usuario.NombreUsuario;
+            ResetPasswordViewModel model = new ResetPasswordViewModel
+            {
+                Email = usuario.NombreUsuario
+            };
             ViewBag.Email = usuario.NombreUsuario;
 
             return View(model);
@@ -372,7 +373,7 @@ namespace CampaniasLito.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, returnUrl = model.ReturnUrl, rememberMe = model.RememberMe });
         }
 
         //
@@ -395,7 +396,7 @@ namespace CampaniasLito.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, rememberMe = false });
                 case SignInStatus.Failure:
                 default:
                     // Si el usuario no tiene ninguna cuenta, solicitar que cree una
@@ -511,7 +512,15 @@ namespace CampaniasLito.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+
+            
+            if (Session["NombreCompleto"].ToString() == "Administrador")
+            {
+                return RedirectToRoute("IndexAdmin");
+            }
+            return RedirectToRoute("Index");
+
+            //return RedirectToAction("Index", "Home");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

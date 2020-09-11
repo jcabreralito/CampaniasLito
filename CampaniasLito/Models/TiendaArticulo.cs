@@ -7,7 +7,7 @@ namespace CampaniasLito.Models
     public class TiendaArticulo
     {
         [Key]
-        public int TiendaArticuloId { get; set; }
+        public long TiendaArticuloId { get; set; }
 
         public int TiendaId { get; set; }
 

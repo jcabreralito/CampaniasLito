@@ -2,175 +2,230 @@
     ViewBag.Title = "Ciudades";
 }
 
-<!DOCTYPE html>
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-sm red" title="Agregar" onclick="PopupForm('@Url.Action("AddOrEdit","Ciudades")')">
+        <i class="large material-icons">add_circle</i>
+    </a>
+</div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+<table id="ciudadesTable" class="table table-striped table-bordered table-hover compact" style="width:100%; text-transform: uppercase">
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>
 
-</head>
-<body>
-    <div class="panel">
-        <div class="panel-heading table-responsive" id="panelH">
+@section scripts{
 
-            <table id="dataTable" cellspacing="0">
-                <tr>
-                    <td class=" col-xs-2">
-                        <h2><i id="iconoTitulo" class="fas fa-map-marker-alt"></i></h2>
-                    </td>
-                    <td class=" col-xs-5" align="center">
-                        <h2 id="titulo"> @ViewBag.Title Equity</h2>
-                    </td>
-
-                    <td class=" col-xs-4" align="right">
-                        <input type="submit" value="EQUITY" id="btnEquity" class="btn btn-primary" onclick="mostrarEquity();" />
-                        <input type="submit" value="FRANQUICIAS" id="btnFranquicias" class="btn btn-primary" onclick="mostrarFranquicias();" />
-                        <input type="submit" value="STOCK" id="btnStock" class="btn btn-primary" onclick="mostrarStock();" />
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div id="equity" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; height: 78.5vh">
-            @Html.Action("CiudadesEquity", new { })
-        </div>
-
-        <div id="franquicias" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; visibility: hidden">
-            @Html.Action("CiudadesFranquicias", new { })
-        </div>
-
-        <div id="stock" class="panel-body" style="padding-top: 10px; margin-bottom: -40px; display: block; visibility: hidden">
-            @Html.Action("CiudadesStock", new { })
-        </div>
-
-    </div>
-
-    <div class="modal fade" data-keyboard="false" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.8);">
-        <div class="modal-dialog" id="smallTamanio">
-            <div class="modal-content">
-                <div class="te">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-</body>
-</html>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-
-    <script src="~/Scripts/sweetalert.min.js" type="text/javascript"></script>
-
-    <script type="text/javascript">
-
+    <script>
+        var Popup, dataTable;
         $(document).ready(function () {
-            $("body").on("click", "a.dialog-window-small", null, function (e) {
-                e.preventDefault();
-                var $link = $(this);
-                var url = $(this).attr('href');
-                if (url.indexOf('#') == 0) {
-                    $('#smallModal').modal('show');
-                    $('input:text:visible:first').focus();
-                }
-                else {
-                    $.get(url, function (data) {
-                        $('#smallModal .te').html(data);
-                        $('#smallModal').modal();
-                    }).success(function () {
-                        $('input:text:visible:first').focus();
-                    });
+            dataTable = $("#ciudadesTable").DataTable({
+                "ajax": {
+                    "url": "Ciudades/GetData",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": "Nombre", "render": function (data) {
+                            return "<span>" + data + "</span>";
+                        },
+                        "title": "Ciudad"
+                    },
+                    {
+                        "data": "Region", "render": function (data) {
+                            return "<span>" + data + "</span>";
+                        },
+                        "title": "Región"
+                    },
+                    {
+                        "data": "EquityFranquicia", "render": function (data) {
+                            return "<span>" + data + "</span>";
+                        },
+                        "title": "Categoría",
+                        "className": "dt-body-center text-center",
+                    },
+                    {
+                        "data": "CiudadId", "render": function (data) {
+                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupForm('@Url.Action("AddOrEdit","Ciudades")/" + data + "')><i class='fas fa-pencil-alt'></i></a>";
+                        },
+                        "title": "Editar",
+                        "orderable": false,
+                        "searchable": false,
+                        "className": "dt-body-center text-center",
+                    },
+                    {
+                        "data": "CiudadId", "render": function (data) {
+                            return "<a class='btn-danger btn-lg' style='background-color: transparent; cursor: pointer' onclick=Delete(" + data + ")><i class='fas fa-trash' style='color: #DF2530'></i></a>";
+                        },
+                        "title": "Eliminar",
+                        "orderable": false,
+                        "searchable": false,
+                        "className": "dt-body-center text-center",
+                    },
+                ],
+                //"serverSide": true,
+                "language": {
+                    "emptyTable": "No hay datos, dar click en el botón <b>Add New</b>",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sInfo": "_END_ registros",
+                    "sInfoEmpty": "Registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "de un total de _MAX_",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "<<",
+                        "sLast": ">>",
+                        "sNext": ">",
+                        "sPrevious": "<"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    "buttons": {
+                        "copy": "Copiar",
+                        "colvis": "Mostrar/Ocultar Columnas"
+                    },
+                    select: {
+                        rows: {
+                            _: "%d registros seleccionados",
+                            0: "",
+                            1: "1 registro seleccionado"
+                        }
+                    },
+                },
+                dom: 'lfrtip',
+                //autoWidth: false,
+                fixedColumns: true,
+                fixedColumns: {
+                    leftColumns: 1,
+                },
+                initComplete: function () {
+                    this.api().columns([1, 2]).every(function () {
+                        var column = this;
+                        var select = $('<select><option value="">=TODOS=</option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
 
-                }
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                },
+                stateSave: true,
+                select: true,
+                scrollY: true,
+                scrollX: false,
+                keys: false,
+                'bLengthChange': true,
+                'bInfo': true,
+                "lengthMenu": [[-1, 15, 25, 50, 100], ["TODOS", 15, 25, 50, 100]],
             });
         });
 
-    </script>
+        function PopupForm(url) {
+            viewPage();
+            var formDiv = $('<div/>');
+            $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
 
-    <script>
-
-        function mostrarEquity() {
-
-            $("#titulo").text(' @ViewBag.Title' + ' EQUITY');
-
-            document.getElementById('equity').style.display = 'block';
-            document.getElementById('franquicias').style.display = 'none';
-            document.getElementById('stock').style.display = 'none';
-            document.getElementById('franquicias').style.visibility = 'visible';
-            document.getElementById('stock').style.visibility = 'visible';
-            document.getElementById('franquicias').style.height = '78.5vh';
-            document.getElementById('stock').style.height = '78.5vh';
-
-            $("#titulo").style.fontFamily = 'Hero';
-
-            var equity = document.getElementByID('btnEquity');
-            equity.classList.add('active');
-
-            var franquicias = document.getElementByID('btnFranquicias');
-            franquicias.classList.remove('active');
-
-            var stock = document.getElementByID('btnStock');
-            stock.classList.remove('active');
-
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: 'CIUDADES',
+                    width: 550,
+                    modal: true,
+                    closeOnEscape: false,
+                    closeText: "Cerrar",
+                    hide: { effect: "fade", duration: 550 },
+                    show: { effect: "fade", duration: 550 },
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                        hidePages();
+                    }
+                });
+            });
         }
 
-        function mostrarFranquicias() {
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if($(form).valid()){
+                $.ajax({
+                    type : "POST",
+                    url : form.action,
+                    data : $(form).serialize(),
+                    success : function (data) {
+                        if(data.success)
+                        {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
 
-            $("#titulo").text(' @ViewBag.Title' + ' FRANQUICIAS');
+                            $.notify(data.message,{
+                                globalPosition :"top center",
+                                className: "success",
+                                autoHide: true,
+                                autoHideDelay: 2000,
+                            })
 
-            document.getElementById('equity').style.display = 'none';
-            document.getElementById('franquicias').style.display = 'block';
-            document.getElementById('stock').style.display = 'none';
-            document.getElementById('franquicias').style.visibility = 'visible';
-            document.getElementById('stock').style.visibility = 'visible';
-            document.getElementById('franquicias').style.height = '78.5vh';
-            document.getElementById('stock').style.height = '78.5vh';
-
-            $("#titulo").style.fontFamily = 'Hero';
-
-            var equity = document.getElementByID('btnEquity');
-            equity.classList.remove('active');
-
-            var franquicias = document.getElementByID('btnFranquicias');
-            franquicias.classList.add('active');
-
-            var stock = document.getElementByID('btnStock');
-            stock.classList.remove('active');
-
+                        }
+                    }
+                });
+            }
+            return false;
         }
 
-        function mostrarStock() {
+        function Delete(id) {
+            Swal.fire({
+                title: '¿ Eliminar Ciudad ?',
+                //text: "You won't be able to revert this!",
+                //icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#4CAF50',
+                cancelButtonColor: '#DF2530',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Ciudades")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
 
-            $("#titulo").text(' @ViewBag.Title' + ' STOCK');
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
 
-            document.getElementById('equity').style.display = 'none';
-            document.getElementById('franquicias').style.display = 'none';
-            document.getElementById('stock').style.display = 'block';
-            document.getElementById('franquicias').style.visibility = 'visible';
-            document.getElementById('stock').style.visibility = 'visible';
-            document.getElementById('franquicias').style.height = '78.5vh';
-            document.getElementById('stock').style.height = '78.5vh';
+                        }
+                    }
 
-            $("#titulo").style.fontFamily = 'Hero';
+                });
+                }
+            })
 
-            var equity = document.getElementByID('btnEquity');
-            equity.classList.remove('active');
-
-            var franquicias = document.getElementByID('btnFranquicias');
-            franquicias.classList.remove('active');
-
-            var stock = document.getElementByID('btnStock');
-            stock.classList.add('active');
-        }
-    </script>
-
-    <script>
-        window.onload = function () {
-            var contenedor = document.getElementById('contenedor_carga');
-            contenedor.style.visibility = 'hidden';
-            contenedor.style.opacity = '0';
         }
     </script>
 }
