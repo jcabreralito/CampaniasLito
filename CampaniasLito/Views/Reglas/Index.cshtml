@@ -29,13 +29,14 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </tfoot>
     </table>
 
 </div>
 
-<div id="franquicias" style="visibility: hidden; display: none">
+@*<div id="franquicias" style="visibility: hidden; display: none">
 
     <style>
         #resFranquiciasTable th, #resFranquiciasTable td {
@@ -61,7 +62,7 @@
         </tfoot>
     </table>
 
-</div>
+</div>*@
 
 <div id="catalogo" style="visibility: hidden; display: none">
 
@@ -103,19 +104,27 @@
                     "type": "GET",
                     "datatype": "json"
                 },
+                "order": [[2, "asc"]],
                 "columns": [
                     {
-                        "data": "Regla", "render": function (data) {
+                        "data": "ArticuloKFCId", "render": function (data) {
                             return "<span>" + data + "</span>";
                         },
-                        "title": "Regla"
+                        "title": "ID",
+                        "className": "dt-body-center text-center",
                     },
                     {
                         "data": "Material", "render": function (data) {
                             return "<span>" + data + "</span>";
                         },
                         "title": "Material",
-                        "className": "dt-body-center text-center",
+                        //"className": "dt-body-center text-center",
+                    },
+                    {
+                        "data": "Regla", "render": function (data) {
+                            return "<span>" + data + "</span>";
+                        },
+                        "title": "Regla"
                     },
                     {
                         "data": "ReglaId", "render": function (data) {
@@ -182,9 +191,9 @@
                 },
                 dom: 'lfrtip',
                 //autoWidth: false,
-                fixedColumns: true,
+                //fixedColumns: true,
                 fixedColumns: {
-                    leftColumns: 1,
+                    leftColumns: 2,
                 },
                 //initComplete: function () {
                 //    this.api().columns([0, 1]).every(function () {
@@ -217,7 +226,7 @@
             });
         });
 
-        $(document).ready(function () {
+        @*$(document).ready(function () {
             dataTableReglaFQ = $("#resFranquiciasTable").DataTable({
                 "ajax": {
                     "url": "Reglas/GetDataFranquicias",
@@ -303,7 +312,7 @@
                 },
                 dom: 'lfrtip',
                 //autoWidth: false,
-                fixedColumns: true,
+                //fixedColumns: true,
                 fixedColumns: {
                     leftColumns: 1,
                 },
@@ -336,7 +345,7 @@
                 'bInfo': true,
                 "lengthMenu": [[-1, 15, 25, 50, 100], ["TODOS", 15, 25, 50, 100]],
             });
-        });
+        });*@
 
         $(document).ready(function () {
             dataTableReglaCat = $("#catalogoTable").DataTable({
@@ -345,6 +354,7 @@
                     "type": "GET",
                     "datatype": "json"
                 },
+                "order": [[1, "asc"]],
                 "columns": [
                     {
                         "data": "ReglaCatalogoId", "render": function (data) {
@@ -430,7 +440,7 @@
                 },
                 dom: 'lfrtip',
                 //autoWidth: false,
-                fixedColumns: true,
+                //fixedColumns: true,
                 fixedColumns: {
                     leftColumns: 1,
                 },
@@ -501,7 +511,7 @@
                         {
                             PopupRegla.dialog('close');
                             dataTableReglaEQ.ajax.reload();
-                            dataTableReglaFQ.ajax.reload();
+                            //dataTableReglaFQ.ajax.reload();
 
                             $.notify(data.message,{
                                 globalPosition :"top center",
@@ -552,7 +562,7 @@
                         if (data.success) {
                             PopupCat.dialog('close');
                             dataTableReglaEQ.ajax.reload();
-                            dataTableReglaFQ.ajax.reload();
+                            //dataTableReglaFQ.ajax.reload();
                             dataTableReglaCat.ajax.reload();
 
                             $.notify(data.message, {
@@ -639,7 +649,7 @@
                 cancelButtonText: 'No',
             }).then((result) => {
                 if (result.value) {
-                    viewPage();
+                    hidePage();
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete","Reglas")/' + id,
@@ -647,13 +657,13 @@
                         if (data.success)
                         {
                             dataTableReglaEQ.ajax.reload();
-                            dataTableReglaFQ.ajax.reload();
+                            //dataTableReglaFQ.ajax.reload();
 
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
                             })
-
+                            viewPage();
                         }
                     }
 
@@ -674,7 +684,7 @@
                 cancelButtonText: 'No',
             }).then((result) => {
                 if (result.value) {
-                    viewPage();
+                    hidePage();
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("DeleteCat","Reglas")/' + id,
@@ -682,14 +692,14 @@
                         if (data.success)
                         {
                             dataTableReglaEQ.ajax.reload();
-                            dataTableReglaFQ.ajax.reload();
+                            //dataTableReglaFQ.ajax.reload();
                             dataTableReglaCat.ajax.reload();
 
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
                             })
-
+                            viewPage();
                         }
                     }
 

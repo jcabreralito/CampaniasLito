@@ -1,6 +1,10 @@
 ﻿using CampaniasLito.Classes;
 using CampaniasLito.Filters;
 using CampaniasLito.Models;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.draw;
+using Microsoft.Owin.Security.DataHandler.Encoder;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
@@ -8,7 +12,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
+using System.Text;
 using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
@@ -82,6 +86,7 @@ namespace CampaniasLito.Controllers
             [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = false)]
             public double TotalCantidad { get; set; }
             public int CampañaId { get; set; }
+            public string Familia { get; set; }
 
         }
 
@@ -364,6 +369,119 @@ namespace CampaniasLito.Controllers
             return View();
         }
 
+        [AuthorizeUser(idOperacion: 5)]
+        public ActionResult ArtKFC(int id, string prov)
+        {
+            MemoryStream ms = new MemoryStream();
+
+            Document document = new Document(PageSize.LETTER, 25f, 25f, 60f, 50f);
+            PdfWriter pw = PdfWriter.GetInstance(document, ms);
+
+            string pathImage = Server.MapPath("~/Content/images/KFC-logo.png");
+            string pathImageMW = Server.MapPath("~/Content/images/KFC-logo.png");
+
+            pw.PageEvent = new HeaderFooter(pathImage);
+            //pw.PageEvent = new HeaderFooter(pathImage, pathImageMW);
+
+            document.Open();
+
+            string heroFont = Server.MapPath("~/Content/Fonts/Hero.otf");
+
+            BaseFont font = BaseFont.CreateFont(heroFont, BaseFont.CP1250, BaseFont.EMBEDDED);
+            Font fontBlack = new Font(font, 10, 0, BaseColor.BLACK);
+            Font fontRed = new Font(font, 10, 0, BaseColor.RED);
+            Font fontRed2 = new Font(font, 14, 1, BaseColor.RED);
+
+            PdfPTable tabla = new PdfPTable(7);
+            tabla.WidthPercentage = 100f;
+
+            var codigosMateriales = db.Database.SqlQuery<CodigosMaterialesTotal>("spGetMaterialesCodigosCampaña @CampañaId",
+                new SqlParameter("@CampañaId", id)).ToList();
+
+            var materialesProv = codigosMateriales.Where(x => x.Proveedor == prov).ToList();
+
+            var familias = codigosMateriales.GroupBy(x => x.Familia).ToList();
+
+            foreach (var familia in familias)
+            {
+                var materialesFam = materialesProv.Where(x => x.Familia == familia.Key).ToList();
+
+                PdfPCell pCell = new PdfPCell();
+
+                Chunk linea = new Chunk(new LineSeparator(2f, 100f, BaseColor.BLACK, Element.ALIGN_CENTER, 0f));
+
+                if (materialesFam.Count != 0)
+                {
+                    pCell = new PdfPCell(new Paragraph(familia.Key.ToUpper(), fontRed2));
+                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    pCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    pCell.Colspan = 7;
+                    pCell.Border = 0;
+                    tabla.AddCell(pCell);
+
+                    pCell = new PdfPCell(new Paragraph(linea));
+                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    pCell.Colspan = 7;
+                    pCell.Border = 0;
+                    tabla.AddCell(pCell);
+                }
+
+
+
+                foreach (var codigo in materialesFam)
+                {
+
+                    BarcodeDatamatrix datamatrix = new BarcodeDatamatrix();
+                    //datamatrix.Generate(codigo.Codigo.ToString() + " / " + codigo.ArticuloKFC);
+                    datamatrix.Generate(codigo.Codigo.ToString());
+                    Image image = datamatrix.CreateImage();
+                    image.ScaleAbsolute(40f, 40f);
+                    image.Border = 0;
+                    //document.Add(image);
+
+                    pCell = new PdfPCell(image, false);
+                    pCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    pCell.Border = 0;
+                    pCell.PaddingTop = 5f;
+                    tabla.AddCell(pCell);
+
+                    pCell = new PdfPCell(new Paragraph(codigo.Codigo.ToString(), fontBlack));
+                    pCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    pCell.Border = 0;
+                    tabla.AddCell(pCell);
+
+                    pCell = new PdfPCell(new Paragraph(codigo.ArticuloKFC.ToUpper(), fontRed));
+                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    pCell.Colspan = 5;
+                    pCell.Border = 0;
+                    tabla.AddCell(pCell);
+
+                    linea = new Chunk(new LineSeparator(2f, 100f, BaseColor.BLACK, Element.ALIGN_CENTER, 0f));
+
+                    pCell = new PdfPCell(new Paragraph(linea));
+                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    pCell.Colspan = 7;
+                    pCell.Border = 0;
+                    tabla.AddCell(pCell);
+
+                    //document.Add(linea);
+                }
+            }
+
+
+            document.Add(tabla);
+            document.Close();
+
+            byte[] bytesStream = ms.ToArray();
+            ms = new MemoryStream();
+            ms.Write(bytesStream, 0, bytesStream.Length);
+            ms.Position = 0;
+
+            return new FileStreamResult(ms, "application/pdf");
+        }
+
         public ActionResult GetData()
         {
             var campañasList = db.Database.SqlQuery<Campaña>("spGetCampañas").ToList();
@@ -478,6 +596,8 @@ namespace CampaniasLito.Controllers
             Session["TipoRestaurante"] = tipoTienda;
 
             var campaña = db.Campañas.Where(x => x.CampañaId == id).FirstOrDefault();
+
+            ViewBag.Campañas = campaña.Generada;
 
             var campañaId = id;
 
@@ -908,6 +1028,17 @@ namespace CampaniasLito.Controllers
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
+                var campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
+                if (campañas.Count == 0)
+                {
+                    db.Database.ExecuteSqlCommand(
+                    "spEliminarTodosArticulosTiendas");
+
+                    db.Database.ExecuteSqlCommand(
+                    "spDesactivarMateriales");
+                }
+
                 movimiento = "Cerrar Campaña " + campaña.CampañaId + " " + campaña.Nombre + " / " + campaña.Descripcion;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
@@ -948,13 +1079,24 @@ namespace CampaniasLito.Controllers
 
                 var vacio = "";
 
-                var folder = "C:\\";
+                //var folder = "C:\\";
+
+                var folder = Server.MapPath("~/Content/Archivos/");
 
                 using (StreamWriter streamWriter = new StreamWriter(folder + "Materiales" + campaña.Nombre + ".txt"))
                 {
                     foreach (var codigo in codigosMateriales)
                     {
-                        var linea = "INSERT INTO Articulos (Codigo, Descripcion, SistemaImpresion,MedExtendida,Sustrato,Tintas,Laminado_FV,Corte,MatPegue,InfAdicional) VALUES ('" + codigo.Codigo + "', '" + codigo.ArticuloKFC + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + codigo.ArticuloKFC + "')";
+                        var linea = "INSERT INTO Articulos (Codigo, Descripcion, SistemaImpresion,MedExtendida,Sustrato,Tintas,Laminado_FV,Corte,MatPegue,InfAdicional) VALUES ('" + codigo.Codigo + "', '" + codigo.ArticuloKFC.ToUpper() + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + codigo.ArticuloKFC.ToUpper() + "')";
+                        streamWriter.WriteLine(linea);
+                    }
+                }
+
+                using (StreamWriter streamWriter = new StreamWriter(folder + "Materiales" + campaña.Nombre + ".txt", false, Encoding.GetEncoding(1252)))
+                {
+                    foreach (var codigo in codigosMateriales)
+                    {
+                        var linea = "INSERT INTO Articulos (Codigo, Descripcion, SistemaImpresion,MedExtendida,Sustrato,Tintas,Laminado_FV,Corte,MatPegue,InfAdicional) VALUES ('" + codigo.Codigo + "', '" + codigo.ArticuloKFC.ToUpper() + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + vacio + "', '" + codigo.ArticuloKFC.ToUpper() + "')";
                         streamWriter.WriteLine(linea);
                     }
                 }
@@ -962,22 +1104,22 @@ namespace CampaniasLito.Controllers
                 var tiendas = db.Database.SqlQuery<spTiendasActivas>("spGetRestaurantesActivos").ToList();
                 var i = 1;
 
-                using (StreamWriter streamWriter = new StreamWriter(folder + "Tiendas" + campaña.Nombre + ".txt"))
+                using (StreamWriter streamWriter = new StreamWriter(folder + "Tiendas" + campaña.Nombre + ".txt", false, Encoding.GetEncoding(1252)))
                 {
                     foreach (var tienda in tiendas)
                     {
-                        var linea = "INSERT INTO Tiendas (Id, Secuencia, Tienda, Region, Ciudad, IdCampana) VALUES (" + tienda.CCoFranquicia + ", " + i + ", '" + tienda.CCoFranquicia + " / " + tienda.Restaurante + "', '" + tienda.Region + "', '" + tienda.Ciudad + "', " + Convert.ToInt32(campaña.Nombre) + ")";
+                        var linea = "INSERT INTO Tiendas (Id, Secuencia, Tienda, Region, Ciudad, IdCampana) VALUES (" + tienda.CCoFranquicia.ToUpper() + ", " + i + ", '" + tienda.CCoFranquicia.ToUpper() + " / " + tienda.Restaurante.ToUpper() + "', '" + tienda.Region.ToUpper() + "', '" + tienda.Ciudad.ToUpper() + "', " + Convert.ToInt32(campaña.Nombre) + ")";
                         streamWriter.WriteLine(linea);
 
                         i = i + 1;
                     }
                 }
 
-                using (StreamWriter streamWriter = new StreamWriter(folder + "Ordenes" + campaña.Nombre + ".txt"))
+                using (StreamWriter streamWriter = new StreamWriter(folder + "Ordenes" + campaña.Nombre + ".txt", false, Encoding.GetEncoding(1252)))
                 {
                     foreach (var codigo in codigosMaterialesOrdenes)
                     {
-                        var linea = "INSERT INTO Ordenes (CAMPANA, IDTIENDA, IDARTICULO, CANTIDAD) VALUES ('" + campaña.Descripcion + "', '" + codigo.CCoFranquicia + "', '" + codigo.Codigo + "', " + codigo.Cantidad + ")";
+                        var linea = "INSERT INTO Ordenes (CAMPANA, IDTIENDA, IDARTICULO, CANTIDAD) VALUES ('" + campaña.Descripcion.ToUpper() + "', '" + codigo.CCoFranquicia.ToUpper() + "', '" + codigo.Codigo + "', " + codigo.Cantidad + ")";
                         streamWriter.WriteLine(linea);
                     }
                 }
@@ -1060,5 +1202,79 @@ namespace CampaniasLito.Controllers
             return View(totalMateriales);
         }
 
+    }
+
+    class HeaderFooter : PdfPageEventHelper
+    {
+        public HeaderFooter(string logoPath)
+        {
+            LogoPath = logoPath;
+        }
+
+        //public HeaderFooter(string logoPath, string marcaImagen)
+        //{
+        //    LogoPath = logoPath;
+        //    MarcaImagen = marcaImagen;
+        //}
+
+        public string LogoPath { get; }
+        public string MarcaImagen { get; }
+
+        public override void OnEndPage(PdfWriter writer, Document document)
+        {
+            //PdfContentByte cb = writer.DirectContentUnder;
+            //Image image = Image.GetInstance(MarcaImagen);
+
+            //float positionX = (writer.PageSize.Top / 2) - (image.Width / 9);
+            //float positionY = (writer.PageSize.Right / 2) - (image.Height / 3);
+
+            //image.SetAbsolutePosition(-370f, -50f);
+            //image.ScaleAbsolute(image.PlainWidth / 3 + 100, image.PlainHeight / 3 + 200);
+            ////image.ScaleAbsoluteWidth(image.PlainWidth / 3);
+            //PdfGState state = new PdfGState();
+            //state.FillOpacity = 0.1f;
+            //cb.SetGState(state);
+            //cb.AddImage(image);
+
+            PdfPTable tbHeader = new PdfPTable(3);
+            tbHeader.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
+            tbHeader.DefaultCell.Border = 0;
+
+            tbHeader.AddCell(new Paragraph());
+
+            PdfPCell pCell = new PdfPCell(new Paragraph("Lista de Materiales"));
+            pCell.HorizontalAlignment = Element.ALIGN_CENTER;
+            pCell.Border = 0;
+            tbHeader.AddCell(pCell);
+
+            tbHeader.AddCell(new Paragraph());
+
+            tbHeader.WriteSelectedRows(0, -1, document.LeftMargin, writer.PageSize.GetTop(document.TopMargin) + 40, writer.DirectContent);
+
+            PdfPTable tbFooter = new PdfPTable(3);
+            tbFooter.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
+            tbFooter.DefaultCell.Border = 0;
+
+            tbFooter.AddCell(new Paragraph());
+
+            pCell = new PdfPCell(new Paragraph("Página " + writer.PageNumber));
+            pCell.HorizontalAlignment = Element.ALIGN_CENTER;
+            pCell.Border = 0;
+            tbFooter.AddCell(pCell);
+
+            tbFooter.AddCell(new Paragraph());
+            tbFooter.WriteSelectedRows(0, -1, document.LeftMargin, writer.PageSize.GetBottom(document.BottomMargin) - 5, writer.DirectContent);
+
+            //Begin Image
+
+            Image logo = Image.GetInstance(LogoPath);
+            logo.SetAbsolutePosition(document.LeftMargin, writer.PageSize.GetTop(document.TopMargin + 5) + 10);
+            logo.ScaleAbsolute(70f, 40f);
+
+            document.Add(logo);
+
+            //End Image
+
+        }
     }
 }

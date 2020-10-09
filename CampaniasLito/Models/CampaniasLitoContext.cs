@@ -25,8 +25,6 @@ namespace CampaniasLito.Models
 
         public DbSet<Region> Regions { get; set; }
 
-        //public DbSet<CampañaArticulo> CampañaArticulos { get; set; }
-
         public DbSet<Campaña> Campañas { get; set; }
 
         public DbSet<NivelPrecio> NivelPrecios { get; set; }

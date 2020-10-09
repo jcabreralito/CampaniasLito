@@ -27,10 +27,12 @@ namespace CampaniasLito.Controllers
             if (user != null)
             {
                 Session["NombreCompleto"] = string.Format("{0}  {1}", user.Nombres, user.Apellidos);
+                Session["UserID"] = user.UsuarioId;
             }
             else
             {
                 Session["NombreCompleto"] = "Administrador";
+                Session["UserID"] = "Admin";
             }
         }
 
@@ -251,8 +253,16 @@ namespace CampaniasLito.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    await UsuariosHelper.PasswordRecovery(user.Email);
-                    return RedirectToAction("Login");
+                    if (user == null)
+                    {
+                        return Json(new { success = true, message = "NO EXISTE EL USUARIO CAPTURADO" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        await UsuariosHelper.PasswordRecovery(user.Email);
+                        return Json(new { success = true, message = "PASSWORD REESTABLECIDO, REVISA TU MAIL" }, JsonRequestBehavior.AllowGet);
+                        //return RedirectToAction("Login");
+                    }
                 }
 
             }
@@ -271,27 +281,38 @@ namespace CampaniasLito.Controllers
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(int? id)
+        public ActionResult ResetPassword(string nameUser)
         {
-            if (id == null)
+            if (nameUser == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var usuario = db.Usuarios.Find(id);
+            var usuarioActual = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().NombreUsuario;
+
+            var usuario = db.Usuarios.Where(x => x.NombreUsuario == nameUser).FirstOrDefault();
 
             if (usuario == null)
             {
-                return HttpNotFound();
+                return Json(new { success = true, message = "EL USUARIO CAPTURADO ES INCORRECTO" }, JsonRequestBehavior.AllowGet);
             }
 
-            ResetPasswordViewModel model = new ResetPasswordViewModel
+            if (usuarioActual != usuario.NombreUsuario)
             {
-                Email = usuario.NombreUsuario
-            };
-            ViewBag.Email = usuario.NombreUsuario;
+                return Json(new { success = true, message = "EL USUARIO CAPTURADO ES INCORRECTO" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                ResetPasswordViewModel model = new ResetPasswordViewModel
+                {
+                    Email = usuario.NombreUsuario
+                };
 
-            return View(model);
+                ViewBag.Email = usuario.NombreUsuario;
+
+                return View(model);
+            }
+
         }
 
         //
@@ -310,16 +331,12 @@ namespace CampaniasLito.Controllers
 
                     var perfil = db.Usuarios.Where(u => u.NombreUsuario == model.Email).FirstOrDefault();
 
-                    TempData["mensajeLito"] = "PASSWORD CAMBIADO CON EXITO";
-
-                    return RedirectToAction("Index", "Home");
+                    return Json(new { success = true, message = "PASSWORD CAMBIADO CON ÉXITO" }, JsonRequestBehavior.AllowGet);
                 }
 
             }
 
-            TempData["mensajeLito"] = "NO COINCIDE EL PASSWORD CON LA CONFIRMACION DEL PASSWORD, INTENTALO NUEVAMENTE";
-
-            return RedirectToAction("Index", "Home");
+            return Json(new { success = true, message = "NO COINCIDE EL PASSWORD CON LA CONFIRMACION DEL PASSWORD, INTENTALO NUEVAMENTE" }, JsonRequestBehavior.AllowGet);
         }
 
         //
@@ -513,7 +530,7 @@ namespace CampaniasLito.Controllers
                 return Redirect(returnUrl);
             }
 
-            
+
             if (Session["NombreCompleto"].ToString() == "Administrador")
             {
                 return RedirectToRoute("IndexAdmin");

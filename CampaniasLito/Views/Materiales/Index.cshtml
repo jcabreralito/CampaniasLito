@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Materiales";
-    Layout = "~/Views/Shared/_Layout_Materiales.cshtml";
+    //Layout = "~/Views/Shared/_Layout_Materiales.cshtml";
 }
 
 <div id="equity" style="visibility: visible; display: block">
@@ -32,13 +32,14 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                @*<th></th>*@
+                <th></th>
+                <th></th>
             </tr>
         </tfoot>
     </table>
 </div>
 
-<div id="franquicias" style="visibility: hidden; display: none">
+@*<div id="franquicias" style="visibility: hidden; display: none">
 
     <style>
         #matFranquiciasTable th, #matFranquiciasTable td {
@@ -66,11 +67,10 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                @*<th></th>*@
             </tr>
         </tfoot>
     </table>
-</div>
+</div>*@
 
 @section scripts{
 
@@ -128,6 +128,13 @@
                     "className": "dt-body-center text-left",
                 },
                 {
+                    "data": "EquityFranquicia", "render": function (data) {
+                        return "<span>" + data + "</span>";
+                    },
+                    "title": "Categoría",
+                    "className": "dt-body-center text-center",
+                },
+                {
                     "data": "Imagen", "render": function (data) {
                         return "<img src=\"Content/images/Productos" + data + "\" height=\"50\" width=\"50\"/>";
                     },
@@ -174,6 +181,9 @@
                         if (row.Activo == 0) {
                             return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
                         }
+                        else if (row.EquityFranquicia == "FRANQUICIAS") {
+                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                        }
                         else {
                             return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupFormTiendas('@Url.Action("Restaurantes", "Materiales")/" + data + "?cat=" + 'EQUITY' +"')><i class='fas fa-plus-circle'></i></a>";
                         }
@@ -188,6 +198,26 @@
                         if (row.Activo == 0) {
                             return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
                         }
+                        else if (row.EquityFranquicia == "EQUITY") {
+                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                        }
+                        else {
+                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupFormTiendas('@Url.Action("Restaurantes", "Materiales")/" + data + "?cat=" + 'FRANQUICIAS' +"')><i class='fas fa-plus-circle'></i></a>";
+                        }
+                    },
+                    "title": "Franquicias",
+                    "orderable": false,
+                    "searchable": false,
+                    "className": "dt-body-center text-center",
+                },
+                {
+                    "data": "ArticuloKFCId", "render": function (data, type, row) {
+                        if (row.Activo == 0) {
+                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                        }
+                        else if (row.EquityFranquicia == "FRANQUICIAS") {
+                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                        }
                         else {
                             return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupFormTiendas('@Url.Action("Restaurantes", "Materiales")/" + data + "?cat=" + 'STOCK' +"')><i class='fas fa-plus-circle'></i></a>";
                         }
@@ -197,22 +227,7 @@
                     "searchable": false,
                     "className": "dt-body-center text-center",
                 },
-                @*{
-                    "data": "ArticuloKFCId", "render": function (data, type, row) {
-                        if (row.Activo == 0) {
-                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
-                        }
-                        else {
-                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupFormReglas('@Url.Action("AddOrEdit", "Reglas")/" + data + "')><i class='fas fa-plus-circle'></i></a>";
-                        }
-                    },
-                    "title": "Regla",
-                    "orderable": false,
-                    "searchable": false,
-                    "className": "dt-body-center text-center",
-                },*@
             ],
-            //"serverSide": true,
             "order": [[1, "asc"]],
             "pagingType": "full_numbers",
             "language": {
@@ -251,12 +266,12 @@
             },
             dom: 'lfrtip',
             autoWidth: true,
-            fixedColumns: true,
+            //fixedColumns: true,
             fixedColumns: {
                 leftColumns: 2,
             },
             initComplete: function () {
-                this.api().columns([2, 3]).every(function () {
+                this.api().columns([2, 3, 6]).every(function () {
                     var column = this;
                     var select = $('<select><option value="">=TODOS=</option></select>')
                         .appendTo($(column.footer()).empty())
@@ -277,7 +292,7 @@
             },
             stateSave: true,
             select: true,
-            scrollY: true,
+            scrollY: false,
             scrollX: true,
             keys: false,
             'bLengthChange': true,
@@ -288,197 +303,6 @@
     });
 
 //END TABLE EQUITY
-
-//BEGIN TABLE FRANQUIICAS
-
-        $(document).ready(function () {
-        dataTableF = $("#matFranquiciasTable").DataTable({
-            "ajax": {
-                "url": "Materiales/GetDataFranquicias",
-                "type": "GET",
-                "datatype": "json"
-            },
-            "columns": [
-                {
-                    "data": "ArticuloKFCId", "render": function (data) {
-                        return "<span>" + data + "</span>";
-                    },
-                    "title": "ID",
-                    "className": "dt-body-center text-center",
-                },
-                {
-                    "data": "Descripcion", "render": function (data) {
-                        return "<span>" + data + "</span>";
-                    },
-                    "title": "Material",
-                    "className": "dt-body-center text-left",
-                },
-                {
-                    "data": "Proveedor", "render": function (data) {
-                        return "<span>" + data + "</span>";
-                    },
-                    "title": "Proveedor",
-                    "className": "dt-body-center text-left",
-                },
-                {
-                    "data": "Familia", "render": function (data) {
-                        return "<span>" + data + "</span>";
-                    },
-                    "title": "Familia",
-                    "className": "dt-body-center text-left",
-                },
-                {
-                    "data": "CantidadDefault", "render": function (data) {
-                        return "<span>" + data + "</span>";
-                    },
-                    "className": "dt-body-center text-center",
-                    "title": "Cantidad"
-                },
-                { "data": "Observaciones", "title": "Observaciones" },
-                {
-                    "data": "Imagen", "render": function (data) {
-                        return "<img src=\"/Content/images/Productos" + data + "\" height=\"50\" width=\"50\"/>";
-                    },
-                    "title": "Imagen",
-                    "orderable": false,
-                    "searchable": false,
-                    "className": "dt-body-center text-center",
-                },
-                {
-                    data: "Activo",
-                    render: function (data, type, row) {
-                        if (data == 1) {
-                            return "<label for='danger' class='btndangerCheck'><input type='checkbox' id='danger' class='badgebox' checked='checked' disabled='disabled'><span class='badge'>&check;</span></label>";
-                        } else {
-                            return "<label for='danger' class='btndangerCheck'><input type='checkbox' id='danger' class='badgebox' disabled='disabled'><span class='badge'>&check;</span></label>";
-                        }
-                        return data;
-                    },
-                    "className": "dt-body-center text-center",
-                    "title": "Activo",
-                },
-                {
-                    "data": "ArticuloKFCId", "render": function (data) {
-                        return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupForm('@Url.Action("AddOrEdit","Materiales")/" + data + "')><i class='fas fa-pencil-alt'></i></a>";
-                    },
-                    "title": "Editar",
-                    "orderable": false,
-                    "searchable": false,
-                    "className": "dt-body-center text-center",
-                },
-                {
-                    "data": "ArticuloKFCId", "render": function (data) {
-                        return "<a class='btn-danger btn-lg' style='background-color: transparent; cursor: pointer' onclick=Delete(" + data + ")><i class='fas fa-trash' style='color: #DF2530'></i></a>";
-                    },
-                    "title": "Eliminar",
-                    "orderable": false,
-                    "searchable": false,
-                    "className": "dt-body-center text-center",
-                },
-                {
-                    "data": "ArticuloKFCId", "render": function (data, type, row) {
-                        if (row.Activo == 0) {
-                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
-                        }
-                        else {
-                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupFormTiendas('@Url.Action("Restaurantes", "Materiales")/" + data + "?cat=" + 'FRANQUICIAS' +"')><i class='fas fa-plus-circle'></i></a>";
-                        }
-                    },
-                    "title": "Franquicias",
-                    "orderable": false,
-                    "searchable": false,
-                    "className": "dt-body-center text-center",
-                },
-                @*{
-                    "data": "ArticuloKFCId", "render": function (data, type, row) {
-                        if (row.Activo == 0) {
-                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
-                        }
-                        else {
-                            return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupFormReglas('@Url.Action("AddOrEdit", "Reglas")/" + data + "')><i class='fas fa-plus-circle'></i></a>";
-                        }
-                    },
-                    "title": "Regla",
-                    "orderable": false,
-                    "searchable": false,
-                    "className": "dt-body-center text-center",
-                },*@
-            ],
-            //"serverSide": true,
-            "order": [[1, "asc"]],
-            "language": {
-                "emptyTable": "No hay datos, dar click en el botón <b>Add New</b>",
-                "sLengthMenu": "Mostrar _MENU_ registros",
-                "sZeroRecords": "No se encontraron resultados",
-                "sInfo": "_END_ registros",
-                "sInfoEmpty": "Registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered": "de un total de _MAX_",
-                "sInfoPostFix": "",
-                "sSearch": "Buscar:",
-                "sUrl": "",
-                "sInfoThousands": ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                    "sFirst": "<<",
-                    "sLast": ">>",
-                    "sNext": ">",
-                    "sPrevious": "<"
-                },
-                "oAria": {
-                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                },
-                "buttons": {
-                    "copy": "Copiar",
-                    "colvis": "Mostrar/Ocultar Columnas"
-                },
-                select: {
-                    rows: {
-                        _: "%d registros seleccionados",
-                        0: "",
-                        1: "1 registro seleccionado"
-                    }
-                },
-            },
-            dom: 'lfrtip',
-            autoWidth: true,
-            fixedColumns: true,
-            fixedColumns: {
-                leftColumns: 2,
-            },
-            initComplete: function () {
-                this.api().columns([2, 3]).every(function () {
-                    var column = this;
-                    var select = $('<select><option value="">=TODOS=</option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-
-                    column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
-            },
-            stateSave: true,
-            select: true,
-            scrollY: true,
-            scrollX: true,
-            keys: false,
-            'bLengthChange': true,
-            'bInfo': true,
-            "lengthMenu": [[-1, 15, 25, 50, 100], ["TODOS", 15, 25, 50, 100]],
-        });
-
-    });
-
-//END TABLE FRANQUIICAS
 
         function PopupForm(url) {
             viewPage();
@@ -516,13 +340,12 @@
                 contentType: false,
                 cache: false,
                 processData: false,
-                //data : $(form).serialize(),
                 success : function (data) {
                     if(data.success)
                     {
                         Popup.dialog('close');
                         dataTable.ajax.reload();
-                        dataTableF.ajax.reload();
+                        //dataTableF.ajax.reload();
 
                         $.notify(data.message, {
                             globalPosition: "top center",
@@ -545,7 +368,6 @@
                 .done(function (response) {
                     formDiv.html(response);
                     PopupTiendas = formDiv.dialog({
-                        //position: ['middle', 20],
                         autoOpen: true,
                         resizable: false,
                         title: "RESTAURANTES",
@@ -574,69 +396,11 @@
                     contentType: false,
                     cache: false,
                     processData: false,
-                    //data : $(form).serialize(),
                     success: function (data) {
                         if (data.success) {
                             PopupTiendas.dialog('close');
                             dataTable.ajax.reload();
-                            dataTableF.ajax.reload();
-
-                            $.notify(data.message, {
-                                globalPosition: "top center",
-                                className: "success",
-                                autoHide: true,
-                                autoHideDelay: 2000,
-                            })
-
-                        }
-                    }
-                });
-            }
-            return false;
-        }
-
-        function PopupFormReglas(url) {
-            viewPage();
-            var formDiv = $('<div/>');
-            $.get(url)
-                .done(function (response) {
-                    formDiv.html(response);
-                    PopupReglas = formDiv.dialog({
-                        //position: ['middle', 20],
-                        autoOpen: true,
-                        resizable: false,
-                        title: "REGLAS",
-                        width: 1100,
-                        modal: true,
-                        closeOnEscape: false,
-                        closeText: "Cerrar",
-                        hide: { effect: "fade", duration: 550 },
-                        show: { effect: "fade", duration: 550 },
-                        close: function () {
-                            PopupReglas.dialog('destroy').remove();
-                            hidePages();
-                        }
-                    });
-                });
-        }
-
-        function SubmitFormReglas(form) {
-            var formData = new FormData(form);
-            $.validator.unobtrusive.parse(form);
-            if ($(form).valid()) {
-                $.ajax({
-                    type: "POST",
-                    url: form.action,
-                    data: formData,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    //data : $(form).serialize(),
-                    success: function (data) {
-                        if (data.success) {
-                            PopupReglas.dialog('close');
-                            dataTable.ajax.reload();
-                            dataTableF.ajax.reload();
+                            //dataTableF.ajax.reload();
 
                             $.notify(data.message, {
                                 globalPosition: "top center",
@@ -670,7 +434,7 @@
                     if (data.success)
                     {
                         dataTable.ajax.reload();
-                        dataTableF.ajax.reload();
+                        //dataTableF.ajax.reload();
 
                         $.notify(data.message, {
                             globalPosition: "top center",

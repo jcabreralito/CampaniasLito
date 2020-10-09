@@ -349,7 +349,7 @@ namespace CampaniasLito.Classes
 
         public static List<TipoCampania> GetTipoCampañas(bool v)
         {
-            var tipos = db.TipoCampanias.Where(x => x.Nombre != "EQUITY / FRANQUICIAS").ToList();
+            var tipos = db.TipoCampanias.Where(x => x.Nombre != "STOCK").ToList();
             tipos.Add(new TipoCampania
             {
                 TipoCampaniaId = 0,
@@ -361,11 +361,17 @@ namespace CampaniasLito.Classes
         public static List<TipoCampania> GetTipoCampañasAll(bool v)
         {
             var tipos = db.TipoCampanias.ToList();
-            tipos.Add(new TipoCampania
-            {
-                TipoCampaniaId = 0,
-                Nombre = "[Seleccionar...]",
-            });
+            //tipos.Add(new TipoCampania
+            //{
+            //    TipoCampaniaId = 0,
+            //    Nombre = "[Seleccionar...]",
+            //});
+            return tipos.OrderBy(c => c.Nombre).ToList();
+        }
+
+        public static List<TipoCampania> GetTipoCampañasMat(bool v)
+        {
+            var tipos = db.TipoCampanias.Where(x => x.Nombre != "STOCK").ToList();
             return tipos.OrderBy(c => c.Nombre).ToList();
         }
 

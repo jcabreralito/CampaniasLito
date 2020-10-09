@@ -182,8 +182,10 @@
                     }
                     <li>
                         <div>
-                            <i class="fas fa-user" title="@User.Identity.Name" style="background-color: #fff; color: #000; border-radius: 50%; height: 37px !important; width: 37px !important; line-height: initial !important; margin-left: 30px; padding: 5px 8px; margin-top: 9px !important;">
-                            </i>
+                            <a href="#" onclick="PopupFormPassword('@Url.Action("ResetPassword", "Account", new { nameUser = User.Identity.Name.ToString() })')" style="background-color: transparent !important">
+                                <i class="fas fa-user" title="@User.Identity.Name" style="background-color: #fff; color: #000; border-radius: 50%; height: 37px !important; width: 37px !important; line-height: initial !important; margin-left: 30px; padding: 5px 8px; margin-top: 9px !important;">
+                                </i>
+                            </a>
                         </div>
                     </li>
                     <li class="iMenuSalir">
@@ -303,6 +305,61 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     @RenderSection("scripts", required: false)
+
+    <script>
+        var PopupPassword;
+
+        function PopupFormPassword(url) {
+            viewPage();
+            var formDiv = $('<div />');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+
+                    PopupPassword = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: 'CAMBIAR PASSWORD',
+                        width: 550,
+                        modal: true,
+                        closeOnEscape: false,
+                        closeText: "Cerrar",
+                        hide: { effect: "fade", duration: 550 },
+                        show: { effect: "fade", duration: 550 },
+                        close: function () {
+                            PopupPassword.dialog('destroy').remove();
+                            hidePages();
+                        }
+                    });
+                });
+        }
+
+        function SubmitFormPassword(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            PopupPassword.dialog('close');
+                            //dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "info",
+                                autoHide: false,
+                                //autoHideDelay: 5000,
+                            })
+
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+    </script>
 
 
 </body>

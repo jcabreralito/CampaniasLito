@@ -44,6 +44,7 @@ namespace CampaniasLito.Controllers
             {
                 ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre");
                 ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre");
+                ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre");
 
                 return PartialView(new Usuario());
             }
@@ -52,12 +53,14 @@ namespace CampaniasLito.Controllers
                 var nombreUsuario = db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault().NombreUsuario;
                 var rolId = db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault().RolId;
                 var compañiaId = db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault().CompañiaId;
+                var proveedorId = db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault().ProveedorId;
 
                 Session["UsuarioEditado"] = nombreUsuario.ToLower();
                 Session["RolEditado"] = rolId;
 
                 ViewBag.CompañiaId = new SelectList(CombosHelper.GetCompañias(true), "CompañiaId", "Nombre", compañiaId);
                 ViewBag.RolId = new SelectList(CombosHelper.GetRoles(true), "RolId", "Nombre", rolId);
+                ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", proveedorId);
 
                 return PartialView(db.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefault());
             }

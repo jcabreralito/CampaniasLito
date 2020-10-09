@@ -535,7 +535,7 @@
                     "title": "Editar",
                     "orderable": false,
                     "searchable": false,
-                    "className": "dt-body-center text-center dt-specialColorYellow",
+                    "className": "dt-body-center text-center noExport dt-specialColorYellow",
                 },
                 {
                     data: "TerceraReceta",
@@ -1266,7 +1266,7 @@
                 },
             ],
             autoWidth: true,
-            fixedColumns: true,
+            //fixedColumns: true,
             fixedColumns: {
                 leftColumns: 2,
             },
@@ -1295,8 +1295,8 @@
                 });
             },
             stateSave: true,
-            select: true,
-            scrollY: true,
+                select: true,
+                scrollY: false,
             scrollX: true,
             keys: false,
             'bLengthChange': true,
@@ -2035,7 +2035,7 @@
                 },
             ],
             autoWidth: true,
-            fixedColumns: true,
+            //fixedColumns: true,
             fixedColumns: {
                 leftColumns: 2,
             },
@@ -2061,7 +2061,7 @@
             },
             stateSave: true,
             select: true,
-            scrollY: true,
+            scrollY: false,
             scrollX: true,
             keys: false,
             serverSide: false,
@@ -2240,7 +2240,7 @@
                 },
             ],
             autoWidth: true,
-            fixedColumns: true,
+            //fixedColumns: true,
             fixedColumns: {
                 leftColumns: 2,
             },
@@ -2266,7 +2266,7 @@
             },
             stateSave: true,
             select: true,
-            scrollY: true,
+            scrollY: false,
             scrollX: true,
             keys: false,
             'bLengthChange': true,
@@ -2277,7 +2277,7 @@
 
 //===================================================END TABLE STOCK=========================================
 
-        function PopupForm(url) {
+                function PopupForm(url) {
             viewPage();
     var formDiv = $('<div/>');
     $.get(url)
@@ -2308,7 +2308,6 @@
         .done(function (response) {
             formDiv.html(response);
             PopupMat = formDiv.dialog({
-                //position: ['middle', 20],
                 autoOpen: true,
                 resizable: false,
                 title: "MATERIALES",
@@ -2337,7 +2336,6 @@
                     contentType: false,
                     cache: false,
                     processData: false,
-                    //data : $(form).serialize(),
                     success: function (data) {
                         if (data.success) {
                             PopupMat.dialog('close');
@@ -2371,7 +2369,6 @@
                     contentType: false,
                     cache: false,
                     processData: false,
-                    //data : $(form).serialize(),
                     success: function (data) {
                         if (data.success) {
                             Popup.dialog('close');
@@ -2396,8 +2393,6 @@
         function Delete(id) {
             Swal.fire({
                 title: '¿ Eliminar Restaurante ?',
-                //text: "You won't be able to revert this!",
-                //icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#4CAF50',
                 cancelButtonColor: '#DF2530',
@@ -2462,4 +2457,5 @@
         }
 
     </script>
+
 }

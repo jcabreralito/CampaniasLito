@@ -55,12 +55,12 @@
                     },
                     {
                         "data": "CampañaId", "render": function (data, type, row) {
-                            if (row.Generada === "SI") {
-                                return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
-                            }
-                            else {
+                            //if (row.Generada === "SI") {
+                            //    return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                            //}
+                            //else {
                                 return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("CreateCampArt", "Campañas")/" + data + "?cat=" + 'EQUITY' +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-calendar-check'></i></a>";
-                            }
+                            //}
                         },
                         "title": "Equity",
                         "className": "dt-body-center text-center",
@@ -69,12 +69,12 @@
                     },
                     {
                         "data": "CampañaId", "render": function (data, type, row) {
-                            if (row.Generada === "SI") {
-                                return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
-                            }
-                            else {
+                            //if (row.Generada === "SI") {
+                            //    return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                            //}
+                            //else {
                                 return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("CreateCampArt", "Campañas")/" + data + "?cat=" + 'FRANQUICIAS' +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-calendar-check'></i></a>";
-                            }
+                            //}
                         },
                         "title": "Franquicias",
                         "className": "dt-body-center text-center",
@@ -83,12 +83,12 @@
                     },
                     {
                         "data": "CampañaId", "render": function (data, type, row) {
-                            if (row.Generada === "SI") {
-                                return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
-                            }
-                            else {
+                            //if (row.Generada === "SI") {
+                            //    return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                            //}
+                            //else {
                                 return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("CreateCampArt", "Campañas")/" + data + "?cat=" + 'STOCK' +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-calendar-check'></i></a>";
-                            }
+                            //}
                         },
                         "title": "Stock",
                         "className": "dt-body-center text-center",
@@ -154,6 +154,21 @@
                         "searchable": false,
 
                     },
+                    {
+                        "data": "CampañaId", "render": function (data, type, row) {
+                            if (row.Generada === "SI") { // TODO: CAMBIAR A "NO"
+                                 //return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                                return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("ResumenProveedor", "Campañas")/" + data +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-shipping-fast'></i></a>";
+                            }
+                            else {
+                                return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("ResumenProveedor", "Campañas")/" + data +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-shipping-fast'></i></a>";
+                            }
+                        },
+                        "title": "Resumen",
+                        "className": "dt-body-center text-center",
+                        "orderable": false,
+                        "searchable": false,
+                    },
                 ],
                 //"serverSide": true,
                 "language": {
@@ -192,7 +207,7 @@
                 },
                 dom: 'lfrtip',
                 //autoWidth: false,
-                fixedColumns: true,
+                //fixedColumns: true,
                 fixedColumns: {
                     leftColumns: 1,
                 },
@@ -379,5 +394,6 @@
             })
 
         }
+
     </script>
 }

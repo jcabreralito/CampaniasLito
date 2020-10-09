@@ -9,56 +9,18 @@
 <link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<style>
-    .displayCard {
-        grid-template-columns: 1fr 1fr 1fr !important;
-    }
-
-    #unIdCalender::-webkit-scrollbar {
-        width: 12px; /* Tamaño del scroll en vertical */
-        /*margin-right: 10px;*/
-        /*height: 10px;  /*Tamaño del scroll en horizontal */
-        /*display: none; /* Ocultar scroll */
-    }
-
-    #unIdCalender::-webkit-scrollbar-thumb {
-        background: #999999;
-        border-radius: 10px;
-    }
-
-        #unIdCalender::-webkit-scrollbar-thumb:hover {
-            background: #b3b3b3;
-            box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
-        }
-
-        #unIdCalender::-webkit-scrollbar-thumb:active {
-            background-color: #ddd;
-        }
-
-    #unIdCalender::-webkit-scrollbar-track {
-        background: #000;
-        border-radius: 10px;
-    }
-
-        #unIdCalender::-webkit-scrollbar-track:hover,
-        #unIdCalender::-webkit-scrollbar-track:active {
-            background: #000;
-        }
-</style>
-
-<div style="margin-top: 40px">
+<div id="unIdCalender" style="margin-top: 30px">
     @foreach (var itemTotal in ViewBag.TotalProveedor)
     {
 
-        <table id="tableResumen" class="table" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>
-                        <h2 class="col-sm-6" style="background-color: #DF2530; color: #fff; border-radius: 10px 0 0 10px;">Proveedor : @itemTotal.Proveedor</h2>
-                        <h2 class="col-sm-6" style="background-color: #DF2530; color: #fff; border-radius: 0 10px 10px 0;">Cantidad : @itemTotal.TotalCantidad.ToString("N0")</h2>
-                    </th>
-                </tr>
-            </thead>
+        <h2 class="col-sm-6" style="background-color: #DF2530; color: #fff; border-radius: 10px 0 0 10px; margin-top: 0">Proveedor : @itemTotal.Proveedor</h2>
+        <h2 class="col-sm-6" style="background-color: #DF2530; color: #fff; border-radius: 0 10px 10px 0; margin-top: 0">
+            Cantidad : @itemTotal.TotalCantidad.ToString("N0")
+            <a class="btn btn-pilares float-right col-sm-1" rel="tooltip" title="Descargar Códigos" href="@Url.Action("ArtKFC", "Campañas", new { id = Model.FirstOrDefault().CampañaId, prov = @itemTotal.Proveedor })" target="_blank" style="margin-top: 1px; border-radius: 50px">
+                <i class="fas fa-download"></i>
+            </a>
+        </h2>
+        <table id="tableResumen" class="table" cellspacing="0" style="width: 99%">
             <tbody>
                 <tr class="displayCard">
                     @foreach (var item in Model.GroupBy(x => new { x.ArticuloKFC, x.Proveedor, x.Campaña, x.Codigo }).Where(p => p.Key.Proveedor == @itemTotal.Proveedor))
@@ -105,7 +67,7 @@
                                                 <div class="content">
                                                     <div class="main">
                                                         @*<p class="text-center"><h5 class="text-center" style="color:#132f52; font-weight:bold">@Html.DisplayFor(modelItem => item.Key.Proveedor)</h5></p>*@
-                                                        <h5 class="name">@Html.DisplayFor(modelItem => item.Key.ArticuloKFC)</h5>
+                                                        <h5 class="name text-center">@Html.DisplayFor(modelItem => item.Key.ArticuloKFC)</h5>
                                                         @*@foreach (var itemTipo in Model.Where(x => x.ArticuloKFC == item.ArticuloKFC && x.TipoTienda == "EQUITY").GroupBy(x => new { x.TipoTienda, x.ArticuloKFC }).Select(x => new TipoTiendaTotal() { ArticuloKFC = x.Key.ArticuloKFC, TipoTienda = x.Key.TipoTienda, TotalCantidadTipo = x.Sum(t => t.TotalCantidad) }))
                                                             {
                                                                 <h4 class="text-center">@itemTipo.TipoTienda : @itemTipo.TotalCantidadTipo</h4>
@@ -115,7 +77,10 @@
                                                         {
                                                             if (item.Key.ArticuloKFC.Equals(itemTipo.ArticuloKFC))
                                                             {
-                                                                <h4 class="text-center"> @itemTipo.EquityFranquicia : @itemTipo.TotalCantidad</h4>
+                                                                if (itemTipo.TotalCantidad > 0)
+                                                                {
+                                                                    <h4 style="font-weight: bold"> @itemTipo.EquityFranquicia : @itemTipo.TotalCantidad</h4>
+                                                                }
                                                             }
 
                                                         }
@@ -135,7 +100,7 @@
                                                     <div class="main">
                                                         <h4 class="text-center">Material</h4>
                                                         <p class="text-center">Proveedor: @Html.DisplayFor(modelItem => item.Key.Proveedor)</p>
-                                                        <p class="text-center">Material: @Html.DisplayFor(modelItem => item.Key.ArticuloKFC)</p>
+                                                        <p class="text-center">@Html.DisplayFor(modelItem => item.Key.ArticuloKFC)</p>
                                                         <p class="text-center">Codigo: @Html.DisplayFor(modelItem => item.Key.Codigo)</p>
                                                         @foreach (var itemMaterial in ViewBag.TotalMaterial)
                                                         {
@@ -174,7 +139,6 @@
         </table>
     }
 </div>
-
 
 <script src="~/Scripts/jquery-3.5.1.min.js"></script>
 <script src="~/Content/vendor/DataTables/dataTables.min.js"></script>

@@ -19,6 +19,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="~/Content/LoginCSS/Login.css" rel="stylesheet" />
 
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
+
     <title>Lito - @ViewBag.Title </title>
 </head>
 <body>
@@ -56,6 +59,16 @@
                     <button class="btn waves-effect waves-light" type="submit" name="action">Iniciar sesión</button>
                 </div>
             }
+
+            <div class="row">
+                <div align="center">
+                    <a href="#" onclick="PopupForm('@Url.Action("ForgotPassword","Account")')">
+                        ¿Olvidaste tu Password?
+                    </a>
+                    @*@Html.ActionLink("¿Olvidaste tu Password?", "ForgotPassword", "Account", new { }, new { style = "font-size:14px; list-style: none;" })*@
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -68,6 +81,71 @@
 
     <script src="~/Scripts/jquery-3.5.1.js"></script>
     <script src="~/Scripts/materialize/materialize.js"></script>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/notify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+
+    <script>
+        var Popup, dataTable;
+
+        function PopupForm(url) {
+            //viewPage();
+            var formDiv = $('<div />');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: 'REESTABLECER PASSWORD',
+                        width: 550,
+                        modal: true,
+                        closeOnEscape: false,
+                        closeText: "Cerrar",
+                        hide: { effect: "fade", duration: 550 },
+                        show: { effect: "fade", duration: 550 },
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                            //hidePages();
+                        }
+                    });
+                });
+        }
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.dialog('close');
+                            //dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "info",
+                                autoHide: false,
+                                //autoHideDelay: 5000,
+                            })
+
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+    </script>
+
 
 </body>
 </html>

@@ -25,7 +25,7 @@ namespace CampaniasLito.Models
         public string Apellidos { get; set; }
 
         [Required(ErrorMessage = "El Campo {0} es obligatorio")]
-        [Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Seleccionar un {0}")]
         [Display(Name = "Rol", Prompt = "[Seleccionar un Rol...]")]
         public int RolId { get; set; }
 
@@ -37,10 +37,18 @@ namespace CampaniasLito.Models
         [Display(Name = "Usuario")]
         public string NombreCompleto => string.Format("{0} {1}", Nombres, Apellidos);
 
+        [Required(ErrorMessage = "El Campo {0} es obligatorio")]
+        [Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
+        [Display(Name = "Empresa", Prompt = "[Seleccionar una Empresa...]")]
+        public int ProveedorId { get; set; }
+
         [JsonIgnore]
         public virtual Rol Rol { get; set; }
 
         [JsonIgnore]
         public virtual Compañia Compañia { get; set; }
+
+        [JsonIgnore]
+        public virtual Proveedor Proveedor { get; set; }
     }
 }

@@ -65,7 +65,7 @@
 
                 <i class="brand-logo2 fas fa-clipboard-check fa-3x"></i>
                 <a id="titulo" class="brand-logo" style="color: #fff !important">
-                    @ViewBag.Title EQUITY
+                    @ViewBag.Title
                 </a>
 
                 <ul class="right hide-on-med-and-down">
@@ -75,30 +75,30 @@
                         </a>
                     </li>
                     @*<li class="iMenu">
-                        <a id="materialesB" href="@Url.Action("Index", "Materiales")" class="@Session["restaurantesB"].ToString()" title="Materiales" onclick="viewPageIndex()">
-                            <i class="fas fa-barcode fa-2x"></i>
+                            <a id="materialesB" href="@Url.Action("Index", "Materiales")" class="@Session["restaurantesB"].ToString()" title="Materiales" onclick="viewPageIndex()">
+                                <i class="fas fa-barcode fa-2x"></i>
+                            </a>
+                        </li>*@
+                    <li class="iMenu">
+                        <a id="equityB" class="iconomenuLetra @Session["equityB"].ToString()" title="Reglas" onclick="mostrarEquity();">
+                            <i>RG</i>
                         </a>
-                    </li>*@
+                    </li>
                     <li class="iMenu">
                         <a id="reglasCatalogoB" class="@Session["reglasCatalogoB"].ToString()" title="Características" onclick="mostrarCat();">
                             <i class="fas fa-clipboard-list fa-2x"></i>
                         </a>
                     </li>
-                    <li class="iMenu">
-                        <a id="equityB" class="iconomenuLetra @Session["equityB"].ToString()" title="Equity" onclick="mostrarEquity();">
-                            <i>EQ</i>
-                        </a>
-                    </li>
-                    <li class="iMenu">
-                        <a id="franquiciasB" class="iconomenuLetra @Session["franquiciasB"].ToString()" title="Franquicias" onclick="mostrarFranquicias();">
-                            <i>FQ</i>
-                        </a>
-                    </li>
                     @*<li class="iMenu">
-            <a id="stockB" class="iconomenuLetra @Session["stockB"].ToString()" title="Stock" onclick="mostrarStock();">
-                <i>STK</i>
-            </a>
-        </li>*@
+                            <a id="franquiciasB" class="iconomenuLetra @Session["franquiciasB"].ToString()" title="Franquicias" onclick="mostrarFranquicias();">
+                                <i>FQ</i>
+                            </a>
+                        </li>*@
+                    @*<li class="iMenu">
+                            <a id="stockB" class="iconomenuLetra @Session["stockB"].ToString()" title="Stock" onclick="mostrarStock();">
+                                <i>STK</i>
+                            </a>
+                        </li>*@
                     <li style="margin: 0 15px">
                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                         {
@@ -135,44 +135,44 @@
                 </a>
             </li>
             @*<li>
-            <a id="materialesB" href="@Url.Action("Index", "Materiales")" class="iconomenu @Session["materialesB"].ToString()" onclick="viewPageIndex()">
-                Materiales
-                <i class="fas fa-barcode"></i>
-            </a>
-        </li>
-        <li>
-            <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="iconomenu @Session["campañasB"].ToString()" onclick="viewPageIndex()">
-                Campañas
-                <i class="fas fa-calendar-alt"></i>
-            </a>
-        </li>*@
+                    <a id="materialesB" href="@Url.Action("Index", "Materiales")" class="iconomenu @Session["materialesB"].ToString()" onclick="viewPageIndex()">
+                        Materiales
+                        <i class="fas fa-barcode"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="iconomenu @Session["campañasB"].ToString()" onclick="viewPageIndex()">
+                        Campañas
+                        <i class="fas fa-calendar-alt"></i>
+                    </a>
+                </li>*@
+            <li>
+                <a id="equityB" class="iconomenu @Session["equityB"].ToString()" onclick="mostrarEquity();">
+                    Reglas
+                </a>
+            </li>
             <li>
                 <a id="reglasCatalogoB" class="iconomenu @Session["reglasCatalogoB"].ToString()" onclick="mostrarCat();">
                     Características
                     <i class="fas fa-clipboard-list"></i>
                 </a>
             </li>
-            <li>
-                <a id="equityB" class="iconomenu @Session["equityB"].ToString()" onclick="mostrarEquity();">
-                    Equity
-                </a>
-            </li>
-            <li>
-                <a id="franquiciasB" class="iconomenu @Session["franquiciasB"].ToString()" onclick="mostrarFranquicias();">
-                    Franquicias
-                </a>
-            </li>
             @*<li>
-            <a id="stockB" class="iconomenu @Session["stockB"].ToString()" onclick="mostrarStock();">
-                Stock
-            </a>
-        </li>*@
+                    <a id="franquiciasB" class="iconomenu @Session["franquiciasB"].ToString()" onclick="mostrarFranquicias();">
+                        Franquicias
+                    </a>
+                </li>*@
             @*<li>
-            <a id="caracteristicasB" class="iconomenu @Session["caracteristicasB"].ToString()" onclick="mostrarCaracteristicas();">
-                Características
-                <i class="fas fa-clipboard-check"></i>
-            </a>
-        </li>*@
+                    <a id="stockB" class="iconomenu @Session["stockB"].ToString()" onclick="mostrarStock();">
+                        Stock
+                    </a>
+                </li>*@
+            @*<li>
+                    <a id="caracteristicasB" class="iconomenu @Session["caracteristicasB"].ToString()" onclick="mostrarCaracteristicas();">
+                        Características
+                        <i class="fas fa-clipboard-check"></i>
+                    </a>
+                </li>*@
         </ul>
 
     </div>
@@ -205,25 +205,25 @@
     <script>
     function mostrarEquity() {
 
-        $("#titulo").text('@ViewBag.Title EQUITY');
-        $("#tituloJum").text('@ViewBag.Title EQUITY');
+        $("#titulo").text('@ViewBag.Title');
+        $("#tituloJum").text('@ViewBag.Title');
 
         $('#equityB').addClass('active');
-        $('#franquiciasB').removeClass('active');
+        //$('#franquiciasB').removeClass('active');
         $('#reglasCatalogoB').removeClass('active');
 
         dataTableReglaEQ.ajax.reload();
 
         document.getElementById('equity').style.display = 'block';
         document.getElementById('equity').style.visibility = 'visible';
-        document.getElementById('franquicias').style.display = 'none';
-        document.getElementById('franquicias').style.visibility = 'hidden';
+        //document.getElementById('franquicias').style.display = 'none';
+        //document.getElementById('franquicias').style.visibility = 'hidden';
         document.getElementById('catalogo').style.display = 'none';
         document.getElementById('catalogo').style.visibility = 'hidden';
 
         }
 
-    function mostrarFranquicias() {
+    @*function mostrarFranquicias() {
 
         $("#titulo").text('@ViewBag.Title FRANQUICIAS');
         $("#tituloJum").text('@ViewBag.Title FRANQUICIAS');
@@ -241,7 +241,7 @@
         document.getElementById('catalogo').style.display = 'none';
         document.getElementById('catalogo').style.visibility = 'hidden';
 
-        }
+        }*@
 
     function mostrarCat() {
 
@@ -249,15 +249,15 @@
         $("#tituloJum").text('@ViewBag.Title CARACTERÍSTICAS');
 
         $('#equityB').removeClass('active');
-        $('#franquiciasB').removeClass('active');
+        //$('#franquiciasB').removeClass('active');
         $('#reglasCatalogoB').addClass('active');
 
         dataTableReglaCat.ajax.reload();
 
         document.getElementById('equity').style.display = 'none';
         document.getElementById('equity').style.visibility = 'hidden';
-        document.getElementById('franquicias').style.display = 'none';
-        document.getElementById('franquicias').style.visibility = 'hidden';
+        //document.getElementById('franquicias').style.display = 'none';
+        //document.getElementById('franquicias').style.visibility = 'hidden';
         document.getElementById('catalogo').style.display = 'block';
         document.getElementById('catalogo').style.visibility = 'visible';
 

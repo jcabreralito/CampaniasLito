@@ -60,7 +60,7 @@ namespace CampaniasLito.Controllers
         }
         public ActionResult GetDataEquity()
         {
-            var reglasList = db.Database.SqlQuery<spReglas>("spGetReglasEquity").ToList();
+            var reglasList = db.Database.SqlQuery<spReglas>("spGetReglasAll").ToList();
 
             return Json(new { data = reglasList }, JsonRequestBehavior.AllowGet);
         }
@@ -350,6 +350,15 @@ namespace CampaniasLito.Controllers
 
                             break;
                         }
+                        else
+                        {
+                            selec = false;
+
+                            reglaCaracteristica.Seleccionado = selec;
+
+                            db.Entry(reglaCaracteristica).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
                     }
                     if (!selec)
                     {
@@ -623,6 +632,8 @@ namespace CampaniasLito.Controllers
         [HttpPost]
         public ActionResult DeleteCat(int id)
         {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
             var tiendaCaracteristica = db.TiendaCaracteristicas.Where(x => x.ReglaCatalogoId == id).ToList();
 
             db.TiendaCaracteristicas.RemoveRange(tiendaCaracteristica);
@@ -634,6 +645,9 @@ namespace CampaniasLito.Controllers
                 var response2 = DBHelper.SaveChanges(db);
                 if (response2.Succeeded)
                 {
+                    movimiento = "Eliminar Característica " + reglaCatalogo.ReglaCatalogoId + " " + reglaCatalogo.Nombre + " / " + reglaCatalogo.Categoria;
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                     return Json(new { success = true, message = "CARACTERÍSTICA ELIMINADA" }, JsonRequestBehavior.AllowGet);
                 }
                 else

@@ -332,7 +332,9 @@ namespace CampaniasLito.Controllers
                         var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
                         if (campaña.Count >= 1)
                         {
-                            MovementsHelper.AgregarArticuloPorTiendas(tienda);
+                            var campañaid = campaña.FirstOrDefault().CampañaId;
+
+                            MovementsHelper.AgregarArticuloPorTiendas(tienda, campañaid);
                         }
                     }
                 }
@@ -367,7 +369,9 @@ namespace CampaniasLito.Controllers
                         var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
                         if (campaña.Count >= 1)
                         {
-                            MovementsHelper.AgregarArticuloPorTiendas(tienda);
+                            var campañaid = campaña.FirstOrDefault().CampañaId;
+
+                            MovementsHelper.AgregarArticuloPorTiendas(tienda, campañaid);
                         }
                     }
                 }

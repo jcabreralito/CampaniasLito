@@ -205,18 +205,24 @@ namespace CampaniasLito.Controllers
         {
             Session["iconoTitulo"] = "fas fa-barcode";
             Session["homeB"] = string.Empty;
-            Session["equityB"] = "active";
-            Session["franquiciasB"] = string.Empty;
+            Session["rolesB"] = string.Empty;
+            Session["compañiasB"] = string.Empty;
+            Session["usuariosB"] = string.Empty;
+            Session["regionesB"] = string.Empty;
+            Session["ciudadesB"] = string.Empty;
             Session["restaurantesB"] = string.Empty;
-            Session["materialesB"] = string.Empty;
+            Session["familiasB"] = string.Empty;
+            Session["materialesB"] = "active";
             Session["campañasB"] = string.Empty;
+            Session["reglasB"] = string.Empty;
+            Session["bitacoraB"] = string.Empty;
 
             return View();
         }
 
         public ActionResult GetDataEquity()
         {
-            var equityList = db.Database.SqlQuery<spArticuloKFC>("spGetMaterialesEquity").ToList();
+            var equityList = db.Database.SqlQuery<spArticuloKFC>("spGetMaterialesAll").ToList();
             //var ciudadList = db.Ciudads.ToList();
 
             return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
@@ -250,6 +256,7 @@ namespace CampaniasLito.Controllers
 
                 ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre");
                 ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Descripcion");
+                ViewBag.EquityFranquicia = new SelectList(CombosHelper.GetTipoCampañasMat(true), "Nombre", "Nombre");
 
                 return PartialView(new ArticuloKFC());
             }
@@ -263,6 +270,7 @@ namespace CampaniasLito.Controllers
 
                 ViewBag.ProveedorId = new SelectList(CombosHelper.GetProveedores(true), "ProveedorId", "Nombre", proveedorId);
                 ViewBag.FamiliaId = new SelectList(CombosHelper.GetFamilias(true), "FamiliaId", "Descripcion", familiaId);
+                ViewBag.EquityFranquicia = new SelectList(CombosHelper.GetTipoCampañasMat(true), "Nombre", "Nombre", tipo);
 
                 return PartialView(db.ArticuloKFCs.Where(x => x.ArticuloKFCId == id).FirstOrDefault());
             }
@@ -292,7 +300,7 @@ namespace CampaniasLito.Controllers
                 {
                     CargarImagen(material);
 
-                    MovementsHelper.AgregarArticuloTiendas(material.ArticuloKFCId);
+                    MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId);
 
                     var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
 
@@ -315,7 +323,7 @@ namespace CampaniasLito.Controllers
             {
                 var tipo = Session["Categoria"].ToString();
 
-                material.EquityFranquicia = tipo;
+                //material.EquityFranquicia = tipo;
 
                 if (material.Observaciones == null)
                 {
@@ -328,26 +336,30 @@ namespace CampaniasLito.Controllers
                 {
                     CargarImagen(material);
 
+                    var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
+
+                    var id = material.ArticuloKFCId;
+
                     if (material.Activo == true)
                     {
-                        MovementsHelper.AgregarArticuloTiendas(material.ArticuloKFCId);
+                        if (tipo != material.EquityFranquicia)
+                        {
+                            EliminarMateriales(id, campaña);
+                        }
+
+                        MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId);
+
+                        if (campaña != null)
+                        {
+                            MovementsHelper.AgregarArticuloCampañas(material);
+                        }
+
                     }
                     else
                     {
-                        var id = material.ArticuloKFCId;
-
-                        db.Database.ExecuteSqlCommand(
-                        "spEliminarMaterialTiendas @ArticuloKFCId",
-                        new SqlParameter("@ArticuloKFCId", id));
-
+                        EliminarMateriales(id, campaña);
                     }
 
-                    var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
-
-                    if (campaña != null)
-                    {
-                        MovementsHelper.AgregarArticuloCampañas(material);
-                    }
 
                     movimiento = "Actualizar Material " + material.ArticuloKFCId + " " + material.Descripcion + " / " + material.EquityFranquicia;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
@@ -358,6 +370,21 @@ namespace CampaniasLito.Controllers
                 {
                     return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
                 }
+            }
+        }
+
+        private void EliminarMateriales(int id, Campaña campaña)
+        {
+            db.Database.ExecuteSqlCommand(
+            "spEliminarMaterialTiendas @ArticuloKFCId",
+            new SqlParameter("@ArticuloKFCId", id));
+
+            if (campaña != null)
+            {
+                db.Database.ExecuteSqlCommand(
+                "spEliminarMaterialCampaniasTiendas @ArticuloKFCId, @CampaniaId",
+                new SqlParameter("@ArticuloKFCId", id),
+                new SqlParameter("@CampaniaId", campaña.CampañaId));
             }
         }
 
@@ -786,11 +813,24 @@ namespace CampaniasLito.Controllers
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
-                db.Database.ExecuteSqlCommand(
-                "spEliminarMaterialTiendas @ArticuloKFCId",
-                new SqlParameter("@ArticuloKFCId", id));
+                var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
 
-                MovementsHelper.AgregarArticuloCampañas(material);
+                EliminarMateriales(id, campaña);
+
+                //db.Database.ExecuteSqlCommand(
+                //"spEliminarMaterialTiendas @ArticuloKFCId",
+                //new SqlParameter("@ArticuloKFCId", id));
+
+
+                //if (campaña != null)
+                //{
+                //    db.Database.ExecuteSqlCommand(
+                //    "spEliminarMaterialCampaniasTiendas @ArticuloKFCId, @CampaniaId",
+                //    new SqlParameter("@ArticuloKFCId", id),
+                //    new SqlParameter("@CampaniaId", campaña.CampañaId));
+                //}
+
+                //MovementsHelper.AgregarArticuloCampañas(material);
 
                 movimiento = "Eliminar Material " + material.ArticuloKFCId + " " + material.Descripcion + " / " + material.EquityFranquicia;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
