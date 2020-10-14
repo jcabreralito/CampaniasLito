@@ -34,6 +34,8 @@ namespace CampaniasLito.Controllers
             public string Valor { get; set; }
             public string Regla { get; set; }
             public bool Seleccionado { get; set; }
+            public bool IsTrue { get; set; }
+            public bool IsFalse { get; set; }
         }
 
 
@@ -312,24 +314,25 @@ namespace CampaniasLito.Controllers
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
             string[] reglaCaractersiticaId = fc.GetValues("ReglaCaractersiticaId");
-            string[] seleccionado = fc.GetValues("Seleccionado");
+            //string[] seleccionado = fc.GetValues("Seleccionado");
+            string[] isTrue = fc.GetValues("IsTrue");
+            string[] isFalse = fc.GetValues("IsFalse");
 
             var selec = false;
+            var si = false;
+            var no = false;
 
             for (var i = 0; i < reglaCaractersiticaId.Length; i++)
             {
                 ReglaCaracteristica reglaCaracteristica = db.ReglasCaracteristicas.Find(Convert.ToInt32(reglaCaractersiticaId[i]));
 
                 var reglaId = reglaCaracteristica.ReglaId;
-                //var articuloId = reglaCaracteristica.ArticuloKFCId;
 
-                //var campañas = db.Campañas.Where(ct => ct.Generada == "NO" && ct.CampañaId == campId).OrderBy(ct => ct.CampañaId).FirstOrDefault();
-
-                if (seleccionado == null)
+                if (isTrue == null)
                 {
                     selec = false;
 
-                    reglaCaracteristica.Seleccionado = selec;
+                    reglaCaracteristica.IsTrue = selec;
 
                     db.Entry(reglaCaracteristica).State = EntityState.Modified;
 
@@ -337,13 +340,13 @@ namespace CampaniasLito.Controllers
                 }
                 else
                 {
-                    for (var j = 0; j < seleccionado.Length; j++)
+                    for (var j = 0; j < isTrue.Length; j++)
                     {
-                        if (reglaCaractersiticaId[i] == seleccionado[j])
+                        if (reglaCaractersiticaId[i] == isTrue[j])
                         {
                             selec = true;
 
-                            reglaCaracteristica.Seleccionado = selec;
+                            reglaCaracteristica.IsTrue = selec;
 
                             db.Entry(reglaCaracteristica).State = EntityState.Modified;
                             db.SaveChanges();
@@ -354,7 +357,7 @@ namespace CampaniasLito.Controllers
                         {
                             selec = false;
 
-                            reglaCaracteristica.Seleccionado = selec;
+                            reglaCaracteristica.IsTrue = selec;
 
                             db.Entry(reglaCaracteristica).State = EntityState.Modified;
                             db.SaveChanges();
@@ -364,240 +367,58 @@ namespace CampaniasLito.Controllers
                     {
                         selec = false;
 
-                        reglaCaracteristica.Seleccionado = selec;
+                        reglaCaracteristica.IsTrue = selec;
 
                         db.Entry(reglaCaracteristica).State = EntityState.Modified;
                         db.SaveChanges();
                     }
                 }
-                //else
-                //{
-                //    campId = campañas.CampañaId;
-                //    CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == reglaId && ta.ArticuloKFCId == articuloId && ta.CampañaId == campId).FirstOrDefault();
+                if (isFalse == null)
+                {
+                    selec = false;
 
-                //    selec = false;
-                //    cantidad = 0;
-                //    if (campañaArticulo == null)
-                //    {
-                //        var codigo = 0;
+                    reglaCaracteristica.IsFalse = selec;
 
-                //        db.Database.ExecuteSqlCommand(
-                //        "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
-                //        new SqlParameter("@ArticuloKFCId", articuloId),
-                //        new SqlParameter("@TiendaId", reglaId),
-                //        new SqlParameter("@CampañaId", campId),
-                //        new SqlParameter("@Habilitado", false),
-                //        new SqlParameter("@Cantidad", cantidad),
-                //        new SqlParameter("@Codigo", codigo));
+                    db.Entry(reglaCaracteristica).State = EntityState.Modified;
 
-                //    }
-                //    else
-                //    {
-                //        if (seleccionado == null)
-                //        {
-                //            selec = false;
-                //            cantidad = 0;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    for (var j = 0; j < isFalse.Length; j++)
+                    {
+                        if (reglaCaractersiticaId[i] == isFalse[j])
+                        {
+                            selec = true;
 
-                //            reglaCaracteristica.Seleccionado = selec;
+                            reglaCaracteristica.IsFalse = selec;
 
-                //            db.Entry(reglaCaracteristica).State = EntityState.Modified;
+                            db.Entry(reglaCaracteristica).State = EntityState.Modified;
+                            db.SaveChanges();
 
-                //            campañaArticulo.Habilitado = selec;
-                //            campañaArticulo.Cantidad = cantidad;
+                            break;
+                        }
+                        else
+                        {
+                            selec = false;
 
-                //            db.Entry(campañaArticulo).State = EntityState.Modified;
+                            reglaCaracteristica.IsFalse = selec;
 
-                //            db.SaveChanges();
-                //        }
-                //        else
-                //        {
-                //            for (var j = 0; j < seleccionado.Length; j++)
-                //            {
-                //                if (reglaCaractersiticaId[i] == seleccionado[j])
-                //                {
-                //                    selec = true;
+                            db.Entry(reglaCaracteristica).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                    }
+                    if (!selec)
+                    {
+                        selec = false;
 
-                //                    reglaCaracteristica.Seleccionado = selec;
+                        reglaCaracteristica.IsFalse = selec;
 
-                //                    db.Entry(reglaCaracteristica).State = EntityState.Modified;
-
-                //                    var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
-
-                //                    cantidad = articuloCantidadDefault;
-                //                    campañaArticulo.Cantidad = cantidad;
-                //                    campañaArticulo.Habilitado = selec;
-
-                //                    db.Entry(campañaArticulo).State = EntityState.Modified;
-                //                    db.SaveChanges();
-
-                //                    break;
-                //                }
-                //            }
-                //            if (!selec)
-                //            {
-                //                selec = false;
-                //                cantidad = 0;
-
-                //                reglaCaracteristica.Seleccionado = selec;
-
-                //                db.Entry(reglaCaracteristica).State = EntityState.Modified;
-
-                //                campañaArticulo.Habilitado = selec;
-                //                campañaArticulo.Cantidad = cantidad;
-
-                //                db.Entry(campañaArticulo).State = EntityState.Modified;
-
-                //                db.SaveChanges();
-                //            }
-                //        }
-                //    }
-                //}
-
+                        db.Entry(reglaCaracteristica).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
             }
-
-            //else
-            //{
-            //    for (int c = 0; c < campañaId.Length; c++)
-            //    {
-            //        Campaña campañaArtId = db.Campañas.Find(Convert.ToInt32(campañaId[c]));
-            //        campId = campañaArtId.CampañaId;
-
-            //        for (var i = 0; i < reglaCaractersiticaId.Length; i++)
-            //        {
-            //            TiendaArticulo tiendaArticulo = db.TiendaArticulos.Find(Convert.ToInt32(reglaCaractersiticaId[i]));
-
-            //            var tiendaId = tiendaArticulo.TiendaId;
-            //            var articuloId = tiendaArticulo.ArticuloKFCId;
-
-            //            var campañas = db.Campañas.Where(ct => ct.Generada == "NO" && ct.CampañaId == campId).OrderBy(ct => ct.CampañaId).FirstOrDefault();
-
-            //            if (campañas == null)
-            //            {
-
-            //                if (seleccionado == null)
-            //                {
-            //                    selec = false;
-            //                    cantidad = 0;
-
-            //                    tiendaArticulo.Seleccionado = selec;
-
-            //                    db.Entry(tiendaArticulo).State = EntityState.Modified;
-
-            //                    db.SaveChanges();
-            //                }
-            //                else
-            //                {
-            //                    for (var j = 0; j < seleccionado.Length; j++)
-            //                    {
-            //                        if (reglaCaractersiticaId[i] == seleccionado[j])
-            //                        {
-            //                            selec = true;
-
-            //                            tiendaArticulo.Seleccionado = selec;
-
-            //                            db.Entry(tiendaArticulo).State = EntityState.Modified;
-            //                            db.SaveChanges();
-
-            //                            break;
-            //                        }
-            //                    }
-            //                    if (!selec)
-            //                    {
-            //                        selec = false;
-            //                        cantidad = 0;
-
-            //                        tiendaArticulo.Seleccionado = selec;
-
-            //                        db.Entry(tiendaArticulo).State = EntityState.Modified;
-            //                        db.SaveChanges();
-            //                    }
-            //                }
-            //            }
-            //            else
-            //            {
-            //                campId = campañas.CampañaId;
-            //                CampañaArticuloTMP campañaArticulo = db.CampañaArticuloTMPs.Where(ta => ta.TiendaId == tiendaId && ta.ArticuloKFCId == articuloId && ta.CampañaId == campId).FirstOrDefault();
-
-            //                selec = false;
-            //                cantidad = 0;
-            //                if (campañaArticulo == null)
-            //                {
-            //                    var codigo = 0;
-
-            //                    db.Database.ExecuteSqlCommand(
-            //                    "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
-            //                    new SqlParameter("@ArticuloKFCId", articuloId),
-            //                    new SqlParameter("@TiendaId", tiendaId),
-            //                    new SqlParameter("@CampañaId", campId),
-            //                    new SqlParameter("@Habilitado", false),
-            //                    new SqlParameter("@Cantidad", cantidad),
-            //                    new SqlParameter("@Codigo", codigo));
-
-            //                }
-            //                else
-            //                {
-            //                    if (seleccionado == null)
-            //                    {
-            //                        selec = false;
-            //                        cantidad = 0;
-
-            //                        tiendaArticulo.Seleccionado = selec;
-
-            //                        db.Entry(tiendaArticulo).State = EntityState.Modified;
-
-            //                        campañaArticulo.Habilitado = selec;
-            //                        campañaArticulo.Cantidad = cantidad;
-
-            //                        db.Entry(campañaArticulo).State = EntityState.Modified;
-
-            //                        db.SaveChanges();
-            //                    }
-            //                    else
-            //                    {
-            //                        for (var j = 0; j < seleccionado.Length; j++)
-            //                        {
-            //                            if (reglaCaractersiticaId[i] == seleccionado[j])
-            //                            {
-            //                                selec = true;
-
-            //                                tiendaArticulo.Seleccionado = selec;
-
-            //                                db.Entry(tiendaArticulo).State = EntityState.Modified;
-
-            //                                var articuloCantidadDefault = db.ArticuloKFCs.Where(a => a.ArticuloKFCId == campañaArticulo.ArticuloKFCId).FirstOrDefault().CantidadDefault;
-
-            //                                cantidad = articuloCantidadDefault;
-            //                                campañaArticulo.Cantidad = cantidad;
-            //                                campañaArticulo.Habilitado = selec;
-
-            //                                db.Entry(campañaArticulo).State = EntityState.Modified;
-            //                                db.SaveChanges();
-
-            //                                break;
-            //                            }
-            //                        }
-            //                        if (!selec)
-            //                        {
-            //                            selec = false;
-            //                            cantidad = 0;
-
-            //                            tiendaArticulo.Seleccionado = selec;
-
-            //                            db.Entry(tiendaArticulo).State = EntityState.Modified;
-
-            //                            campañaArticulo.Habilitado = selec;
-            //                            campañaArticulo.Cantidad = cantidad;
-
-            //                            db.Entry(campañaArticulo).State = EntityState.Modified;
-
-            //                            db.SaveChanges();
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
 
             movimiento = "Asignar Características";
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);

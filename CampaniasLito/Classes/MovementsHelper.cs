@@ -131,7 +131,7 @@ namespace CampaniasLito.Classes
             //    {
             //        selec = material.Seleccionado;
             //        cantidadDefault = material.CantidadDefault;
-                    
+
             //    }
 
             //    db.Database.ExecuteSqlCommand(
@@ -304,101 +304,115 @@ namespace CampaniasLito.Classes
 
         //}
 
-        public static Response AgregarArticuloPorTiendas(Tienda tienda, int campañaid)
+        public static Response AgregarArticuloPorTiendas(int tiendaId, int campañaid)
         {
-            var tiendaId = tienda.TiendaId;
-            var tipoTienda = tienda.EquityFranquicia;
+            db.Database.ExecuteSqlCommand(
+            "spAgregarPorTiendaYCampania @TiendaId, @CampañaId",
+            new SqlParameter("@TiendaId", tiendaId),
+            new SqlParameter("@CampañaId", campañaid));
 
-            var articulos = db.ArticuloKFCs.Where(cdt => cdt.EquityFranquicia == tipoTienda).ToList();
+            //var tiendaId = tienda.TiendaId;
+            //var tipoTienda = tienda.EquityFranquicia;
 
-            //var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
+            //var articulos = db.ArticuloKFCs.ToList();
 
-            //if (campaña.Count == 0)
+            //if (tipoTienda == "EQUITY")
             //{
-            //    return new Response { Succeeded = true, };
+            //    articulos = db.ArticuloKFCs.Where(x => x.EquityFranquicia != "FRANQUICIAS").ToList();
             //}
-            //else
+            //else if (tipoTienda == "FRANQUICIAS")
             //{
-            //foreach (var campa in campaña)
+            //    articulos = db.ArticuloKFCs.Where(x => x.EquityFranquicia != "EQUITY").ToList();
+            //}
+
+            ////var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
+
+            ////if (campaña.Count == 0)
+            ////{
+            ////    return new Response { Succeeded = true, };
+            ////}
+            ////else
+            ////{
+            ////foreach (var campa in campaña)
+            ////{
+            //foreach (var articulo in articulos)
             //{
-            foreach (var articulo in articulos)
-            {
 
-                var articulosCampaña = db.Database.SqlQuery<CampañaArticuloTMP>("spGetArticulosCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId",
-                new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-                new SqlParameter("@CampañaId", campañaid),
-                new SqlParameter("@TiendaId", tiendaId)).FirstOrDefault();
+            //    var articulosCampaña = db.Database.SqlQuery<CampañaArticuloTMP>("spGetArticulosCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId",
+            //    new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+            //    new SqlParameter("@CampañaId", campañaid),
+            //    new SqlParameter("@TiendaId", tiendaId)).FirstOrDefault();
 
 
-                if (articulosCampaña == null)
-                {
-                    var materialTienda = db.Database.SqlQuery<TiendaArticulo>("spGetMaterialCAmpanias @ArticuloKFCId, @TiendaId",
-                    new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-                    new SqlParameter("@TiendaId", tiendaId)).FirstOrDefault();
+            //    if (articulosCampaña == null)
+            //    {
+            //        var materialTienda = db.Database.SqlQuery<TiendaArticulo>("spGetMaterialCAmpanias @ArticuloKFCId, @TiendaId",
+            //        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+            //        new SqlParameter("@TiendaId", tiendaId)).FirstOrDefault();
 
-                    var habilitado = false;
+            //        var habilitado = false;
 
-                    if (materialTienda != null)
-                    {
-                        habilitado = materialTienda.Seleccionado;
-                    }
+            //        if (materialTienda != null)
+            //        {
+            //            habilitado = materialTienda.Seleccionado;
+            //        }
 
-                    var cantidad = 0;
+            //        var cantidad = 0;
 
-                    if (habilitado == true)
-                    {
-                        cantidad = articulo.CantidadDefault;
-                    }
+            //        if (habilitado == true)
+            //        {
+            //            cantidad = articulo.CantidadDefault;
+            //        }
 
-                    int codigo = 0;
+            //        int codigo = 0;
 
-                    if (articulo.Activo == true && articulo.Eliminado == false)
-                    {
-                        db.Database.ExecuteSqlCommand(
-                        "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
-                        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-                        new SqlParameter("@TiendaId", tiendaId),
-                        new SqlParameter("@CampañaId", campañaid),
-                        new SqlParameter("@Habilitado", habilitado),
-                        new SqlParameter("@Cantidad", cantidad),
-                        new SqlParameter("@Codigo", codigo));
-                    }
-                }
-                else
-                {
-                    if (tienda.Activo == false)
-                    {
-                        //int campId = campa.CampañaId;
+            //        if (articulo.Activo == true && articulo.Eliminado == false)
+            //        {
+            //            db.Database.ExecuteSqlCommand(
+            //            "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
+            //            new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+            //            new SqlParameter("@TiendaId", tiendaId),
+            //            new SqlParameter("@CampañaId", campañaid),
+            //            new SqlParameter("@Habilitado", habilitado),
+            //            new SqlParameter("@Cantidad", cantidad),
+            //            new SqlParameter("@Codigo", codigo));
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (tienda.Activo == false)
+            //        {
+            //            //int campId = campa.CampañaId;
 
-                        db.Database.ExecuteSqlCommand(
-                        "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
-                        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-                        new SqlParameter("@CampañaId", campañaid),
-                        new SqlParameter("@TiendaId", tiendaId));
-                    }
-                    else
-                    {
-                        if (articulosCampaña.Habilitado == true)
-                        {
+            //            db.Database.ExecuteSqlCommand(
+            //            "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
+            //            new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+            //            new SqlParameter("@CampañaId", campañaid),
+            //            new SqlParameter("@TiendaId", tiendaId));
+            //        }
+            //        else
+            //        {
+            //            if (articulosCampaña.Habilitado == true)
+            //            {
 
-                            if (articulo.CantidadDefault != articulosCampaña.Cantidad)
-                            {
-                                var cantidad = articulo.CantidadDefault;
+            //                if (articulo.CantidadDefault != articulosCampaña.Cantidad)
+            //                {
+            //                    var cantidad = articulo.CantidadDefault;
 
-                                db.Database.ExecuteSqlCommand(
-                               "spActualizarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId, @Cantidad",
-                                new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-                                new SqlParameter("@CampañaId", campañaid),
-                                new SqlParameter("@TiendaId", tiendaId),
-                                new SqlParameter("@Cantidad", cantidad));
+            //                    db.Database.ExecuteSqlCommand(
+            //                   "spActualizarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId, @Cantidad",
+            //                    new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+            //                    new SqlParameter("@CampañaId", campañaid),
+            //                    new SqlParameter("@TiendaId", tiendaId),
+            //                    new SqlParameter("@Cantidad", cantidad));
 
-                            }
-                        }
-                    }
-                }
-            }
+            //                }
+            //            }
+            //        }
             //    }
             //}
+            ////    }
+            ////}
 
             return new Response { Succeeded = true, };
 
@@ -6849,7 +6863,7 @@ namespace CampaniasLito.Classes
                     }
                 }
             }
-            if (tiendas.TipoId == 2 && tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tiendas.WCMedidaEspecial60_8x85cm == false && tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+            if (tiendas.TipoId == 2 && tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tiendas.WCMedidaEspecial60_8x85cm == false && tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
             {
                 var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 191 && cdt.TiendaId == tiendaId).FirstOrDefault();
 
@@ -6876,7 +6890,7 @@ namespace CampaniasLito.Classes
                 }
 
             }
-            if (tiendas.TipoId == 3 && tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tiendas.WCMedidaEspecial60_8x85cm == false && tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+            if (tiendas.TipoId == 3 && tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tiendas.WCMedidaEspecial60_8x85cm == false && tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
             {
                 var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 191 && cdt.TiendaId == tiendaId).FirstOrDefault();
 
@@ -7213,7 +7227,7 @@ namespace CampaniasLito.Classes
                     }
                 }
             }
-            if (tiendas.TipoId == 2 && tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tiendas.WCMedidaEspecial60_8x85cm == false && tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+            if (tiendas.TipoId == 2 && tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tiendas.WCMedidaEspecial60_8x85cm == false && tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
             {
                 var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 193 && cdt.TiendaId == tiendaId).FirstOrDefault();
 
@@ -7240,7 +7254,7 @@ namespace CampaniasLito.Classes
                 }
 
             }
-            if (tiendas.TipoId == 3 && tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tiendas.WCMedidaEspecial60_8x85cm == false && tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+            if (tiendas.TipoId == 3 && tiendas.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tiendas.WCMedidaEspecial60_8x85cm == false && tiendas.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
             {
                 var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 193 && cdt.TiendaId == tiendaId).FirstOrDefault();
 
@@ -7330,6 +7344,335 @@ namespace CampaniasLito.Classes
                 }
             }
 
+            if (tiendas.TipoId == 2 || tiendas.TipoId == 3)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 204 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 204).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 204),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tiendas.TipoId == 2 || tiendas.TipoId == 3)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 218 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 218).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 218),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            var primero = 0;
+
+            //if (tiendas.TipoId == 1 || tiendas.TipoId == 2 || tiendas.TipoId == 3 || tiendas.TipoId == 4) //223
+            //{
+            //    primero = 223;
+            //    AgregarTiendas(tiendaId, primero);
+            //}
+
+            if (tiendas.TerceraReceta == true && tiendas.Hamburgesas == true && tiendas.PanelALaCartaCaribe == true)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 224 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 224).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 224),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tiendas.TerceraReceta == true && tiendas.Arroz == true && tiendas.PanelComplementosHolding == true)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 229 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 229).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 229),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tiendas.TipoId == 2 || tiendas.TipoId == 3)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 234 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 234).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 234),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tiendas.TiendaId == 268 && tiendas.TelefonoPersonalizado == true) //245
+            {
+                primero = 245;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 334 && tiendas.TelefonoPersonalizado == true) //246
+            {
+                primero = 246;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 390 && tiendas.TelefonoPersonalizado == true || tiendas.TiendaId == 391 && tiendas.TelefonoPersonalizado == true) //247
+            {
+                primero = 247;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 286 && tiendas.TelefonoPersonalizado == true) //248
+            {
+                primero = 248;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 287 && tiendas.TelefonoPersonalizado == true) //249
+            {
+                primero = 249;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 288 && tiendas.TelefonoPersonalizado == true) //250
+            {
+                primero = 250;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 290 && tiendas.TelefonoPersonalizado == true) //251
+            {
+                primero = 251;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 291 && tiendas.TelefonoPersonalizado == true) //252
+            {
+                primero = 252;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 297 && tiendas.TelefonoPersonalizado == true || tiendas.TiendaId == 384 && tiendas.TelefonoPersonalizado == true) //253
+            {
+                primero = 253;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 299 && tiendas.TelefonoPersonalizado == true) //254
+            {
+                primero = 254;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 300 && tiendas.TelefonoPersonalizado == true) //255
+            {
+                primero = 255;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 304 && tiendas.TelefonoPersonalizado == true) //256
+            {
+                primero = 256;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 307 && tiendas.TelefonoPersonalizado == true) //257
+            {
+                primero = 257;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 308 && tiendas.TelefonoPersonalizado == true) //258
+            {
+                primero = 258;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 309 && tiendas.TelefonoPersonalizado == true) //259
+            {
+                primero = 259;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 310 && tiendas.TelefonoPersonalizado == true) //260
+            {
+                primero = 260;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 314 && tiendas.TelefonoPersonalizado == true) //261
+            {
+                primero = 261;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 319 && tiendas.TelefonoPersonalizado == true) //262
+            {
+                primero = 262;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 327 && tiendas.TelefonoPersonalizado == true) //263
+            {
+                primero = 263;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 328 && tiendas.TelefonoPersonalizado == true) //264
+            {
+                primero = 264;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 329 && tiendas.TelefonoPersonalizado == true) //265
+            {
+                primero = 265;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 335 && tiendas.TelefonoPersonalizado == true) //266
+            {
+                primero = 266;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 336 && tiendas.TelefonoPersonalizado == true) //267
+            {
+                primero = 267;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 337 && tiendas.TelefonoPersonalizado == true) //268
+            {
+                primero = 268;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 339 && tiendas.TelefonoPersonalizado == true) //269
+            {
+                primero = 269;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 343 && tiendas.TelefonoPersonalizado == true) //270
+            {
+                primero = 270;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 347 && tiendas.TelefonoPersonalizado == true) //271
+            {
+                primero = 271;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 349 && tiendas.TelefonoPersonalizado == true) //272
+            {
+                primero = 272;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 351 && tiendas.TelefonoPersonalizado == true) //273
+            {
+                primero = 273;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 356 && tiendas.TelefonoPersonalizado == true) //274
+            {
+                primero = 274;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 367 && tiendas.TelefonoPersonalizado == true) //275
+            {
+                primero = 275;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 368 && tiendas.TelefonoPersonalizado == true) //276
+            {
+                primero = 276;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 373 && tiendas.TelefonoPersonalizado == true || tiendas.TiendaId == 379 && tiendas.TelefonoPersonalizado == true || tiendas.TiendaId == 382 && tiendas.TelefonoPersonalizado == true) //277
+            {
+                primero = 277;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 374 && tiendas.TelefonoPersonalizado == true) //278
+            {
+                primero = 278;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 375 && tiendas.TelefonoPersonalizado == true || tiendas.TiendaId == 381 && tiendas.TelefonoPersonalizado == true) //279
+            {
+                primero = 279;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TiendaId == 394 && tiendas.TelefonoPersonalizado == true) //280
+            {
+                primero = 280;
+                AgregarTiendas(tiendaId, primero);
+            }
+
             if (tiendas.TerceraReceta == true && tiendas.Arroz == true && tiendas.PanelDeComplementosDigital == true)
             {
                 var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 286 && cdt.TiendaId == tiendaId).FirstOrDefault();
@@ -7382,6 +7725,82 @@ namespace CampaniasLito.Classes
                 //}
             }
 
+            if (tiendas.TerceraReceta == false && tiendas.Arroz == false && tiendas.PanelComplementosHoldingMR == true) //288
+            {
+                primero = 288;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TerceraReceta == false && tiendas.Autoexpress == true) //289
+            {
+                primero = 280;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TerceraReceta == true && tiendas.Arroz == true) //290
+            {
+                primero = 290;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.TerceraReceta == true && tiendas.Arroz == true && tiendas.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm) //291
+            {
+                primero = 291;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.Autoexpress == true && tiendas.Arroz == false) //292
+            {
+                primero = 292;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tiendas.Autoexpress == true && tiendas.Arroz == true && tiendas.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm) //293
+            {
+                primero = 293;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //294
+            {
+                primero = 294;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //295
+            {
+                primero = 295;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //296
+            {
+                primero = 296;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //297
+            {
+                primero = 297;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //298
+            {
+                primero = 298;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //299
+            {
+                primero = 299;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //300
+            {
+                primero = 300;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //301
+            {
+                primero = 301;
+                AgregarTiendas(tiendaId, primero);
+            }
+            if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true) //302
+            {
+                primero = 302;
+                AgregarTiendas(tiendaId, primero);
+            }
+
             if (tiendas.TipoId == 2 || tiendas.TipoId == 3)
             {
                 var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 304 && cdt.TiendaId == tiendaId).FirstOrDefault();
@@ -7409,6 +7828,38 @@ namespace CampaniasLito.Classes
                 }
             }
             if (tiendas.TipoId == 3 && tiendas.WCMedidaEspecial60_8x85cm == true)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 305 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 305).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 305),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+
+                        db.Database.ExecuteSqlCommand(
+                        "spEliminarArticuloPorTienda @TiendaId, @ArticuloKFCId",
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@ArticuloKFCId", 304));
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tiendas.TipoId == 2 && tiendas.WCMedidaEspecial60_8x85cm == true)
             {
                 var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 305 && cdt.TiendaId == tiendaId).FirstOrDefault();
 
@@ -7705,6 +8156,114 @@ namespace CampaniasLito.Classes
                         db.Database.ExecuteSqlCommand(
                         "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
                         new SqlParameter("@ArticuloKFCId", 310),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tiendas.Autoexpress == true && tiendas.TerceraReceta == true && tiendas.Arroz == true && tiendas.KeCono == true)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 310 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 310).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 310),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tiendas.TipoId == 1 || tiendas.TipoId == 2 || tiendas.TipoId == 3 || tiendas.TipoId == 4)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 315 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 315).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 315),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tiendas.TipoId == 1 || tiendas.TipoId == 2 || tiendas.TipoId == 3 || tiendas.TipoId == 4)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 316 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 316).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 316),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Seleccionado", true));
+                    }
+                    else
+                    {
+                        selec = true;
+
+                        tiendaArticulos.Seleccionado = selec;
+                        db.Entry(tiendaArticulos).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            if (tienda.TipoId == 2 && tienda.KREAMBALL == true || tienda.TipoId == 3 && tienda.KREAMBALL == true || tienda.TipoId == 1 && tienda.KREAMBALL == true || tienda.TipoId == 4 && tienda.KREAMBALL == true)
+            {
+                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 317 && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == 317).FirstOrDefault().Activo;
+
+                if (articuloActivo == true)
+                {
+                    if (tiendaArticulos == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                        new SqlParameter("@ArticuloKFCId", 317),
                         new SqlParameter("@TiendaId", tiendaId),
                         new SqlParameter("@Seleccionado", true));
                     }
@@ -8349,12 +8908,12 @@ namespace CampaniasLito.Classes
                 primero = 312;
                 AgregarTiendas(tiendaId, primero);
             }
-            if (tiendas.TipoId == 2 || tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true) //304
+            if (tiendas.TipoId == 2) //304
             {
                 primero = 304;
                 AgregarTiendas(tiendaId, primero);
             }
-            else if (tiendas.TipoId == 3 || tiendas.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true) //304
+            else if (tiendas.TipoId == 3) //304
             {
                 primero = 304;
                 AgregarTiendas(tiendaId, primero);
@@ -8452,10 +9011,20 @@ namespace CampaniasLito.Classes
 
         }
 
-        public static void AgregarMaterialesTiendaCampañaExiste(int articuloKFCId)
+        public static void AgregarMaterialesTiendaCampañaExiste(int articuloKFCId, int restauranteId)
         {
             var categoria = db.Database.SqlQuery<ArticuloKFC>("spGetMateriales @ArticuloKFCId",
-                new SqlParameter("@ArticuloKFCId", articuloKFCId)).FirstOrDefault().EquityFranquicia;
+                new SqlParameter("@ArticuloKFCId", 1)).FirstOrDefault().EquityFranquicia;
+
+            if (articuloKFCId != 0)
+            {
+                categoria = db.Database.SqlQuery<ArticuloKFC>("spGetMateriales @ArticuloKFCId",
+                    new SqlParameter("@ArticuloKFCId", articuloKFCId)).FirstOrDefault().EquityFranquicia;
+            }
+            else
+            {
+                categoria = db.Tiendas.Where(x => x.TiendaId == restauranteId).FirstOrDefault().EquityFranquicia;
+            }
 
             var restaurantes = db.Database.SqlQuery<Tienda>("spGetRestaurantes").ToList();
 
@@ -8472,12 +9041,35 @@ namespace CampaniasLito.Classes
 
             var selec = false;
 
-            var articulos = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloKFCId).ToList();
+            var articulos = db.ArticuloKFCs.Where(x => x.Activo == true).ToList();
 
-            //var reglas = db.Database.SqlQuery<spMaterialesReglas>("spGetMaterialesReglas @ArticuloKFCId",
-            //    new SqlParameter("@ArticuloKFCId", articuloKFCId)).ToList();
 
-            //var reglaMaterial = string.Join(",", reglas);
+
+            if (categoria == "EQUITY" || categoria == "STOCK")
+            {
+                articulos = db.ArticuloKFCs.Where(x => x.EquityFranquicia != "FRANQUICIAS" && x.Activo == true).ToList();
+            }
+            else if (categoria == "FRANQUICIAS")
+            {
+                articulos = db.ArticuloKFCs.Where(x => x.EquityFranquicia != "EQUITY" && x.Activo == true).ToList();
+            }
+
+
+            if (articuloKFCId != 0)
+            {
+                articulos = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloKFCId).ToList();
+            }
+
+            if (restauranteId != 0)
+            {
+                tiendas = restaurantes.Where(x => x.TiendaId == restauranteId).ToList();
+
+            }
+
+            var reglas = db.Database.SqlQuery<spMaterialesReglas>("spGetMaterialesReglas @ArticuloKFCId",
+                new SqlParameter("@ArticuloKFCId", articuloKFCId)).ToList();
+
+            var reglaMaterial = string.Join(",", reglas[0].Nombre);
 
             //foreach (var regla in reglas)
             //{
@@ -8492,14 +9084,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 4;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
 
                     }
@@ -8511,14 +9103,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 4;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
 
                     }
@@ -8530,14 +9122,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 4;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8548,11 +9140,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true)
                         {
-                            SiExisteMedidaEspecialAE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
 
                     }
@@ -8564,14 +9156,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 4;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
 
                     }
@@ -8583,14 +9175,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 4;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8601,14 +9193,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 4;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8619,14 +9211,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 4;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8637,14 +9229,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 4;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8655,14 +9247,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 13;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8673,14 +9265,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 13;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8691,14 +9283,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 13;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8709,11 +9301,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            SiExisteMedidaEspecialAE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8724,14 +9316,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 13;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8742,14 +9334,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 13;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8760,14 +9352,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 13;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8778,14 +9370,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 13;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8796,14 +9388,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 13;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8814,14 +9406,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 22;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8832,14 +9424,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 22;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8850,14 +9442,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 22;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8868,11 +9460,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true)
                         {
-                            SiExisteMedidaEspecialAE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8883,14 +9475,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 22;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8901,14 +9493,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 22;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8919,14 +9511,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 22;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8937,14 +9529,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 22;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8955,14 +9547,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 22;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8973,11 +9565,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -8988,14 +9580,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 33;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9006,14 +9598,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 33;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9024,14 +9616,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 33;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9042,14 +9634,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 33;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9060,11 +9652,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true)
                         {
-                            SiExisteMedidaEspecialAE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9075,14 +9667,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 33;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9093,14 +9685,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 33;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9111,14 +9703,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 33;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9129,14 +9721,14 @@ namespace CampaniasLito.Classes
                 //    {
                 //        if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                 //        {
-                //                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                 //                var articuloKFCIdPadre = 41;
                 //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                 //        }
                 //        else
                 //        {
-                //            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                 //        }
                 //    }
                 //}
@@ -9151,7 +9743,7 @@ namespace CampaniasLito.Classes
 
                 //            if (tiendaArticulos == null)
                 //            {
-                //                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                 //                var articuloKFCIdPadre = 41;
                 //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
@@ -9167,7 +9759,7 @@ namespace CampaniasLito.Classes
                 //        }
                 //        else
                 //        {
-                //            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                 //        }
                 //    }
                 //}
@@ -9182,7 +9774,7 @@ namespace CampaniasLito.Classes
 
                 //            if (tiendaArticulos == null)
                 //            {
-                //                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                 //                var articuloKFCIdPadre = 41;
                 //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
@@ -9198,7 +9790,7 @@ namespace CampaniasLito.Classes
                 //        }
                 //        else
                 //        {
-                //            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                 //        }
                 //    }
                 //}
@@ -9213,7 +9805,7 @@ namespace CampaniasLito.Classes
 
                 //            if (tiendaArticulos == null)
                 //            {
-                //                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                 //                var articuloKFCIdPadre = 41;
                 //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
@@ -9229,7 +9821,7 @@ namespace CampaniasLito.Classes
                 //        }
                 //        else
                 //        {
-                //            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                 //        }
                 //    }
                 //}
@@ -9240,11 +9832,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == false)
                         {
-                            SiExisteMedidaEspecialAE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9259,7 +9851,7 @@ namespace CampaniasLito.Classes
 
                 //            if (tiendaArticulos == null)
                 //            {
-                //                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                 //                var articuloKFCIdPadre = 41;
                 //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
@@ -9275,7 +9867,7 @@ namespace CampaniasLito.Classes
                 //        }
                 //        else
                 //        {
-                //            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                 //        }
                 //    }
                 //}
@@ -9286,14 +9878,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 41;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9308,7 +9900,7 @@ namespace CampaniasLito.Classes
 
                 //            if (tiendaArticulos == null)
                 //            {
-                //                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                 //                var articuloKFCIdPadre = 41;
                 //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
@@ -9324,7 +9916,7 @@ namespace CampaniasLito.Classes
                 //        }
                 //        else
                 //        {
-                //            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                 //        }
                 //    }
                 //}
@@ -9339,7 +9931,7 @@ namespace CampaniasLito.Classes
 
                 //            if (tiendaArticulos == null)
                 //            {
-                //                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                 //                var articuloKFCIdPadre = 41;
                 //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
@@ -9355,7 +9947,7 @@ namespace CampaniasLito.Classes
                 //        }
                 //        else
                 //        {
-                //            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                 //        }
                 //    }
                 //}
@@ -9366,14 +9958,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == false && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 50;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9384,14 +9976,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 50;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9402,14 +9994,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 50;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9420,14 +10012,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 50;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9438,11 +10030,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true)
                         {
-                            SiExisteMedidaEspecialAE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9453,14 +10045,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 50;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9471,14 +10063,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 50;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9489,14 +10081,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 50;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9507,14 +10099,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 50;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9525,11 +10117,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9540,14 +10132,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 59;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9558,14 +10150,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 59;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9576,14 +10168,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 59;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9594,11 +10186,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            SiExisteMedidaEspecialAE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9609,14 +10201,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 59;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9627,14 +10219,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 59;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9645,14 +10237,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 59;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9663,14 +10255,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 59;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9681,14 +10273,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 59;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9699,14 +10291,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 68;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9717,14 +10309,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 68;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9735,14 +10327,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 68;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9753,11 +10345,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            SiExisteMedidaEspecialAE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9768,14 +10360,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 68;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9786,14 +10378,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 68;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9804,14 +10396,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 68;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9822,14 +10414,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 68;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9840,14 +10432,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 68;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9858,11 +10450,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9873,11 +10465,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9888,11 +10480,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9903,11 +10495,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9918,11 +10510,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9933,11 +10525,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9948,11 +10540,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9963,11 +10555,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9978,11 +10570,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -9993,11 +10585,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10008,11 +10600,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10023,11 +10615,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10038,11 +10630,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10053,11 +10645,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10068,11 +10660,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10083,11 +10675,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10098,11 +10690,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10113,11 +10705,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10128,11 +10720,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10143,11 +10735,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10158,11 +10750,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_55_5X75_5CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10173,11 +10765,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.MenuBackLigth == true && tienda.MEDIDA_BACKLIGHT_59_5X79CM == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10188,11 +10780,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10203,11 +10795,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10218,11 +10810,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10233,11 +10825,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.CopeteAERemodelado == true && tienda.PET2Litros == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10248,11 +10840,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.CopeteAERemodelado == true && tienda.PET2Litros == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10263,11 +10855,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.CopeteAETradicional == true && tienda.PET2Litros == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10278,11 +10870,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.CopeteAETradicional == true && tienda.PET2Litros == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10293,11 +10885,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Postres == false && tienda.PET2Litros == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10308,11 +10900,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Postres == true && tienda.PET2Litros == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10323,11 +10915,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Postres == true && tienda.PET2Litros == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
 
@@ -10339,11 +10931,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 1 || tienda.TipoId == 3 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10354,11 +10946,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.DisplayDeBurbuja == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10369,11 +10961,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 1 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10384,11 +10976,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10399,11 +10991,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Arroz == true && tienda.Hamburgesas == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10414,11 +11006,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Arroz == false && tienda.Hamburgesas == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10429,11 +11021,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Arroz == false && tienda.Hamburgesas == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10444,11 +11036,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.AreaDeJuegos == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10459,11 +11051,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10474,11 +11066,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10489,11 +11081,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 1 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10504,11 +11096,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Delivery == true && tienda.TerceraReceta == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10517,13 +11109,27 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.Delivery == true)
+                        if (tienda.EquityFranquicia == "FRANQUICIAS")
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            if (tienda.Delivery == true && tienda.Telefono == true)
+                            {
+                                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                            }
+                            else
+                            {
+                                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            }
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            if (tienda.Delivery == true)
+                            {
+                                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                            }
+                            else
+                            {
+                                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            }
                         }
                     }
                 }
@@ -10534,11 +11140,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Delivery == true && tienda.TerceraReceta == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10549,11 +11155,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 1 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10564,11 +11170,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Hamburgesas == true && tienda.Ensalada == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10579,11 +11185,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Hamburgesas == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10594,11 +11200,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Hamburgesas == false && tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10609,11 +11215,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.PanelDeComplementosDigital == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10624,11 +11230,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Arroz == false && tienda.MedidaEspecialPanelDeComplementos == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10639,11 +11245,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.MedidaEspecialPanelDeComplementos == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10654,11 +11260,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Arroz == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10669,11 +11275,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Arroz == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10684,11 +11290,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.PanelDeInnovacion == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10699,11 +11305,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Delivery == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10714,11 +11320,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10729,11 +11335,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Delivery == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10744,11 +11350,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10759,14 +11365,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10777,14 +11383,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10795,11 +11401,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            SiExisteMedidaEspecialPRE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialPRE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10810,14 +11416,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10828,14 +11434,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10846,14 +11452,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10864,14 +11470,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10882,14 +11488,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10900,14 +11506,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10918,14 +11524,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 136;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10936,11 +11542,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10951,14 +11557,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10969,14 +11575,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -10987,14 +11593,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11005,14 +11611,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11023,11 +11629,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            SiExisteMedidaEspecialPRE(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialPRE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11038,14 +11644,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11056,14 +11662,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11074,14 +11680,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11092,14 +11698,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11110,14 +11716,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 149;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11128,11 +11734,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 1 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11143,25 +11749,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == true && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == true && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11172,25 +11778,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11201,25 +11807,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11230,25 +11836,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11259,25 +11865,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 161;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11288,19 +11894,19 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == true && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11311,25 +11917,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == false && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == false && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11340,25 +11946,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11369,25 +11975,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11398,25 +12004,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11427,25 +12033,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 167;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11456,19 +12062,19 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.TerceraReceta == false && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11479,25 +12085,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11508,25 +12114,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11537,25 +12143,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11566,25 +12172,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11595,25 +12201,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 173;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11624,19 +12230,19 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11647,25 +12253,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11676,25 +12282,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11705,25 +12311,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11734,25 +12340,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11763,25 +12369,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 179;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11790,21 +12396,21 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11815,25 +12421,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11844,25 +12450,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11873,25 +12479,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11902,25 +12508,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11931,25 +12537,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 185;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11958,21 +12564,21 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -11983,25 +12589,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12012,25 +12618,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12041,25 +12647,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12070,25 +12676,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12099,25 +12705,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 191;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12126,21 +12732,21 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12151,25 +12757,25 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 193;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 193;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12178,21 +12784,21 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
-                            SiExisteMedidaEspecialWC(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12203,11 +12809,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12221,11 +12827,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12236,11 +12842,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12251,11 +12857,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12266,11 +12872,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12281,11 +12887,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12296,11 +12902,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12311,11 +12917,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12326,11 +12932,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12341,11 +12947,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12356,11 +12962,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12371,11 +12977,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12386,29 +12992,29 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.CopeteAETradicional == true && tienda.PET2Litros == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
 
-                if (articulo.ArticuloKFCId == 207) //207
-                {
-                    foreach (var tienda in tiendas)
-                    {
-                        if (tienda.Postres == false && tienda.PET2Litros == false)
-                        {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
-                        }
-                        else
-                        {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
-                        }
-                    }
-                }
+                //if (articulo.ArticuloKFCId == 207) //207
+                //{
+                //    foreach (var tienda in tiendas)
+                //    {
+                //        if (tienda.Postres == false && tienda.PET2Litros == false)
+                //        {
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                //        }
+                //        else
+                //        {
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                //        }
+                //    }
+                //}
 
                 if (articulo.ArticuloKFCId == 208) //208
                 {
@@ -12416,11 +13022,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Postres == true && tienda.PET2Litros == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12431,11 +13037,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 1 || tienda.TipoId == 3 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12446,11 +13052,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.DisplayDeBurbuja == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12461,11 +13067,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 1 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12476,11 +13082,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12491,11 +13097,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Arroz == true && tienda.Hamburgesas == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12506,11 +13112,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Arroz == false && tienda.Hamburgesas == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12521,11 +13127,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Arroz == false && tienda.Hamburgesas == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12536,11 +13142,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.AreaDeJuegos == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12551,11 +13157,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12566,11 +13172,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12581,11 +13187,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 1 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12596,11 +13202,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Delivery == true && tienda.TerceraReceta == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12611,11 +13217,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Delivery == true && tienda.Telefono == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12626,11 +13232,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Delivery == true && tienda.TerceraReceta == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12641,11 +13247,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 1 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12656,11 +13262,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Hamburgesas == true && tienda.PanelALaCartaCaribe == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12671,11 +13277,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Hamburgesas == true && tienda.Ensalada == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12686,11 +13292,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Hamburgesas == true && tienda.Ensalada == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12701,11 +13307,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Hamburgesas == false && tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12716,11 +13322,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.PanelDeComplementosDigital == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12731,11 +13337,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.PanelComplementosHolding == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12746,11 +13352,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Arroz == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12761,11 +13367,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Arroz == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12776,11 +13382,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.PanelDeInnovacion == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12791,11 +13397,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12806,11 +13412,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12821,11 +13427,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12836,11 +13442,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12851,11 +13457,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 1 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12866,11 +13472,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == true || tienda.TipoId == 3 && tienda.TerceraReceta == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12881,11 +13487,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.TerceraReceta == false || tienda.TipoId == 3 && tienda.TerceraReceta == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12896,11 +13502,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12911,11 +13517,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12926,11 +13532,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12941,11 +13547,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12956,11 +13562,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12971,11 +13577,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 268 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -12986,11 +13592,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 334 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13001,11 +13607,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 390 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 391 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13016,11 +13622,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 286 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13031,11 +13637,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 287 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13046,11 +13652,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 288 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13061,11 +13667,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 290 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13076,11 +13682,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 291 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13091,11 +13697,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 297 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 384 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13106,11 +13712,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 299 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13121,11 +13727,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 300 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13136,11 +13742,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 304 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13151,11 +13757,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 307 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13166,11 +13772,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 308 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13181,11 +13787,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 309 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13196,11 +13802,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 310 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13211,11 +13817,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 314 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13226,11 +13832,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 319 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13241,11 +13847,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 327 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13256,11 +13862,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 328 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13271,11 +13877,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 329 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13286,11 +13892,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 335 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13301,11 +13907,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 336 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13316,11 +13922,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 337 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13331,11 +13937,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 339 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13346,11 +13952,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 343 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13361,11 +13967,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 347 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13376,11 +13982,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 349 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13391,11 +13997,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 351 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13406,11 +14012,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 356 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13421,11 +14027,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 367 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13436,11 +14042,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 368 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13451,11 +14057,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 373 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 379 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 382 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13466,11 +14072,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 374 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13481,11 +14087,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 375 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 381 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13495,11 +14101,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 394 && tienda.TelefonoPersonalizado == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13509,11 +14115,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 0)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13523,11 +14129,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 0)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13537,11 +14143,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 0)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13551,11 +14157,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 0)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13565,11 +14171,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TiendaId == 0)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13580,7 +14186,7 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.PanelDeComplementosDigital == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 124;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
@@ -13599,7 +14205,7 @@ namespace CampaniasLito.Classes
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13610,7 +14216,7 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.PanelDeComplementosDigital == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 228;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
@@ -13626,7 +14232,7 @@ namespace CampaniasLito.Classes
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13637,11 +14243,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Arroz == false && tienda.PanelComplementosHoldingMR == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13652,11 +14258,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == false && tienda.Autoexpress == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13667,11 +14273,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true)
                         {
-                            SiExisteMedidaEspecialZuaZua(tienda, selec, articuloKFCId);
+                            SiExisteMedidaEspecialZuaZua(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13682,14 +14288,14 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
 
                             var articuloKFCIdPadre = 290;
                             NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13700,11 +14306,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == false)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13715,11 +14321,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13730,11 +14336,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TerceraReceta == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13745,11 +14351,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13760,11 +14366,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13775,11 +14381,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13790,11 +14396,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13805,11 +14411,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13820,11 +14426,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13835,11 +14441,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13850,11 +14456,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13865,11 +14471,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13879,21 +14485,13 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
+                        if (tienda.TipoId == 2 || tienda.TipoId == 3)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
-                        }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
-                        {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
-                        }
-                        else
-                        {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13904,20 +14502,28 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
 
                         if (tienda.TipoId == 3 && tienda.WCMedidaEspecial60_8x85cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13928,19 +14534,27 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13951,19 +14565,27 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13974,19 +14596,27 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -13997,19 +14627,27 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                         if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 304;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -14020,11 +14658,15 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.Arroz == true && tienda.Postres == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                        }
+                        else if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.Arroz == true && tienda.KeCono == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -14035,11 +14677,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.Arroz == true && tienda.KeCono == true)
                         {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -14050,29 +14692,29 @@ namespace CampaniasLito.Classes
                 //    {
                 //        if (tienda.TipoId == 2 && tienda.KREAMBALL == true || tienda.TipoId == 3 && tienda.KREAMBALL == true || tienda.TipoId == 1 && tienda.KREAMBALL == true || tienda.TipoId == 4 && tienda.KREAMBALL == true)
                 //        {
-                //                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                 //        }
                 //        else
                 //        {
-                //            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                 //        }
                 //    }
                 //}
 
-                if (articulo.ArticuloKFCId == 313) //313
-                {
-                    foreach (var tienda in tiendas)
-                    {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true || tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
-                        {
-                                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
-                        }
-                        else
-                        {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
-                        }
-                    }
-                }
+                //if (articulo.ArticuloKFCId == 313) //313
+                //{
+                //    foreach (var tienda in tiendas)
+                //    {
+                //        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true || tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                //        {
+                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                //        }
+                //        else
+                //        {
+                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                //        }
+                //    }
+                //}
 
                 //if (articulo.ArticuloKFCId == 314) //314
                 //{
@@ -14095,27 +14737,20 @@ namespace CampaniasLito.Classes
                 //{
                 //    primero++;
                 //}
-                //if (articulo.ArticuloKFCId == 315) //315
-                //{
-                //    primero = 315;
-
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
-                //        {
-                //            AsignarMaterialF(primero, tienda.TiendaId);
-                //        }
-                //        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
-                //        {
-                //            AsignarMaterialF(primero, tienda.TiendaId);
-                //        }
-                //    }
-                //    break;
-                //}
-                //else
-                //{
-                //    primero++;
-                //}
+                if (articulo.ArticuloKFCId == 315) //315
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 1 || tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 4)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
 
                 if (articulo.ArticuloKFCId == 316) //316
                 {
@@ -14123,11 +14758,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 1 || tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 4)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -14138,11 +14773,11 @@ namespace CampaniasLito.Classes
                     {
                         if (tienda.TipoId == 2 && tienda.KREAMBALL == true || tienda.TipoId == 3 && tienda.KREAMBALL == true || tienda.TipoId == 1 && tienda.KREAMBALL == true || tienda.TipoId == 4 && tienda.KREAMBALL == true)
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, true);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
                         }
                         else
                         {
-                            AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, false);
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         }
                     }
                 }
@@ -14255,14 +14890,21 @@ namespace CampaniasLito.Classes
 
             if (tiendaArticulos == null)
             {
-                if (tienda.WCMedidaEspecial60_8x85cm == true ||
-                    tienda.WCNACIONAL67X100cm == true ||
-                    tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true ||
-                    tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true ||
-                    tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true ||
-                    tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
+                if (tienda.EquityFranquicia == "EQUITY" || tienda.EquityFranquicia == "STOCK")
                 {
-                    selecc = false;
+                    if (tienda.WCMedidaEspecial60_8x85cm == true ||
+                        tienda.WCNACIONAL67X100cm == true ||
+                        tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true ||
+                        tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true ||
+                        tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true ||
+                        tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
+                    {
+                        selecc = false;
+                    }
+                    else
+                    {
+                        selecc = true;
+                    }
                 }
                 else
                 {
@@ -14273,19 +14915,28 @@ namespace CampaniasLito.Classes
             }
             else
             {
-                if (tienda.WCMedidaEspecial60_8x85cm == true ||
-                    tienda.WCNACIONAL67X100cm == true ||
-                    tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true ||
-                    tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true ||
-                    tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true ||
-                    tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
+                if (tienda.EquityFranquicia == "EQUITY" || tienda.EquityFranquicia == "STOCK")
                 {
-                    selecc = false;
+                    if (tienda.WCMedidaEspecial60_8x85cm == true ||
+                        tienda.WCNACIONAL67X100cm == true ||
+                        tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true ||
+                        tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true ||
+                        tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true ||
+                        tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
+                    {
+                        selecc = false;
+                    }
+                    else
+                    {
+                        selecc = true;
+                    }
                 }
                 else
                 {
                     selecc = true;
                 }
+
+                AgregarNuevoMaterial(articuloKFCId, tienda.TiendaId, selecc);
 
                 tiendaArticulos.Seleccionado = selecc;
                 db.Entry(tiendaArticulos).State = EntityState.Modified;
@@ -20668,7 +21319,7 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
                             var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 179 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
@@ -20690,7 +21341,7 @@ namespace CampaniasLito.Classes
                             }
 
                         }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
                             var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 179 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
@@ -21024,7 +21675,7 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
                             var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 185 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
@@ -21046,7 +21697,7 @@ namespace CampaniasLito.Classes
                             }
 
                         }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
                             var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 185 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
@@ -21380,7 +22031,7 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
                             var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 191 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
@@ -21402,7 +22053,7 @@ namespace CampaniasLito.Classes
                             }
 
                         }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
                             var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 191 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
@@ -21492,7 +22143,7 @@ namespace CampaniasLito.Classes
                 {
                     foreach (var tienda in tiendas)
                     {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
                             var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 193 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
@@ -21513,7 +22164,7 @@ namespace CampaniasLito.Classes
                                 db.SaveChanges();
                             }
                         }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == false && tienda.WCMedidaEspecial60_8x85cm == false && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == false && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == false)
                         {
                             var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 193 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
 
@@ -21909,11 +22560,32 @@ namespace CampaniasLito.Classes
                                 db.SaveChanges();
                             }
                         }
+                        else if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.Arroz == true && tienda.KeCono == true)
+                        {
+                            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == 310 && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
+
+                            if (tiendaArticulos == null)
+                            {
+                                db.Database.ExecuteSqlCommand(
+                                "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+                                new SqlParameter("@ArticuloKFCId", 310),
+                                new SqlParameter("@TiendaId", tienda.TiendaId),
+                                new SqlParameter("@Seleccionado", true));
+                            }
+                            else
+                            {
+                                selec = true;
+
+                                tiendaArticulos.Seleccionado = selec;
+                                db.Entry(tiendaArticulos).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
                     }
                 }
             }
-
         }
+
 
         private static void AgregarArticulosTiendaCampañaExisteF(int articuloKFCId)
         {
@@ -22140,21 +22812,21 @@ namespace CampaniasLito.Classes
                     primero++;
                 }
 
-                if (articulo.ArticuloKFCId == primero) //207
-                {
-                    foreach (var tienda in tiendas)
-                    {
-                        if (tienda.Postres == false && tienda.PET2Litros == false)
-                        {
-                            AsignarMaterialF(primero, tienda.TiendaId);
-                        }
-                    }
-                    break;
-                }
-                else
-                {
-                    primero++;
-                }
+                //if (articulo.ArticuloKFCId == primero) //207
+                //{
+                //    foreach (var tienda in tiendas)
+                //    {
+                //        if (tienda.Postres == false && tienda.PET2Litros == false)
+                //        {
+                //            AsignarMaterialF(primero, tienda.TiendaId);
+                //        }
+                //    }
+                //    break;
+                //}
+                //else
+                //{
+                //    primero++;
+                //}
 
                 if (articulo.ArticuloKFCId == primero) //208
                 {
@@ -23777,27 +24449,27 @@ namespace CampaniasLito.Classes
                 {
                     primero++;
                 }
-                if (articulo.ArticuloKFCId == 313) //313
-                {
-                    primero = 313;
+                //if (articulo.ArticuloKFCId == 313) //313
+                //{
+                //    primero = 313;
 
-                    foreach (var tienda in tiendas)
-                    {
-                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
-                        {
-                            AsignarMaterialF(primero, tienda.TiendaId);
-                        }
-                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
-                        {
-                            AsignarMaterialF(primero, tienda.TiendaId);
-                        }
-                    }
-                    break;
-                }
-                else
-                {
-                    primero++;
-                }
+                //    foreach (var tienda in tiendas)
+                //    {
+                //        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                //        {
+                //            AsignarMaterialF(primero, tienda.TiendaId);
+                //        }
+                //        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                //        {
+                //            AsignarMaterialF(primero, tienda.TiendaId);
+                //        }
+                //    }
+                //    break;
+                //}
+                //else
+                //{
+                //    primero++;
+                //}
                 //if (articulo.ArticuloKFCId == 314) //314
                 //{
                 //    primero = 314;
@@ -23819,48 +24491,40 @@ namespace CampaniasLito.Classes
                 //{
                 //    primero++;
                 //}
-                //if (articulo.ArticuloKFCId == 315) //315
-                //{
-                //    primero = 315;
+                if (articulo.ArticuloKFCId == 315) //315
+                {
+                    primero = 315;
 
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
-                //        {
-                //            AsignarMaterialF(primero, tienda.TiendaId);
-                //        }
-                //        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
-                //        {
-                //            AsignarMaterialF(primero, tienda.TiendaId);
-                //        }
-                //    }
-                //    break;
-                //}
-                //else
-                //{
-                //    primero++;
-                //}
-                //if (articulo.ArticuloKFCId == 316) //316
-                //{
-                //    primero = 316;
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 1 || tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 4)
+                        {
+                            AsignarMaterialF(primero, tienda.TiendaId);
+                        }
+                    }
+                    break;
+                }
+                else
+                {
+                    primero++;
+                }
+                if (articulo.ArticuloKFCId == 316) //316
+                {
+                    primero = 316;
 
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
-                //        {
-                //            AsignarMaterialF(primero, tienda.TiendaId);
-                //        }
-                //        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
-                //        {
-                //            AsignarMaterialF(primero, tienda.TiendaId);
-                //        }
-                //    }
-                //    break;
-                //}
-                //else
-                //{
-                //    primero++;
-                //}
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 1 || tienda.TipoId == 2 || tienda.TipoId == 3 || tienda.TipoId == 4)
+                        {
+                            AsignarMaterialF(primero, tienda.TiendaId);
+                        }
+                    }
+                    break;
+                }
+                else
+                {
+                    primero++;
+                }
                 if (articulo.ArticuloKFCId == 317) //317
                 {
                     primero = 317;
@@ -23915,138 +24579,145 @@ namespace CampaniasLito.Classes
             }
         }
 
-        public static Response AgregarArticuloCampañas(ArticuloKFC articuloKFC)
+        public static Response AgregarArticuloCampañas(ArticuloKFC articuloKFC, int campañaid)
         {
-            var articuloKFCId = articuloKFC.ArticuloKFCId;
 
-            var categorias = db.Database.SqlQuery<ArticuloKFC>("spGetMateriales @ArticuloKFCId",
-                new SqlParameter("@ArticuloKFCId", articuloKFCId)).FirstOrDefault();
-
-            var tipoArticulo = string.Empty;
-
-            if (categorias == null)
-            {
-                tipoArticulo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloKFCId).FirstOrDefault().EquityFranquicia;
-            }
-            else
-            {
-                tipoArticulo = categorias.EquityFranquicia;
-            }
-
-            var tiendas = db.Tiendas.Where(cdt => cdt.Activo == true).ToList();
-
-            if (tipoArticulo == "EQUITY")
-            {
-                tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia != "FRANQUICIAS" && cdt.Activo == true).ToList();
-            }
-            else if (tipoArticulo == "FRANQUICIAS")
-            {
-                tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == "FRANQUICIAS" && cdt.Activo == true).ToList();
-            }
-
-            var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
-
-            if (campaña.Count == 0)
-            {
-                return new Response { Succeeded = true, };
-            }
-            else
-            {
-                foreach (var campa in campaña)
-                {
-                    foreach (var tienda in tiendas)
-                    {
-                        //var articulosCampaña = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaId == campa.CampañaId).FirstOrDefault();
-
-                        var articulosCampaña = db.Database.SqlQuery<CampañaArticuloTMP>("spGetArticulosCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId",
-                        new SqlParameter("@ArticuloKFCId", articuloKFCId),
-                        new SqlParameter("@CampañaId", campa.CampañaId),
-                        new SqlParameter("@TiendaId", tienda.TiendaId)).FirstOrDefault();
+            db.Database.ExecuteSqlCommand(
+            "spAgregarPorMaterialYCampania @ArticuloKFCId, @CampañaId",
+            new SqlParameter("@ArticuloKFCId", articuloKFC.ArticuloKFCId),
+            new SqlParameter("@CampañaId", campañaid));
 
 
-                        if (articulosCampaña == null)
-                        {
-                            var materialTienda = db.Database.SqlQuery<TiendaArticulo>("spGetMaterialCAmpanias @ArticuloKFCId, @TiendaId",
-                            new SqlParameter("@ArticuloKFCId", articuloKFCId),
-                            new SqlParameter("@TiendaId", tienda.TiendaId)).FirstOrDefault();
+            //var articuloKFCId = articuloKFC.ArticuloKFCId;
+
+            //var categorias = db.Database.SqlQuery<ArticuloKFC>("spGetMateriales @ArticuloKFCId",
+            //    new SqlParameter("@ArticuloKFCId", articuloKFCId)).FirstOrDefault();
+
+            //var tipoArticulo = string.Empty;
+
+            //if (categorias == null)
+            //{
+            //    tipoArticulo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloKFCId).FirstOrDefault().EquityFranquicia;
+            //}
+            //else
+            //{
+            //    tipoArticulo = categorias.EquityFranquicia;
+            //}
+
+            //var tiendas = db.Tiendas.Where(cdt => cdt.Activo == true).ToList();
+
+            //if (tipoArticulo == "EQUITY")
+            //{
+            //    tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia != "FRANQUICIAS" && cdt.Activo == true).ToList();
+            //}
+            //else if (tipoArticulo == "FRANQUICIAS")
+            //{
+            //    tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == "FRANQUICIAS" && cdt.Activo == true).ToList();
+            //}
+
+            //var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
+
+            //if (campaña.Count == 0)
+            //{
+            //    return new Response { Succeeded = true, };
+            //}
+            //else
+            //{
+            //    foreach (var campa in campaña)
+            //    {
+            //        foreach (var tienda in tiendas)
+            //        {
+            //            //var articulosCampaña = db.CampañaArticuloTMPs.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId && cdt.CampañaId == campa.CampañaId).FirstOrDefault();
+
+            //            var articulosCampaña = db.Database.SqlQuery<CampañaArticuloTMP>("spGetArticulosCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId",
+            //            new SqlParameter("@ArticuloKFCId", articuloKFCId),
+            //            new SqlParameter("@CampañaId", campa.CampañaId),
+            //            new SqlParameter("@TiendaId", tienda.TiendaId)).FirstOrDefault();
 
 
-                            var habilitado = false;
+            //            if (articulosCampaña == null)
+            //            {
+            //                var materialTienda = db.Database.SqlQuery<TiendaArticulo>("spGetMaterialCAmpanias @ArticuloKFCId, @TiendaId",
+            //                new SqlParameter("@ArticuloKFCId", articuloKFCId),
+            //                new SqlParameter("@TiendaId", tienda.TiendaId)).FirstOrDefault();
 
-                            if (materialTienda == null)
-                            {
-                                habilitado = false;
-                            }
-                            else
-                            {
-                                habilitado = materialTienda.Seleccionado;
-                            }
 
-                            var cantidad = 0;
+            //                var habilitado = false;
 
-                            if (habilitado == true)
-                            {
-                                cantidad = articuloKFC.CantidadDefault;
-                            }
+            //                if (materialTienda == null)
+            //                {
+            //                    habilitado = false;
+            //                }
+            //                else
+            //                {
+            //                    habilitado = materialTienda.Seleccionado;
+            //                }
 
-                            int codigo = 0;
+            //                var cantidad = 0;
 
-                            db.Database.ExecuteSqlCommand(
-                            "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
-                            new SqlParameter("@ArticuloKFCId", articuloKFCId),
-                            new SqlParameter("@TiendaId", tienda.TiendaId),
-                            new SqlParameter("@CampañaId", campa.CampañaId),
-                            new SqlParameter("@Habilitado", habilitado),
-                            new SqlParameter("@Cantidad", cantidad),
-                            new SqlParameter("@Codigo", codigo));
-                        }
-                        else
-                        {
-                            if (articuloKFC.Activo == false)
-                            {
-                                int campId = campa.CampañaId;
-                                int tiendId = tienda.TiendaId;
+            //                if (habilitado == true)
+            //                {
+            //                    cantidad = articuloKFC.CantidadDefault;
+            //                }
 
-                                db.Database.ExecuteSqlCommand(
-                                "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
-                                new SqlParameter("@ArticuloKFCId", articuloKFCId),
-                                new SqlParameter("@CampañaId", campId),
-                                new SqlParameter("@TiendaId", tiendId));
-                            }
-                            else if (articuloKFC.Eliminado == true)
-                            {
-                                int campId = campa.CampañaId;
-                                int tiendId = tienda.TiendaId;
+            //                int codigo = 0;
 
-                                db.Database.ExecuteSqlCommand(
-                                "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
-                                new SqlParameter("@ArticuloKFCId", articuloKFCId),
-                                new SqlParameter("@CampañaId", campId),
-                                new SqlParameter("@TiendaId", tiendId));
-                            }
-                            else
-                            {
-                                if (articulosCampaña.Habilitado == true)
-                                {
+            //                db.Database.ExecuteSqlCommand(
+            //                "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
+            //                new SqlParameter("@ArticuloKFCId", articuloKFCId),
+            //                new SqlParameter("@TiendaId", tienda.TiendaId),
+            //                new SqlParameter("@CampañaId", campa.CampañaId),
+            //                new SqlParameter("@Habilitado", habilitado),
+            //                new SqlParameter("@Cantidad", cantidad),
+            //                new SqlParameter("@Codigo", codigo));
+            //            }
+            //            else
+            //            {
+            //                if (articuloKFC.Activo == false)
+            //                {
+            //                    int campId = campa.CampañaId;
+            //                    int tiendId = tienda.TiendaId;
 
-                                    if (articuloKFC.CantidadDefault != articulosCampaña.Cantidad)
-                                    {
-                                        var cantidad = articuloKFC.CantidadDefault;
+            //                    db.Database.ExecuteSqlCommand(
+            //                    "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
+            //                    new SqlParameter("@ArticuloKFCId", articuloKFCId),
+            //                    new SqlParameter("@CampañaId", campId),
+            //                    new SqlParameter("@TiendaId", tiendId));
+            //                }
+            //                else if (articuloKFC.Eliminado == true)
+            //                {
+            //                    int campId = campa.CampañaId;
+            //                    int tiendId = tienda.TiendaId;
 
-                                        db.Database.ExecuteSqlCommand(
-                                       "spActualizarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId, @Cantidad",
-                                        new SqlParameter("@ArticuloKFCId", articuloKFCId),
-                                        new SqlParameter("@CampañaId", campa.CampañaId),
-                                        new SqlParameter("@TiendaId", tienda.TiendaId),
-                                        new SqlParameter("@Cantidad", cantidad));
+            //                    db.Database.ExecuteSqlCommand(
+            //                    "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
+            //                    new SqlParameter("@ArticuloKFCId", articuloKFCId),
+            //                    new SqlParameter("@CampañaId", campId),
+            //                    new SqlParameter("@TiendaId", tiendId));
+            //                }
+            //                else
+            //                {
+            //                    if (articulosCampaña.Habilitado == true)
+            //                    {
 
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //                        if (articuloKFC.CantidadDefault != articulosCampaña.Cantidad)
+            //                        {
+            //                            var cantidad = articuloKFC.CantidadDefault;
+
+            //                            db.Database.ExecuteSqlCommand(
+            //                           "spActualizarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId, @Cantidad",
+            //                            new SqlParameter("@ArticuloKFCId", articuloKFCId),
+            //                            new SqlParameter("@CampañaId", campa.CampañaId),
+            //                            new SqlParameter("@TiendaId", tienda.TiendaId),
+            //                            new SqlParameter("@Cantidad", cantidad));
+
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             return new Response { Succeeded = true, };
         }
@@ -24210,39 +24881,53 @@ namespace CampaniasLito.Classes
         public static Response AgregarTiendaArticulos(int tiendaId)
         {
             var tipoTienda = db.Tiendas.Where(a => a.TiendaId == tiendaId).FirstOrDefault().EquityFranquicia;
+            var materialId = 0;
 
             var tiendas = db.Tiendas.Where(x => x.TiendaId == tiendaId).FirstOrDefault();
 
-            if (tipoTienda == "STOCK")
+            var articulos = db.ArticuloKFCs.ToList();
+
+            if (tipoTienda == "EQUITY" || tipoTienda == "STOCK")
             {
-                tipoTienda = "EQUITY";
+                articulos = db.ArticuloKFCs.Where(x => x.EquityFranquicia != "FRANQUICIAS").ToList();
             }
+            else if (tipoTienda == "FRANQUICIAS")
+            {
+                articulos = db.ArticuloKFCs.Where(x => x.EquityFranquicia != "EQUITY").ToList();
+            }
+
+            //if (tipoTienda == "STOCK")
+            //{
+            //    tipoTienda = "EQUITY";
+            //}
 
             //var articulos = db.ArticuloKFCs.Where(cdt => cdt.EquityFranquicia == tipoTienda).ToList();
 
-            var articulos = db.Database.SqlQuery<ArticuloKFC>("spGetMaterialesTodos @Categoria",
-                new SqlParameter("@Categoria", tipoTienda)).ToList();
+            //var articulos = db.Database.SqlQuery<ArticuloKFC>("spGetMaterialesTodos @Categoria",
+            //    new SqlParameter("@Categoria", tipoTienda)).ToList();
 
-            AgregarTiendaArticulosCampañaExiste(tiendas);
+            AgregarMaterialesTiendaCampañaExiste(materialId, tiendaId);
 
-            foreach (var articulo in articulos)
-            {
-                var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articulo.ArticuloKFCId).FirstOrDefault().Activo;
+            //AgregarTiendaArticulosCampañaExiste(tiendas);
 
-                var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
+            //foreach (var articulo in articulos)
+            //{
+            //    var articuloActivo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articulo.ArticuloKFCId).FirstOrDefault().Activo;
 
-                if (articuloActivo == true)
-                {
-                    if (tiendaArticulos == null)
-                    {
-                        db.Database.ExecuteSqlCommand(
-                        "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
-                        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-                        new SqlParameter("@TiendaId", tiendaId),
-                        new SqlParameter("@Seleccionado", false));
-                    }
-                }
-            }
+            //    var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articulo.ArticuloKFCId && cdt.TiendaId == tiendaId).FirstOrDefault();
+
+            //    if (articuloActivo == true)
+            //    {
+            //        if (tiendaArticulos == null)
+            //        {
+            //            db.Database.ExecuteSqlCommand(
+            //            "spAgregarTiendasMaterialC @ArticuloKFCId, @TiendaId, @Seleccionado",
+            //            new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
+            //            new SqlParameter("@TiendaId", tiendaId),
+            //            new SqlParameter("@Seleccionado", false));
+            //        }
+            //    }
+            //}
 
             return new Response { Succeeded = true, };
         }

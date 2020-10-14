@@ -301,80 +301,81 @@ namespace CampaniasLito.Controllers
         {
             if (tienda.Activo == true)
             {
-                if (tienda.EquityFranquicia == "FRANQUICIAS")
+                //if (tienda.EquityFranquicia == "FRANQUICIAS")
+                //{
+                var response = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
+
+                //==========================TODAS INICIO=======================
+
+                //var tiendas = db.Tiendas.Where(x => x.EquityFranquicia == "FRANQUICIAS").ToList();
+
+                //foreach (var tiendaInd in tiendas)
+                //{
+                //    var id = tiendaInd.TiendaId;
+
+                //    var response = MovementsHelper.AgregarTiendaArticulosF(id);
+
+                //    if (response.Succeeded)
+                //    {
+                //        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
+                //        if (campaña.Count >= 1)
+                //        {
+                //            MovementsHelper.AgregarArticuloPorTiendas(tiendaInd);
+                //        }
+                //    }
+                //}
+
+                //==========================TODAS FIN=======================
+
+                if (response.Succeeded)
                 {
-                    var response = MovementsHelper.AgregarTiendaArticulosF(tienda.TiendaId);
-
-                    //==========================TODAS INICIO=======================
-
-                    //var tiendas = db.Tiendas.Where(x => x.EquityFranquicia == "FRANQUICIAS").ToList();
-
-                    //foreach (var tiendaInd in tiendas)
-                    //{
-                    //    var id = tiendaInd.TiendaId;
-
-                    //    var response = MovementsHelper.AgregarTiendaArticulosF(id);
-
-                    //    if (response.Succeeded)
-                    //    {
-                    //        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
-                    //        if (campaña.Count >= 1)
-                    //        {
-                    //            MovementsHelper.AgregarArticuloPorTiendas(tiendaInd);
-                    //        }
-                    //    }
-                    //}
-
-                    //==========================TODAS FIN=======================
-
-                    if (response.Succeeded)
+                    var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
+                    if (campaña.Count >= 1)
                     {
-                        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
-                        if (campaña.Count >= 1)
-                        {
-                            var campañaid = campaña.FirstOrDefault().CampañaId;
+                        var campañaid = campaña.FirstOrDefault().CampañaId;
+                        var tiendaId = tienda.TiendaId;
 
-                            MovementsHelper.AgregarArticuloPorTiendas(tienda, campañaid);
-                        }
+                        MovementsHelper.AgregarArticuloPorTiendas(tiendaId, campañaid);
                     }
                 }
-                else
-                {
-                    var response = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
+                //}
+                //else
+                //{
+                //    var response = MovementsHelper.AgregarTiendaArticulos(tienda.TiendaId);
 
-                    //==========================TODAS INICIO=======================
+                //    //==========================TODAS INICIO=======================
 
-                    //var tiendas = db.Tiendas.Where(x => x.EquityFranquicia == "EQUITY").ToList();
+                //    //var tiendas = db.Tiendas.Where(x => x.EquityFranquicia == "EQUITY").ToList();
 
-                    //foreach (var tiendaInd in tiendas)
-                    //{
-                    //    var id = tiendaInd.TiendaId;
+                //    //foreach (var tiendaInd in tiendas)
+                //    //{
+                //    //    var id = tiendaInd.TiendaId;
 
-                    //    var response = MovementsHelper.AgregarTiendaArticulos(id);
+                //    //    var response = MovementsHelper.AgregarTiendaArticulos(id);
 
-                    //    if (response.Succeeded)
-                    //    {
-                    //        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
-                    //        if (campaña.Count >= 1)
-                    //        {
-                    //            MovementsHelper.AgregarArticuloPorTiendas(tiendaInd);
-                    //        }
-                    //    }
-                    //}
+                //    //    if (response.Succeeded)
+                //    //    {
+                //    //        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
+                //    //        if (campaña.Count >= 1)
+                //    //        {
+                //    //            MovementsHelper.AgregarArticuloPorTiendas(tiendaInd);
+                //    //        }
+                //    //    }
+                //    //}
 
-                    //==========================TODAS FIN=======================
+                //    //==========================TODAS FIN=======================
 
-                    if (response.Succeeded)
-                    {
-                        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
-                        if (campaña.Count >= 1)
-                        {
-                            var campañaid = campaña.FirstOrDefault().CampañaId;
+                //    if (response.Succeeded)
+                //    {
+                //        var campaña = db.Campañas.Where(x => x.Generada == "NO").ToList();
+                //        if (campaña.Count >= 1)
+                //        {
+                //            var campañaid = campaña.FirstOrDefault().CampañaId;
 
-                            MovementsHelper.AgregarArticuloPorTiendas(tienda, campañaid);
-                        }
-                    }
-                }
+                //            MovementsHelper.AgregarArticuloPorTiendas(tienda.TiendaId, campañaid);
+                //        }
+                //    }
+                //}
 
             }
             else

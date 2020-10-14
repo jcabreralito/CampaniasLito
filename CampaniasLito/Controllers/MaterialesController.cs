@@ -281,7 +281,7 @@ namespace CampaniasLito.Controllers
         public ActionResult AddOrEdit(ArticuloKFC material)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
-
+            var restauranteId = 0;
             if (material.ArticuloKFCId == 0)
             {
                 var tipo = Session["Categoria"].ToString();
@@ -300,13 +300,15 @@ namespace CampaniasLito.Controllers
                 {
                     CargarImagen(material);
 
-                    MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId);
+                    MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
 
                     var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
 
                     if (campaña != null)
                     {
-                        MovementsHelper.AgregarArticuloCampañas(material);
+                        var campañaId = campaña.CampañaId;
+
+                        MovementsHelper.AgregarArticuloCampañas(material, campañaId);
                     }
 
                     movimiento = "Agregar Material " + material.ArticuloKFCId + " " + material.Descripcion + " / " + material.EquityFranquicia;
@@ -342,16 +344,20 @@ namespace CampaniasLito.Controllers
 
                     if (material.Activo == true)
                     {
-                        if (tipo != material.EquityFranquicia)
-                        {
-                            EliminarMateriales(id, campaña);
-                        }
+                        //if (tipo != material.EquityFranquicia)
+                        //{
+                        //    EliminarMateriales(id, campaña);
+                        //}
 
-                        MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId);
+                        EliminarMateriales(id, campaña);
+
+                        MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
 
                         if (campaña != null)
                         {
-                            MovementsHelper.AgregarArticuloCampañas(material);
+                            var campañaId = campaña.CampañaId;
+
+                            MovementsHelper.AgregarArticuloCampañas(material, campañaId);
                         }
 
                     }
@@ -789,7 +795,7 @@ namespace CampaniasLito.Controllers
 
             }
 
-            var articulo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == Convert.ToInt32(articuloKFCId[0])).FirstOrDefault().Descripcion;
+            var articulo = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloId).FirstOrDefault().Descripcion;
 
             movimiento = "Asignar Cantidades " + articulo;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);

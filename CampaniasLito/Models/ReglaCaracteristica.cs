@@ -13,5 +13,9 @@ namespace CampaniasLito.Models
 
         public bool Seleccionado { get; set; }
 
+        public bool IsTrue { get; set; }
+
+        public bool IsFalse { get; set; }
+
     }
 }
