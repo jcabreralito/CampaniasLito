@@ -200,6 +200,7 @@
                 cancelButtonText: 'No',
             }).then((result) => {
                 if (result.value) {
+                    hidePage();
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete", "Usuarios")/' + id,
@@ -212,7 +213,7 @@
                                 globalPosition: "top center",
                                 className: "success"
                             })
-
+                            viewPage();
                         }
                     }
 

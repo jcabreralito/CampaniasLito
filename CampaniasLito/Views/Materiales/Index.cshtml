@@ -141,7 +141,7 @@
                     "title": "Imagen",
                     "orderable": false,
                     "searchable": false,
-                    "className": "dt-body-center text-center",
+                    "className": "dt-body-center text-center noExport",
                 },
                 {
                     data: "Activo",
@@ -153,7 +153,7 @@
                         }
                         return data;
                     },
-                    "className": "dt-body-center text-center",
+                    "className": "dt-body-center text-center noExport",
                     "title": "Activo",
                     "orderable": false,
                     "searchable": false,
@@ -165,7 +165,7 @@
                     "title": "Editar",
                     "orderable": false,
                     "searchable": false,
-                    "className": "dt-body-center text-center",
+                    "className": "dt-body-center text-center noExport",
                 },
                 {
                     "data": "ArticuloKFCId", "render": function (data) {
@@ -174,7 +174,7 @@
                     "title": "Eliminar",
                     "orderable": false,
                     "searchable": false,
-                    "className": "dt-body-center text-center",
+                    "className": "dt-body-center text-center noExport",
                 },
                 {
                     "data": "ArticuloKFCId", "render": function (data, type, row) {
@@ -191,7 +191,7 @@
                     "title": "Equity",
                     "orderable": false,
                     "searchable": false,
-                    "className": "dt-body-center text-center",
+                    "className": "dt-body-center text-center noExport",
                 },
                 {
                     "data": "ArticuloKFCId", "render": function (data, type, row) {
@@ -208,7 +208,7 @@
                     "title": "Franquicias",
                     "orderable": false,
                     "searchable": false,
-                    "className": "dt-body-center text-center",
+                    "className": "dt-body-center text-center noExport",
                 },
                 {
                     "data": "ArticuloKFCId", "render": function (data, type, row) {
@@ -225,7 +225,7 @@
                     "title": "Stock",
                     "orderable": false,
                     "searchable": false,
-                    "className": "dt-body-center text-center",
+                    "className": "dt-body-center text-center noExport",
                 },
             ],
             "order": [[1, "asc"]],
@@ -264,7 +264,29 @@
                     }
                 },
             },
-            dom: 'lfrtip',
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    extend: 'colvis',
+                    columns: ':gt(1)',
+                    text: '<i class="fas fa-tasks" title="Mostrar / Ocultar Columnas"></i>',
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: null,
+                    text: '<i class="fas fa-file-excel" title="Exportar a Excel"></i>',
+                    exportOptions: {
+                        orthogonal: 'export',
+                        columns: "thead th:not(.noExport)",
+                    },
+                    filename: 'Materiales KFC',
+                    autoFilter: true,
+                    sheetName: 'Materiales',
+                    messageTop: null,
+                    body: true,
+                    footer: false,
+                },
+            ],
             autoWidth: true,
             //fixedColumns: true,
             fixedColumns: {

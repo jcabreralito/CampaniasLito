@@ -96,8 +96,8 @@
         @Html.HiddenFor(model => model.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS)
         @Html.HiddenFor(model => model.COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L)
         @Html.HiddenFor(model => model.MenuBackLigth)
-        @*@Html.HiddenFor(model => model.CopeteAERemodelado)
-            @Html.HiddenFor(model => model.CopeteAETradicional)*@
+        @Html.HiddenFor(model => model.PanelKids)
+        @Html.HiddenFor(model => model.StickerNavidad)
         @Html.HiddenFor(model => model.AreaDeJuegos)
         @Html.HiddenFor(model => model.PanelDeComplementosDigital)
     }
@@ -261,6 +261,17 @@
             <div class="input-field center-align col-sm-4">
                 @Html.CheckBoxFor(model => model.PanelDeComplementosDigital, new { @class = "switch_1" })
                 <label class="active" for="PanelDeComplementosDigital">Panel De Complementos Digital</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field center-align col-sm-4">
+                @Html.CheckBoxFor(model => model.PanelKids, new { @class = "switch_1" })
+                <label class="active" for="PanelKids">PANEL KIDS</label>
+            </div>
+            <div class="input-field center-align col-sm-4">
+                @Html.CheckBoxFor(model => model.StickerNavidad, new { @class = "switch_1" })
+                <label class="active" for="StickerNavidad">STICKER NAVIDAD</label>
             </div>
         </div>
     }

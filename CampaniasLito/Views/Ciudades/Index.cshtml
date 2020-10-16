@@ -206,6 +206,7 @@
                 cancelButtonText: 'No',
             }).then((result) => {
                 if (result.value) {
+                    hidePage();
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete","Ciudades")/' + id,
@@ -218,7 +219,7 @@
                                 globalPosition: "top center",
                                 className: "success"
                             })
-
+                            viewPage();
                         }
                     }
 

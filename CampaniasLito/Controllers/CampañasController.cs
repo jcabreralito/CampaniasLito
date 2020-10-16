@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 namespace CampaniasLito.Controllers
 {
@@ -1124,10 +1125,18 @@ namespace CampaniasLito.Controllers
                     }
                 }
 
+                movimiento = "Generar Códigos " + campaña.CampañaId + " " + campaña.Nombre + " / " + campaña.Descripcion;
+                MovementsHelper.MovimientosBitacora(usuario.UsuarioId, modulo, movimiento);
+
+                return Json(new { success = true, message = "CODIGOS GENERADOS" }, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
             }
 
-            //return Json(new { success = true, message = "CODIGOS GENERADOS" }, JsonRequestBehavior.AllowGet);
-            return RedirectToAction("Index");
+            //return RedirectToAction("Index");
             //return RedirectToAction("ResumenProveedor", new { id = id });
         }
 
@@ -1164,6 +1173,7 @@ namespace CampaniasLito.Controllers
         [AuthorizeUser(idOperacion: 5)]
         public ActionResult ResumenProveedor(int id)
         {
+
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
             if (usuario == null)
@@ -1172,6 +1182,16 @@ namespace CampaniasLito.Controllers
             }
 
             var campaña = db.Campañas.Where(x => x.CampañaId == id).FirstOrDefault();
+
+            var codigosMateriales = db.Database.SqlQuery<CodigosMaterialesTotal>("spGetMaterialesCodigosCampaña @CampañaId",
+                new SqlParameter("@CampañaId", id)).ToList();
+
+            if (codigosMateriales.Count == 0)
+            {
+                Session["Mensaje"] = "AÚN NO SE HAN GENERADO CÓDIGOS";
+                return RedirectToAction("Index");
+                //return Json(new { success = true, message = "AÚN NO SE HAN GENERADO CÓDIGOS" }, JsonRequestBehavior.AllowGet);
+            }
 
             var materialesTipoTienda = db.Database.SqlQuery<CodigosMaterialesTienda>("spGetMaterialesTipoTienda @CampañaId",
                                         new SqlParameter("@CampañaId", id)).ToList();

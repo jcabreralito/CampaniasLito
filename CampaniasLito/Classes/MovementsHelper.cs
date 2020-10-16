@@ -9066,10 +9066,10 @@ namespace CampaniasLito.Classes
 
             }
 
-            var reglas = db.Database.SqlQuery<spMaterialesReglas>("spGetMaterialesReglas @ArticuloKFCId",
-                new SqlParameter("@ArticuloKFCId", articuloKFCId)).ToList();
+            //var reglas = db.Database.SqlQuery<spMaterialesReglas>("spGetMaterialesReglas @ArticuloKFCId",
+            //    new SqlParameter("@ArticuloKFCId", articuloKFCId)).ToList();
 
-            var reglaMaterial = string.Join(",", reglas[0].Nombre);
+            //var reglaMaterial = string.Join(",", reglas[0].Nombre);
 
             //foreach (var regla in reglas)
             //{
@@ -9715,117 +9715,6 @@ namespace CampaniasLito.Classes
                     }
                 }
 
-                //if (articulo.ArticuloKFCId == 37)
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
-                //        {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-
-                //                var articuloKFCIdPadre = 41;
-                //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
-
-                //if (articulo.ArticuloKFCId == 38)
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
-                //        {
-                //            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
-
-                //            if (tiendaArticulos == null)
-                //            {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-
-                //                var articuloKFCIdPadre = 41;
-                //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
-                //            }
-                //            else
-                //            {
-                //                selec = true;
-
-                //                tiendaArticulos.Seleccionado = selec;
-                //                db.Entry(tiendaArticulos).State = EntityState.Modified;
-                //                db.SaveChanges();
-                //            }
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
-
-                //if (articulo.ArticuloKFCId == 39)
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
-                //        {
-                //            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
-
-                //            if (tiendaArticulos == null)
-                //            {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-
-                //                var articuloKFCIdPadre = 41;
-                //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
-                //            }
-                //            else
-                //            {
-                //                selec = true;
-
-                //                tiendaArticulos.Seleccionado = selec;
-                //                db.Entry(tiendaArticulos).State = EntityState.Modified;
-                //                db.SaveChanges();
-                //            }
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
-
-                //if (articulo.ArticuloKFCId == 40)
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
-                //        {
-                //            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
-
-                //            if (tiendaArticulos == null)
-                //            {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-
-                //                var articuloKFCIdPadre = 41;
-                //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
-                //            }
-                //            else
-                //            {
-                //                selec = true;
-
-                //                tiendaArticulos.Seleccionado = selec;
-                //                db.Entry(tiendaArticulos).State = EntityState.Modified;
-                //                db.SaveChanges();
-                //            }
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
-
                 if (articulo.ArticuloKFCId == 41)
                 {
                     foreach (var tienda in tiendas)
@@ -9840,37 +9729,6 @@ namespace CampaniasLito.Classes
                         }
                     }
                 }
-
-                //if (articulo.ArticuloKFCId == 42)
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
-                //        {
-                //            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
-
-                //            if (tiendaArticulos == null)
-                //            {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-
-                //                var articuloKFCIdPadre = 41;
-                //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
-                //            }
-                //            else
-                //            {
-                //                selec = true;
-
-                //                tiendaArticulos.Seleccionado = selec;
-                //                db.Entry(tiendaArticulos).State = EntityState.Modified;
-                //                db.SaveChanges();
-                //            }
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
 
                 if (articulo.ArticuloKFCId == 43)
                 {
@@ -9889,68 +9747,6 @@ namespace CampaniasLito.Classes
                         }
                     }
                 }
-
-                //if (articulo.ArticuloKFCId == 44)
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
-                //        {
-                //            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
-
-                //            if (tiendaArticulos == null)
-                //            {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-
-                //                var articuloKFCIdPadre = 41;
-                //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
-                //            }
-                //            else
-                //            {
-                //                selec = true;
-
-                //                tiendaArticulos.Seleccionado = selec;
-                //                db.Entry(tiendaArticulos).State = EntityState.Modified;
-                //                db.SaveChanges();
-                //            }
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
-
-                //if (articulo.ArticuloKFCId == 45)
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.Autoexpress == true && tienda.TerceraReceta == false && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
-                //        {
-                //            var tiendaArticulos = db.TiendaArticulos.Where(cdt => cdt.ArticuloKFCId == articuloKFCId && cdt.TiendaId == tienda.TiendaId).FirstOrDefault();
-
-                //            if (tiendaArticulos == null)
-                //            {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-
-                //                var articuloKFCIdPadre = 41;
-                //                NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
-                //            }
-                //            else
-                //            {
-                //                selec = true;
-
-                //                tiendaArticulos.Seleccionado = selec;
-                //                db.Entry(tiendaArticulos).State = EntityState.Modified;
-                //                db.SaveChanges();
-                //            }
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
 
                 if (articulo.ArticuloKFCId == 46)
                 {
@@ -13001,21 +12797,6 @@ namespace CampaniasLito.Classes
                     }
                 }
 
-                //if (articulo.ArticuloKFCId == 207) //207
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.Postres == false && tienda.PET2Litros == false)
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
-
                 if (articulo.ArticuloKFCId == 208) //208
                 {
                     foreach (var tienda in tiendas)
@@ -14671,72 +14452,6 @@ namespace CampaniasLito.Classes
                     }
                 }
 
-                if (articulo.ArticuloKFCId == 311) //311
-                {
-                    foreach (var tienda in tiendas)
-                    {
-                        if (tienda.Autoexpress == true && tienda.TerceraReceta == true && tienda.Arroz == true && tienda.KeCono == true)
-                        {
-                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-                        }
-                        else
-                        {
-                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                        }
-                    }
-                }
-
-                //if (articulo.ArticuloKFCId == 312) //312
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.TipoId == 2 && tienda.KREAMBALL == true || tienda.TipoId == 3 && tienda.KREAMBALL == true || tienda.TipoId == 1 && tienda.KREAMBALL == true || tienda.TipoId == 4 && tienda.KREAMBALL == true)
-                //        {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
-
-                //if (articulo.ArticuloKFCId == 313) //313
-                //{
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true || tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
-                //        {
-                //                AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-                //        }
-                //        else
-                //        {
-                //            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                //        }
-                //    }
-                //}
-
-                //if (articulo.ArticuloKFCId == 314) //314
-                //{
-                //    primero = 314;
-
-                //    foreach (var tienda in tiendas)
-                //    {
-                //        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
-                //        {
-                //            AsignarMaterialF(primero, tienda.TiendaId);
-                //        }
-                //        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
-                //        {
-                //            AsignarMaterialF(primero, tienda.TiendaId);
-                //        }
-                //    }
-                //    break;
-                //}
-                //else
-                //{
-                //    primero++;
-                //}
                 if (articulo.ArticuloKFCId == 315) //315
                 {
                     foreach (var tienda in tiendas)
@@ -14774,6 +14489,1128 @@ namespace CampaniasLito.Classes
                         if (tienda.TipoId == 2 && tienda.KREAMBALL == true || tienda.TipoId == 3 && tienda.KREAMBALL == true || tienda.TipoId == 1 && tienda.KREAMBALL == true || tienda.TipoId == 4 && tienda.KREAMBALL == true)
                         {
                             AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 319)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 320)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 319;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 321)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 319;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 322)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 319;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 323)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 319;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 324)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 319;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 325)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 319;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 326)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 319;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 327)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 328;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 328)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 329)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 328;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 330)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 328;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 331)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 328;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 332)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 328;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 333)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 328;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 334)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 328;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 335)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 336)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 335;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 337)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 335;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 338)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 335;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 339)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 335;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 340)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 335;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 341)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 335;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 342)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 335;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 344)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 345)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 344;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 346)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 344;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 347)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 344;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 348)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 344;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 349)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 344;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 350)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 344;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 351)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 344;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 352)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 353)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 352;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 354)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 352;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 355)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 352;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 356)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 352;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 357)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 352;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 358)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 352;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 359)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 352;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 360)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 361)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 360;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 362)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 360;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 363)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 360;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 364)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 360;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 365)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 360;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 366)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 360;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 367)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.Autoexpress == true && tienda.Arroz == true && tienda.MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 360;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 368)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.PanelKids == true && tienda.TerceraReceta == true && tienda.Hamburgesas == true && tienda.Ensalada == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 369)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.StickerNavidad == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 370)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 2 || tienda.TipoId == 3)
+                        {
+                            SiExisteMedidaEspecialWC(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 371)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 2 && tienda.WCMedidaEspecial60_8x85cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+
+                        if (tienda.TipoId == 3 && tienda.WCMedidaEspecial60_8x85cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 372)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 373)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 374)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 375)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.TipoId == 2 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                        if (tienda.TipoId == 3 && tienda.WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm == true)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+
+                            var articuloKFCIdPadre = 370;
+                            NoSeleccionarMaterialPadre(articuloKFCIdPadre, tienda.TiendaId, false);
+
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 378)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.PanelKids == true && tienda.TerceraReceta == false && tienda.Hamburgesas == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 379)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.PanelKids == true && tienda.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 380)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.PanelKids == true && tienda.COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS == false && tienda.PET2Litros == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 381)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.PanelKids == true && tienda.TerceraReceta == true && tienda.Arroz == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
+                        }
+                        else
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                        }
+                    }
+                }
+
+                if (articulo.ArticuloKFCId == 382)
+                {
+                    foreach (var tienda in tiendas)
+                    {
+                        if (tienda.PanelKids == true && tienda.TerceraReceta == true && tienda.Arroz == true)
+                        {
+                            SiExisteMedidaEspecialAE(tienda, selec, articulo.ArticuloKFCId);
                         }
                         else
                         {
@@ -24804,9 +25641,9 @@ namespace CampaniasLito.Classes
         public static Response GenerarCodigos(int? id)
         {
 
-            db.Database.ExecuteSqlCommand(
-            "spEliminarCodigos @CampañaId",
-            new SqlParameter("@CampañaId", id));
+            //db.Database.ExecuteSqlCommand(
+            //"spEliminarCodigos @CampañaId",
+            //new SqlParameter("@CampañaId", id));
 
             try
             {

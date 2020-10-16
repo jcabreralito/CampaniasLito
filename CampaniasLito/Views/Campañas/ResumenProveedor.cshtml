@@ -89,6 +89,14 @@
                                                         <button class="btn btn-pilares" rel="tooltip" title="Info" onclick="rotateCard(this)" style="margin-top: -5px">
                                                             <i class="fas fa-share"></i>
                                                         </button>
+                                                        @foreach (var itemLinkImagenes in ViewBag.Imagenes)
+                                                        {
+                                                            if (item.Key.ArticuloKFC.Equals(itemLinkImagenes.ArticuloKFC))
+                                                            {
+
+                                                                <a href="@itemLinkImagenes.LigaImagen" target="_blank" rel="tooltip" title="Link" class="btn btn-pilares" style="margin-top: -5px"><i class="glyphicon glyphicon-open-file"></i></a>
+                                                            }
+                                                        }
                                                     </div>
                                                 </div>
                                             </div> <!-- end front panel -->
@@ -117,14 +125,6 @@
                                                         <button class="btn btn-pilares" rel="tooltip" title="Regresar" onclick="rotateCard(this)" style="margin-top: -5px">
                                                             <i class="fas fa-reply"></i>
                                                         </button>
-                                                        @foreach (var itemLinkImagenes in ViewBag.Imagenes)
-                                                        {
-                                                            if (item.Key.ArticuloKFC.Equals(itemLinkImagenes.ArticuloKFC))
-                                                            {
-
-                                                                <a href="@itemLinkImagenes.LigaImagen" target="_blank" rel="tooltip" title="Link" class="btn btn-pilares" style="margin-top: -5px"><i class="glyphicon glyphicon-open-file"></i></a>
-                                                            }
-                                                        }
                                                     </div>
                                                 </div>
                                             </div>

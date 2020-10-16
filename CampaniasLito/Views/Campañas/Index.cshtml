@@ -101,8 +101,8 @@
                                  return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
                             }
                             else {
-                                //return "<a class='btn-danger btn-lg' style='background-color: transparent; cursor: pointer' onclick=CodesCampArt(" + data + ") ><i class='fas fa-barcode' style='color: #000'></i></a>";
-                                return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("CodesCampArt", "Campañas")/" + data +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-barcode'></i></a>";
+                                return "<a class='btn-danger btn-lg' style='background-color: transparent; cursor: pointer' onclick=CodesCampArt(" + data + ") ><i class='fas fa-barcode' style='color: #000'></i></a>";
+                                //return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("CodesCampArt", "Campañas")/" + data +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-barcode'></i></a>";
                                 //return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='#'><i style='color: #000' class='fas fa-ban'></i></a>";
                             }
                         },
@@ -157,8 +157,8 @@
                     {
                         "data": "CampañaId", "render": function (data, type, row) {
                             if (row.Generada === "SI") { // TODO: CAMBIAR A "NO"
-                                 //return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
-                                return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("ResumenProveedor", "Campañas")/" + data +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-shipping-fast'></i></a>";
+                                 return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed' ><i class='fas fa-ban' style='color: #DF2530'></i></a>";
+                                @*return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("ResumenProveedor", "Campañas")/" + data +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-shipping-fast'></i></a>";*@
                             }
                             else {
                                 return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' href='@Url.Action("ResumenProveedor", "Campañas")/" + data +"' onclick=(viewPageIndex())><i style='color: #000' class='fas fa-shipping-fast'></i></a>";
@@ -339,6 +339,7 @@
                 cancelButtonText: 'No',
             }).then((result) => {
                 if (result.value) {
+                    hidePage();
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("CloseCampArt", "Campañas")/' + id,
@@ -351,7 +352,42 @@
                                 globalPosition: "top center",
                                 className: "success"
                             })
+                            viewPage();
+                        }
+                    }
 
+                });
+                }
+            })
+
+        }
+
+        function CodesCampArt(id) {
+            Swal.fire({
+                title: '¿ Genrar Códigos ?',
+                //text: "You won't be able to revert this!",
+                //icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#4CAF50',
+                cancelButtonColor: '#DF2530',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.value) {
+                    hidePage();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CodesCampArt", "Campañas")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                            viewPage();
                         }
                     }
 
@@ -373,6 +409,7 @@
                 cancelButtonText: 'No',
             }).then((result) => {
                 if (result.value) {
+                    hidePage();
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete","Campañas")/' + id,
@@ -385,7 +422,7 @@
                                 globalPosition: "top center",
                                 className: "success"
                             })
-
+                            viewPage();
                         }
                     }
 

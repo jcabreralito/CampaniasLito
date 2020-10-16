@@ -149,6 +149,12 @@ namespace CampaniasLito.Models
         [Display(Name = "Teléfono Personalizado")]
         public bool TelefonoPersonalizado { get; set; }
 
+        [Display(Name = "Panel Kids")]
+        public bool PanelKids { get; set; }
+
+        [Display(Name = "Sticker Navidad")]
+        public bool StickerNavidad { get; set; }
+
         //00000000000000000000000000 MEDIDAS ESPECIALES 0000000000000000000000000000000000
 
         [Display(Name = "WC MEDIDA ESPECIAL  60.8 x 85 cm")]

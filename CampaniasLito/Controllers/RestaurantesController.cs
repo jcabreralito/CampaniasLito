@@ -117,6 +117,8 @@ namespace CampaniasLito.Controllers
             public bool PanelComplementosHoldingMR { get; set; }
             public bool Telefono { get; set; }
             public bool TelefonoPersonalizado { get; set; }
+            public bool PanelKids { get; set; }
+            public bool StickerNavidad { get; set; }
 
             //00000000000000000000000000 MEDIDAS ESPECIALES 0000000000000000000000000000000000
             public bool WCMedidaEspecial60_8x85cm { get; set; }

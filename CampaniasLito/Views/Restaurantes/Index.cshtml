@@ -102,6 +102,10 @@
                 </th>
                 <th style="background-color: #BB93D0 !important; color: #000 !important">
                 </th>
+                <th style="background-color: #BB93D0 !important; color: #000 !important">
+                </th>
+                <th style="background-color: #BB93D0 !important; color: #000 !important">
+                </th>
                 <th style="background-color: #9CD78D !important; color: #000 !important">
                 </th>
                 <th style="background-color: #9CD78D !important; color: #000 !important">
@@ -798,6 +802,34 @@
                         return data;
                     },
                     "title": "Área De Juegos",
+                    "visible": true,
+                    "className": "dt-body-center text-center dt-specialColorLilac",
+                },
+                {
+                    data: "PanelKids",
+                    render: function (data, type, row) {
+                        if (data == 1) {
+                            return "<span>SI</span>";
+                        } else {
+                            return "<span>NO</span>";
+                        }
+                        return data;
+                    },
+                    "title": "Panel Kids",
+                    "visible": true,
+                    "className": "dt-body-center text-center dt-specialColorLilac",
+                },
+                {
+                    data: "StickerNavidad",
+                    render: function (data, type, row) {
+                        if (data == 1) {
+                            return "<span>SI</span>";
+                        } else {
+                            return "<span>NO</span>";
+                        }
+                        return data;
+                    },
+                    "title": "Sticker Navidad",
                     "visible": true,
                     "className": "dt-body-center text-center dt-specialColorLilac",
                 },
@@ -2400,6 +2432,7 @@
                 cancelButtonText: 'No',
             }).then((result) => {
                 if (result.value) {
+                    hidePage();
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete","Restaurantes")/' + id,
@@ -2414,6 +2447,7 @@
                                 globalPosition: "top center",
                                 className: "success"
                             })
+                            viewPage();
                         }
                     }
 
