@@ -438,7 +438,10 @@ namespace CampaniasLito.Controllers
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
-                movimiento = "Eliminar Regla " + regla.ReglaId + " " + regla.NombreRegla + " / " + regla.ArticuloKFC.Descripcion;
+                db.Database.ExecuteSqlCommand("spEliminarReglasCaracteristicas @ReglaId",
+                new SqlParameter("@ReglaId", id));
+
+                movimiento = "Eliminar Regla " + regla.ReglaId + " " + regla.NombreRegla;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 return Json(new { success = true, message = "REGLA ELIMINADA" }, JsonRequestBehavior.AllowGet);
@@ -466,6 +469,10 @@ namespace CampaniasLito.Controllers
                 var response2 = DBHelper.SaveChanges(db);
                 if (response2.Succeeded)
                 {
+                    var reglaCaracteristica = db.ReglasCaracteristicas.Where(x => x.ReglaCatalogoId == id).ToList();
+                    db.ReglasCaracteristicas.RemoveRange(reglaCaracteristica);
+                    DBHelper.SaveChanges(db);
+
                     movimiento = "Eliminar Característica " + reglaCatalogo.ReglaCatalogoId + " " + reglaCatalogo.Nombre + " / " + reglaCatalogo.Categoria;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 

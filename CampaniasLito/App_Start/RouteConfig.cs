@@ -28,6 +28,24 @@ namespace CampaniasLito
             );
 
             routes.MapRoute(
+                name: "IndexEQ",
+                url: "Restaurantes",
+                defaults: new { controller = "Restaurantes", action = "Index" }
+            );
+
+            routes.MapRoute(
+                name: "IndexFQ",
+                url: "RestaurantesFQ",
+                defaults: new { controller = "Restaurantes", action = "IndexFQ" }
+            );
+
+            routes.MapRoute(
+                name: "IndexSK",
+                url: "RestaurantesSK",
+                defaults: new { controller = "Restaurantes", action = "IndexSK" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

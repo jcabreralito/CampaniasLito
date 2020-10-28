@@ -96,6 +96,21 @@
                                 <i class="fas fa-store fa-2x"></i>
                             </a>
                         </li>
+
+
+
+
+
+                        @*<li class="iMenu">
+                            <a id="restaurantesB" href="@Url.Action("IndexDev", "Restaurantes")" class="@Session["restaurantesB"].ToString()" title="Restaurantes" onclick="viewPageIndex()">
+                                <i class="fas fa-store fa-2x"></i>
+                            </a>
+                        </li>*@
+                        
+                        
+                        
+                        
+                        
                         <li class="iMenu">
                             <div>
                                 <a id="familiasB" href="@Url.Action("Index", "Familias")" class="@Session["familiasB"].ToString()" title="Familias" onclick="viewPageIndex()">
@@ -152,6 +167,20 @@
                                 <i class="fas fa-store fa-2x"></i>
                             </a>
                         </li>
+
+
+
+
+                        @*<li class="iMenu">
+                            <a id="restaurantesB" href="@Url.Action("IndexDev", "Restaurantes")" class="@Session["restaurantesB"].ToString()" title="Restaurantes" onclick="viewPageIndex()">
+                                <i class="fas fa-store fa-2x"></i>
+                            </a>
+                        </li>*@
+                        
+                        
+                        
+                        
+                        
                         <li class="iMenu">
                             <div>
                                 <a id="familiasB" href="@Url.Action("Index", "Familias")" class="@Session["familiasB"].ToString()" title="Familias" onclick="viewPageIndex()">
@@ -183,7 +212,7 @@
                     <li>
                         <div>
                             <a href="#" onclick="PopupFormPassword('@Url.Action("ResetPassword", "Account", new { nameUser = User.Identity.Name.ToString() })')" style="background-color: transparent !important">
-                                <i class="fas fa-user" title="@User.Identity.Name" style="background-color: #fff; color: #000; border-radius: 50%; height: 37px !important; width: 37px !important; line-height: initial !important; margin-left: 30px; padding: 5px 8px; margin-top: 9px !important;">
+                                <i class="fas fa-user" title="@User.Identity.Name" style="background-color: #fff; color: #000; border-radius: 50%; height: 37px !important; width: 37px !important; line-height: initial !important; margin-left: 30px; padding: 5px 8px; margin-top: 9px !important; margin-left: 0">
                                 </i>
                             </a>
                         </div>
@@ -235,6 +264,18 @@
                     <i class="fas fa-store-alt"></i>
                 </a>
             </li>
+
+
+
+            @*<li>
+                <a id="restaurantesB" href="@Url.Action("IndexDev", "Restaurantes")" class="iconomenu @Session["restaurantesB"].ToString()" onclick="viewPageIndex()">
+                    Restaurantes
+                    <i class="fas fa-store-alt"></i>
+                </a>
+            </li>*@
+
+
+
             <li>
                 <a id="familiasB" href="@Url.Action("Index", "Familias")" class="iconomenu @Session["familiasB"].ToString()" onclick="viewPageIndex()">
                     Familias
@@ -279,14 +320,18 @@
         <div id="contenedor_carga">
             <div id="carga">
             </div>
-            @*<div id="inTurnBlurringTextG">
-                    <div id="inTurnBlurringTextG_1" class="inTurnBlurringTextG">K</div>
-                    <div id="inTurnBlurringTextG_2" class="inTurnBlurringTextG">F</div>
-                    <div id="inTurnBlurringTextG_3" class="inTurnBlurringTextG">C</div>
-                    <div id="inTurnBlurringTextG_4" class="inTurnBlurringTextG">.</div>
-                    <div id="inTurnBlurringTextG_5" class="inTurnBlurringTextG">.</div>
-                    <div id="inTurnBlurringTextG_6" class="inTurnBlurringTextG">.</div>
-                </div>*@
+
+
+            <div id="inTurnBlurringTextG">
+                <div id="inTurnBlurringTextG_1" class="inTurnBlurringTextG">K</div>
+                <div id="inTurnBlurringTextG_2" class="inTurnBlurringTextG">F</div>
+                <div id="inTurnBlurringTextG_3" class="inTurnBlurringTextG">C</div>
+                <div id="inTurnBlurringTextG_4" class="inTurnBlurringTextG">.</div>
+                <div id="inTurnBlurringTextG_5" class="inTurnBlurringTextG">.</div>
+                <div id="inTurnBlurringTextG_6" class="inTurnBlurringTextG">.</div>
+            </div>
+
+
         </div>
         @RenderBody()
     </div>

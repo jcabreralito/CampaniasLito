@@ -67,6 +67,7 @@ namespace CampaniasLito
             UsuariosHelper.CrearRolOperaciones(3, 5);
             UsuariosHelper.CrearCategorias("EQUITY");
             UsuariosHelper.CrearCategorias("FRANQUICIAS");
+            UsuariosHelper.CrearCategorias("EQUITY / FRANQUICIAS");
             UsuariosHelper.CrearCategorias("STOCK");
         }
     }

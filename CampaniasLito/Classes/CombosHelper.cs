@@ -151,8 +151,7 @@ namespace CampaniasLito.Classes
 
         public static List<ArticuloKFC> GetMateriales(string cat, bool sw)
         {
-                var materiales = db.Database.SqlQuery<ArticuloKFC>("spGetReglasAsignadas @Categoria",
-                                    new SqlParameter("@Categoria", cat)).ToList();
+                var materiales = db.Database.SqlQuery<ArticuloKFC>("spGetReglasAsignadas").ToList();
   
                 return materiales.OrderBy(r => r.Descripcion).ToList();
 

@@ -46,6 +46,42 @@ namespace CampaniasLito.Controllers
             public int ReglaCatalogoId { get; set; }
         }
 
+        public class spTiendasCaracteristicasFQ
+        {
+            public int TiendaId { get; set; }
+            public string Clasificacion { get; set; }
+            public string CCoFranquicia { get; set; }
+            public string Restaurante { get; set; }
+            public string Region { get; set; }
+            public string Ciudad { get; set; }
+            public string Direccion { get; set; }
+            public string Observaciones { get; set; }
+            public bool Activo { get; set; }
+            public string Nombre { get; set; }
+            public string Categoria { get; set; }
+            public string Valor { get; set; }
+            public int TipoConfiguracionId { get; set; }
+            public int ReglaCatalogoId { get; set; }
+        }
+
+        public class spTiendasCaracteristicasSK
+        {
+            public int TiendaId { get; set; }
+            public string Clasificacion { get; set; }
+            public string CCoFranquicia { get; set; }
+            public string Restaurante { get; set; }
+            public string Region { get; set; }
+            public string Ciudad { get; set; }
+            public string Direccion { get; set; }
+            public string Observaciones { get; set; }
+            public bool Activo { get; set; }
+            public string Nombre { get; set; }
+            public string Categoria { get; set; }
+            public string Valor { get; set; }
+            public int TipoConfiguracionId { get; set; }
+            public int ReglaCatalogoId { get; set; }
+        }
+
         public class spRestaurantesCaracteristicas
         {
             public int TiendaCaracteristicaId { get; set; }
@@ -156,6 +192,7 @@ namespace CampaniasLito.Controllers
         public ActionResult Index()
         {
             Session["iconoTitulo"] = "fas fa-store";
+            Session["titulo"] = "EQUITY";
             Session["homeB"] = string.Empty;
             Session["equityB"] = "active";
             Session["franquiciasB"] = string.Empty;
@@ -165,11 +202,74 @@ namespace CampaniasLito.Controllers
             Session["campañasB"] = string.Empty;
             Session["caracteristicasB"] = string.Empty;
 
-            //var equityList = db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicas").ToList();
+            var equityList = db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicasEquity").ToList();
 
-            //return PartialView(equityList);
+            return PartialView(equityList);
 
-            return View();
+            //return View();
+
+        }
+
+        // GET: Restaurantes
+        [AuthorizeUser(idOperacion: 5)]
+        public ActionResult IndexFQ()
+        {
+            Session["iconoTitulo"] = "fas fa-store";
+            Session["titulo"] = "FRANQUICIAS";
+            Session["homeB"] = string.Empty;
+            Session["equityB"] = string.Empty;
+            Session["franquiciasB"] = "active";
+            Session["stockB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+            Session["caracteristicasB"] = string.Empty;
+
+            var franquiciasList = db.Database.SqlQuery<spTiendasCaracteristicasFQ>("spGetRestaurantesCaracteristicasFranquicias").ToList();
+
+            return PartialView(franquiciasList);
+
+        }
+
+        // GET: Restaurantes
+        [AuthorizeUser(idOperacion: 5)]
+        public ActionResult IndexSK()
+        {
+            Session["iconoTitulo"] = "fas fa-store";
+            Session["titulo"] = "STOCK";
+            Session["homeB"] = string.Empty;
+            Session["equityB"] = string.Empty;
+            Session["franquiciasB"] = string.Empty;
+            Session["stockB"] = "active";
+            Session["restaurantesB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+            Session["caracteristicasB"] = string.Empty;
+
+            var stockList = db.Database.SqlQuery<spTiendasCaracteristicasSK>("spGetRestaurantesCaracteristicasStock").ToList();
+
+            return PartialView(stockList);
+
+        }
+
+        // GET: Restaurantes
+        [AuthorizeUser(idOperacion: 5)]
+        public ActionResult IndexDev()
+        {
+            Session["iconoTitulo"] = "fas fa-store";
+            Session["homeB"] = string.Empty;
+            Session["equityB"] = "active";
+            Session["franquiciasB"] = string.Empty;
+            Session["stockB"] = string.Empty;
+            Session["restaurantesB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
+            Session["campañasB"] = string.Empty;
+            Session["caracteristicasB"] = string.Empty;
+
+            var equityList = db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicas").ToList();
+
+            return PartialView(equityList);
+
         }
 
         public ActionResult GetDataEquity()
@@ -415,14 +515,6 @@ namespace CampaniasLito.Controllers
         public ActionResult EditCG(int id)
         {
 
-            //var restauranteCG = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasG @TiendaID",
-            //                    new SqlParameter("@TiendaId", id)).ToList();
-
-            //var tipo = restauranteCG.Where(x => x.ReglaCatalogoId == 1 || x.ReglaCatalogoId == 104).FirstOrDefault().Valor;
-            //var tipoId = db.TipoTiendas.Where(x => x.Tipo == tipo).FirstOrDefault().TipoTiendaId;
-            //var nivel = restauranteCG.Where(x => x.ReglaCatalogoId == 5 || x.ReglaCatalogoId == 113).FirstOrDefault().Valor;
-            //var nivelPrecioId = db.NivelPrecios.Where(x => x.Descripcion == nivel).FirstOrDefault().NivelPrecioId;
-
             var tipoId = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().TipoId;
             var nivelPrecioId = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault().NuevoNivelDePrecioId;
 
@@ -446,7 +538,6 @@ namespace CampaniasLito.Controllers
 
             return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
 
-            //return PartialView(restauranteCG);
         }
 
         [AuthorizeUser(idOperacion: 1)]
@@ -473,87 +564,208 @@ namespace CampaniasLito.Controllers
                 return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
             }
 
-            //string[] restauranteId = formCollection.GetValues("TiendaId");
-            //string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
-            //string[] tipo = formCollection.GetValues("TipoId");
-            //string[] nivel = formCollection.GetValues("NuevoNivelDePrecioId");
-            //string[] valorMD = formCollection.GetValues("ValorMD");
-            //string[] valorP = formCollection.GetValues("ValorP");
+        }
 
-            //for (var i = 0; i < restauranteId.Length; i++)
-            //{
-            //    var tiendaId = Convert.ToInt32(restauranteId[i]);
-            //    var reglaCatalogoId = Convert.ToInt32(catalogoId[i]);
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCGDev(int id)
+        {
+            var restauranteCG = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasG @TiendaID",
+                                new SqlParameter("@TiendaId", id)).ToList();
 
-            //    if (catalogoId[i] == "1")
-            //    {
-            //        var tipoId = Convert.ToInt32(tipo[0]);
+            var tipo = restauranteCG.Where(x => x.ReglaCatalogoId == 1 || x.ReglaCatalogoId == 104).FirstOrDefault().Valor;
+            var tipoId = db.TipoTiendas.Where(x => x.Tipo == tipo).FirstOrDefault().TipoTiendaId;
+            var nivel = restauranteCG.Where(x => x.ReglaCatalogoId == 5 || x.ReglaCatalogoId == 113).FirstOrDefault().Valor;
+            var nivelPrecioId = db.NivelPrecios.Where(x => x.Descripcion == nivel).FirstOrDefault().NivelPrecioId;
 
-            //        var tipoValor = db.TipoTiendas.Where(x => x.TipoTiendaId == tipoId).FirstOrDefault().Tipo;
+            if (tipoId == 0)
+            {
+                ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo");
+            }
+            else
+            {
+                ViewBag.TipoId = new SelectList(CombosHelper.GetTiposTienda(true), "TipoTiendaId", "Tipo", tipoId);
+            }
 
-            //        db.Database.ExecuteSqlCommand(
-            //        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
-            //        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
-            //        new SqlParameter("@TiendaId", tiendaId),
-            //        new SqlParameter("@Valor", tipoValor));
+            if (nivelPrecioId == 0)
+            {
+                ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion");
+            }
+            else
+            {
+                ViewBag.NuevoNivelDePrecioId = new SelectList(CombosHelper.GetNivelesPrecio(true), "NivelPrecioId", "Descripcion", nivelPrecioId);
+            }
 
-            //    }
-            //    else if (catalogoId[i] == "5")
-            //    {
-            //        var nivelId = Convert.ToInt32(nivel[0]);
+            return PartialView(restauranteCG);
+        }
 
-            //        var tipoValor = db.NivelPrecios.Where(x => x.NivelPrecioId == nivelId).FirstOrDefault().Descripcion;
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCGDev(Tienda tiendas, FormCollection formCollection)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            //        db.Database.ExecuteSqlCommand(
-            //        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
-            //        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
-            //        new SqlParameter("@TiendaId", tiendaId),
-            //        new SqlParameter("@Valor", tipoValor));
+            string[] restauranteId = formCollection.GetValues("TiendaId");
+            string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
+            string[] tipo = formCollection.GetValues("TipoId");
+            string[] nivel = formCollection.GetValues("NuevoNivelDePrecioId");
+            string[] valorMD = formCollection.GetValues("ValorMD");
+            string[] valorP = formCollection.GetValues("ValorP");
 
-            //    }
-            //    else if (catalogoId[i] == "21")
-            //    {
-            //        var tipoValor = "NO";
+            for (var i = 0; i < restauranteId.Length; i++)
+            {
+                var tiendaId = Convert.ToInt32(restauranteId[i]);
+                var reglaCatalogoId = Convert.ToInt32(catalogoId[i]);
 
-            //        if (valorMD == null)
-            //        {
-            //            tipoValor = "NO";
-            //        }
-            //        else
-            //        {
-            //            tipoValor = "SI";
-            //        }
+                if (catalogoId[i] == "1")
+                {
+                    var tipoId = Convert.ToInt32(tipo[0]);
 
-            //        db.Database.ExecuteSqlCommand(
-            //        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
-            //        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
-            //        new SqlParameter("@TiendaId", tiendaId),
-            //        new SqlParameter("@Valor", tipoValor));
+                    var tipoValor = db.TipoTiendas.Where(x => x.TipoTiendaId == tipoId).FirstOrDefault().Tipo;
 
-            //    }
-            //    else if (catalogoId[i] == "22")
-            //    {
-            //        var tipoValor = valorP[0];
+                    db.Database.ExecuteSqlCommand(
+                    "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                    new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Valor", tipoValor));
 
-            //        db.Database.ExecuteSqlCommand(
-            //        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
-            //        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
-            //        new SqlParameter("@TiendaId", tiendaId),
-            //        new SqlParameter("@Valor", tipoValor));
+                }
+                else if (catalogoId[i] == "5")
+                {
+                    var nivelId = Convert.ToInt32(nivel[0]);
 
-            //    }
+                    var tipoValor = db.NivelPrecios.Where(x => x.NivelPrecioId == nivelId).FirstOrDefault().Descripcion;
 
-            //}
+                    db.Database.ExecuteSqlCommand(
+                    "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                    new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Valor", tipoValor));
 
-            //var tiendaIdA = Convert.ToInt32(restauranteId[0]);
+                }
+                else if (catalogoId[i] == "21")
+                {
+                    var tipoValor = "NO";
 
-            //var tienda = db.Tiendas.Where(x => x.TiendaId == tiendaIdA).FirstOrDefault();
+                    if (valorMD == null)
+                    {
+                        tipoValor = "NO";
+                    }
+                    else
+                    {
+                        tipoValor = "SI";
+                    }
 
-            //EliminarTodo(tienda);
+                    db.Database.ExecuteSqlCommand(
+                    "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                    new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Valor", tipoValor));
 
-            //MovimientosRestaurantes(tienda);
+                }
+                else if (catalogoId[i] == "22")
+                {
+                    var tipoValor = valorP[0];
 
-            //return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+                    db.Database.ExecuteSqlCommand(
+                    "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                    new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Valor", tipoValor));
+
+                }
+
+            }
+
+            var tiendaIdA = Convert.ToInt32(restauranteId[0]);
+
+            var tienda = db.Tiendas.Where(x => x.TiendaId == tiendaIdA).FirstOrDefault();
+
+            EliminarTodo(tienda);
+
+            MovimientosRestaurantes(tienda);
+
+
+            movimiento = "Actualizar CG " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCPDev(int id)
+        {
+            var restauranteCP = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasP @TiendaID",
+                                new SqlParameter("@TiendaId", id)).ToList();
+
+            return PartialView(restauranteCP);
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCPDev(Tienda tiendas, FormCollection formCollection)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            string[] restauranteId = formCollection.GetValues("TiendaId");
+            string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
+            string[] valor = formCollection.GetValues("Valor");
+
+            for (var i = 0; i < restauranteId.Length; i++)
+            {
+                var tiendaId = Convert.ToInt32(restauranteId[i]);
+                var reglaCatalogoId = Convert.ToInt32(catalogoId[i]);
+
+                var tipoValor = "NO";
+
+                if (valor == null)
+                {
+                    db.Database.ExecuteSqlCommand(
+                    "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                    new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Valor", tipoValor));
+                }
+                else
+                {
+                    for (int v = 0; v < valor.Length; v++)
+                    {
+                        if (catalogoId[i] == valor[v])
+                        {
+                            tipoValor = "SI";
+
+                            db.Database.ExecuteSqlCommand(
+                            "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                            new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                            new SqlParameter("@TiendaId", tiendaId),
+                            new SqlParameter("@Valor", tipoValor));
+
+                            break;
+                        }
+                        db.Database.ExecuteSqlCommand(
+                        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Valor", tipoValor));
+                    }
+                }
+
+            }
+
+            var tiendaIdA = Convert.ToInt32(restauranteId[0]);
+
+            var tienda = db.Tiendas.Where(x => x.TiendaId == tiendaIdA).FirstOrDefault();
+
+            EliminarTodo(tienda);
+
+            MovimientosRestaurantes(tienda);
+
+
+            movimiento = "Actualizar CP " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
         }
 
         [AuthorizeUser(idOperacion: 1)]
@@ -598,6 +810,82 @@ namespace CampaniasLito.Controllers
         }
 
         [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCMEDev(int id)
+        {
+            var restauranteCME = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasME @TiendaID",
+                                new SqlParameter("@TiendaId", id)).ToList();
+
+            return PartialView(restauranteCME);
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCMEDev(Tienda tiendas, FormCollection formCollection)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            string[] restauranteId = formCollection.GetValues("TiendaId");
+            string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
+            string[] valor = formCollection.GetValues("Valor");
+
+            for (var i = 0; i < restauranteId.Length; i++)
+            {
+                var tiendaId = Convert.ToInt32(restauranteId[i]);
+                var reglaCatalogoId = Convert.ToInt32(catalogoId[i]);
+
+                var tipoValor = "NO";
+
+                if (valor == null)
+                {
+                    db.Database.ExecuteSqlCommand(
+                    "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                    new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Valor", tipoValor));
+                }
+                else
+                {
+                    for (int v = 0; v < valor.Length; v++)
+                    {
+                        if (catalogoId[i] == valor[v])
+                        {
+                            tipoValor = "SI";
+
+                            db.Database.ExecuteSqlCommand(
+                            "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                            new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                            new SqlParameter("@TiendaId", tiendaId),
+                            new SqlParameter("@Valor", tipoValor));
+
+                            break;
+                        }
+                        db.Database.ExecuteSqlCommand(
+                        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Valor", tipoValor));
+                    }
+                }
+
+            }
+
+            var tiendaIdA = Convert.ToInt32(restauranteId[0]);
+
+            var tienda = db.Tiendas.Where(x => x.TiendaId == tiendaIdA).FirstOrDefault();
+
+            EliminarTodo(tienda);
+
+            MovimientosRestaurantes(tienda);
+
+
+            movimiento = "Actualizar ME " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
         [HttpPost]
         public ActionResult EditCME(Tienda tienda)
         {
@@ -627,6 +915,82 @@ namespace CampaniasLito.Controllers
         public ActionResult EditCMES(int id)
         {
             return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCMESDev(int id)
+        {
+            var restauranteCMES = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasMED @TiendaID",
+                                new SqlParameter("@TiendaId", id)).ToList();
+
+            return PartialView(restauranteCMES);
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCMESDev(Tienda tiendas, FormCollection formCollection)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            string[] restauranteId = formCollection.GetValues("TiendaId");
+            string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
+            string[] valor = formCollection.GetValues("Valor");
+
+            for (var i = 0; i < restauranteId.Length; i++)
+            {
+                var tiendaId = Convert.ToInt32(restauranteId[i]);
+                var reglaCatalogoId = Convert.ToInt32(catalogoId[i]);
+
+                var tipoValor = "NO";
+
+                if (valor == null)
+                {
+                    db.Database.ExecuteSqlCommand(
+                    "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                    new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Valor", tipoValor));
+                }
+                else
+                {
+                    for (int v = 0; v < valor.Length; v++)
+                    {
+                        if (catalogoId[i] == valor[v])
+                        {
+                            tipoValor = "SI";
+
+                            db.Database.ExecuteSqlCommand(
+                            "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                            new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                            new SqlParameter("@TiendaId", tiendaId),
+                            new SqlParameter("@Valor", tipoValor));
+
+                            break;
+                        }
+                        db.Database.ExecuteSqlCommand(
+                        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Valor", tipoValor));
+                    }
+                }
+
+            }
+
+            var tiendaIdA = Convert.ToInt32(restauranteId[0]);
+
+            var tienda = db.Tiendas.Where(x => x.TiendaId == tiendaIdA).FirstOrDefault();
+
+            EliminarTodo(tienda);
+
+            MovimientosRestaurantes(tienda);
+
+
+            movimiento = "Actualizar CMES " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
         }
 
         [AuthorizeUser(idOperacion: 1)]
@@ -666,6 +1030,109 @@ namespace CampaniasLito.Controllers
             ViewBag.AcomodoDeCajas = new SelectList(CombosHelper.GetAcomodoCajas(true), "AcomodoCajaId", "Descripcion", acomodoCaja);
 
             return PartialView(db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault());
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpGet]
+        public ActionResult EditCERDev(int id)
+        {
+            var restauranteCER = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasER @TiendaID",
+                                new SqlParameter("@TiendaId", id)).ToList();
+
+            return PartialView(restauranteCER);
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult EditCERDev(Tienda tiendas, FormCollection formCollection)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            string[] restauranteId = formCollection.GetValues("TiendaId");
+            string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
+            string[] valor = formCollection.GetValues("ValorMD");
+            string[] valorP = formCollection.GetValues("ValorP");
+
+            for (var i = 0; i < restauranteId.Length; i++)
+            {
+                var tiendaId = Convert.ToInt32(restauranteId[i]);
+                var reglaCatalogoId = Convert.ToInt32(catalogoId[i]);
+
+                var tipoValor = "NO";
+
+                if (restauranteId.Length == valorP.Length)
+                {
+                    tipoValor = valorP[i].ToUpper();
+
+                    db.Database.ExecuteSqlCommand(
+                    "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                    new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                    new SqlParameter("@TiendaId", tiendaId),
+                    new SqlParameter("@Valor", tipoValor));
+
+                }
+                else
+                {
+                    for (int vp = i; vp < valorP.Length; vp++)
+                    {
+                        tipoValor = valorP[i].ToUpper();
+
+                        db.Database.ExecuteSqlCommand(
+                        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Valor", tipoValor));
+                    }
+
+                    if (valor == null)
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                        new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                        new SqlParameter("@TiendaId", tiendaId),
+                        new SqlParameter("@Valor", tipoValor));
+                    }
+                    else
+                    {
+                        for (int v = 0; v < valor.Length; v++)
+                        {
+                            if (catalogoId[i] == valor[v])
+                            {
+                                tipoValor = "SI";
+
+                                db.Database.ExecuteSqlCommand(
+                                "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                                new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                                new SqlParameter("@TiendaId", tiendaId),
+                                new SqlParameter("@Valor", tipoValor));
+
+                                break;
+                            }
+                            db.Database.ExecuteSqlCommand(
+                            "spActualizarTiendaCaracteristicas @ReglaCatalogoId, @TiendaId, @Valor",
+                            new SqlParameter("@ReglaCatalogoId", reglaCatalogoId),
+                            new SqlParameter("@TiendaId", tiendaId),
+                            new SqlParameter("@Valor", tipoValor));
+                        }
+                    }
+                }
+
+
+            }
+
+            var tiendaIdA = Convert.ToInt32(restauranteId[0]);
+
+            var tienda = db.Tiendas.Where(x => x.TiendaId == tiendaIdA).FirstOrDefault();
+
+            EliminarTodo(tienda);
+
+            MovimientosRestaurantes(tienda);
+
+
+            movimiento = "Actualizar CG " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
         }
 
         [AuthorizeUser(idOperacion: 1)]

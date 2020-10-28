@@ -9,6 +9,7 @@ namespace CampaniasLito.Models
     [Table("CodigosCampaña")]
     public class CodigoCampaña
     {
+        [key]
         public int CodigoCampañaId { get; set; }
 
         public int ArticuloKFCId { get; set; }

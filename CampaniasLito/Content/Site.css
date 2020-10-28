@@ -728,10 +728,34 @@ table.dataTable tbody tr.selected {
 
 .notifyjs-bootstrap-success {
     color: #fff !important;
-    background-color: #92BABC !important;
+    background-color: #132f52 !important;
     /*opacity: .8;*/
     border-color: #fff !important;
     background-image: url(images/Check.png) !important;
+    background-size: 30px !important;
+    background-position: left !important;
+    background-position-x: 10px !important;
+    left: -20px !important
+}
+
+.notifyjs-bootstrap-info {
+    color: #fff !important;
+    background-color: #92BABC !important;
+    /*opacity: .8;*/
+    border-color: #fff !important;
+    background-image: url(images/info.png) !important;
+    background-size: 30px !important;
+    background-position: left !important;
+    background-position-x: 10px !important;
+    left: -20px !important
+}
+
+.notifyjs-bootstrap-danger {
+    color: red !important;
+    background-color: #92BABC !important;
+    /*opacity: .8;*/
+    border-color: #fff !important;
+    background-image: url(images/danger.png) !important;
     background-size: 30px !important;
     background-position: left !important;
     background-position-x: 10px !important;
@@ -744,7 +768,7 @@ table.dataTable tbody tr.selected {
 
 .notifyjs-bootstrap-base {
     padding: 10px 40px !important;
-    background-color: #92BABC !important;
+    background-color: #000000 !important;
     -webkit-border-radius: 10px !important;
     -moz-border-radius: 10px !important;
     border-radius: 10px !important;

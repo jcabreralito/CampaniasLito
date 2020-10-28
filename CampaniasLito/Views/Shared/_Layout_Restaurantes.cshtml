@@ -65,7 +65,7 @@
 
                 <i class="brand-logo2 fas fa-store fa-3x"></i>
                 <a id="titulo" class="brand-logo" style="color: #fff !important">
-                    @ViewBag.Title EQUITY
+                    @ViewBag.Title @Session["titulo"]
                 </a>
 
                 <ul class="right hide-on-med-and-down">
@@ -85,17 +85,17 @@
                         </a>
                     </li>
                     <li class="iMenu">
-                        <a id="equityB" class="iconomenuLetra @Session["equityB"].ToString()" title="Equity" onclick="mostrarEquity();">
+                        <a id="equityB" href="@Url.Action("Index", "Restaurantes")" class="iconomenuLetra @Session["equityB"].ToString()" title="Equity" onclick="viewPageIndex()">
                             <i>EQ</i>
                         </a>
                     </li>
                     <li class="iMenu">
-                        <a id="franquiciasB" class="iconomenuLetra @Session["franquiciasB"].ToString()" title="Franquicias" onclick="mostrarFranquicias();">
+                        <a id="franquiciasB" href="@Url.Action("IndexFQ", "Restaurantes")" class="iconomenuLetra @Session["franquiciasB"].ToString()" title="Franquicias" onclick="viewPageIndex()">
                             <i>FQ</i>
                         </a>
                     </li>
                     <li class="iMenu">
-                        <a id="stockB" class="iconomenuLetra @Session["stockB"].ToString()" title="Stock" onclick="mostrarStock();">
+                        <a id="stockB" href="@Url.Action("IndexSK", "Restaurantes")" class="iconomenuLetra @Session["stockB"].ToString()" title="Stock" onclick="viewPageIndex()">
                             <i>STK</i>
                         </a>
                     </li>
@@ -147,17 +147,17 @@
                 </a>
             </li>
             <li>
-                <a id="equityB" class="iconomenu @Session["equityB"].ToString()" onclick="mostrarEquity();">
+                <a id="equityB" href="@Url.Action("Index", "Restaurantes")" class="iconomenu @Session["equityB"].ToString()" onclick="viewPageIndex()">
                     Equity
                 </a>
             </li>
             <li>
-                <a id="franquiciasB" class="iconomenu @Session["franquiciasB"].ToString()" onclick="mostrarFranquicias();">
+                <a id="franquiciasB" href="@Url.Action("IndexFQ", "Restaurantes")" class="iconomenu @Session["franquiciasB"].ToString()" onclick="viewPageIndex()">
                     Franquicias
                 </a>
             </li>
             <li>
-                <a id="stockB" class="iconomenu @Session["stockB"].ToString()" onclick="mostrarStock();">
+                <a id="stockB" href="@Url.Action("IndexSK", "Restaurantes")" class="iconomenu @Session["stockB"].ToString()" onclick="viewPageIndex()">
                     Stock
                 </a>
             </li>
