@@ -57,6 +57,7 @@ namespace CampaniasLito.Controllers
             Session["franquiciasB"] = string.Empty;
             Session["reglasCatalogoB"] = string.Empty;
             Session["stockB"] = string.Empty;
+            Session["materialesB"] = string.Empty;
 
             return View();
         }
@@ -83,30 +84,19 @@ namespace CampaniasLito.Controllers
 
         [AuthorizeUser(idOperacion: 1)]
         [HttpGet]
-        public ActionResult AddOrEdit(int? cat, int id = 0)
+        public ActionResult AddOrEdit(int id = 0)
         {
-            var categoria = string.Empty;
-            if (cat == 1)
-            {
-                categoria = "EQUITY";
-            }
-            else if (cat == 2)
-            {
-                categoria = "FRANQUICIAS";
-            }
-
             if (id == 0)
             {
-                ViewBag.ArticuloKFCId = new SelectList(CombosHelper.GetMateriales(categoria, true), "ArticuloKFCId", "Descripcion");
+                ViewBag.ArticuloKFCId = new SelectList(CombosHelper.GetMateriales("", true), "ArticuloKFCId", "Descripcion");
 
                 return PartialView(new Regla());
             }
             else
             {
                 var articuloId = db.Reglas.Where(x => x.ReglaId == id).FirstOrDefault().ArticuloKFCId;
-                categoria = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloId).FirstOrDefault().EquityFranquicia;
 
-                ViewBag.ArticuloKFCId = new SelectList(CombosHelper.GetMateriales(categoria), "ArticuloKFCId", "Descripcion", articuloId);
+                ViewBag.ArticuloKFCId = new SelectList(CombosHelper.GetMateriales("", true), "ArticuloKFCId", "Descripcion", articuloId);
                 return PartialView(db.Reglas.Where(x => x.ReglaId == id).FirstOrDefault());
             }
         }
@@ -126,7 +116,7 @@ namespace CampaniasLito.Controllers
                     var reglaId = regla.ReglaId;
                     var cat = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == regla.ArticuloKFCId).FirstOrDefault().EquityFranquicia;
 
-                    MovementsHelper.AgregarReglasCaracteristicas(reglaId, cat);
+                    MovementsHelper.AgregarReglasCaracteristicas(cat);
 
                     movimiento = "Agregar Regla " + regla.ReglaId + " " + regla.NombreRegla + " / " + regla.ArticuloKFC.Descripcion;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
@@ -147,7 +137,7 @@ namespace CampaniasLito.Controllers
                     var reglaId = regla.ReglaId;
                     var cat = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == regla.ArticuloKFCId).FirstOrDefault().EquityFranquicia;
 
-                    MovementsHelper.AgregarReglasCaracteristicas(reglaId, cat);
+                    MovementsHelper.AgregarReglasCaracteristicas(cat);
 
                     movimiento = "Actualizar Regla " + regla.ReglaId + " " + regla.NombreRegla + " / " + regla.ArticuloKFC.Descripcion;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
@@ -238,7 +228,7 @@ namespace CampaniasLito.Controllers
 
                     var reglaIdTienda = reglaCatalogo.ReglaCatalogoId;
 
-                    MovementsHelper.AgregarReglasCaracteristicas(reglaIdTienda, cat);
+                    MovementsHelper.AgregarReglasCaracteristicas(cat);
 
                     MovementsHelper.AgregarTiendasCaracteristicas(reglaIdTienda, cat, fcTipo, fsTipo, ilTipo, sbTipo);
 
@@ -294,7 +284,7 @@ namespace CampaniasLito.Controllers
                 var cat = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == artId).FirstOrDefault().EquityFranquicia;
                 int reglaId = (int)id;
 
-                MovementsHelper.AgregarReglasCaracteristicas(reglaId, cat);
+                MovementsHelper.AgregarReglasCaracteristicas(cat);
             }
 
             if (reglasList == null)
@@ -319,8 +309,6 @@ namespace CampaniasLito.Controllers
             string[] isFalse = fc.GetValues("IsFalse");
 
             var selec = false;
-            var si = false;
-            var no = false;
 
             for (var i = 0; i < reglaCaractersiticaId.Length; i++)
             {

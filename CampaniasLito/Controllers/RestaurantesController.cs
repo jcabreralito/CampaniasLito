@@ -5,6 +5,7 @@ using System;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
@@ -189,7 +190,7 @@ namespace CampaniasLito.Controllers
 
         // GET: Restaurantes
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             Session["iconoTitulo"] = "fas fa-store";
             Session["titulo"] = "EQUITY";
@@ -202,7 +203,7 @@ namespace CampaniasLito.Controllers
             Session["campañasB"] = string.Empty;
             Session["caracteristicasB"] = string.Empty;
 
-            var equityList = db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicasEquity").ToList();
+            var equityList = await db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicasEquity").ToListAsync();
 
             return PartialView(equityList);
 
@@ -363,15 +364,73 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    var cat = tienda.EquityFranquicia;
+
+                    var categoria = string.Empty;
+
+                    if (cat == "EQUITY" || cat == "STOCK")
+                    {
+                        categoria = "FRANQUICIAS";
+                    }
+                    else if (cat == "FRANQUICIAS")
+                    {
+                        categoria = "EQUITY";
+                    }
+
+                    var reglasList = db.Database.SqlQuery<ReglaCatalogo>("spGetReglasCatalogoCategoria @Categoria",
+                    new SqlParameter("@Categoria", categoria)).ToList();
+
+                    foreach (var regla in reglasList)
+                    {
+                        var val = string.Empty;
+
+                        if (regla.Valor == "SI / NO")
+                        {
+                            val = "NO";
+                        }
+                        else if (regla.Valor == "TIPOS")
+                        {
+                            val = "FC";
+                        }
+                        else if (regla.Valor == "NUEVO NIVEL DE PRECIO")
+                        {
+                            val = "ALTO";
+                        }
+                        else
+                        {
+                            val = regla.Valor;
+                        }
+
+                        db.Database.ExecuteSqlCommand(
+                        "spAgregarTiendaCaracteristicas @TiendaId, @ReglaCatalogoId, @Valor",
+                        new SqlParameter("@TiendaId", tienda.TiendaId),
+                        new SqlParameter("@ReglaCatalogoId", regla.ReglaCatalogoId),
+                        new SqlParameter("@Valor", val));
+                    }
+
+
                     MovimientosRestaurantes(tienda);
 
                     movimiento = "Agregar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
+                    //if (cat == "EQUITY")
+                    //{
+                    //    return RedirectToRoute("Index");
+                    //}
+                    //else if (cat == "FRANQUICIAS")
+                    //{
+                    //    return RedirectToRoute("IndexFQ");
+                    //}
+                    //else
+                    //{
+                    //    return RedirectToRoute("IndexSK");
+                    //}
                     return Json(new { success = true, message = "RESTAURANTE AGREGADO" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
+                    //return RedirectToRoute("Index");
                     return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -385,15 +444,33 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    var cat = tienda.EquityFranquicia;
+
+                    EliminarTodo(tienda);
+
                     MovimientosRestaurantes(tienda);
 
                     movimiento = "Actualizar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
+
+                    //if (cat == "EQUITY")
+                    //{
+                    //    return RedirectToRoute("Index");
+                    //}
+                    //else if (cat == "FRANQUICIAS")
+                    //{
+                    //    return RedirectToRoute("IndexFQ");
+                    //}
+                    //else
+                    //{
+                    //    return RedirectToRoute("IndexSK");
+                    //}
                     return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
+                    //return RedirectToRoute("Index");
                     return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -1618,15 +1695,36 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            db.Database.ExecuteSqlCommand(
-            "spEliminarArticulosTiendas @TiendaId",
-            new SqlParameter("@TiendaId", id));
 
             Tienda tienda = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault();
-            db.Tiendas.Remove(tienda);
+            tienda.Eliminado = true;
+            db.Entry(tienda).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
             {
+                db.Database.ExecuteSqlCommand(
+                "spEliminarCaracteristicasTiendas @TiendaId",
+                new SqlParameter("@TiendaId", id));
+
+                db.Database.ExecuteSqlCommand(
+                "spEliminarArticulosTiendas @TiendaId",
+                new SqlParameter("@TiendaId", id));
+
+                var campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
+                if (campañas != null)
+                {
+                    foreach (var campaña in campañas)
+                    {
+                        var campId = campaña.CampañaId;
+
+                        db.Database.ExecuteSqlCommand(
+                        "spEliminarTiendaCampanias @TiendaId, @CampañaId",
+                        new SqlParameter("@TiendaId", id),
+                        new SqlParameter("@CampañaId", campId));
+                    }
+                }
+
                 movimiento = "Eliminar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 

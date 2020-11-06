@@ -189,7 +189,7 @@
 
     @RenderSection("scripts", required: false)
 
-    <script>
+@*<script>
     function mostrarEquity() {
 
         $("#titulo").text('@ViewBag.Title EQUITY');
@@ -199,7 +199,7 @@
         $('#franquiciasB').removeClass('active');
         $('#stockB').removeClass('active');
 
-        dataTable.ajax.reload();
+        //dataTable.ajax.reload();
 
         document.getElementById('equity').style.display = 'block';
         document.getElementById('equity').style.visibility = 'visible';
@@ -221,7 +221,7 @@
 
         //dataTableF.draw();
 
-        dataTableF.ajax.reload();
+        //dataTableF.ajax.reload();
 
         document.getElementById('equity').style.display = 'none';
         document.getElementById('equity').style.visibility = 'hidden';
@@ -241,7 +241,7 @@
         $('#franquiciasB').removeClass('active');
         $('#stockB').addClass('active');
 
-        dataTableS.ajax.reload();
+        //dataTableS.ajax.reload();
 
         document.getElementById('equity').style.display = 'none';
         document.getElementById('equity').style.visibility = 'hidden';
@@ -252,7 +252,7 @@
 
         }
 
-    </script>
+</script>*@
 
 </body>
 </html>

@@ -336,17 +336,23 @@
 
 @section scripts{
 
-    <script>
+        <script>
 
     var Popup, PopupMat, dataTable, dataTableF, dataTableS;
         $(document).ready(function () {
 
             dataTable = $("#resEquityTable").DataTable({
             "serverSide": false,
+            "deferRender": true,
+            //"ajax": {
+            //"url": "Restaurantes/Index",
+            //"type": "GET",
+            //"datatype": "json"
+            //},
             "order": [[1, "asc"]],
             "pagingType": "full_numbers",
             "language": {
-                "emptyTable": "No hay datos, dar click en el botón <b>Add New</b>",
+                "emptyTable": "No hay datos, dar click en el botón <b>Agregar</b>",
                 "sLengthMenu": "Mostrar _MENU_ registros",
                 "sZeroRecords": "No se encontraron resultados",
                 "sInfo": "_END_ registros",
@@ -591,7 +597,13 @@ function SubmitForm(form) {
             success: function (data) {
                 if (data.success) {
                     Popup.dialog('close');
-                    dataTable.reload();
+                    //ajax: {
+                    //    url: "Restaurantes/Index",
+                    //        type: "GET",
+                    //            datatype: "json"
+                    //};
+                    //dataTable.ajax.reload();
+                    dataTable.draw();
 
                     $.notify(data.message, {
                         globalPosition: "top center",
@@ -626,8 +638,7 @@ function Delete(id) {
                 if (data.success)
                 {
                     dataTable.draw();
-                    dataTableF.draw();
-                    //dataTableS.ajax.reload();
+                    ////dataTableS.ajax.reload();
 
                     $.notify(data.message, {
                         globalPosition: "top center",
@@ -674,5 +685,5 @@ function exportTableToExcel(tableID, filename = '') {
     }
 }
 
-    </script>
-}
+        </script>
+    }

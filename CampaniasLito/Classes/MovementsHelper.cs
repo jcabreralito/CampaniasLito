@@ -319,108 +319,6 @@ namespace CampaniasLito.Classes
             new SqlParameter("@TiendaId", tiendaId),
             new SqlParameter("@CampañaId", campañaid));
 
-            //var tiendaId = tienda.TiendaId;
-            //var tipoTienda = tienda.EquityFranquicia;
-
-            //var articulos = db.ArticuloKFCs.ToList();
-
-            //if (tipoTienda == "EQUITY")
-            //{
-            //    articulos = db.ArticuloKFCs.Where(x => x.EquityFranquicia != "FRANQUICIAS").ToList();
-            //}
-            //else if (tipoTienda == "FRANQUICIAS")
-            //{
-            //    articulos = db.ArticuloKFCs.Where(x => x.EquityFranquicia != "EQUITY").ToList();
-            //}
-
-            ////var campaña = db.Campañas.Where(c => c.Generada == "NO").ToList();
-
-            ////if (campaña.Count == 0)
-            ////{
-            ////    return new Response { Succeeded = true, };
-            ////}
-            ////else
-            ////{
-            ////foreach (var campa in campaña)
-            ////{
-            //foreach (var articulo in articulos)
-            //{
-
-            //    var articulosCampaña = db.Database.SqlQuery<CampañaArticuloTMP>("spGetArticulosCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId",
-            //    new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-            //    new SqlParameter("@CampañaId", campañaid),
-            //    new SqlParameter("@TiendaId", tiendaId)).FirstOrDefault();
-
-
-            //    if (articulosCampaña == null)
-            //    {
-            //        var materialTienda = db.Database.SqlQuery<TiendaArticulo>("spGetMaterialCAmpanias @ArticuloKFCId, @TiendaId",
-            //        new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-            //        new SqlParameter("@TiendaId", tiendaId)).FirstOrDefault();
-
-            //        var habilitado = false;
-
-            //        if (materialTienda != null)
-            //        {
-            //            habilitado = materialTienda.Seleccionado;
-            //        }
-
-            //        var cantidad = 0;
-
-            //        if (habilitado == true)
-            //        {
-            //            cantidad = articulo.CantidadDefault;
-            //        }
-
-            //        int codigo = 0;
-
-            //        if (articulo.Activo == true && articulo.Eliminado == false)
-            //        {
-            //            db.Database.ExecuteSqlCommand(
-            //            "spAgregarMaterialCAmpanias @ArticuloKFCId, @TiendaId, @CampañaId, @Habilitado, @Cantidad, @Codigo",
-            //            new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-            //            new SqlParameter("@TiendaId", tiendaId),
-            //            new SqlParameter("@CampañaId", campañaid),
-            //            new SqlParameter("@Habilitado", habilitado),
-            //            new SqlParameter("@Cantidad", cantidad),
-            //            new SqlParameter("@Codigo", codigo));
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (tienda.Activo == false)
-            //        {
-            //            //int campId = campa.CampañaId;
-
-            //            db.Database.ExecuteSqlCommand(
-            //            "spEliminarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId",
-            //            new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-            //            new SqlParameter("@CampañaId", campañaid),
-            //            new SqlParameter("@TiendaId", tiendaId));
-            //        }
-            //        else
-            //        {
-            //            if (articulosCampaña.Habilitado == true)
-            //            {
-
-            //                if (articulo.CantidadDefault != articulosCampaña.Cantidad)
-            //                {
-            //                    var cantidad = articulo.CantidadDefault;
-
-            //                    db.Database.ExecuteSqlCommand(
-            //                   "spActualizarMaterialCAmpanias @ArticuloKFCId, @CampañaId, @TiendaId, @Cantidad",
-            //                    new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId),
-            //                    new SqlParameter("@CampañaId", campañaid),
-            //                    new SqlParameter("@TiendaId", tiendaId),
-            //                    new SqlParameter("@Cantidad", cantidad));
-
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            ////    }
-            ////}
 
             return new Response { Succeeded = true, };
 
@@ -9047,8 +8945,6 @@ namespace CampaniasLito.Classes
                 tiendas = restaurantes.Where(x => x.EquityFranquicia == "FRANQUICIAS" && x.Activo == true).ToList();
             }
 
-            var selec = false;
-
             var articulos = db.ArticuloKFCs.Where(x => x.Activo == true).ToList();
 
 
@@ -9091,11 +8987,22 @@ namespace CampaniasLito.Classes
 
                 foreach (var tienda in tiendas)
                 {
-                    var tipoRestaurante = string.Empty;
+                    categoria = tienda.EquityFranquicia;
+                    var tipoRestaurante = "STK";
+
+                    if (categoria != "STOCK")
+                    {
+                        tipoRestaurante = db.Database.SqlQuery<TiendaCaracteristica>("spGetTipoTienda @TiendaId",
+                                new SqlParameter("@TiendaId", tienda.TiendaId)).FirstOrDefault().Valor;
+
+                    }
 
                     foreach (var regla in reglas)
                     {
-                        var caracteristicasTienda = db.TiendaCaracteristicas.Where(x => x.ReglaCatalogoId == regla.ReglaCatalogoId && x.TiendaId == tienda.TiendaId).FirstOrDefault();
+                        var caracteristicasTienda = db.Database.SqlQuery<TiendaCaracteristica>("spGetCaracteristicasTienda @TiendaId, @ReglaCatalogoId",
+                            new SqlParameter("@TiendaId", tienda.TiendaId),
+                            new SqlParameter("@ReglaCatalogoId", regla.ReglaCatalogoId)).FirstOrDefault();
+
                         if (caracteristicasTienda == null)
                         {
                             cumpleRegla = false;
@@ -9121,26 +9028,18 @@ namespace CampaniasLito.Classes
                                 }
                             }
                         }
-                        else if (regla.Nombre == "TIPO")
+                        else if (regla.Nombre.Contains("TIPO"))
                         {
                             tipoRestaurante = caracteristicasTienda.Valor;
-
-
-                            //if (caracteristicasTienda.Valor != regla.Nombre)
-                            //{
-                            //    cumpleRegla = false;
-                            //    //break;
-                            //}
-                            //else
-                            //{
-                            //    cumpleRegla = true;
-                            //    break;
-                            //}
                         }
                         else if (caracteristicasTienda.Valor != regla.Habilitado)
                         {
                             cumpleRegla = false;
                             break;
+                        }
+                        else if (regla.Nombre.Contains("PERSONALIZADO"))
+                        {
+                            AsignarNumeroMotoboard(articulo.ArticuloKFCId, tienda);
                         }
                         else
                         {
@@ -15795,6 +15694,431 @@ namespace CampaniasLito.Classes
 
             }
 
+        }
+
+        private static void AsignarNumeroMotoboard(int articuloId, Tienda tienda)
+        {
+            if (articuloId == 245) //245
+            {
+                if (tienda.TiendaId == 268 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 246) //246
+            {
+                if (tienda.TiendaId == 334 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 247) //247
+            {
+                if (tienda.TiendaId == 390 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 391 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 248) //248
+            {
+                if (tienda.TiendaId == 286 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 249) //249
+            {
+                if (tienda.TiendaId == 287 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 250) //250
+            {
+                if (tienda.TiendaId == 288 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 251) //251
+            {
+                if (tienda.TiendaId == 290 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 252) //252
+            {
+                if (tienda.TiendaId == 291 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 253) //253
+            {
+                if (tienda.TiendaId == 297 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 384 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 254) //254
+            {
+                if (tienda.TiendaId == 299 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 255) //255
+            {
+                if (tienda.TiendaId == 300 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 256) //256
+            {
+                if (tienda.TiendaId == 304 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 257) //257
+            {
+                if (tienda.TiendaId == 307 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 258) //258
+            {
+                if (tienda.TiendaId == 308 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 259) //259
+            {
+                if (tienda.TiendaId == 309 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 260) //260
+            {
+                if (tienda.TiendaId == 310 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 261) //261
+            {
+                if (tienda.TiendaId == 314 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 262) //262
+            {
+                if (tienda.TiendaId == 319 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 263) //263
+            {
+                if (tienda.TiendaId == 327 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 264) //264
+            {
+                if (tienda.TiendaId == 328 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 265) //265
+            {
+                if (tienda.TiendaId == 329 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 266) //266
+            {
+                if (tienda.TiendaId == 335 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 267) //267
+            {
+                if (tienda.TiendaId == 336 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 268) //268
+            {
+                if (tienda.TiendaId == 337 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 269) //269
+            {
+                if (tienda.TiendaId == 339 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 270) //270
+            {
+                if (tienda.TiendaId == 343 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 271) //271
+            {
+                if (tienda.TiendaId == 347 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 272) //272
+            {
+                if (tienda.TiendaId == 349 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 273) //273
+            {
+                if (tienda.TiendaId == 351 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 274) //274
+            {
+                if (tienda.TiendaId == 356 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 275) //275
+            {
+                if (tienda.TiendaId == 367 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 276) //276
+            {
+                if (tienda.TiendaId == 368 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 277) //277
+            {
+                if (tienda.TiendaId == 373 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 379 && tienda.TelefonoPersonalizado == true || tienda.TiendaId == 382 && tienda.TelefonoPersonalizado == true)
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                }
+                else
+                {
+                    AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                }
+            }
+
+            if (articuloId == 278) //278
+            {
+                {
+                    if (tienda.TiendaId == 374 && tienda.TelefonoPersonalizado == true)
+                    {
+                        AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                    }
+                    else
+                    {
+                        AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                    }
+                }
+
+                if (articuloId == 280) //280
+                {
+                    if (tienda.TiendaId == 394 && tienda.TelefonoPersonalizado == true)
+                    {
+                        AgregarNuevoMaterial(articuloId, tienda.TiendaId, true);
+                    }
+                    else
+                    {
+                        AgregarNuevoMaterial(articuloId, tienda.TiendaId, false);
+                    }
+                }
+            }
         }
 
         private static void SiExisteMedidaEspecialAE(Tienda tienda, bool selecc, int articuloKFCId)
@@ -23597,7 +23921,6 @@ namespace CampaniasLito.Classes
             }
         }
 
-
         private static void AgregarArticulosTiendaCampañaExisteF(int articuloKFCId)
         {
             var categoria = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloKFCId).FirstOrDefault().EquityFranquicia;
@@ -26107,44 +26430,39 @@ namespace CampaniasLito.Classes
             }
         }
 
-        public static Response AgregarReglasCaracteristicas(int reglaId, string cat)
+        public static Response AgregarReglasCaracteristicas(string cat)
         {
-            var categoria = "EQUITY";
-
-            if (cat == "EQUITY" || cat == "EQUITY / FRANQUICIAS")
-            {
-                categoria = "FRANQUICIAS";
-            }
-
-            var caracteristicas = db.ReglasCatalogo.ToList();
+            var caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticas").ToList();
 
             if (cat == "EQUITY")
             {
-                caracteristicas = db.ReglasCatalogo.Where(x => x.Categoria != "FRANQUICIAS").ToList();
+                caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticasEQ").ToList();
             }
             else if (cat == "FRANQUICIAS")
             {
-                caracteristicas = db.ReglasCatalogo.Where(x => x.Categoria != "EQUITY").ToList();
+                caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticasFQ").ToList();
             }
 
             foreach (var caracteristica in caracteristicas)
             {
-                var reglas = db.Reglas.ToList();
+                var reglas = db.Database.SqlQuery<Regla>("spReglas").ToList();
 
                 if (cat == "EQUITY")
                 {
-                    reglas = db.Reglas.Where(x => x.ArticuloKFC.EquityFranquicia != "FRANQUICIAS").ToList();
+                    reglas = db.Database.SqlQuery<Regla>("spReglasEQ").ToList();
                 }
                 else if (cat == "FRANQUICIAS")
                 {
-                    reglas = db.Reglas.Where(x => x.ArticuloKFC.EquityFranquicia != "EQUITY").ToList();
+                    reglas = db.Database.SqlQuery<Regla>("spReglasFQ").ToList();
                 }
 
                 if (reglas != null)
                 {
                     foreach (var regla in reglas)
                     {
-                        var existentes = db.ReglasCaracteristicas.Where(x => x.ReglaId == regla.ReglaId && x.ReglaCatalogoId == caracteristica.ReglaCatalogoId).FirstOrDefault();
+                        var existentes = db.Database.SqlQuery<ReglaCaracteristica>("spReglasCaracteristicasExistentes @ReglaId, @ReglaCatalogoId",
+                            new SqlParameter("@ReglaId", regla.ReglaId),
+                            new SqlParameter("@ReglaCatalogoId", caracteristica.ReglaCatalogoId)).FirstOrDefault();
 
                         if (existentes == null)
                         {

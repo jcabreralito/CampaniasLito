@@ -342,30 +342,47 @@ namespace CampaniasLito.Controllers
 
                     var id = material.ArticuloKFCId;
 
-                    if (material.Activo == true)
+                    if (material.FamiliaId != 22)
                     {
-                        //if (tipo != material.EquityFranquicia)
-                        //{
-                        //    EliminarMateriales(id, campaña);
-                        //}
-
-                        EliminarMateriales(id, campaña);
-
-                        MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
-
-                        if (campaña != null)
+                        if (material.Activo == true)
                         {
-                            var campañaId = campaña.CampañaId;
 
-                            MovementsHelper.AgregarArticuloCampañas(material, campañaId);
+                            EliminarMateriales(id, campaña);
+
+                            MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
+                            if (campaña != null)
+                            {
+                                var campañaId = campaña.CampañaId;
+
+                                MovementsHelper.AgregarArticuloCampañas(material, campañaId);
+                            }
+
                         }
-
+                        else
+                        {
+                            EliminarMateriales(id, campaña);
+                        }
                     }
                     else
                     {
-                        EliminarMateriales(id, campaña);
-                    }
+                        if (material.Activo == true)
+                        {
 
+                            EliminarMaterialesMoto(id, campaña);
+
+                            if (campaña != null)
+                            {
+                                var campañaId = campaña.CampañaId;
+
+                                MovementsHelper.AgregarArticuloCampañas(material, campañaId);
+                            }
+
+                        }
+                        else
+                        {
+                            EliminarMaterialesMoto(id, campaña);
+                        }
+                    }
 
                     movimiento = "Actualizar Material " + material.ArticuloKFCId + " " + material.Descripcion + " / " + material.EquityFranquicia;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
@@ -376,6 +393,17 @@ namespace CampaniasLito.Controllers
                 {
                     return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
                 }
+            }
+        }
+
+        private void EliminarMaterialesMoto(int id, Campaña campaña)
+        {
+            if (campaña != null)
+            {
+                db.Database.ExecuteSqlCommand(
+                "spEliminarMaterialCampaniasTiendas @ArticuloKFCId, @CampaniaId",
+                new SqlParameter("@ArticuloKFCId", id),
+                new SqlParameter("@CampaniaId", campaña.CampañaId));
             }
         }
 

@@ -165,7 +165,7 @@ namespace CampaniasLito.Classes
 
         public static List<ArticuloKFC> GetMateriales(bool sw)
         {
-            var materiales = db.ArticuloKFCs.ToList();
+            var materiales = db.ArticuloKFCs.Where(x => x.Eliminado == false).ToList();
             return materiales.OrderBy(r => r.Descripcion).ToList();
         }
 

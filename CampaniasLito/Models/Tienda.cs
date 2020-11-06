@@ -256,6 +256,8 @@ namespace CampaniasLito.Models
 
         public bool Activo { get; set; }
 
+        public bool Eliminado { get; set; }
+
         [Display(Name = "AE MEDIDA ESPECIAL")]
         public bool AEMedidaEspecial { get; set; }
 

@@ -342,11 +342,13 @@
         $(document).ready(function () {
 
             dataTable = $("#resFranquiciasTable").DataTable({
-            "serverSide": false,
+            //"processing": true,
+            //"serverSide": true,
+            "deferRender": true,
             "order": [[1, "asc"]],
             "pagingType": "full_numbers",
             "language": {
-                "emptyTable": "No hay datos, dar click en el botón <b>Add New</b>",
+                "emptyTable": "No hay datos, dar click en el botón <b>Agregar</b>",
                 "sLengthMenu": "Mostrar _MENU_ registros",
                 "sZeroRecords": "No se encontraron resultados",
                 "sInfo": "_END_ registros",
@@ -437,7 +439,7 @@
                     //},
                     filename: 'Restaurantes',
                     autoFilter: true,
-                    sheetName: 'Equity',
+                    sheetName: 'Franquicias',
                     messageTop: null,
                     body: true,
                     footer: false,
@@ -504,7 +506,7 @@ viewPage();
         Popup = formDiv.dialog({
             autoOpen: true,
             resizable: false,
-            title: "RESTAURANTES EQ",
+            title: "RESTAURANTES FQ",
             width: 850,
             modal: true,
             closeOnEscape: false,
@@ -529,7 +531,7 @@ viewPage();
                 //position: ['middle', 20],
                 autoOpen: true,
                 resizable: false,
-                title: "MATERIALES EQ",
+                title: "MATERIALES FQ",
                 width: 800,
                 modal: true,
                 closeOnEscape: false,
@@ -559,7 +561,7 @@ viewPage();
                     success: function (data) {
                         if (data.success) {
                             PopupMat.dialog('close');
-                            dataTable.draw();
+                            //dataTable.draw();
 
                             $.notify(data.message, {
                                 globalPosition: "top center",
@@ -591,7 +593,7 @@ function SubmitForm(form) {
             success: function (data) {
                 if (data.success) {
                     Popup.dialog('close');
-                    dataTable.reload();
+                    //dataTable.draw();
 
                     $.notify(data.message, {
                         globalPosition: "top center",
@@ -625,8 +627,7 @@ function Delete(id) {
             success: function (data) {
                 if (data.success)
                 {
-                    dataTable.draw();
-                    dataTableF.draw();
+                    //dataTable.draw();
                     //dataTableS.ajax.reload();
 
                     $.notify(data.message, {
