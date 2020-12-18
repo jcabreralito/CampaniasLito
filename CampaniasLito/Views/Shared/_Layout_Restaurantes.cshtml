@@ -171,6 +171,14 @@
         <div id="contenedor_carga">
             <div id="carga">
             </div>
+            <div id="inTurnBlurringTextG">
+                <div id="inTurnBlurringTextG_1" class="inTurnBlurringTextG">K</div>
+                <div id="inTurnBlurringTextG_2" class="inTurnBlurringTextG">F</div>
+                <div id="inTurnBlurringTextG_3" class="inTurnBlurringTextG">C</div>
+                <div id="inTurnBlurringTextG_4" class="inTurnBlurringTextG">.</div>
+                <div id="inTurnBlurringTextG_5" class="inTurnBlurringTextG">.</div>
+                <div id="inTurnBlurringTextG_6" class="inTurnBlurringTextG">.</div>
+            </div>
         </div>
         @RenderBody()
     </div>
@@ -188,71 +196,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     @RenderSection("scripts", required: false)
-
-@*<script>
-    function mostrarEquity() {
-
-        $("#titulo").text('@ViewBag.Title EQUITY');
-        $("#tituloJum").text('@ViewBag.Title EQUITY');
-
-        $('#equityB').addClass('active');
-        $('#franquiciasB').removeClass('active');
-        $('#stockB').removeClass('active');
-
-        //dataTable.ajax.reload();
-
-        document.getElementById('equity').style.display = 'block';
-        document.getElementById('equity').style.visibility = 'visible';
-        document.getElementById('franquicias').style.display = 'none';
-        document.getElementById('franquicias').style.visibility = 'hidden';
-        document.getElementById('stock').style.display = 'none';
-        document.getElementById('stock').style.visibility = 'hidden';
-
-        }
-
-    function mostrarFranquicias() {
-
-        $("#titulo").text('@ViewBag.Title FRANQUICIAS');
-        $("#tituloJum").text('@ViewBag.Title FRANQUICIAS');
-
-        $('#equityB').removeClass('active');
-        $('#franquiciasB').addClass('active');
-        $('#stockB').removeClass('active');
-
-        //dataTableF.draw();
-
-        //dataTableF.ajax.reload();
-
-        document.getElementById('equity').style.display = 'none';
-        document.getElementById('equity').style.visibility = 'hidden';
-        document.getElementById('franquicias').style.display = 'block';
-        document.getElementById('franquicias').style.visibility = 'visible';
-        document.getElementById('stock').style.display = 'none';
-        document.getElementById('stock').style.visibility = 'hidden';
-
-        }
-
-    function mostrarStock() {
-
-        $("#titulo").text('@ViewBag.Title STOCK');
-        $("#tituloJum").text('@ViewBag.Title STOCK');
-
-        $('#equityB').removeClass('active');
-        $('#franquiciasB').removeClass('active');
-        $('#stockB').addClass('active');
-
-        //dataTableS.ajax.reload();
-
-        document.getElementById('equity').style.display = 'none';
-        document.getElementById('equity').style.visibility = 'hidden';
-        document.getElementById('franquicias').style.display = 'none';
-        document.getElementById('franquicias').style.visibility = 'hidden';
-        document.getElementById('stock').style.display = 'block';
-        document.getElementById('stock').style.visibility = 'visible';
-
-        }
-
-</script>*@
 
 </body>
 </html>
