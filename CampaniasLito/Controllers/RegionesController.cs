@@ -32,6 +32,7 @@ namespace CampaniasLito.Controllers
             Session["campañasB"] = string.Empty;
             Session["reglasB"] = string.Empty;
             Session["bitacoraB"] = string.Empty;
+            Session["Mensaje"] = string.Empty;
 
             return View();
         }

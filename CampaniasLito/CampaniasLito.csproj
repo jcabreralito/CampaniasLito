@@ -25,7 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>3.8</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,6 +36,19 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -2945,7 +2958,6 @@
     <Content Include="Views\Materiales\Index.cshtml" />
     <Content Include="Views\Materiales\AddOrEdit.cshtml" />
     <Content Include="Views\Shared\_Layout_Restaurantes.cshtml" />
-    <Content Include="Views\Restaurantes\IndexDev.cshtml" />
     <Content Include="Views\Restaurantes\AddOrEdit.cshtml" />
     <Content Include="Views\Restaurantes\EditCGDev.cshtml" />
     <Content Include="Views\Restaurantes\EditCP.cshtml" />
@@ -2970,18 +2982,16 @@
     <Content Include="Views\Shared\_Layout_Reglas.cshtml" />
     <Content Include="Views\Reglas\Caracteristicas.cshtml" />
     <Content Include="Views\Reglas\AddOrEditCat.cshtml" />
-    <Content Include="Views\Restaurantes\IndexOP.cshtml" />
     <Content Include="Views\Restaurantes\EditCG.cshtml" />
     <Content Include="Views\Bitacora\Index.cshtml" />
     <Content Include="Views\Campañas\ResumenProveedor.cshtml" />
     <Content Include="Views\Campañas\Reports\ArtKFC.cshtml" />
-    <Content Include="Views\Restaurantes\IndexFQ.cshtml" />
-    <Content Include="Views\Restaurantes\IndexSK.cshtml" />
     <Content Include="Views\Restaurantes\Index.cshtml" />
     <Content Include="Views\Restaurantes\EditCPDev.cshtml" />
     <Content Include="Views\Restaurantes\EditCMEDev.cshtml" />
     <Content Include="Views\Restaurantes\EditCERDev.cshtml" />
     <Content Include="Views\Restaurantes\EditCMESDev.cshtml" />
+    <Content Include="Views\Restaurantes\RestaurantesEquity.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

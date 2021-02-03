@@ -21,12 +21,34 @@
     </div>
 
     <div class="center-align">
-        <button type="submit" title="Aceptar" class="btn-floating btn-sm green" style="border-radius: 50%" onclick="hidePage()">
+        <button id="aceptar" disabled type="submit" title="Aceptar" class="btn-floating btn-sm green" style="border-radius: 50%" onclick="hidePage()">
             <i class="large material-icons">check</i>
         </button>
-
-        @*<button type="reset" title="Reset" class="btn-floating btn-sm red" style="border-radius: 50%">
-                <i class="large material-icons">arrow_back</i>
-            </button>*@
     </div>
 }
+
+<script>
+
+    var art = document.getElementById('ArticuloKFCId');
+    var nombre = document.getElementById('NombreRegla');
+    var acep = document.getElementById('aceptar');
+
+    art.addEventListener('change', function () {
+        alcambiar();
+    });
+
+    nombre.addEventListener('change', function () {
+        alcambiar();
+    });
+
+    function alcambiar() {
+
+        if (art.value != "" && nombre.value != "") {
+            acep.disabled = false;
+        }
+        else {
+            acep.disabled = true;
+        }
+    }
+
+</script>

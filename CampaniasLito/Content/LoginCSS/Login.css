@@ -124,3 +124,16 @@ i.iconis {
     font-size: 12px !important;
     transform: translateY(0) !important;
 }
+
+@media only screen and (max-width: 768px) {
+    .login {
+        width: 50%;
+        margin-top: 15% !important;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .login {
+        width: 40%;
+    }
+}

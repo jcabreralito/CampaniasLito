@@ -11,6 +11,7 @@ namespace CampaniasLito.Controllers
 
         public RedirectToRouteResult IndexL()
         {
+            Session["Mensaje"] = string.Empty;
             return RedirectToRoute("Login");
         }
 

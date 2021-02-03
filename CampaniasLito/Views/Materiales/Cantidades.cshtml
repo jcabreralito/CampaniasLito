@@ -41,7 +41,7 @@
             <thead>
                 <tr>
                     <th class="dt-body-center text-center">Restaurante</th>
-                    <th class="dt-body-center text-center">Cantidad</th>
+                    <th class="dt-body-center text-center">Cant</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,16 +90,16 @@
                 var api = new $.fn.dataTable.Api(settings);
                 api.columns().header().each(function (column) {
                     if ($(column).text() == 'Restaurante') {
-                        $(column).attr('style', 'min-width: 554px');
+                        $(column).attr('style', 'min-width: 598px');
                     }
-                    else if ($(column).text() == 'Cantidad') {
-                        $(column).attr('style', 'min-width: 90px');
+                    else if ($(column).text() == 'Cant') {
+                        $(column).attr('style', 'min-width: 63px');
                     }
                 });
             },
             columnDefs: [
-                { width: '520px', targets: 0 },
-                { width: '132px', targets: 1 },
+                { width: '598px', targets: 0 },
+                { width: '63px', targets: 1 },
                 { "orderable": false, "targets": [1] },
                 { "searchable": false, "targets": [1] },
             ],

@@ -24,6 +24,8 @@ namespace CampaniasLito.Controllers
         public void NombreCompleto(LoginViewModel model)
         {
             var user = db.Usuarios.Where(u => u.NombreUsuario == model.Email).FirstOrDefault();
+            Session["Mensaje"] = string.Empty;
+
             if (user != null)
             {
                 Session["NombreCompleto"] = string.Format("{0}  {1}", user.Nombres, user.Apellidos);
@@ -471,6 +473,7 @@ namespace CampaniasLito.Controllers
             Session["Logo"] = string.Empty;
             Session["Compañia"] = string.Empty;
             Session["NombreCompleto"] = string.Empty;
+            Session["Mensaje"] = string.Empty;
 
             return RedirectToAction("Login", "Account");
         }

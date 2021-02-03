@@ -1,0 +1,1 @@
+INSERT INTO Articulos (Codigo, Descripcion, SistemaImpresion,MedExtendida,Sustrato,Tintas,Laminado_FV,Corte,MatPegue,InfAdicional) VALUES ('2102018000', 'VENTA SUGESTIVA', '', '', '', '', '', '', '', 'VENTA SUGESTIVA')

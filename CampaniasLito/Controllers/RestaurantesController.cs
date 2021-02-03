@@ -5,12 +5,11 @@ using System;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace CampaniasLito.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     public class RestaurantesController : Controller
     {
         private readonly CampaniasLitoContext db = new CampaniasLitoContext();
@@ -35,42 +34,7 @@ namespace CampaniasLito.Controllers
             public string Clasificacion { get; set; }
             public string CCoFranquicia { get; set; }
             public string Restaurante { get; set; }
-            public string Region { get; set; }
-            public string Ciudad { get; set; }
-            public string Direccion { get; set; }
-            public string Observaciones { get; set; }
-            public bool Activo { get; set; }
-            public string Nombre { get; set; }
-            public string Categoria { get; set; }
-            public string Valor { get; set; }
-            public int TipoConfiguracionId { get; set; }
-            public int ReglaCatalogoId { get; set; }
-        }
-
-        public class spTiendasCaracteristicasFQ
-        {
-            public int TiendaId { get; set; }
-            public string Clasificacion { get; set; }
-            public string CCoFranquicia { get; set; }
-            public string Restaurante { get; set; }
-            public string Region { get; set; }
-            public string Ciudad { get; set; }
-            public string Direccion { get; set; }
-            public string Observaciones { get; set; }
-            public bool Activo { get; set; }
-            public string Nombre { get; set; }
-            public string Categoria { get; set; }
-            public string Valor { get; set; }
-            public int TipoConfiguracionId { get; set; }
-            public int ReglaCatalogoId { get; set; }
-        }
-
-        public class spTiendasCaracteristicasSK
-        {
-            public int TiendaId { get; set; }
-            public string Clasificacion { get; set; }
-            public string CCoFranquicia { get; set; }
-            public string Restaurante { get; set; }
+            public string EquityFranquicia { get; set; }
             public string Region { get; set; }
             public string Ciudad { get; set; }
             public string Direccion { get; set; }
@@ -95,102 +59,9 @@ namespace CampaniasLito.Controllers
             public int ReglaCatalogoId { get; set; }
         }
 
-        public class spTiendas
-        {
-            public int TiendaId { get; set; }
-            public string Clasificacion { get; set; }
-            public string CCoFranquicia { get; set; }
-            public string Restaurante { get; set; }
-            public string Region { get; set; }
-            public string Ciudad { get; set; }
-            public string Direccion { get; set; }
-            public string Observaciones { get; set; }
-            public bool Activo { get; set; }
-
-            //00000000000000000000000000 GENERALES 0000000000000000000000000000000000
-
-            public string Tipo { get; set; }
-            public string NivelPrecio { get; set; }
-            public bool MenuDigital { get; set; }
-            public string CantidadDePantallas { get; set; }
-
-            //00000000000000000000000000 POR PRODUCTO 0000000000000000000000000000000000
-
-            public bool TerceraReceta { get; set; }
-            public bool Arroz { get; set; }
-            public bool Hamburgesas { get; set; }
-            public bool Ensalada { get; set; }
-            public bool PET2Litros { get; set; }
-            public bool Postres { get; set; }
-            public bool BisquetMiel { get; set; }
-            public bool KeCono { get; set; }
-            public bool KREAMBALL { get; set; }
-
-            //00000000000000000000000000 MATERIALES ESPECIFICOS 0000000000000000000000000000000000
-
-            public bool MenuBackLigth { get; set; }
-            public bool Autoexpress { get; set; }
-            public bool CopeteAERemodelado { get; set; }
-            public bool CopeteAETradicional { get; set; }
-            public bool PanelDeInnovacion { get; set; }
-            public bool DisplayDeBurbuja { get; set; }
-            public bool Delivery { get; set; }
-            public bool MERCADO_DE_PRUEBA { get; set; }
-            public bool AreaDeJuegos { get; set; }
-            public bool COPETE_ESPECIAL_SOPORTE_LATERAL_4_VASOS { get; set; }
-            public bool COPETE_ESPECIAL_SOPORTE_LATERAL_PET_2L { get; set; }
-            public bool DisplayDePiso { get; set; }
-            public bool WCNACIONAL67X100cm { get; set; }
-            public bool AEMedidaEspecial { get; set; }
-            public bool AEHolding { get; set; }
-            public bool AECaribe { get; set; }
-            public bool PanelComplementosHolding { get; set; }
-            public bool PanelDeComplementosSinArrozSin3raReceta { get; set; }
-            public bool PanelALaCartaCaribe { get; set; }
-            public bool PanelALaCartaCaribeSin3raReceta { get; set; }
-            public bool PanelALaCartaHolding { get; set; }
-            public bool PanelALaCartaHoldingSin3raReceta { get; set; }
-            public bool PanelDeComplementosDigital { get; set; }
-            public bool PanelComplementosHoldingMR { get; set; }
-            public bool Telefono { get; set; }
-            public bool TelefonoPersonalizado { get; set; }
-            public bool PanelKids { get; set; }
-            public bool StickerNavidad { get; set; }
-
-            //00000000000000000000000000 MEDIDAS ESPECIALES 0000000000000000000000000000000000
-            public bool WCMedidaEspecial60_8x85cm { get; set; }
-            public bool WC_MEDIDA_ESPECIAL_MALL_ORIENTE_100x120cm { get; set; }
-            public bool WC_MEDIDA_ESPECIAL_ZUAZUA_87x120cm { get; set; }
-            public bool WC_MEDIDA_ESPECIAL_CORREO_MAYOR_60x90cm { get; set; }
-            public bool WC_MEDIDA_ESPECIAL_ZARAGOZA_90x100cm { get; set; }
-            public bool MedidaEspecialPanelDeComplementos { get; set; }
-            public bool MEDIDA_ESPECIAL_PRE_MENU_AE_SAN_ANTONIO_49x67_5cm { get; set; }
-            public bool MEDIDA_ESPECIAL_AE_TECAMAC_48x67_5cm { get; set; }
-            public bool MEDIDA_ESPECIAL_AE_VILLA_GARCIA_45x65cm { get; set; }
-            public bool MEDIDA_ESPECIAL_AE_XOLA_49_9x66_9cm { get; set; }
-            public bool MEDIDA_ESPECIAL_AE_ZUAZUA_51x71cm { get; set; }
-            public bool MEDIDA_ESPECIAL_AE_VALLE_SOLEADO_51x71cm { get; set; }
-            public bool MEDIDA_ESPECIAL_AE_MIRASIERRA_46x68cm { get; set; }
-            public bool MEDIDA_ESPECIAL_AE_CELAYA_50x68_5cm { get; set; }
-            public bool MEDIDA_ESPECIAL_AE_CANDILES_49_5x73_5cm { get; set; }
-            public bool MEDIDA_BACKLIGHT_55_5X75_5CM { get; set; }
-            public bool MEDIDA_BACKLIGHT_59_5X79CM { get; set; }
-            public bool MEDIDAS_ESPECIALES_MENU { get; set; }
-
-            //00000000000000000000000000 POR EQUIPO EN EL RESTAURANTE 0000000000000000000000000000000000
-
-            public string TipoDeCaja { get; set; }
-            public string AcomodoDeCajas { get; set; }
-            public string NoMesaDeAreaComedor { get; set; }
-            public string NoMesaDeAreaDeJuegos { get; set; }
-            public string NumeroDeVentanas { get; set; }
-            public string UbicacionPantallas { get; set; }
-
-        }
-
         // GET: Restaurantes
         [AuthorizeUser(idOperacion: 5)]
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             Session["iconoTitulo"] = "fas fa-store";
             Session["titulo"] = "EQUITY";
@@ -202,96 +73,12 @@ namespace CampaniasLito.Controllers
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
             Session["caracteristicasB"] = string.Empty;
+            Session["Mensaje"] = string.Empty;
 
-            var equityList = await db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicasEquity").ToListAsync();
-
-            return PartialView(equityList);
-
-            //return View();
-
-        }
-
-        // GET: Restaurantes
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult IndexFQ()
-        {
-            Session["iconoTitulo"] = "fas fa-store";
-            Session["titulo"] = "FRANQUICIAS";
-            Session["homeB"] = string.Empty;
-            Session["equityB"] = string.Empty;
-            Session["franquiciasB"] = "active";
-            Session["stockB"] = string.Empty;
-            Session["restaurantesB"] = string.Empty;
-            Session["materialesB"] = string.Empty;
-            Session["campañasB"] = string.Empty;
-            Session["caracteristicasB"] = string.Empty;
-
-            var franquiciasList = db.Database.SqlQuery<spTiendasCaracteristicasFQ>("spGetRestaurantesCaracteristicasFranquicias").ToList();
-
-            return PartialView(franquiciasList);
-
-        }
-
-        // GET: Restaurantes
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult IndexSK()
-        {
-            Session["iconoTitulo"] = "fas fa-store";
-            Session["titulo"] = "STOCK";
-            Session["homeB"] = string.Empty;
-            Session["equityB"] = string.Empty;
-            Session["franquiciasB"] = string.Empty;
-            Session["stockB"] = "active";
-            Session["restaurantesB"] = string.Empty;
-            Session["materialesB"] = string.Empty;
-            Session["campañasB"] = string.Empty;
-            Session["caracteristicasB"] = string.Empty;
-
-            var stockList = db.Database.SqlQuery<spTiendasCaracteristicasSK>("spGetRestaurantesCaracteristicasStock").ToList();
-
-            return PartialView(stockList);
-
-        }
-
-        // GET: Restaurantes
-        [AuthorizeUser(idOperacion: 5)]
-        public ActionResult IndexDev()
-        {
-            Session["iconoTitulo"] = "fas fa-store";
-            Session["homeB"] = string.Empty;
-            Session["equityB"] = "active";
-            Session["franquiciasB"] = string.Empty;
-            Session["stockB"] = string.Empty;
-            Session["restaurantesB"] = string.Empty;
-            Session["materialesB"] = string.Empty;
-            Session["campañasB"] = string.Empty;
-            Session["caracteristicasB"] = string.Empty;
-
-            var equityList = db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicas").ToList();
+            var equityList = db.Database.SqlQuery<spTiendasCaracteristicas>("spGetRestaurantesCaracteristicasAll").ToList();
 
             return PartialView(equityList);
 
-        }
-
-        public ActionResult GetDataEquity()
-        {
-            var equityList = db.Database.SqlQuery<spTiendas>("spGetRestaurantesEquity").ToList();
-
-            return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetDataFranquicias()
-        {
-            var equityList = db.Database.SqlQuery<spTiendas>("spGetRestaurantesFranquicias").ToList();
-
-            return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetDataStock()
-        {
-            var equityList = db.Database.SqlQuery<spTiendas>("spGetRestaurantesStock").ToList();
-
-            return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetMateriales()
@@ -1698,6 +1485,7 @@ namespace CampaniasLito.Controllers
 
             Tienda tienda = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault();
             tienda.Eliminado = true;
+            tienda.Activo = false;
             db.Entry(tienda).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)

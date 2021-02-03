@@ -68,7 +68,7 @@
             <thead>
                 <tr>
                     <th class="dt-body-center text-center">Restaurante</th>
-                    <th class="dt-body-center text-center">Seleccionado</th>
+                    <th class="dt-body-center text-center">Sel.</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,16 +128,17 @@
                 var api = new $.fn.dataTable.Api(settings);
                 api.columns().header().each(function (column) {
                     if ($(column).text() == 'Restaurante') {
-                        $(column).attr('style', 'min-width: 578px');
+                        $(column).attr('style', 'min-width: 478px');
                     }
-                    else if ($(column).text() == 'Seleccionado') {
-                        $(column).attr('style', 'min-width: 119px');
+                    else if ($(column).text() == 'Sel.') {
+                        $(column).attr('style', 'min-width: 50px');
                     }
                 });
             },
             columnDefs: [
-                { width: '578px', targets: 0 },
-                { width: '119px', targets: 1 },
+                { width: '478px', targets: 0 },
+                { width: '50px', targets: 1 },
+                { orderable: false, targets: 1 },
             ],
             autoWidth: true,
             fixedHeader: true,

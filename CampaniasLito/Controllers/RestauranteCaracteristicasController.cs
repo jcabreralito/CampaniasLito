@@ -24,6 +24,7 @@ namespace CampaniasLito.Controllers
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;
             Session["caracteristicasB"] = "active";
+            Session["Mensaje"] = string.Empty;
 
             return View();
         }

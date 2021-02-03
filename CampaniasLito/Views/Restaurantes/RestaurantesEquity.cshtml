@@ -1,0 +1,375 @@
+﻿@model IList<CampaniasLito.Controllers.RestaurantesController.spTiendasCaracteristicas>
+@{
+    ViewBag.Title = "Equity";
+    Layout = "~/Views/Shared/_Layout_Restaurantes.cshtml";
+}
+
+<div id="equity" style="visibility: visible; display: block">
+
+    <style>
+        #resEquityTable th, #resEquityTable td {
+            white-space: nowrap;
+        }
+
+        tfoot {
+            display: table-header-group !important;
+        }
+    </style>
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-sm red" title="Agregar" onclick="PopupForm('@Url.Action("AddOrEdit","Restaurantes", new { cat = 1})')">
+            <i class="large material-icons">add_circle</i>
+        </a>
+    </div>
+
+    <table id="resEquityTable" class="table table-striped table-bordered compact nowrap" style="width:100%; text-transform: uppercase;">
+        <thead>
+            <tr>
+                <th class="dt-body-center text-center dt-specialColorBlack">
+                    RESTAURANTE
+                </th>
+                <th class="dt-body-center text-center dt-specialColorBlack">
+                    CC
+                </th>
+                <th class="dt-body-center text-center dt-specialColorBlack">
+                    CLASIFICACIÓN
+                </th>
+                <th class="dt-body-center text-center dt-specialColorBlack">
+                    REGIÓN
+                </th>
+                <th class="dt-body-center text-center dt-specialColorBlack">
+                    CIUDAD
+                </th>
+                <th class="dt-body-center text-left dt-specialColorBlack">
+                    DIRECCIÓN
+                </th>
+                <th class="dt-body-center text-center dt-specialColorBlack noExport">
+                    Activo
+                </th>
+                <th class="dt-body-center text-center dt-specialColorBlack noExport">
+                    Editar
+                </th>
+                <th class="dt-body-center text-center dt-specialColorBlack noExport">
+                    Eliminar
+                </th>
+                <th class="dt-body-center text-center dt-specialColorBlack noExport">
+                    Materiales
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 1 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th class="dt-body-center text-center dt-specialColorYellow">
+                        @item.Key.Nombre
+                    </th>
+                }
+                <th class="dt-body-center text-center dt-specialColorYellow noExport">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 2 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th class="dt-body-center text-center dt-specialColorBlue">
+                        @item.Key.Nombre
+                    </th>
+                }
+                <th class="dt-body-center text-center dt-specialColorBlue noExport">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 3 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th class="dt-body-center text-center dt-specialColorLilac">
+                        @item.Key.Nombre
+                    </th>
+                }
+                <th class="dt-body-center text-center dt-specialColorLilac noExport">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 4 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th class="dt-body-center text-center dt-specialColorGreenLight">
+                        @item.Key.Nombre
+                    </th>
+                }
+                <th class="dt-body-center text-center dt-specialColorGreenLight noExport">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 5 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th class="dt-body-center text-center dt-specialColorBlueLight">
+                        @item.Key.Nombre
+                    </th>
+                }
+                <th class="dt-body-center text-center dt-specialColorBlueLight noExport">
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item2 in Model.Where(x => x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.TiendaId, x.Restaurante }))
+            {
+                <tr>
+                    <td style="text-align: left !important">
+                        @item2.Key.Restaurante
+                    </td>
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.CCoFranquicia }))
+                    {
+                        <td align="center">
+                            @item.Key.CCoFranquicia
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Clasificacion }))
+                    {
+                        <td align="center">
+                            @item.Key.Clasificacion
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Region }))
+                    {
+                        <td align="center">
+                            @item.Key.Region
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Ciudad }))
+                    {
+                        <td align="center">
+                            @item.Key.Ciudad
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Direccion }))
+                    {
+                        <td>
+                            @item.Key.Direccion
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Activo }))
+                    {
+                        <td class="text-center">
+                            @if (@item.Key.Activo == true)
+                            {
+                                <label>
+                                    <i class='btn-default btn-lg fas fa-check' style='background-color: transparent; color: #000'></i>
+                                </label>
+                            }
+                            else
+                            {
+                                <i class='btn-default btn-lg fas fa-times' style='background-color: transparent; color: #DF2530'></i>
+                            }
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.TiendaId }))
+                    {
+                        <td class="text-center">
+                            <a class="btn-default btn-lg" style="background-color: transparent; cursor: pointer" onclick="PopupForm('@Url.Action("AddOrEdit","Restaurantes", new { id = item.Key.TiendaId })')">
+                                <i class='fas fa-pencil-alt'></i>
+                            </a>
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.TiendaId }))
+                    {
+                        <td class="text-center">
+                            <a class="btn-danger btn-lg" style="background-color: transparent; cursor: pointer" onclick="Delete(@item.Key.TiendaId)">
+                                <i class="fas fa-trash" style="color: #DF2530"></i>
+                            </a>
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Activo, x.TiendaId }))
+                    {
+                        <td class="text-center">
+                            @if (item.Key.Activo == false)
+                            {
+                                <a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed'>
+                                    <i class='fas fa-ban' style='color: #DF2530'></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick="PopupFormMat('@Url.Action("Materiales","Restaurantes", new { id = item.Key.TiendaId })')">
+                                    <i class='fas fa-plus-circle'></i>
+                                </a>
+                            }
+                        </td>
+                    }
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId && x.TipoConfiguracionId == 1).GroupBy(x => new { x.Nombre, x.Valor }))
+                    {
+                        <td class="text-center">
+                            @item.Key.Valor
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Activo, x.TiendaId }))
+                    {
+                        <td class="text-center">
+                            @if (item.Key.Activo == false)
+                            {
+                                <a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed'>
+                                    <i class='fas fa-ban' style='color: #DF2530'></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn-default btn-lg" style="background-color: transparent; cursor: pointer" onclick="PopupForm('@Url.Action("EditCGDev","Restaurantes", new { id = item2.Key.TiendaId })')">
+                                    <i class='fas fa-pencil-alt'></i>
+                                </a>
+                            }
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId && x.TipoConfiguracionId == 2).GroupBy(x => new { x.Nombre, x.Valor }))
+                    {
+                        <td class="text-center">
+                            @item.Key.Valor
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Activo, x.TiendaId }))
+                    {
+                        <td class="text-center">
+                            @if (item.Key.Activo == false)
+                            {
+                                <a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed'>
+                                    <i class='fas fa-ban' style='color: #DF2530'></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn-default btn-lg" style="background-color: transparent; cursor: pointer" onclick="PopupForm('@Url.Action("EditCPDev","Restaurantes", new { id = item2.Key.TiendaId })')">
+                                    <i class='fas fa-pencil-alt'></i>
+                                </a>
+                            }
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId && x.TipoConfiguracionId == 3).GroupBy(x => new { x.Nombre, x.Valor }))
+                    {
+                        <td class="text-center">
+                            @item.Key.Valor
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Activo, x.TiendaId }))
+                    {
+                        <td class="text-center">
+                            @if (item.Key.Activo == false)
+                            {
+                                <a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed'>
+                                    <i class='fas fa-ban' style='color: #DF2530'></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn-default btn-lg" style="background-color: transparent; cursor: pointer" onclick="PopupForm('@Url.Action("EditCMEDev", "Restaurantes", new { id = item2.Key.TiendaId })')">
+                                    <i class='fas fa-pencil-alt'></i>
+                                </a>
+                            }
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId && x.TipoConfiguracionId == 4).GroupBy(x => new { x.Nombre, x.Valor }))
+                    {
+                        <td class="text-center">
+                            @item.Key.Valor
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Activo, x.TiendaId }))
+                    {
+                        <td class="text-center">
+                            @if (item.Key.Activo == false)
+                            {
+                                <a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed'>
+                                    <i class='fas fa-ban' style='color: #DF2530'></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn-default btn-lg" style="background-color: transparent; cursor: pointer" onclick="PopupForm('@Url.Action("EditCMESDev","Restaurantes", new { id = item2.Key.TiendaId })')">
+                                    <i class='fas fa-pencil-alt'></i>
+                                </a>
+                            }
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId && x.TipoConfiguracionId == 5).GroupBy(x => new { x.Nombre, x.Valor }))
+                    {
+                        <td class="text-center">
+                            @item.Key.Valor
+                        </td>
+                    }
+
+                    @foreach (var item in Model.Where(x => x.TiendaId == item2.Key.TiendaId).GroupBy(x => new { x.Restaurante, x.Activo, x.TiendaId }))
+                    {
+                        <td class="text-center">
+                            @if (item.Key.Activo == false)
+                            {
+                                <a class='btn-default btn-lg' style='background-color: transparent; cursor: not-allowed'>
+                                    <i class='fas fa-ban' style='color: #DF2530'></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn-default btn-lg" style="background-color: transparent; cursor: pointer" onclick="PopupForm('@Url.Action("EditCERDev","Restaurantes", new { id = item2.Key.TiendaId })')">
+                                    <i class='fas fa-pencil-alt'></i>
+                                </a>
+                            }
+                        </td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                <th style="background-color: #000 !important; text-align: center !important">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 1 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th style="background-color: #FFDC5A !important; color: #000 !important">
+                    </th>
+                }
+                <th style="background-color: #FFDC5A !important; color: #000 !important">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 2 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th style="background-color: #00B0F0 !important; color: #000 !important">
+                    </th>
+                }
+                <th style="background-color: #00B0F0 !important; color: #000 !important">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 3 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th style="background-color: #BB93D0 !important; color: #000 !important">
+                    </th>
+                }
+                <th style="background-color: #BB93D0 !important; color: #000 !important">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 4 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th style="background-color: #9CD78D !important; color: #000 !important">
+                    </th>
+                }
+                <th style="background-color: #9CD78D !important; color: #000 !important">
+                </th>
+                @foreach (var item in Model.Where(x => x.TipoConfiguracionId == 5 && x.EquityFranquicia == "EQUITY").GroupBy(x => new { x.Nombre }))
+                {
+                    <th style="background-color: #AAE6FF !important; color: #000 !important">
+                    </th>
+                }
+                <th style="background-color: #AAE6FF !important; color: #000 !important">
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</div>

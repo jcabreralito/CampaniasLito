@@ -134,7 +134,7 @@
                 var api = new $.fn.dataTable.Api(settings);
                 api.columns().header().each(function (column) {
                     if ($(column).text() == 'Material') {
-                        $(column).attr('style', 'min-width: 578px');
+                        $(column).attr('style', 'min-width: 508px');
                     }
                     else if ($(column).text() == 'Seleccionado') {
                         $(column).attr('style', 'min-width: 119px');
@@ -142,7 +142,7 @@
                 });
             },
             columnDefs: [
-                { width: '578px', targets: 0 },
+                { width: '508px', targets: 0 },
                 { width: '119px', targets: 1 },
             ],
             autoWidth: true,

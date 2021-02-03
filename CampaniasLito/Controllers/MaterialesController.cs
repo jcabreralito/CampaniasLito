@@ -216,6 +216,7 @@ namespace CampaniasLito.Controllers
             Session["campañasB"] = string.Empty;
             Session["reglasB"] = string.Empty;
             Session["bitacoraB"] = string.Empty;
+            Session["Mensaje"] = string.Empty;
 
             return View();
         }
@@ -274,6 +275,93 @@ namespace CampaniasLito.Controllers
 
                 return PartialView(db.ArticuloKFCs.Where(x => x.ArticuloKFCId == id).FirstOrDefault());
             }
+        }
+
+        public ActionResult ActivarDesactivar(int id)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+            var restauranteId = 0;
+            var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
+
+            var material = db.Database.SqlQuery<ArticuloKFC>("spGetMaterialesXId @ArticuloKFCId",
+                new SqlParameter("@ArticuloKFCId", id)).FirstOrDefault();
+
+            var activo = material.Activo;
+
+            var materialEditado = db.ArticuloKFCs.Find(id);
+
+            var Mensaje = string.Empty;
+
+            if (material.FamiliaId != 22)
+            {
+                if (activo == true)
+                {
+                    materialEditado.Activo = false;
+                    Mensaje = "Material Desactivado ";
+
+                    db.Entry(materialEditado).State = EntityState.Modified;
+                    DBHelper.SaveChanges(db);
+
+                    EliminarMateriales(id, campaña);
+                }
+                else
+                {
+                    materialEditado.Activo = true;
+                    Mensaje = "Material Activado ";
+
+                    db.Entry(materialEditado).State = EntityState.Modified;
+                    DBHelper.SaveChanges(db);
+
+                    EliminarMateriales(id, campaña);
+
+                    MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
+                    if (campaña != null)
+                    {
+                        var campañaId = campaña.CampañaId;
+
+                        MovementsHelper.AgregarArticuloCampañas(materialEditado, campañaId);
+                    }
+
+                }
+            }
+            else
+            {
+                if (activo == true)
+                {
+
+                    materialEditado.Activo = false;
+                    Mensaje = "Material Desactivado ";
+
+                    db.Entry(materialEditado).State = EntityState.Modified;
+                    DBHelper.SaveChanges(db);
+
+                    EliminarMaterialesMoto(id, campaña);
+
+                    if (campaña != null)
+                    {
+                        var campañaId = campaña.CampañaId;
+
+                        MovementsHelper.AgregarArticuloCampañas(material, campañaId);
+                    }
+
+                }
+                else
+                {
+                    materialEditado.Activo = true;
+                    Mensaje = "Material Activado ";
+
+                    db.Entry(materialEditado).State = EntityState.Modified;
+                    DBHelper.SaveChanges(db);
+
+                    EliminarMaterialesMoto(id, campaña);
+                }
+            }
+
+            movimiento = Mensaje + id + " " + material.Descripcion + " / " + material.EquityFranquicia;
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = Mensaje }, JsonRequestBehavior.AllowGet);
+
         }
 
         [AuthorizeUser(idOperacion: 1)]

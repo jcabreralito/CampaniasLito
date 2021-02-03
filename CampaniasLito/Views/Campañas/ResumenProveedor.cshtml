@@ -9,15 +9,35 @@
 <link href="~/Content/vendor/font-awesome/css/all.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+<style>
+    @@media screen and (max-width: 768px) {
+        .tituloResumen {
+            font-size: 20px;
+            height: 30px;
+            padding-top: 5px;
+        }
+
+        #ancDownload {
+            margin-top: -3px !important;
+            height: 25px;
+            padding: 0 0 0 2px;
+        }
+
+        #btnDownload {
+            font-size: 15px;
+        }
+    }
+</style>
+
 <div id="unIdCalender" style="margin-top: 30px">
     @foreach (var itemTotal in ViewBag.TotalProveedor)
     {
 
-        <h2 class="col-sm-6" style="background-color: #DF2530; color: #fff; border-radius: 10px 0 0 10px; margin-top: 0">Proveedor : @itemTotal.Proveedor</h2>
-        <h2 class="col-sm-6" style="background-color: #DF2530; color: #fff; border-radius: 0 10px 10px 0; margin-top: 0">
+        <h2 class="col-sm-6 tituloResumen" style="background-color: #DF2530; color: #fff; border-radius: 10px 0 0 10px; margin-top: 0">Proveedor : @itemTotal.Proveedor</h2>
+        <h2 class="col-sm-6 tituloResumen" style="background-color: #DF2530; color: #fff; border-radius: 0 10px 10px 0; margin-top: 0">
             Cantidad : @itemTotal.TotalCantidad.ToString("N0")
-            <a class="btn btn-pilares float-right col-sm-1" rel="tooltip" title="Descargar Códigos" href="@Url.Action("ArtKFC", "Campañas", new { id = Model.FirstOrDefault().CampañaId, prov = @itemTotal.Proveedor })" target="_blank" style="margin-top: 1px; border-radius: 50px">
-                <i class="fas fa-download"></i>
+            <a id="ancDownload" class="btn btn-pilares float-right col-sm-1" rel="tooltip" title="Descargar Códigos" href="@Url.Action("ArtKFC", "Campañas", new { id = Model.FirstOrDefault().CampañaId, prov = @itemTotal.Proveedor })" target="_blank" style="margin-top: 1px; border-radius: 50px">
+                <i id="btnDownload" class="fas fa-download"></i>
             </a>
         </h2>
         <table id="tableResumen" class="table" cellspacing="0" style="width: 99%">

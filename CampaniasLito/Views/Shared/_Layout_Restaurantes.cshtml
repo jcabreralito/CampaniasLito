@@ -47,7 +47,7 @@
         <nav>
             <div class="nav-wrapper">
 
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <a data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
                 <a href="/" class="hide-on-med-and-down brand-logo" title="KFC">
                     <img src="~/Content/images/KFC-logo.png" width="75" style="margin-top: -9px;" />
@@ -85,17 +85,17 @@
                         </a>
                     </li>
                     <li class="iMenu">
-                        <a id="equityB" href="@Url.Action("Index", "Restaurantes")" class="iconomenuLetra @Session["equityB"].ToString()" title="Equity" onclick="viewPageIndex()">
+                        <a id="equityB" class="iconomenuLetra @Session["equityB"].ToString()" title="Equity" onclick="mostrarEquity()">
                             <i>EQ</i>
                         </a>
                     </li>
                     <li class="iMenu">
-                        <a id="franquiciasB" href="@Url.Action("IndexFQ", "Restaurantes")" class="iconomenuLetra @Session["franquiciasB"].ToString()" title="Franquicias" onclick="viewPageIndex()">
+                        <a id="franquiciasB" class="iconomenuLetra @Session["franquiciasB"].ToString()" title="Franquicias" onclick="mostrarFranquicias()">
                             <i>FQ</i>
                         </a>
                     </li>
                     <li class="iMenu">
-                        <a id="stockB" href="@Url.Action("IndexSK", "Restaurantes")" class="iconomenuLetra @Session["stockB"].ToString()" title="Stock" onclick="viewPageIndex()">
+                        <a id="stockB" class="iconomenuLetra @Session["stockB"].ToString()" title="Stock" onclick="mostrarStock()">
                             <i>STK</i>
                         </a>
                     </li>
@@ -147,18 +147,21 @@
                 </a>
             </li>
             <li>
-                <a id="equityB" href="@Url.Action("Index", "Restaurantes")" class="iconomenu @Session["equityB"].ToString()" onclick="viewPageIndex()">
+                <a id="equityA" class="iconomenu @Session["equityB"].ToString()" onclick="mostrarEquity()">
                     Equity
+                    <i>EQ</i>
                 </a>
             </li>
             <li>
-                <a id="franquiciasB" href="@Url.Action("IndexFQ", "Restaurantes")" class="iconomenu @Session["franquiciasB"].ToString()" onclick="viewPageIndex()">
+                <a id="franquiciasA" class="iconomenu" onclick="mostrarFranquicias()">
                     Franquicias
+                    <i>FQ</i>
                 </a>
             </li>
             <li>
-                <a id="stockB" href="@Url.Action("IndexSK", "Restaurantes")" class="iconomenu @Session["stockB"].ToString()" onclick="viewPageIndex()">
+                <a id="stockA" class="iconomenu" onclick="mostrarStock()">
                     Stock
+                    <i>SK</i>
                 </a>
             </li>
         </ul>
@@ -196,6 +199,79 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     @RenderSection("scripts", required: false)
+
+<script>
+
+        function mostrarEquity() {
+
+            $("#titulo").text('@ViewBag.Title EQUITY');
+            $("#tituloJum").text('@ViewBag.Title EQUITY');
+
+            $('#equityB').addClass('active');
+            $('#franquiciasB').removeClass('active');
+            $('#stockB').removeClass('active');
+
+            $('#equityA').addClass('active');
+            $('#franquiciasA').removeClass('active');
+            $('#stockA').removeClass('active');
+
+            document.getElementById('equity').style.display = 'block';
+            document.getElementById('equity').style.visibility = 'visible';
+            document.getElementById('franquicias').style.display = 'none';
+            document.getElementById('franquicias').style.visibility = 'hidden';
+            document.getElementById('stock').style.display = 'none';
+            document.getElementById('stock').style.visibility = 'hidden';
+
+            dataTable.draw();
+        }
+
+        function mostrarFranquicias() {
+
+            $("#titulo").text('@ViewBag.Title FRANQUICIAS');
+            $("#tituloJum").text('@ViewBag.Title FRANQUICIAS');
+
+            $('#equityB').removeClass('active');
+            $('#franquiciasB').addClass('active');
+            $('#stockB').removeClass('active');
+
+            $('#equityA').removeClass('active');
+            $('#franquiciasA').addClass('active');
+            $('#stockA').removeClass('active');
+
+            document.getElementById('equity').style.display = 'none';
+            document.getElementById('equity').style.visibility = 'hidden';
+            document.getElementById('franquicias').style.display = 'block';
+            document.getElementById('franquicias').style.visibility = 'visible';
+            document.getElementById('stock').style.display = 'none';
+            document.getElementById('stock').style.visibility = 'hidden';
+
+            dataTableF.draw();
+        }
+
+        function mostrarStock() {
+
+            $("#titulo").text('@ViewBag.Title STOCK');
+            $("#tituloJum").text('@ViewBag.Title STOCK');
+
+            $('#equityB').removeClass('active');
+            $('#franquiciasB').removeClass('active');
+            $('#stockB').addClass('active');
+
+            $('#equityA').removeClass('active');
+            $('#franquiciasA').removeClass('active');
+            $('#stockA').addClass('active');
+
+            document.getElementById('equity').style.display = 'none';
+            document.getElementById('equity').style.visibility = 'hidden';
+            document.getElementById('franquicias').style.display = 'none';
+            document.getElementById('franquicias').style.visibility = 'hidden';
+            document.getElementById('stock').style.display = 'block';
+            document.getElementById('stock').style.visibility = 'visible';
+
+            dataTableS.draw();
+        }
+
+</script>
 
 </body>
 </html>

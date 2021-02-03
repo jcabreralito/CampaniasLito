@@ -71,6 +71,8 @@
                     },
                 ],
                 //"serverSide": true,
+                "order": [[1, "asc"]],
+                "pagingType": "full_numbers",
                 "language": {
                     "emptyTable": "No hay datos, dar click en el botón <b>Agregar</b>",
                     "sLengthMenu": "Mostrar _MENU_ registros",
@@ -106,7 +108,7 @@
                     },
                 },
                 dom: 'lfrtip',
-                //autoWidth: false,
+                autoWidth: true,
                 //fixedColumns: true,
                 fixedColumns: {
                     leftColumns: 1,
@@ -133,8 +135,8 @@
                 },
                 stateSave: true,
                 select: true,
-                scrollY: true,
-                scrollX: false,
+                scrollY: false,
+                scrollX: true,
                 keys: false,
                 'bLengthChange': true,
                 'bInfo': true,

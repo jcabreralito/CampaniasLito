@@ -401,75 +401,92 @@ namespace CampaniasLito.Controllers
 
             var materialesProv = codigosMateriales.Where(x => x.Proveedor == prov).ToList();
 
-            var familias = codigosMateriales.GroupBy(x => x.Familia).ToList();
-
-            foreach (var familia in familias)
+            if (materialesProv.Count == 0)
             {
-                var materialesFam = materialesProv.Where(x => x.Familia == familia.Key).ToList();
-
+                var mensaje = "! NO SE HAN GENERADO CÓDIGOS !";
                 PdfPCell pCell = new PdfPCell();
 
-                Chunk linea = new Chunk(new LineSeparator(2f, 100f, BaseColor.BLACK, Element.ALIGN_CENTER, 0f));
+                pCell = new PdfPCell(new Paragraph(mensaje.ToUpper(), fontRed2));
+                pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                pCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                pCell.Colspan = 7;
+                pCell.Border = 0;
+                tabla.AddCell(pCell);
+            }
+            else
+            {
 
-                if (materialesFam.Count != 0)
+                var familias = codigosMateriales.GroupBy(x => x.Familia).ToList();
+
+                foreach (var familia in familias)
                 {
-                    pCell = new PdfPCell(new Paragraph(familia.Key.ToUpper(), fontRed2));
-                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    pCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    pCell.Colspan = 7;
-                    pCell.Border = 0;
-                    tabla.AddCell(pCell);
+                    var materialesFam = materialesProv.Where(x => x.Familia == familia.Key).ToList();
 
-                    pCell = new PdfPCell(new Paragraph(linea));
-                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    pCell.Colspan = 7;
-                    pCell.Border = 0;
-                    tabla.AddCell(pCell);
-                }
+                    PdfPCell pCell = new PdfPCell();
+
+                    Chunk linea = new Chunk(new LineSeparator(2f, 100f, BaseColor.BLACK, Element.ALIGN_CENTER, 0f));
+
+                    if (materialesFam.Count != 0)
+                    {
+                        pCell = new PdfPCell(new Paragraph(familia.Key.ToUpper(), fontRed2));
+                        pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                        pCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        pCell.Colspan = 7;
+                        pCell.Border = 0;
+                        tabla.AddCell(pCell);
+
+                        pCell = new PdfPCell(new Paragraph(linea));
+                        pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                        pCell.Colspan = 7;
+                        pCell.Border = 0;
+                        tabla.AddCell(pCell);
+                    }
 
 
 
-                foreach (var codigo in materialesFam)
-                {
+                    foreach (var codigo in materialesFam)
+                    {
 
-                    BarcodeDatamatrix datamatrix = new BarcodeDatamatrix();
-                    //datamatrix.Generate(codigo.Codigo.ToString() + " / " + codigo.ArticuloKFC);
-                    datamatrix.Generate(codigo.Codigo.ToString());
-                    Image image = datamatrix.CreateImage();
-                    image.ScaleAbsolute(40f, 40f);
-                    image.Border = 0;
-                    //document.Add(image);
+                        BarcodeDatamatrix datamatrix = new BarcodeDatamatrix();
+                        //datamatrix.Generate(codigo.Codigo.ToString() + " / " + codigo.ArticuloKFC);
+                        datamatrix.Generate(codigo.Codigo.ToString());
+                        Image image = datamatrix.CreateImage();
+                        image.ScaleAbsolute(40f, 40f);
+                        image.Border = 0;
+                        //document.Add(image);
 
-                    pCell = new PdfPCell(image, false);
-                    pCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    pCell.Border = 0;
-                    pCell.PaddingTop = 5f;
-                    tabla.AddCell(pCell);
+                        pCell = new PdfPCell(image, false);
+                        pCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                        pCell.Border = 0;
+                        pCell.PaddingTop = 5f;
+                        tabla.AddCell(pCell);
 
-                    pCell = new PdfPCell(new Paragraph(codigo.Codigo.ToString(), fontBlack));
-                    pCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    pCell.Border = 0;
-                    tabla.AddCell(pCell);
+                        pCell = new PdfPCell(new Paragraph(codigo.Codigo.ToString(), fontBlack));
+                        pCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                        pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                        pCell.Border = 0;
+                        tabla.AddCell(pCell);
 
-                    pCell = new PdfPCell(new Paragraph(codigo.ArticuloKFC.ToUpper(), fontRed));
-                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    pCell.Colspan = 5;
-                    pCell.Border = 0;
-                    tabla.AddCell(pCell);
+                        pCell = new PdfPCell(new Paragraph(codigo.ArticuloKFC.ToUpper(), fontRed));
+                        pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                        pCell.Colspan = 5;
+                        pCell.Border = 0;
+                        tabla.AddCell(pCell);
 
-                    linea = new Chunk(new LineSeparator(2f, 100f, BaseColor.BLACK, Element.ALIGN_CENTER, 0f));
+                        linea = new Chunk(new LineSeparator(2f, 100f, BaseColor.BLACK, Element.ALIGN_CENTER, 0f));
 
-                    pCell = new PdfPCell(new Paragraph(linea));
-                    pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    pCell.Colspan = 7;
-                    pCell.Border = 0;
-                    tabla.AddCell(pCell);
+                        pCell = new PdfPCell(new Paragraph(linea));
+                        pCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                        pCell.Colspan = 7;
+                        pCell.Border = 0;
+                        tabla.AddCell(pCell);
 
-                    //document.Add(linea);
+                        //document.Add(linea);
+                    }
                 }
             }
+
 
 
             document.Add(tabla);
@@ -1007,10 +1024,12 @@ namespace CampaniasLito.Controllers
 
             if (totalMateriales.Count == 0)
             {
-                TempData["mensajeLito"] = "Aún no hay cantidades para la Campaña";
+                Session["Mensaje"] = "Aún no hay cantidades para la Campaña de " + cat;
 
                 return RedirectToAction("Index");
             }
+
+            Session["Mensaje"] = string.Empty;
 
             return View(totalMateriales.ToList());
 
@@ -1171,8 +1190,13 @@ namespace CampaniasLito.Controllers
         }
 
         [AuthorizeUser(idOperacion: 5)]
-        public ActionResult ResumenProveedor(int id)
+        public ActionResult ResumenProveedor(int? id)
         {
+            Session["iconoTitulo"] = "fas fa-shipping-fast";
+            Session["homeB"] = string.Empty;
+            Session["campañasB"] = "active";
+
+            Session["Mensaje"] = string.Empty;
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
 
@@ -1181,45 +1205,103 @@ namespace CampaniasLito.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var campaña = db.Campañas.Where(x => x.CampañaId == id).FirstOrDefault();
-
-            var codigosMateriales = db.Database.SqlQuery<CodigosMaterialesTotal>("spGetMaterialesCodigosCampaña @CampañaId",
-                new SqlParameter("@CampañaId", id)).ToList();
-
-            if (codigosMateriales.Count == 0)
+            if (id == null)
             {
-                Session["Mensaje"] = "AÚN NO SE HAN GENERADO CÓDIGOS";
-                return RedirectToAction("Index");
-                //return Json(new { success = true, message = "AÚN NO SE HAN GENERADO CÓDIGOS" }, JsonRequestBehavior.AllowGet);
+                id = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault().CampañaId;
             }
 
-            var materialesTipoTienda = db.Database.SqlQuery<CodigosMaterialesTienda>("spGetMaterialesTipoTienda @CampañaId",
-                                        new SqlParameter("@CampañaId", id)).ToList();
+            var proveedor = usuario.ProveedorId;
 
-            var materialesEqFqStk = db.Database.SqlQuery<CodigosMaterialesEQFQSTK>("spGetMaterialesEqFqStk @CampañaId",
-                                        new SqlParameter("@CampañaId", id)).ToList();
+            var campaña = db.Campañas.Where(x => x.CampañaId == id).FirstOrDefault();
 
-            ViewBag.TotalCategoria = materialesEqFqStk.ToList();
+            if (proveedor == 4)
+            {
+                var codigosMateriales = db.Database.SqlQuery<CodigosMaterialesTotal>("spGetMaterialesCodigosCampaña @CampañaId",
+                    new SqlParameter("@CampañaId", id)).ToList();
 
-            var materialesImagenes = db.Database.SqlQuery<CodigosMaterialesImagenes>("spGetMaterialesImagenes @CampañaId",
-                                        new SqlParameter("@CampañaId", id)).ToList();
+                if (codigosMateriales.Count == 0)
+                {
+                    Session["Mensaje"] = "AÚN NO SE HAN GENERADO CÓDIGOS";
+                    return RedirectToAction("Index");
+                    //return Json(new { success = true, message = "AÚN NO SE HAN GENERADO CÓDIGOS" }, JsonRequestBehavior.AllowGet);
+                }
 
-            ViewBag.Imagenes = materialesImagenes.ToList();
+                var materialesTipoTienda = db.Database.SqlQuery<CodigosMaterialesTienda>("spGetMaterialesTipoTienda @CampañaId",
+                                            new SqlParameter("@CampañaId", id)).ToList();
 
-            var totalProv = db.Database.SqlQuery<ProveedoresTotal>("spGetTotalProv @CampañaId",
-                            new SqlParameter("@CampañaId", id)).ToList();
+                var materialesEqFqStk = db.Database.SqlQuery<CodigosMaterialesEQFQSTK>("spGetMaterialesEqFqStk @CampañaId",
+                                            new SqlParameter("@CampañaId", id)).ToList();
+
+                ViewBag.TotalCategoria = materialesEqFqStk.ToList();
+
+                var materialesImagenes = db.Database.SqlQuery<CodigosMaterialesImagenes>("spGetMaterialesImagenes @CampañaId",
+                                            new SqlParameter("@CampañaId", id)).ToList();
+
+                ViewBag.Imagenes = materialesImagenes.ToList();
+
+                var totalProv = db.Database.SqlQuery<ProveedoresTotal>("spGetTotalProv @CampañaId",
+                                            new SqlParameter("@CampañaId", id)).ToList();
 
 
-            ViewBag.TotalProveedor = totalProv.ToList();
+                ViewBag.TotalProveedor = totalProv.ToList();
 
-            var totalCantidad = db.Database.SqlQuery<MaterialTotal>("spGetMaterialesTotalResumen @CampañaId",
-                new SqlParameter("@CampañaId", id)).ToList();
+                var totalCantidad = db.Database.SqlQuery<MaterialTotal>("spGetMaterialesTotalResumen @CampañaId",
+                                            new SqlParameter("@CampañaId", id)).ToList();
 
-            ViewBag.TotalMaterial = totalCantidad.ToList();
+                ViewBag.TotalMaterial = totalCantidad.ToList();
 
-            var totalMateriales = materialesTipoTienda.ToList().OrderBy(p => p.Proveedor).ThenBy(p => p.ArticuloKFC);
+                var totalMateriales = materialesTipoTienda.ToList().OrderBy(p => p.Proveedor).ThenBy(p => p.ArticuloKFC);
 
-            return View(totalMateriales);
+                return View(totalMateriales);
+            }
+            else
+            {
+
+                var codigosMateriales = db.Database.SqlQuery<CodigosMaterialesTotal>("spGetMaterialesCodigosCampañaXProveedor @CampañaId, @ProveedorId",
+                    new SqlParameter("@CampañaId", id),
+                    new SqlParameter("@ProveedorId", proveedor)).ToList();
+
+                if (codigosMateriales.Count == 0)
+                {
+                    Session["Mensaje"] = "¡NO HAY INFORMACIÓN!";
+                    return RedirectToAction("Index", "Home");
+                    //return Json(new { success = true, message = "AÚN NO SE HAN GENERADO CÓDIGOS" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var materialesTipoTienda = db.Database.SqlQuery<CodigosMaterialesTienda>("spGetMaterialesTipoTiendaXProveedor @CampañaId, @ProveedorId",
+                                            new SqlParameter("@CampañaId", id),
+                                            new SqlParameter("@ProveedorId", proveedor)).ToList();
+
+                var materialesEqFqStk = db.Database.SqlQuery<CodigosMaterialesEQFQSTK>("spGetMaterialesEqFqStkXProveedor @CampañaId, @ProveedorId",
+                                            new SqlParameter("@CampañaId", id),
+                                            new SqlParameter("@ProveedorId", proveedor)).ToList();
+
+                ViewBag.TotalCategoria = materialesEqFqStk.ToList();
+
+                var materialesImagenes = db.Database.SqlQuery<CodigosMaterialesImagenes>("spGetMaterialesImagenesXProveedor @CampañaId, @ProveedorId",
+                                            new SqlParameter("@CampañaId", id),
+                                            new SqlParameter("@ProveedorId", proveedor)).ToList();
+
+                ViewBag.Imagenes = materialesImagenes.ToList();
+
+                var totalProv = db.Database.SqlQuery<ProveedoresTotal>("spGetTotalProvXProveedor @CampañaId, @ProveedorId",
+                                            new SqlParameter("@CampañaId", id),
+                                            new SqlParameter("@ProveedorId", proveedor)).ToList();
+
+
+                ViewBag.TotalProveedor = totalProv.ToList();
+
+                var totalCantidad = db.Database.SqlQuery<MaterialTotal>("spGetMaterialesTotalResumenXProveedor @CampañaId, @ProveedorId",
+                                            new SqlParameter("@CampañaId", id),
+                                            new SqlParameter("@ProveedorId", proveedor)).ToList();
+
+                ViewBag.TotalMaterial = totalCantidad.ToList();
+
+                var totalMateriales = materialesTipoTienda.ToList().OrderBy(p => p.Proveedor).ThenBy(p => p.ArticuloKFC);
+
+                return View(totalMateriales);
+            }
+
         }
 
     }

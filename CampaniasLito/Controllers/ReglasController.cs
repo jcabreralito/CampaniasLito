@@ -58,6 +58,7 @@ namespace CampaniasLito.Controllers
             Session["reglasCatalogoB"] = string.Empty;
             Session["stockB"] = string.Empty;
             Session["materialesB"] = string.Empty;
+            Session["Mensaje"] = string.Empty;
 
             return View();
         }

@@ -105,23 +105,23 @@
                             </a>
                         </li>*@
                     <li style="margin: 0 15px">
-                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            <div>
-                                <a href="javascript:document.getElementById('logoutForm').submit()"
-                                   class="sidenav-trigger iconomenuSalir"
-                                   title="Salir" onclick="viewPageIndex()">
-                                    <i class="large material-icons">power_settings_new</i>
-                                </a>
+                        @*@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            {*@
+                        @Html.AntiForgeryToken()
+                        <div>
+                            <a href="javascript:document.getElementById('logoutForm').submit()"
+                               class="sidenav-trigger iconomenuSalir"
+                               title="Salir" onclick="viewPageIndex()">
+                                <i class="large material-icons">power_settings_new</i>
+                            </a>
 
-                                <a href="javascript:document.getElementById('logoutForm').submit()"
-                                   class="iconomenuSalir"
-                                   title="Salir" onclick="viewPageIndex()">
-                                    <i class="large material-icons">power_settings_new</i>
-                                </a>
-                            </div>
-                        }
+                            <a href="javascript:document.getElementById('logoutForm').submit()"
+                               class="iconomenuSalir"
+                               title="Salir" onclick="viewPageIndex()">
+                                <i class="large material-icons">power_settings_new</i>
+                            </a>
+                        </div>
+                        @*}*@
                     </li>
                 </ul>
             </div>
@@ -139,26 +139,14 @@
                     <i class="fas fa-home"></i>
                 </a>
             </li>
-            @*<li>
-            <a id="materialesB" href="@Url.Action("Index", "Materiales")" class="iconomenu @Session["materialesB"].ToString()" onclick="viewPageIndex()">
-                Materiales
-                <i class="fas fa-barcode"></i>
-            </a>
-        </li>
-        <li>
-            <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="iconomenu @Session["campañasB"].ToString()" onclick="viewPageIndex()">
-                Campañas
-                <i class="fas fa-calendar-alt"></i>
-            </a>
-        </li>*@
             <li>
-                <a id="equityB" class="iconomenu @Session["equityB"].ToString()" onclick="mostrarEquity();">
+                <a id="equityA" class="iconomenu @Session["equityB"].ToString()" onclick="mostrarEquity();">
                     Reglas
                     <i>RG</i>
                 </a>
             </li>
             <li>
-                <a id="reglasCatalogoB" class="iconomenu @Session["reglasCatalogoB"].ToString()" onclick="mostrarCat();">
+                <a id="reglasCatalogoA" class="iconomenu" onclick="mostrarCat();">
                     Características
                     <i class="fas fa-clipboard-list"></i>
                 </a>
@@ -169,29 +157,12 @@
                     <i class="fas fa-barcode"></i>
                 </a>
             </li>
-            @*<li>
-            <a id="franquiciasB" class="iconomenu @Session["franquiciasB"].ToString()" onclick="mostrarFranquicias();">
-                Franquicias
-            </a>
-        </li>*@
-            @*<li>
-            <a id="stockB" class="iconomenu @Session["stockB"].ToString()" onclick="mostrarStock();">
-                Stock
-            </a>
-        </li>*@
-            @*<li>
-            <a id="caracteristicasB" class="iconomenu @Session["caracteristicasB"].ToString()" onclick="mostrarCaracteristicas();">
-                Características
-                <i class="fas fa-clipboard-check"></i>
-            </a>
-        </li>*@
         </ul>
 
     </div>
 
     <div class="container body-content" style="margin-top: 20px">
         <div class="jumbotron">
-            @*<h6 class="center-align tituloJumbotron" style="padding-top: 13px; font-size: 12px !important" id="tituloJum">@ViewBag.Title EQUITY</h6>*@
         </div>
         <div id="contenedor_carga">
             <div id="carga">
@@ -223,63 +194,44 @@
     @RenderSection("scripts", required: false)
 
     <script>
-    function mostrarEquity() {
 
-        $("#titulo").text('@ViewBag.Title');
-        $("#tituloJum").text('@ViewBag.Title');
+        function mostrarEquity() {
 
-        $('#equityB').addClass('active');
-        //$('#franquiciasB').removeClass('active');
-        $('#reglasCatalogoB').removeClass('active');
+            $("#titulo").text('@ViewBag.Title');
+            $("#tituloJum").text('@ViewBag.Title');
 
-        dataTableReglaEQ.ajax.reload();
+            $('#equityB').addClass('active');
+            $('#reglasCatalogoB').removeClass('active');
 
-        document.getElementById('equity').style.display = 'block';
-        document.getElementById('equity').style.visibility = 'visible';
-        //document.getElementById('franquicias').style.display = 'none';
-        //document.getElementById('franquicias').style.visibility = 'hidden';
-        document.getElementById('catalogo').style.display = 'none';
-        document.getElementById('catalogo').style.visibility = 'hidden';
+            $('#equityA').addClass('active');
+            $('#reglasCatalogoA').removeClass('active');
+
+            dataTableReglaEQ.ajax.reload();
+
+            document.getElementById('equity').style.display = 'block';
+            document.getElementById('equity').style.visibility = 'visible';
+            document.getElementById('catalogo').style.display = 'none';
+            document.getElementById('catalogo').style.visibility = 'hidden';
 
         }
 
-    @*function mostrarFranquicias() {
+        function mostrarCat() {
 
-        $("#titulo").text('@ViewBag.Title FRANQUICIAS');
-        $("#tituloJum").text('@ViewBag.Title FRANQUICIAS');
+            $("#titulo").text('@ViewBag.Title CARACTERÍSTICAS');
+            $("#tituloJum").text('@ViewBag.Title CARACTERÍSTICAS');
 
-        $('#equityB').removeClass('active');
-        $('#franquiciasB').addClass('active');
-        $('#reglasCatalogoB').removeClass('active');
+            $('#equityB').removeClass('active');
+            $('#reglasCatalogoB').addClass('active');
 
-        dataTableReglaFQ.ajax.reload();
+            $('#equityA').removeClass('active');
+            $('#reglasCatalogoA').addClass('active');
 
-        document.getElementById('equity').style.display = 'none';
-        document.getElementById('equity').style.visibility = 'hidden';
-        document.getElementById('franquicias').style.display = 'block';
-        document.getElementById('franquicias').style.visibility = 'visible';
-        document.getElementById('catalogo').style.display = 'none';
-        document.getElementById('catalogo').style.visibility = 'hidden';
+            dataTableReglaCat.ajax.reload();
 
-        }*@
-
-    function mostrarCat() {
-
-        $("#titulo").text('@ViewBag.Title CARACTERÍSTICAS');
-        $("#tituloJum").text('@ViewBag.Title CARACTERÍSTICAS');
-
-        $('#equityB').removeClass('active');
-        //$('#franquiciasB').removeClass('active');
-        $('#reglasCatalogoB').addClass('active');
-
-        dataTableReglaCat.ajax.reload();
-
-        document.getElementById('equity').style.display = 'none';
-        document.getElementById('equity').style.visibility = 'hidden';
-        //document.getElementById('franquicias').style.display = 'none';
-        //document.getElementById('franquicias').style.visibility = 'hidden';
-        document.getElementById('catalogo').style.display = 'block';
-        document.getElementById('catalogo').style.visibility = 'visible';
+            document.getElementById('equity').style.display = 'none';
+            document.getElementById('equity').style.visibility = 'hidden';
+            document.getElementById('catalogo').style.display = 'block';
+            document.getElementById('catalogo').style.visibility = 'visible';
 
         }
 

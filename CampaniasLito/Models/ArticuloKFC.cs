@@ -29,6 +29,9 @@ namespace CampaniasLito.Models
         [Display(Name = "Cantidad Default")]
         public int CantidadDefault { get; set; }
 
+        [Required(ErrorMessage = "El Campo {0} es obligatorio")]
+        //[Range(1, double.MaxValue, ErrorMessage = "Seleccionar una {0}")]
+        [Display(Name = "Categoría", Prompt = "[Seleccionar...]")]
         public string EquityFranquicia { get; set; }
 
         public string Observaciones { get; set; }

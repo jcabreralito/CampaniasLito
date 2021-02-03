@@ -2,6 +2,12 @@
 @{
 }
 
+<style>
+    .row {
+        margin-top: -13px;
+    }
+</style>
+
 @using (Html.BeginForm("AddOrEdit", "Restaurantes", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
 {
     @Html.HiddenFor(model => model.TiendaId)
@@ -90,7 +96,7 @@
 
     @Html.HiddenFor(model => model.Eliminado)
 
-    <div class="input-field col-sm-12" style="text-transform: uppercase !important">
+    <div class="input-field col s12" style="text-transform: uppercase !important">
         @if (Model.TiendaId == 0)
         {
             <h6 class="red-text center-align"><strong>AGREGAR RESTAURANTE</strong></h6>
@@ -102,28 +108,28 @@
     </div>
 
     <div class="row">
-        <div class="input-field col-sm-12" style="text-transform: uppercase !important">
+        <div class="input-field col s12" style="text-transform: uppercase !important">
             @Html.EditorFor(model => model.Restaurante, new { htmlAttributes = new { @type = "text", @class = "validate", @required = "true", style = "text-transform: uppercase !important" } })
             <label class="active" for="Restaurante">Restaurante</label>
         </div>
     </div>
 
     <div class="row">
-        <div class="input-field col-sm-12" style="text-transform: uppercase !important">
+        <div class="input-field col s12" style="text-transform: uppercase !important">
             @Html.TextAreaFor(model => model.Direccion, new { @class = "materialize-textarea validate", @required = "true", style = "text-transform: uppercase !important" })
             <label class="active" for="Direccion">Dirección</label>
         </div>
     </div>
 
     <div class="row">
-        <div class="form-group focus col-sm-6" style="text-transform: uppercase !important;">
+        <div class="col s6" style="text-transform: uppercase !important;">
             <label for="RegionId">Región</label>
             <div class="customselect">
                 @Html.DropDownList("RegionId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[4].Watermark, htmlAttributes: new { @class = "form-control form-control-select clgfocus", @type = "text", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
             </div>
             <span class="focus-border"></span>
         </div>
-        <div class="form-group focus col-sm-6" style="text-transform: uppercase !important">
+        <div class="col s6" style="text-transform: uppercase !important">
             <label for="CiudadId">Ciudad</label>
             <div class="customselect">
                 @Html.DropDownList("CiudadId", null, ((IList<ModelMetadata>)ViewData.ModelMetadata.Properties)[5].Watermark, htmlAttributes: new { @class = "form-control form-control-select clgfocus", @type = "text", @required = "true", style = "text-transform: uppercase", @oninvalid = "setCustomValidity('Seleccionar un elemento de la lista')", @oninput = "setCustomValidity('')" })
@@ -135,12 +141,12 @@
     if (Model.TiendaId == 0)
     {
         <div class="row">
-            <div class="input-field col-sm-6" style="padding-right: 10px;">
+            <div class="input-field col s6" style="padding-right: 10px;">
                 @Html.EditorFor(model => model.Clasificacion, new { htmlAttributes = new { @type = "text", @class = "validate center-align", style = "text-transform: uppercase !important" } })
                 <label class="active" for="Clasificacion">Clasificación</label>
             </div>
 
-            <div class="input-field col-sm-6" style="padding-right: 10px;">
+            <div class="input-field col s6" style="padding-right: 10px;">
                 @Html.EditorFor(model => model.CCoFranquicia, new { htmlAttributes = new { @type = "text", @class = "validate center-align", @required = "true", style = "text-transform: uppercase !important" } })
                 <label class="active" for="CCoFranquicia">C.C.</label>
             </div>
@@ -149,17 +155,17 @@
     else
     {
         <div class="row">
-            <div class="input-field col-sm-4" style="padding-right: 10px;">
+            <div class="input-field col s4" style="padding-right: 10px;">
                 @Html.EditorFor(model => model.Clasificacion, new { htmlAttributes = new { @type = "text", @class = "validate center-align", style = "text-transform: uppercase !important" } })
                 <label class="active" for="Clasificacion">Clasificación</label>
             </div>
 
-            <div class="input-field col-sm-4" style="padding-right: 10px;">
+            <div class="input-field col s4" style="padding-right: 10px;">
                 @Html.EditorFor(model => model.CCoFranquicia, new { htmlAttributes = new { @type = "text", @class = "validate center-align", @required = "true", style = "text-transform: uppercase !important" } })
                 <label class="active" for="CCoFranquicia">C.C.</label>
             </div>
 
-            <div class="input-field center-align col-sm-4">
+            <div class="input-field center-align col s4">
                 @Html.CheckBoxFor(model => model.Activo, new { @class = "switch_1" })
                 <label class="active" for="Activo">Activo</label>
             </div>
@@ -167,15 +173,61 @@
     }
 
     <div class="row">
-        <div class="input-field col-sm-12" style="text-transform: uppercase !important">
+        <div class="input-field col s12" style="text-transform: uppercase !important">
             @Html.TextAreaFor(model => model.Observaciones, new { @class = "materialize-textarea validate", style = "text-transform: uppercase !important" })
             <label class="active" for="Observaciones">Observaciones</label>
         </div>
     </div>
 
-    <div class="center-align col-sm-12">
-        <button type="submit" title="Aceptar" id="Aceptar" class="btn-floating btn-sm green" style="border-radius: 50%" onclick="hidePage()">
+    <div class="center-align col s12">
+        <button type="submit" title="Aceptar" id="aceptar" disabled class="btn-floating btn-sm green" style="border-radius: 50%" onclick="hidePage()">
             <i class="large material-icons">check</i>
         </button>
     </div>
 }
+
+<script>
+
+    var rest = document.getElementById('Restaurante');
+    var dir = document.getElementById('Direccion');
+    var reg = document.getElementById('RegionId');
+    var cd = document.getElementById('CiudadId');
+    var ccofran = document.getElementById('CCoFranquicia');
+    var act = document.getElementById('Activo');
+    var acep = document.getElementById('aceptar');
+
+    rest.addEventListener('change', function () {
+        alcambiar();
+    });
+
+    dir.addEventListener('change', function () {
+        alcambiar();
+    });
+
+    reg.addEventListener('change', function () {
+        alcambiar();
+    });
+
+    cd.addEventListener('change', function () {
+        alcambiar();
+    });
+
+    ccofran.addEventListener('change', function () {
+        alcambiar();
+    });
+
+    act.addEventListener('change', function () {
+        alcambiar();
+    });
+
+    function alcambiar() {
+
+        if (rest.value != "" && dir.value != "" && reg.value != "" && cd.value != "" && ccofran.value != "") {
+            acep.disabled = false;
+        }
+        else {
+            acep.disabled = true;
+        }
+    }
+
+</script>

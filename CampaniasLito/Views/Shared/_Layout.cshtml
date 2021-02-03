@@ -204,8 +204,8 @@
                     @if (User.IsInRole("Proveedor"))
                     {
                         <li class="iMenu">
-                            <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="@Session["campañasB"].ToString()" title="Campañas" onclick="viewPageIndex()">
-                                <i class="fas fa-calendar-alt fa-2x"></i>
+                            <a id="campañasB" href="@Url.Action("ResumenProveedor", "Campañas")" class="@Session["campañasB"].ToString()" title="Resumen" onclick="viewPageIndex()">
+                                <i class="fas fa-shipping-fast fa-2x"></i>
                             </a>
                         </li>
                     }
@@ -218,8 +218,8 @@
                         </div>
                     </li>
                     <li class="iMenuSalir">
-                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                        {
+                        @*@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                        {*@
                             @Html.AntiForgeryToken()
                             <div>
                                 <a href="javascript:document.getElementById('logoutForm').submit()"
@@ -228,7 +228,7 @@
                                     <i class="large material-icons">power_settings_new</i>
                                 </a>
                             </div>
-                        }
+                        @*}*@
                     </li>
                 </ul>
             </div>
@@ -246,66 +246,111 @@
                     <i class="fas fa-home"></i>
                 </a>
             </li>
-            <li>
-                <a id="regionesB" href="@Url.Action("Index", "Regiones")" class="iconomenu @Session["regionesB"].ToString()" onclick="viewPageIndex()">
-                    Regiones
-                    <i class="fas fa-map-marked"></i>
-                </a>
-            </li>
-            <li>
-                <a id="ciudadesB" href="@Url.Action("Index", "Ciudades")" class="iconomenu @Session["ciudadesB"].ToString()" onclick="viewPageIndex()">
-                    Ciudades
-                    <i class="fas fa-map-marker-alt"></i>
-                </a>
-            </li>
-            <li>
-                <a id="restaurantesB" href="@Url.Action("Index", "Restaurantes")" class="iconomenu @Session["restaurantesB"].ToString()" onclick="viewPageIndex()">
-                    Restaurantes
-                    <i class="fas fa-store-alt"></i>
-                </a>
-            </li>
-
-
-
-            @*<li>
-                <a id="restaurantesB" href="@Url.Action("IndexDev", "Restaurantes")" class="iconomenu @Session["restaurantesB"].ToString()" onclick="viewPageIndex()">
-                    Restaurantes
-                    <i class="fas fa-store-alt"></i>
-                </a>
-            </li>*@
-
-
-
-            <li>
-                <a id="familiasB" href="@Url.Action("Index", "Familias")" class="iconomenu @Session["familiasB"].ToString()" onclick="viewPageIndex()">
-                    Familias
-                    <i class="fas fa-boxes"></i>
-                </a>
-            </li>
-            <li>
-                <a id="reglasB" href="@Url.Action("Index", "Reglas")" class="iconomenu @Session["reglasB"].ToString()" onclick="viewPageIndex()">
-                    Reglas
-                    <i class="fas fa-file-contract"></i>
-                </a>
-            </li>
-            <li>
-                <a id="materialesB" href="@Url.Action("Index", "Materiales")" class="iconomenu @Session["materialesB"].ToString()" onclick="viewPageIndex()">
-                    Materiales
-                    <i class="fas fa-barcode"></i>
-                </a>
-            </li>
-            <li>
-                <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="iconomenu @Session["campañasB"].ToString()" onclick="viewPageIndex()">
-                    Campañas
-                    <i class="fas fa-calendar-alt"></i>
-                </a>
-            </li>
-            @if (User.Identity.Name == "jcabrera@litoprocess.com")
+            @if (User.IsInRole("Admin"))
             {
                 <li>
-                    <a id="bitacoraB" href="@Url.Action("Index", "Bitacora")" class="iconomenu @Session["bitacoraB"].ToString()" onclick="viewPageIndex()">
-                        Bitácora
-                        <i class="fas fa-atlas"></i>
+                    <a id="regionesB" href="@Url.Action("Index", "Regiones")" class="iconomenu @Session["regionesB"].ToString()" onclick="viewPageIndex()">
+                        Regiones
+                        <i class="fas fa-map-marked"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="ciudadesB" href="@Url.Action("Index", "Ciudades")" class="iconomenu @Session["ciudadesB"].ToString()" onclick="viewPageIndex()">
+                        Ciudades
+                        <i class="fas fa-map-marker-alt"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="restaurantesB" href="@Url.Action("Index", "Restaurantes")" class="iconomenu @Session["restaurantesB"].ToString()" onclick="viewPageIndex()">
+                        Restaurantes
+                        <i class="fas fa-store-alt"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="familiasB" href="@Url.Action("Index", "Familias")" class="iconomenu @Session["familiasB"].ToString()" onclick="viewPageIndex()">
+                        Familias
+                        <i class="fas fa-boxes"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="reglasB" href="@Url.Action("Index", "Reglas")" class="iconomenu @Session["reglasB"].ToString()" onclick="viewPageIndex()">
+                        Reglas
+                        <i class="fas fa-file-contract"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="materialesB" href="@Url.Action("Index", "Materiales")" class="iconomenu @Session["materialesB"].ToString()" onclick="viewPageIndex()">
+                        Materiales
+                        <i class="fas fa-barcode"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="iconomenu @Session["campañasB"].ToString()" onclick="viewPageIndex()">
+                        Campañas
+                        <i class="fas fa-calendar-alt"></i>
+                    </a>
+                </li>
+                if (User.Identity.Name == "jcabrera@litoprocess.com")
+                {
+                    <li>
+                        <a id="bitacoraB" href="@Url.Action("Index", "Bitacora")" class="iconomenu @Session["bitacoraB"].ToString()" onclick="viewPageIndex()">
+                            Bitácora
+                            <i class="fas fa-atlas"></i>
+                        </a>
+                    </li>
+                }
+            }
+            @if (User.IsInRole("User") || User.IsInRole("CONSULTAS"))
+            {
+                <li>
+                    <a id="regionesB" href="@Url.Action("Index", "Regiones")" class="iconomenu @Session["regionesB"].ToString()" onclick="viewPageIndex()">
+                        Regiones
+                        <i class="fas fa-map-marked"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="ciudadesB" href="@Url.Action("Index", "Ciudades")" class="iconomenu @Session["ciudadesB"].ToString()" onclick="viewPageIndex()">
+                        Ciudades
+                        <i class="fas fa-map-marker-alt"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="restaurantesB" href="@Url.Action("Index", "Restaurantes")" class="iconomenu @Session["restaurantesB"].ToString()" onclick="viewPageIndex()">
+                        Restaurantes
+                        <i class="fas fa-store-alt"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="familiasB" href="@Url.Action("Index", "Familias")" class="iconomenu @Session["familiasB"].ToString()" onclick="viewPageIndex()">
+                        Familias
+                        <i class="fas fa-boxes"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="reglasB" href="@Url.Action("Index", "Reglas")" class="iconomenu @Session["reglasB"].ToString()" onclick="viewPageIndex()">
+                        Reglas
+                        <i class="fas fa-file-contract"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="materialesB" href="@Url.Action("Index", "Materiales")" class="iconomenu @Session["materialesB"].ToString()" onclick="viewPageIndex()">
+                        Materiales
+                        <i class="fas fa-barcode"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="iconomenu @Session["campañasB"].ToString()" onclick="viewPageIndex()">
+                        Campañas
+                        <i class="fas fa-calendar-alt"></i>
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole("Proveedor"))
+            {
+                <li>
+                    <a id="campañasB" href="@Url.Action("ResumenProveedor", "Campañas")" class="iconomenu @Session["campañasB"].ToString()" onclick="viewPageIndex()">
+                        Resumen
+                        <i class="fas fa-shipping-fast"></i>
                     </a>
                 </li>
             }
@@ -315,6 +360,7 @@
 
     <div class="container body-content" style="margin-top: 20px">
         <div class="jumbotron">
+            <h5 class="center-align red-text"></h5>
             @*<h4 class="center-align"><i class="@Session["iconoTitulo"].ToString()"></i>&nbsp;&nbsp;&nbsp;@ViewBag.Title</h4>*@
         </div>
         <div id="contenedor_carga">

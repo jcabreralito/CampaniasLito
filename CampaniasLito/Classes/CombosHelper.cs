@@ -342,7 +342,7 @@ namespace CampaniasLito.Classes
 
         public static List<Proveedor> GetProveedores(bool sw)
         {
-            var proveedores = db.Proveedors.Where(x => x.ProveedorId != 5).ToList();
+            var proveedores = db.Database.SqlQuery<Proveedor>("spGetProveedores").ToList();
             return proveedores.OrderBy(c => c.Nombre).ToList();
         }
 
