@@ -29,7 +29,6 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
             </tr>
         </tfoot>
     </table>
@@ -126,7 +125,7 @@
                         },
                         "title": "Regla"
                     },
-                    {
+                    @*{
                         "data": "ReglaId", "render": function (data) {
                             return "<a class='btn-default btn-lg' style='background-color: transparent; cursor: pointer' onclick=PopupForm('@Url.Action("AddOrEdit","Reglas")/" + data + "')><i class='fas fa-pencil-alt'></i></a>";
                         },
@@ -134,7 +133,7 @@
                         "orderable": false,
                         "searchable": false,
                         "className": "dt-body-center text-center",
-                    },
+                    },*@
                     {
                         "data": "ReglaId", "render": function (data) {
                             return "<a class='btn-danger btn-lg' style='background-color: transparent; cursor: pointer' onclick=Delete(" + data + ")><i class='fas fa-trash' style='color: #DF2530'></i></a>";

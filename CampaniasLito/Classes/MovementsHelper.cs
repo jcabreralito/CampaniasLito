@@ -8983,7 +8983,7 @@ namespace CampaniasLito.Classes
             foreach (var articulo in articulos)
             {
                 var reglas = db.Database.SqlQuery<spMaterialesCaracteristicas>("spGetMaterialCarateristicas @ArticuloKFCId",
-                     new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId)).ToList();
+                     new SqlParameter("@ArticuloKFCId", articulo.ArticuloKFCId)).OrderByDescending(x => x.ReglaCatalogoId).ToList();
 
                 foreach (var tienda in tiendas)
                 {
@@ -9008,6 +9008,17 @@ namespace CampaniasLito.Classes
                             cumpleRegla = false;
                             break;
                         }
+                        //else if (regla.Nombre != "FC" && regla.Nombre != "FS" && regla.Nombre != "IL" && regla.Nombre != "SB")
+                        //{
+                        //    if (cumpleReglaTipo == true)
+                        //    {
+                        //        cumpleReglaTipo = true;
+                        //    }
+                        //    else
+                        //    {
+                        //        cumpleReglaTipo = false;
+                        //    }
+                        //}
                         else if (regla.Nombre == "FC" || regla.Nombre == "FS" || regla.Nombre == "IL" || regla.Nombre == "SB")
                         {
                             if (cumpleReglaTipo == true)
@@ -9062,6 +9073,12 @@ namespace CampaniasLito.Classes
                     else if (cumpleRegla)
                     {
                         AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                        cumpleRegla = false;
+                        cumpleReglaTipo = false;
+                    }
+                    else if (cumpleRegla && cumpleReglaTipo == false)
+                    {
+                        AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
                         cumpleRegla = false;
                         cumpleReglaTipo = false;
                     }
