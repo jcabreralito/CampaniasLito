@@ -312,15 +312,15 @@ namespace CampaniasLito.Controllers
                     db.Entry(materialEditado).State = EntityState.Modified;
                     DBHelper.SaveChanges(db);
 
-                    EliminarMateriales(id, campaña);
+                    //EliminarMateriales(id, campaña);
 
-                    MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
-                    if (campaña != null)
-                    {
-                        var campañaId = campaña.CampañaId;
+                    //MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
+                    //if (campaña != null)
+                    //{
+                    //    var campañaId = campaña.CampañaId;
 
-                        MovementsHelper.AgregarArticuloCampañas(materialEditado, campañaId);
-                    }
+                    //    MovementsHelper.AgregarArticuloCampañas(materialEditado, campañaId);
+                    //}
 
                 }
             }
@@ -388,7 +388,9 @@ namespace CampaniasLito.Controllers
                 {
                     CargarImagen(material);
 
-                    MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
+                    var categoria = string.Empty;
+
+                    MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId, categoria);
 
                     var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
 
@@ -437,7 +439,10 @@ namespace CampaniasLito.Controllers
 
                             EliminarMateriales(id, campaña);
 
-                            MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId);
+                            var categoria = string.Empty;
+
+                            MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId, categoria);
+
                             if (campaña != null)
                             {
                                 var campañaId = campaña.CampañaId;
@@ -480,6 +485,139 @@ namespace CampaniasLito.Controllers
                 else
                 {
                     return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult ActualizarMaterial(int id)
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+            var restauranteId = 0;
+
+            var material = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == id).FirstOrDefault();
+            //material.EquityFranquicia = tipo;
+
+            if (material.Observaciones == null)
+            {
+                material.Observaciones = string.Empty;
+            }
+
+            db.Entry(material).State = EntityState.Modified;
+            var response = DBHelper.SaveChanges(db);
+            if (response.Succeeded)
+            {
+                CargarImagen(material);
+
+                var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
+
+                if (material.FamiliaId != 22)
+                {
+                    if (material.Activo == true)
+                    {
+
+                        EliminarMateriales(id, campaña);
+
+                        var categoria = string.Empty;
+
+                        MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId, categoria);
+
+                        if (campaña != null)
+                        {
+                            var campañaId = campaña.CampañaId;
+
+                            MovementsHelper.AgregarArticuloCampañas(material, campañaId);
+                        }
+
+                    }
+                    else
+                    {
+                        EliminarMateriales(id, campaña);
+                    }
+                }
+                else
+                {
+                    if (material.Activo == true)
+                    {
+
+                        EliminarMaterialesMoto(id, campaña);
+
+                        if (campaña != null)
+                        {
+                            var campañaId = campaña.CampañaId;
+
+                            MovementsHelper.AgregarArticuloCampañas(material, campañaId);
+                        }
+
+                    }
+                    else
+                    {
+                        EliminarMaterialesMoto(id, campaña);
+                    }
+                }
+
+                movimiento = "Actualizar Material " + material.ArticuloKFCId + " " + material.Descripcion + " / " + material.EquityFranquicia;
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+                return Json(new { success = true, message = "MATERIAL ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = true, message = response.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult ActualizarTodo()
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+            var restauranteId = 0;
+
+            var materialId = 0;
+
+            var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
+
+
+            EliminarTodo();
+
+            var categorias = db.TipoCampanias.Where(x => x.Nombre != "STOCK" && x.Nombre != "EQUITY / FRANQUICIAS").ToList();
+
+            foreach (var categoria in categorias)
+            {
+                MovementsHelper.AgregarMaterialesTiendaCampañaExiste(materialId, restauranteId, categoria.Nombre);
+            }
+
+            if (campaña != null)
+            {
+                var campañaId = campaña.CampañaId;
+
+                MovementsHelper.AgregarArticulosNuevaCampaña(campañaId);
+            }
+
+            movimiento = "Actualizar Todo";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = "MATERIAL ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void EliminarTodo()
+        {
+            db.Database.ExecuteSqlCommand(
+            "spEliminarTodosArticulosTiendas");
+
+            var campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
+            if (campañas != null)
+            {
+                foreach (var campaña in campañas)
+                {
+                    var campId = campaña.CampañaId;
+
+                    db.Database.ExecuteSqlCommand(
+                    "spEliminarCampaña @CampañaId",
+                    new SqlParameter("@CampañaId", campId));
                 }
             }
         }

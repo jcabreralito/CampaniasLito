@@ -26,6 +26,10 @@ input:not([type]), input[type=text]:not(.browser-default), input[type=password]:
      margin-bottom: 0; 
 }
 
+td a {
+    color: #000 !important;
+}
+
 #inTurnBlurringTextG {
     width: 560px;
     margin: 39% 0 0 47%;
@@ -709,7 +713,7 @@ table.dataTable thead th.dt-specialColorGreenLight {
 }
 
 div.dataTables_wrapper div.dataTables_paginate {
-    margin: -5px 55px 0 0 !important;
+    margin: -5px 100px 0 0 !important;
 }
 
 div.dataTables_info {

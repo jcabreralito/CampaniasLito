@@ -8917,12 +8917,16 @@ namespace CampaniasLito.Classes
 
         }
 
-        public static void AgregarMaterialesTiendaCampañaExiste(int articuloKFCId, int restauranteId)
+        public static void AgregarMaterialesTiendaCampañaExiste(int articuloKFCId, int restauranteId, string cat)
         {
             var categoria = db.Database.SqlQuery<ArticuloKFC>("spGetMateriales @ArticuloKFCId",
                 new SqlParameter("@ArticuloKFCId", 1)).FirstOrDefault().EquityFranquicia;
 
-            if (articuloKFCId != 0)
+            if (articuloKFCId == 0 && restauranteId == 0)
+            {
+                categoria = cat;
+            }
+            else if (articuloKFCId != 0)
             {
                 categoria = db.Database.SqlQuery<ArticuloKFC>("spGetMateriales @ArticuloKFCId",
                     new SqlParameter("@ArticuloKFCId", articuloKFCId)).FirstOrDefault().EquityFranquicia;
@@ -8946,8 +8950,6 @@ namespace CampaniasLito.Classes
             }
 
             var articulos = db.ArticuloKFCs.Where(x => x.Activo == true).ToList();
-
-
 
             if (categoria == "EQUITY" || categoria == "STOCK")
             {
@@ -9005,8 +9007,15 @@ namespace CampaniasLito.Classes
 
                         if (caracteristicasTienda == null)
                         {
-                            cumpleRegla = false;
-                            break;
+                            if (cumpleReglaTipo == true)
+                            {
+                                cumpleRegla = true;
+                            }
+                            else
+                            {
+                                cumpleRegla = false;
+                            }
+                            //break;
                         }
                         //else if (regla.Nombre != "FC" && regla.Nombre != "FS" && regla.Nombre != "IL" && regla.Nombre != "SB")
                         //{
@@ -26257,7 +26266,9 @@ namespace CampaniasLito.Classes
             //var articulos = db.Database.SqlQuery<ArticuloKFC>("spGetMaterialesTodos @Categoria",
             //    new SqlParameter("@Categoria", tipoTienda)).ToList();
 
-            AgregarMaterialesTiendaCampañaExiste(materialId, tiendaId);
+            var categoria = string.Empty;
+
+            AgregarMaterialesTiendaCampañaExiste(materialId, tiendaId, categoria);
 
             //AgregarTiendaArticulosCampañaExiste(tiendas);
 
