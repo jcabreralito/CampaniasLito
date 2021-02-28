@@ -59,6 +59,17 @@ namespace CampaniasLito.Controllers
             public int ReglaCatalogoId { get; set; }
         }
 
+        public class spReglasCatalogos
+        {
+            public int ReglaCatalogoId { get; set; }
+            public string Nombre { get; set; }
+            public string Valor { get; set; }
+            public bool SiNo { get; set; }
+            public bool Activo { get; set; }
+            public string Categoria { get; set; }
+            public int TipoConfiguracionId { get; set; }
+        } 
+
         // GET: Restaurantes
         [AuthorizeUser(idOperacion: 5)]
         public ActionResult Index()
@@ -164,14 +175,15 @@ namespace CampaniasLito.Controllers
                         categoria = "EQUITY";
                     }
 
-                    var reglasList = db.Database.SqlQuery<ReglaCatalogo>("spGetReglasCatalogoCategoria @Categoria",
+                    var reglasList = db.Database.SqlQuery<spReglasCatalogos>("spGetReglasCatalogoCategoria @Categoria",
                     new SqlParameter("@Categoria", categoria)).ToList();
 
                     foreach (var regla in reglasList)
                     {
                         var val = string.Empty;
+                        var activo = true;
 
-                        if (regla.Valor == "SI / NO")
+                        if (regla.Valor == "SI / NO" || regla.Valor == "SI/NO" || regla.Valor == "si/no")
                         {
                             val = "NO";
                         }
@@ -183,16 +195,21 @@ namespace CampaniasLito.Controllers
                         {
                             val = "ALTO";
                         }
+                        else if (regla.Valor == "TIPO")
+                        {
+                            activo = false;
+                        }
                         else
                         {
                             val = regla.Valor;
                         }
 
                         db.Database.ExecuteSqlCommand(
-                        "spAgregarTiendaCaracteristicas @TiendaId, @ReglaCatalogoId, @Valor",
+                        "spAgregarTiendaCaracteristicas @TiendaId, @ReglaCatalogoId, @Valor, @Activo",
                         new SqlParameter("@TiendaId", tienda.TiendaId),
                         new SqlParameter("@ReglaCatalogoId", regla.ReglaCatalogoId),
-                        new SqlParameter("@Valor", val));
+                        new SqlParameter("@Valor", val),
+                        new SqlParameter("@Activo", activo));
                     }
 
 

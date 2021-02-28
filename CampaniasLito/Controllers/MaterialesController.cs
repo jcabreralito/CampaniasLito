@@ -584,9 +584,11 @@ namespace CampaniasLito.Controllers
 
             var categorias = db.TipoCampanias.Where(x => x.Nombre != "STOCK" && x.Nombre != "EQUITY / FRANQUICIAS").ToList();
 
-            foreach (var categoria in categorias)
+            var materialiesActivos = db.Database.SqlQuery<ArticuloKFC>("spGetMaterialesActivos").ToList();
+
+            foreach (var materialActivo in materialiesActivos)
             {
-                MovementsHelper.AgregarMaterialesTiendaCampañaExiste(materialId, restauranteId, categoria.Nombre);
+                MovementsHelper.AgregarMaterialesTiendaCampañaExiste(materialActivo.ArticuloKFCId, restauranteId, materialActivo.EquityFranquicia);
             }
 
             if (campaña != null)

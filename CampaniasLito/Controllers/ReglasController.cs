@@ -47,6 +47,14 @@ namespace CampaniasLito.Controllers
             public string Descripcion { get; set; }
         }
 
+        public class spReglaCaracteristicasEliminar
+        {
+            public int ReglaCaracteristicaId { get; set; }
+            public int ReglaId { get; set; }
+            public int ReglaCatalogoId { get; set; }
+            public string EquityFranquicia { get; set; }
+        }
+
         // GET: Reglas
         [AuthorizeUser(idOperacion: 5)]
         public ActionResult Index()
@@ -260,6 +268,41 @@ namespace CampaniasLito.Controllers
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    var cat = reglaCatalogo.Categoria;
+
+                    var reglaIdTienda = reglaCatalogo.ReglaCatalogoId;
+
+                    MovementsHelper.AgregarReglasCaracteristicas(cat);
+
+                    if (cat == "EQUITY")
+                    {
+                        cat = "FRANQUICIAS";
+                    }
+                    else if (cat == "FRANQUICIAS")
+                    {
+                        cat = "EQUITY";
+                    }
+                    else
+                    {
+                        cat = string.Empty;
+                    }
+
+                    var caracteristicasEliminar = db.Database.SqlQuery<spReglaCaracteristicasEliminar>("spGetReglasCaracteristicasAEliminar @Categoria, @ReglaCatalogoId",
+                        new SqlParameter("@Categoria", cat),
+                        new SqlParameter("@ReglaCatalogoId", reglaIdTienda)).ToList();
+
+                    if (caracteristicasEliminar.Count > 0)
+                    {
+                        foreach (var caracteristicaEliminar in caracteristicasEliminar)
+                        {
+                            var reglaCaracteristica = db.ReglasCaracteristicas.Find(caracteristicaEliminar.ReglaCaracteristicaId);
+                            db.ReglasCaracteristicas.Remove(reglaCaracteristica);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    MovementsHelper.AgregarTiendasCaracteristicas(reglaIdTienda, cat, fcTipo, fsTipo, ilTipo, sbTipo);
+
                     movimiento = "Actualizar Característica " + reglaCatalogo.ReglaCatalogoId + " " + reglaCatalogo.Nombre + " / " + reglaCatalogo.Categoria;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
@@ -315,7 +358,7 @@ namespace CampaniasLito.Controllers
             {
                 ReglaCaracteristica reglaCaracteristica = db.ReglasCaracteristicas.Find(Convert.ToInt32(reglaCaractersiticaId[i]));
 
-                var reglaId = reglaCaracteristica.ReglaId;
+                //var reglaId = reglaCaracteristica.ReglaId;
 
                 if (isTrue == null)
                 {
@@ -408,6 +451,20 @@ namespace CampaniasLito.Controllers
                     }
                 }
             }
+
+            var regla = db.ReglasCaracteristicas.Find(Convert.ToInt32(reglaCaractersiticaId[1]));
+
+            var reglaId = regla.ReglaId;
+
+            var articuloId = db.Reglas.Find(reglaId);
+
+            var articuloKFCId = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloId.ArticuloKFCId).FirstOrDefault().ArticuloKFCId;
+
+            var restauranteId = 0;
+
+            var categoria = string.Empty;
+
+            MovementsHelper.AgregarMaterialesTiendaCampañaExiste(articuloKFCId, restauranteId, categoria);
 
             movimiento = "Asignar Características";
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);

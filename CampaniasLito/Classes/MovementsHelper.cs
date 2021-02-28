@@ -8981,6 +8981,7 @@ namespace CampaniasLito.Classes
 
             var cumpleRegla = false;
             var cumpleReglaTipo = false;
+            var tieneTipo = false;
 
             foreach (var articulo in articulos)
             {
@@ -9028,15 +9029,17 @@ namespace CampaniasLito.Classes
                         //        cumpleReglaTipo = false;
                         //    }
                         //}
-                        else if (regla.Nombre == "FC" || regla.Nombre == "FS" || regla.Nombre == "IL" || regla.Nombre == "SB")
+                        else if (regla.Nombre.ToUpper() == "FC" || regla.Nombre.ToUpper() == "FS" || regla.Nombre.ToUpper() == "IL" || regla.Nombre.ToUpper() == "SB")
                         {
+                            tieneTipo = true;
+
                             if (cumpleReglaTipo == true)
                             {
                                 cumpleRegla = true;
                             }
                             else
                             {
-                                if (regla.Nombre == tipoRestaurante)
+                                if (regla.Nombre.ToUpper() == tipoRestaurante.ToUpper())
                                 {
                                     cumpleReglaTipo = true;
                                     cumpleRegla = true;
@@ -9052,7 +9055,7 @@ namespace CampaniasLito.Classes
                         {
                             tipoRestaurante = caracteristicasTienda.Valor;
                         }
-                        else if (caracteristicasTienda.Valor != regla.Habilitado)
+                        else if (caracteristicasTienda.Valor.ToUpper() != regla.Habilitado.ToUpper())
                         {
                             cumpleRegla = false;
                             break;
@@ -9067,36 +9070,80 @@ namespace CampaniasLito.Classes
                         }
                     }
 
-                    if (cumpleRegla && cumpleReglaTipo)
+                    if (tieneTipo)
                     {
-                        AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-                        cumpleRegla = false;
-                        cumpleReglaTipo = false;
+                        if (cumpleRegla && cumpleReglaTipo)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla == false && cumpleReglaTipo == false)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla == false && cumpleReglaTipo)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla && cumpleReglaTipo == false)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla == false)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
                     }
-                    else if (cumpleRegla == false && cumpleReglaTipo == false)
+                    else
                     {
-                        AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                        cumpleRegla = false;
-                        cumpleReglaTipo = false;
+                        if (cumpleRegla && cumpleReglaTipo)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla == false && cumpleReglaTipo == false)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla == false && cumpleReglaTipo)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+                        else if (cumpleRegla == false)
+                        {
+                            AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
+                            cumpleRegla = false;
+                            cumpleReglaTipo = false;
+                        }
+
                     }
-                    else if (cumpleRegla)
-                    {
-                        AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, true);
-                        cumpleRegla = false;
-                        cumpleReglaTipo = false;
-                    }
-                    else if (cumpleRegla && cumpleReglaTipo == false)
-                    {
-                        AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                        cumpleRegla = false;
-                        cumpleReglaTipo = false;
-                    }
-                    else if (cumpleRegla == false)
-                    {
-                        AgregarNuevoMaterial(articulo.ArticuloKFCId, tienda.TiendaId, false);
-                        cumpleRegla = false;
-                        cumpleReglaTipo = false;
-                    }
+
 
                 }
 
@@ -26460,7 +26507,10 @@ namespace CampaniasLito.Classes
 
         public static Response AgregarReglasCaracteristicas(string cat)
         {
+
             var caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticas").ToList();
+
+            var reglasCat = db.Database.SqlQuery<Regla>("spReglas").ToList();
 
             if (cat == "EQUITY")
             {
@@ -26510,17 +26560,40 @@ namespace CampaniasLito.Classes
 
         public static Response AgregarTiendasCaracteristicas(int reglaIdTienda, string cat, int fc, int fs, int il, int sb)
         {
-            var tiendas = db.Tiendas.Where(x => x.EquityFranquicia == cat).ToList();
+            var tiendasCat = db.Tiendas.Where(x => x.EquityFranquicia == cat).ToList();
+
+            var tiendas = db.Tiendas.ToList();
 
             if (cat == "EQUITY / FRANQUICIAS")
             {
-                tiendas = db.Tiendas.ToList();
+                tiendasCat = db.Tiendas.ToList();
+            }
+            else if (cat == "EQUITY")
+            {
+                tiendasCat = db.Tiendas.Where(x => x.EquityFranquicia == cat).ToList();
+            }
+            else if (cat == "FRANQUICIAS")
+            {
+                tiendasCat = db.Tiendas.Where(x => x.EquityFranquicia == cat).ToList();
             }
 
             if (reglaIdTienda != 0)
             {
                 foreach (var tienda in tiendas)
                 {
+                    var activo = false;
+
+                    var tiensaCatActivo = tiendasCat.Where(x => x.TiendaId == tienda.TiendaId).FirstOrDefault();
+
+                    if (tiensaCatActivo == null)
+                    {
+                        activo = true;
+                    }
+                    else
+                    {
+                        activo = false;
+                    }
+
                     var valor = "NO";
 
                     if (tienda.TipoId == fc || tienda.TipoId == fs || tienda.TipoId == il || tienda.TipoId == sb)
@@ -26533,10 +26606,19 @@ namespace CampaniasLito.Classes
                     if (existentes == null)
                     {
                         db.Database.ExecuteSqlCommand(
-                        "spAgregarTiendaCaracteristicas @TiendaId, @ReglaCatalogoId, @Valor",
+                        "spAgregarTiendaCaracteristicas @TiendaId, @ReglaCatalogoId, @Valor, @Activo",
                         new SqlParameter("@TiendaId", tienda.TiendaId),
                         new SqlParameter("@ReglaCatalogoId", reglaIdTienda),
-                        new SqlParameter("@Valor", valor));
+                        new SqlParameter("@Valor", valor),
+                        new SqlParameter("@Activo", activo));
+                    }
+                    else
+                    {
+                        db.Database.ExecuteSqlCommand(
+                        "spActualizarTiendaCarDesdeCar @ReglaCatalogoId, @TiendaId, @Activo",
+                        new SqlParameter("@ReglaCatalogoId", reglaIdTienda),
+                        new SqlParameter("@TiendaId", tienda.TiendaId),
+                        new SqlParameter("@Activo", activo));
                     }
                 }
             }

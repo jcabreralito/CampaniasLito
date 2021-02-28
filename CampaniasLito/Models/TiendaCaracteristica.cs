@@ -14,6 +14,8 @@ namespace CampaniasLito.Models
 
         public string Valor { get; set; }
 
+        public bool Activo { get; set; }
+
         public virtual Tienda Tienda { get; set; }
 
         public virtual ReglaCatalogo ReglaCatalogo { get; set; }

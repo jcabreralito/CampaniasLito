@@ -25,6 +25,12 @@ namespace CampaniasLito.Models
         [Index("IX_Nombre_Valor_Categoria", 3, IsUnique = true)]
         public string Categoria { get; set; }
 
+        public bool Equity { get; set; }
+
+        public bool Franquicias { get; set; }
+
+        public bool Stock { get; set; }
+
         public int TipoConfiguracionId { get; set; }
 
         public virtual TipoConfiguracion TipoConfiguracion { get; set; }
