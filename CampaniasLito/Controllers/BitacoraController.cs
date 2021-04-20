@@ -37,6 +37,7 @@ namespace CampaniasLito.Controllers
             Session["regionesB"] = string.Empty;
             Session["ciudadesB"] = string.Empty;
             Session["restaurantesB"] = string.Empty;
+            Session["materialesAcB"] = string.Empty;
             Session["familiasB"] = string.Empty;
             Session["materialesB"] = string.Empty;
             Session["campañasB"] = string.Empty;

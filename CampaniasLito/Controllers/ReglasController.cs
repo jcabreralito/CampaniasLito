@@ -118,11 +118,27 @@ namespace CampaniasLito.Controllers
 
             if (regla.ReglaId == 0)
             {
+                movimiento = "Agregando regla";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 db.Reglas.Add(regla);
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
+                    var reglaCatalogoId = 0;
+
                     var reglaId = regla.ReglaId;
+
+                    var reglasCatalogoId = db.ReglasCaracteristicas.Where(x => x.ReglaId == reglaId).FirstOrDefault();
+
+                    if (reglasCatalogoId == null)
+                    {
+                        reglaCatalogoId = 0;
+                    }
+                    else
+                    {
+                        reglaCatalogoId = reglasCatalogoId.ReglaCatalogoId;
+                    }
                     var cat = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == regla.ArticuloKFCId).FirstOrDefault().EquityFranquicia;
 
                     MovementsHelper.AgregarReglasCaracteristicas(cat);
@@ -139,14 +155,18 @@ namespace CampaniasLito.Controllers
             }
             else
             {
+                movimiento = "Actualizando regla";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 db.Entry(regla).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
                 {
                     var reglaId = regla.ReglaId;
+                    var reglaCatalogoId = db.ReglasCaracteristicas.Where(x => x.ReglaId == reglaId).FirstOrDefault().ReglaCatalogoId;
                     var cat = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == regla.ArticuloKFCId).FirstOrDefault().EquityFranquicia;
 
-                    MovementsHelper.AgregarReglasCaracteristicas(cat);
+                    MovementsHelper.AgregarReglasCaracteristicas(reglaCatalogoId, cat);
 
                     movimiento = "Actualizar Regla " + regla.ReglaId + " " + regla.NombreRegla + " / " + regla.ArticuloKFC.Descripcion;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
@@ -219,6 +239,9 @@ namespace CampaniasLito.Controllers
 
             if (reglaCatalogo.ReglaCatalogoId == 0)
             {
+                movimiento = "Agregando Característica";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 if (string.IsNullOrEmpty(reglaCatalogo.Valor))
                 {
                     reglaCatalogo.SiNo = true;
@@ -237,7 +260,7 @@ namespace CampaniasLito.Controllers
 
                     var reglaIdTienda = reglaCatalogo.ReglaCatalogoId;
 
-                    MovementsHelper.AgregarReglasCaracteristicas(cat);
+                    MovementsHelper.AgregarReglasCaracteristicas(reglaIdTienda, cat);
 
                     MovementsHelper.AgregarTiendasCaracteristicas(reglaIdTienda, cat, fcTipo, fsTipo, ilTipo, sbTipo);
 
@@ -253,6 +276,9 @@ namespace CampaniasLito.Controllers
             }
             else
             {
+
+                movimiento = "Actualizando Característica";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 if (string.IsNullOrEmpty(reglaCatalogo.Valor))
                 {
@@ -272,7 +298,7 @@ namespace CampaniasLito.Controllers
 
                     var reglaIdTienda = reglaCatalogo.ReglaCatalogoId;
 
-                    MovementsHelper.AgregarReglasCaracteristicas(cat);
+                    MovementsHelper.AgregarReglasCaracteristicas(reglaIdTienda, cat);
 
                     if (cat == "EQUITY")
                     {
@@ -324,11 +350,22 @@ namespace CampaniasLito.Controllers
 
             if (reglasList.Count == 0)
             {
+                var reglaIdTienda = 0;
                 var artId = db.Reglas.Where(x => x.ReglaId == id).FirstOrDefault().ArticuloKFCId;
                 var cat = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == artId).FirstOrDefault().EquityFranquicia;
                 int reglaId = (int)id;
+                var reglasIdTienda = reglasList.FirstOrDefault();
 
-                MovementsHelper.AgregarReglasCaracteristicas(cat);
+                if (reglasIdTienda == null)
+                {
+                    reglaIdTienda = 0;
+                }
+                else
+                {
+                    reglaIdTienda = reglasIdTienda.ReglaCatalogoId;
+                }
+
+                MovementsHelper.AgregarReglasCaracteristicas(reglaIdTienda, cat);
             }
 
             if (reglasList == null)
@@ -346,6 +383,9 @@ namespace CampaniasLito.Controllers
         public ActionResult Caracteristicas(FormCollection fc)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Agregando Característica";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] reglaCaractersiticaId = fc.GetValues("ReglaCaractersiticaId");
             //string[] seleccionado = fc.GetValues("Seleccionado");
@@ -464,7 +504,20 @@ namespace CampaniasLito.Controllers
 
             var categoria = string.Empty;
 
+            var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
+
+            EliminarMateriales(articuloKFCId, campaña);
+
             MovementsHelper.AgregarMaterialesTiendaCampañaExiste(articuloKFCId, restauranteId, categoria);
+
+            var material = db.ArticuloKFCs.Where(x => x.ArticuloKFCId == articuloId.ArticuloKFCId).FirstOrDefault();
+
+            if (campaña != null)
+            {
+                var campañaId = campaña.CampañaId;
+
+                MovementsHelper.AgregarArticuloCampañas(material, campañaId);
+            }
 
             movimiento = "Asignar Características";
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
@@ -473,11 +526,29 @@ namespace CampaniasLito.Controllers
 
         }
 
+        private void EliminarMateriales(int id, Campaña campaña)
+        {
+            db.Database.ExecuteSqlCommand(
+            "spEliminarMaterialTiendas @ArticuloKFCId",
+            new SqlParameter("@ArticuloKFCId", id));
+
+            if (campaña != null)
+            {
+                db.Database.ExecuteSqlCommand(
+                "spEliminarMaterialCampaniasTiendas @ArticuloKFCId, @CampaniaId",
+                new SqlParameter("@ArticuloKFCId", id),
+                new SqlParameter("@CampaniaId", campaña.CampañaId));
+            }
+        }
+
         [AuthorizeUser(idOperacion: 3)]
         [HttpPost]
         public ActionResult Delete(int id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Eliminando Regla";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             Regla regla = db.Reglas.Where(x => x.ReglaId == id).FirstOrDefault();
             db.Reglas.Remove(regla);
@@ -504,6 +575,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Eliminando Característica";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             var tiendaCaracteristica = db.TiendaCaracteristicas.Where(x => x.ReglaCatalogoId == id).ToList();
 
             db.TiendaCaracteristicas.RemoveRange(tiendaCaracteristica);
@@ -518,6 +592,8 @@ namespace CampaniasLito.Controllers
                     var reglaCaracteristica = db.ReglasCaracteristicas.Where(x => x.ReglaCatalogoId == id).ToList();
                     db.ReglasCaracteristicas.RemoveRange(reglaCaracteristica);
                     DBHelper.SaveChanges(db);
+
+                    ActualizarTodo();
 
                     movimiento = "Eliminar Característica " + reglaCatalogo.ReglaCatalogoId + " " + reglaCatalogo.Nombre + " / " + reglaCatalogo.Categoria;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
@@ -535,5 +611,67 @@ namespace CampaniasLito.Controllers
             }
 
         }
+
+        [AuthorizeUser(idOperacion: 1)]
+        [HttpPost]
+        public ActionResult ActualizarTodo()
+        {
+            var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Actualizando Todo";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            var restauranteId = 0;
+
+            var materialId = 0;
+
+            var campaña = db.Campañas.Where(x => x.Generada == "NO").FirstOrDefault();
+
+
+            EliminarTodo();
+
+            var categorias = db.TipoCampanias.Where(x => x.Nombre != "STOCK" && x.Nombre != "EQUITY / FRANQUICIAS").ToList();
+
+            var materialiesActivos = db.Database.SqlQuery<ArticuloKFC>("spGetMaterialesActivos").ToList();
+
+            foreach (var materialActivo in materialiesActivos)
+            {
+                MovementsHelper.AgregarMaterialesTiendaCampañaExiste(materialActivo.ArticuloKFCId, restauranteId, materialActivo.EquityFranquicia);
+            }
+
+            if (campaña != null)
+            {
+                var campañaId = campaña.CampañaId;
+
+                MovementsHelper.AgregarArticulosNuevaCampaña(campañaId);
+            }
+
+            movimiento = "Actualizar Todo";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            return Json(new { success = true, message = "MATERIAL ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void EliminarTodo()
+        {
+            db.Database.ExecuteSqlCommand(
+            "spEliminarTodosArticulosTiendas");
+
+            var campañas = db.Campañas.Where(x => x.Generada == "NO").ToList();
+
+            if (campañas != null)
+            {
+                foreach (var campaña in campañas)
+                {
+                    var campId = campaña.CampañaId;
+
+                    db.Database.ExecuteSqlCommand(
+                    "spEliminarCampaña @CampañaId",
+                    new SqlParameter("@CampañaId", campId));
+                }
+            }
+        }
+
+
     }
 }

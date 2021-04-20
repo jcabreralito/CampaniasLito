@@ -1,0 +1,4 @@
+INSERT INTO Articulos (Codigo, Descripcion, SistemaImpresion,MedExtendida,Sustrato,Tintas,Laminado_FV,Corte,MatPegue,InfAdicional) VALUES ('2103022000', 'MOTOBOARD 311 181 0008', '', '', '', '', '', '', '', 'MOTOBOARD 311 181 0008')
+INSERT INTO Articulos (Codigo, Descripcion, SistemaImpresion,MedExtendida,Sustrato,Tintas,Laminado_FV,Corte,MatPegue,InfAdicional) VALUES ('2103022001', 'MOTOBOARD 311 214 5880', '', '', '', '', '', '', '', 'MOTOBOARD 311 214 5880')
+INSERT INTO Articulos (Codigo, Descripcion, SistemaImpresion,MedExtendida,Sustrato,Tintas,Laminado_FV,Corte,MatPegue,InfAdicional) VALUES ('2103022002', 'MOTOBOARD 312 312 4039', '', '', '', '', '', '', '', 'MOTOBOARD 312 312 4039')
+INSERT INTO Articulos (Codigo, Descripcion, SistemaImpresion,MedExtendida,Sustrato,Tintas,Laminado_FV,Corte,MatPegue,InfAdicional) VALUES ('2103022003', 'MOTOBOARD 312 396 1919', '', '', '', '', '', '', '', 'MOTOBOARD 312 396 1919')

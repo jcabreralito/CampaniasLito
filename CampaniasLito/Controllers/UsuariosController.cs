@@ -89,7 +89,7 @@ namespace CampaniasLito.Controllers
                     <h1>Bienvenido a la Plataforma de Campañas</h1>
                     <p>Tu Usuario es: <strong>{1}</strong></p>
                     <p>Tu password es: <strong>{0}</strong></p>
-                    <p>Link de la Plataforma: <a href='portal.litoprocess.com/Campanias'>portal.litoprocess.com/Campanias</a>",
+                    <p>Link de la Plataforma: <a href='https://servicios.litoprocess.com/Campanias'>servicios.litoprocess.com/Campanias</a>",
                     password, usuario.NombreUsuario);
 
                     await MailHelper.SendMail(usuario.NombreUsuario, "jesuscabrerag@yahoo.com.mx", subject, body);

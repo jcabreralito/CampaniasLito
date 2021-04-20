@@ -548,6 +548,9 @@ namespace CampaniasLito.Controllers
 
             if (campaña.CampañaId == 0)
             {
+                movimiento = "Agregando Campaña";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 campaña.Generada = "NO";
                 db.Campañas.Add(campaña);
                 var response = DBHelper.SaveChanges(db);
@@ -567,6 +570,9 @@ namespace CampaniasLito.Controllers
             }
             else
             {
+                movimiento = "Actualizando Campaña";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 db.Entry(campaña).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
                 if (response.Succeeded)
@@ -1042,6 +1048,9 @@ namespace CampaniasLito.Controllers
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Cerrando Campaña";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             Campaña campaña = db.Campañas.Where(x => x.CampañaId == id).FirstOrDefault();
             campaña.Generada = "SI";
             db.Entry(campaña).State = EntityState.Modified;
@@ -1080,6 +1089,10 @@ namespace CampaniasLito.Controllers
             }
 
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault();
+
+            movimiento = "Generando Códigos";
+            MovementsHelper.MovimientosBitacora(usuario.UsuarioId, modulo, movimiento);
+
             if (usuario == null)
             {
                 return RedirectToAction("Index");
@@ -1164,6 +1177,9 @@ namespace CampaniasLito.Controllers
         public ActionResult Delete(int id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Eliminando Códigos";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             db.Database.ExecuteSqlCommand(
             "spEliminarCampaña @CampañaId",

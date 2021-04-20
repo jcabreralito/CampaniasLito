@@ -213,6 +213,7 @@ namespace CampaniasLito.Controllers
             Session["restaurantesB"] = string.Empty;
             Session["familiasB"] = string.Empty;
             Session["materialesB"] = "active";
+            Session["materialesAcB"] = string.Empty;
             Session["campañasB"] = string.Empty;
             Session["reglasB"] = string.Empty;
             Session["bitacoraB"] = string.Empty;
@@ -221,10 +222,67 @@ namespace CampaniasLito.Controllers
             return View();
         }
 
+        public ActionResult GetData(JqueryDatatableParam param)
+        {
+            //var employees = GetEmployees();
+            var equityList = db.Database.SqlQuery<spArticuloKFC>("spGetMaterialesAll").ToList();
+
+            equityList.ToList().ForEach(x => x.ArticuloKFCId = x.ArticuloKFCId);
+
+            //var equityList = db.Database.SqlQuery<spArticuloKFC>("spGetMaterialesAll").ToList();
+
+            if (!string.IsNullOrEmpty(param.sSearch))
+            {
+                equityList = equityList.Where(x => x.Descripcion.ToLower().Contains(param.sSearch.ToLower())
+                                              || x.EquityFranquicia.ToLower().Contains(param.sSearch.ToLower())
+                                              || x.Familia.ToLower().Contains(param.sSearch.ToLower())
+                                              || x.Proveedor.ToLower().Contains(param.sSearch.ToLower())
+                                              || x.Observaciones.ToLower().Contains(param.sSearch.ToLower())
+                                              || x.ArticuloKFCId.ToString().Contains(param.sSearch.ToLower())
+                                              || x.Activo.ToString().Contains(param.sSearch.ToLower())
+                                              || x.Todo.ToString().Contains(param.sSearch.ToLower())
+                                              || x.CantidadDefault.ToString().Contains(param.sSearch.ToLower())
+                                              || x.Eliminado.ToString().Contains(param.sSearch.ToLower())).ToList();
+            }
+
+            var sortColumnIndex = Convert.ToInt32(HttpContext.Request.QueryString["iSortCol_0"]);
+            var sortDirection = HttpContext.Request.QueryString["sSortDir_0"];
+            //if (sortColumnIndex == 3)
+            //{
+            //    equityList = sortDirection == "asc" ? equityList.OrderBy(c => c.CantidadDefault) : equityList.OrderByDescending(c => c.Descripcion);
+            //}
+            //else if (sortColumnIndex == 4)
+            //{
+            //    equityList = sortDirection == "asc" ? equityList.OrderBy(c => c.StartDate) : equityList.OrderByDescending(c => c.StartDate);
+            //}
+            //else if (sortColumnIndex == 5)
+            //{
+            //    equityList = sortDirection == "asc" ? equityList.OrderBy(c => c.Salary) : equityList.OrderByDescending(c => c.Salary);
+            //}
+            //else
+            //{
+            //    Func<ArticuloKFC, string> orderingFunction = e => sortColumnIndex == 0 ? e.Name : sortColumnIndex == 1 ? e.Position : e.Location;
+            //    employees = sortDirection == "asc" ? employees.OrderBy(orderingFunction) : employees.OrderByDescending(orderingFunction);
+            //}
+
+            var displayResult = equityList.Skip(param.iDisplayStart)
+               .Take(param.iDisplayLength).ToList();
+            var totalRecords = equityList.Count();
+
+            return Json(new
+            {
+                param.sEcho,
+                iTotalRecords = totalRecords,
+                iTotalDisplayRecords = totalRecords,
+                aaData = equityList
+            }, JsonRequestBehavior.AllowGet);
+
+        }
+
         public ActionResult GetDataEquity()
         {
+            //var equityList = db.Database.SqlQuery<spArticuloKFC>("spGetMaterialesActivos").ToList();
             var equityList = db.Database.SqlQuery<spArticuloKFC>("spGetMaterialesAll").ToList();
-            //var ciudadList = db.Ciudads.ToList();
 
             return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
         }
@@ -232,7 +290,6 @@ namespace CampaniasLito.Controllers
         public ActionResult GetDataFranquicias()
         {
             var equityList = db.Database.SqlQuery<spArticuloKFC>("spGetMaterialesFranquicias").ToList();
-            //var ciudadList = db.Ciudads.ToList();
 
             return Json(new { data = equityList }, JsonRequestBehavior.AllowGet);
         }
@@ -294,6 +351,9 @@ namespace CampaniasLito.Controllers
 
             if (material.FamiliaId != 22)
             {
+                movimiento = "Desactivando Material";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 if (activo == true)
                 {
                     materialEditado.Activo = false;
@@ -306,11 +366,16 @@ namespace CampaniasLito.Controllers
                 }
                 else
                 {
+                    movimiento = "Activando Material";
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                     materialEditado.Activo = true;
                     Mensaje = "Material Activado ";
 
                     db.Entry(materialEditado).State = EntityState.Modified;
                     DBHelper.SaveChanges(db);
+
+                    ActualizarMaterial(id);
 
                     //EliminarMateriales(id, campaña);
 
@@ -328,6 +393,9 @@ namespace CampaniasLito.Controllers
             {
                 if (activo == true)
                 {
+
+                    movimiento = "Desactivando Material";
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                     materialEditado.Activo = false;
                     Mensaje = "Material Desactivado ";
@@ -347,6 +415,9 @@ namespace CampaniasLito.Controllers
                 }
                 else
                 {
+                    movimiento = "Activando Material";
+                    MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                     materialEditado.Activo = true;
                     Mensaje = "Material Activado ";
 
@@ -354,6 +425,17 @@ namespace CampaniasLito.Controllers
                     DBHelper.SaveChanges(db);
 
                     EliminarMaterialesMoto(id, campaña);
+
+                    var categoria = string.Empty;
+
+                    MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId, categoria);
+
+                    if (campaña != null)
+                    {
+                        var campañaId = campaña.CampañaId;
+
+                        MovementsHelper.AgregarArticuloCampañas(material, campañaId);
+                    }
                 }
             }
 
@@ -372,6 +454,9 @@ namespace CampaniasLito.Controllers
             var restauranteId = 0;
             if (material.ArticuloKFCId == 0)
             {
+                movimiento = "Agregando Material";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 var tipo = Session["Categoria"].ToString();
 
                 material.Activo = true;
@@ -413,6 +498,9 @@ namespace CampaniasLito.Controllers
             }
             else
             {
+                movimiento = "Actualizando Material";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 var tipo = Session["Categoria"].ToString();
 
                 //material.EquityFranquicia = tipo;
@@ -463,6 +551,10 @@ namespace CampaniasLito.Controllers
 
                             EliminarMaterialesMoto(id, campaña);
 
+                            var categoria = string.Empty;
+
+                            MovementsHelper.AgregarMaterialesTiendaCampañaExiste(material.ArticuloKFCId, restauranteId, categoria);
+
                             if (campaña != null)
                             {
                                 var campañaId = campaña.CampañaId;
@@ -503,6 +595,9 @@ namespace CampaniasLito.Controllers
             {
                 material.Observaciones = string.Empty;
             }
+
+            movimiento = "Actualizando Material";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             db.Entry(material).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
@@ -573,6 +668,10 @@ namespace CampaniasLito.Controllers
         public ActionResult ActualizarTodo()
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Actualizando Todo";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             var restauranteId = 0;
 
             var materialId = 0;
@@ -693,6 +792,9 @@ namespace CampaniasLito.Controllers
         public ActionResult Restaurantes(FormCollection fc)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Asignando Restaurantes";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] campañaId = fc.GetValues("Campaña");
             string[] articuloKFCTMPId = fc.GetValues("TiendaArticuloId");
@@ -1016,6 +1118,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Asignando Cantidades";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             string[] tiendaCampañaID = fc.GetValues("TiendaId");
             string[] articuloKFCId = fc.GetValues("ArticuloKFCId");
             string[] cantidadInput = fc.GetValues("CantidadInput");
@@ -1065,6 +1170,9 @@ namespace CampaniasLito.Controllers
         public ActionResult Delete(int id)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Eliminando Material";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             var material = db.ArticuloKFCs.Find(id);
 

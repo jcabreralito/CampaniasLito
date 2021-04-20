@@ -29,6 +29,7 @@ namespace CampaniasLito.Controllers
             Session["restaurantesB"] = string.Empty;
             Session["familiasB"] = string.Empty;
             Session["materialesB"] = string.Empty;
+            Session["materialesAcB"] = string.Empty;
             Session["campañasB"] = string.Empty;
             Session["reglasB"] = string.Empty;
             Session["bitacoraB"] = string.Empty;

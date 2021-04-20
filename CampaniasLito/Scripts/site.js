@@ -100,21 +100,6 @@ function hidePage() {
     document.getElementById('contenedor_carga').style.zIndex = '10000';
 };
 
-function activeKeys() {
-
-    //$(document).keydown(function (objEvent) {
-
-    //    if (objEvent.keyCode == 9) {  //tab pressed
-    //        objEvent.keyCode = 505;
-    //    }
-
-    //    if (objEvent.keyCode == 505) {
-    //        return true;
-    //    }
-    //})
-
-};
-
 function hidePages() {
 
     document.getElementById('contenedor_carga').style.visibility = 'hidden';

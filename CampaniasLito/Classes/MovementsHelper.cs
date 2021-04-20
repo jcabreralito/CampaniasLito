@@ -8972,13 +8972,6 @@ namespace CampaniasLito.Classes
 
             }
 
-            //var reglaMaterial = string.Join(",", reglas[0].Nombre);
-
-            //foreach (var regla in reglas)
-            //{
-            //    reglaMaterial = regla.ReglaId.ToString();
-            //}
-
             var cumpleRegla = false;
             var cumpleReglaTipo = false;
             var tieneTipo = false;
@@ -9016,19 +9009,7 @@ namespace CampaniasLito.Classes
                             {
                                 cumpleRegla = false;
                             }
-                            //break;
                         }
-                        //else if (regla.Nombre != "FC" && regla.Nombre != "FS" && regla.Nombre != "IL" && regla.Nombre != "SB")
-                        //{
-                        //    if (cumpleReglaTipo == true)
-                        //    {
-                        //        cumpleReglaTipo = true;
-                        //    }
-                        //    else
-                        //    {
-                        //        cumpleReglaTipo = false;
-                        //    }
-                        //}
                         else if (regla.Nombre.ToUpper() == "FC" || regla.Nombre.ToUpper() == "FS" || regla.Nombre.ToUpper() == "IL" || regla.Nombre.ToUpper() == "SB")
                         {
                             tieneTipo = true;
@@ -26505,21 +26486,74 @@ namespace CampaniasLito.Classes
             }
         }
 
+        public static Response AgregarReglasCaracteristicas(int reglaIdTienda, string cat)
+        {
+
+            var caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticas").Where(x => x.ReglaCatalogoId == reglaIdTienda).ToList();
+
+            //var reglasCat = db.Database.SqlQuery<Regla>("spReglas").ToList();
+
+            //if (cat == "EQUITY")
+            //{
+            //    caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticasEQ").ToList();
+            //}
+            //else if (cat == "FRANQUICIAS")
+            //{
+            //    caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticasFQ").ToList();
+            //}
+
+            foreach (var caracteristica in caracteristicas)
+            {
+                var reglas = db.Database.SqlQuery<Regla>("spReglas").ToList();
+
+                if (cat == "EQUITY")
+                {
+                    reglas = db.Database.SqlQuery<Regla>("spReglasEQ").ToList();
+                }
+                else if (cat == "FRANQUICIAS")
+                {
+                    reglas = db.Database.SqlQuery<Regla>("spReglasFQ").ToList();
+                }
+
+                if (reglas != null)
+                {
+                    foreach (var regla in reglas)
+                    {
+                        var existentes = db.Database.SqlQuery<ReglaCaracteristica>("spReglasCaracteristicasExistentes @ReglaId, @ReglaCatalogoId",
+                            new SqlParameter("@ReglaId", regla.ReglaId),
+                            new SqlParameter("@ReglaCatalogoId", caracteristica.ReglaCatalogoId)).FirstOrDefault();
+
+                        if (existentes == null)
+                        {
+                            db.Database.ExecuteSqlCommand(
+                            "spAgregarCaracteristicasReglas @ReglaId, @ReglaCatalogoId, @Seleccionado, @IsTrue, @IsFalse",
+                            new SqlParameter("@ReglaId", regla.ReglaId),
+                            new SqlParameter("@ReglaCatalogoId", caracteristica.ReglaCatalogoId),
+                            new SqlParameter("@Seleccionado", false),
+                            new SqlParameter("@IsTrue", false),
+                            new SqlParameter("@IsFalse", false));
+                        }
+                    }
+                }
+            }
+            return new Response { Succeeded = true, };
+        }
+
         public static Response AgregarReglasCaracteristicas(string cat)
         {
 
             var caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticas").ToList();
 
-            var reglasCat = db.Database.SqlQuery<Regla>("spReglas").ToList();
+            //var reglasCat = db.Database.SqlQuery<Regla>("spReglas").ToList();
 
-            if (cat == "EQUITY")
-            {
-                caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticasEQ").ToList();
-            }
-            else if (cat == "FRANQUICIAS")
-            {
-                caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticasFQ").ToList();
-            }
+            //if (cat == "EQUITY")
+            //{
+            //    caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticasEQ").ToList();
+            //}
+            //else if (cat == "FRANQUICIAS")
+            //{
+            //    caracteristicas = db.Database.SqlQuery<ReglaCatalogo>("spCaracterisiticasFQ").ToList();
+            //}
 
             foreach (var caracteristica in caracteristicas)
             {
@@ -26562,6 +26596,16 @@ namespace CampaniasLito.Classes
         {
             var tiendasCat = db.Tiendas.Where(x => x.EquityFranquicia == cat).ToList();
 
+            //if (tipoArticulo == "EQUITY" || tipoArticulo == "STOCK")
+            //    {
+            //        tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia != "FRANQUICIAS").ToList();
+            //    }
+            //    else
+            //    {
+            //        tiendas = db.Tiendas.Where(cdt => cdt.EquityFranquicia == "FRANQUICIAS").ToList();
+            //    }
+
+
             var tiendas = db.Tiendas.ToList();
 
             if (cat == "EQUITY / FRANQUICIAS")
@@ -26570,11 +26614,11 @@ namespace CampaniasLito.Classes
             }
             else if (cat == "EQUITY")
             {
-                tiendasCat = db.Tiendas.Where(x => x.EquityFranquicia == cat).ToList();
+                tiendasCat = db.Tiendas.Where(x => x.EquityFranquicia == "EQUITY").ToList();
             }
             else if (cat == "FRANQUICIAS")
             {
-                tiendasCat = db.Tiendas.Where(x => x.EquityFranquicia == cat).ToList();
+                tiendasCat = db.Tiendas.Where(x => x.EquityFranquicia == "FRANQUICIAS").ToList();
             }
 
             if (reglaIdTienda != 0)

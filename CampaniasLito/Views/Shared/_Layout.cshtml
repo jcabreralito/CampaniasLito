@@ -102,15 +102,15 @@
 
 
                         @*<li class="iMenu">
-                            <a id="restaurantesB" href="@Url.Action("IndexDev", "Restaurantes")" class="@Session["restaurantesB"].ToString()" title="Restaurantes" onclick="viewPageIndex()">
-                                <i class="fas fa-store fa-2x"></i>
-                            </a>
-                        </li>*@
-                        
-                        
-                        
-                        
-                        
+                <a id="restaurantesB" href="@Url.Action("IndexDev", "Restaurantes")" class="@Session["restaurantesB"].ToString()" title="Restaurantes" onclick="viewPageIndex()">
+                    <i class="fas fa-store fa-2x"></i>
+                </a>
+            </li>*@
+
+
+
+
+
                         <li class="iMenu">
                             <div>
                                 <a id="familiasB" href="@Url.Action("Index", "Familias")" class="@Session["familiasB"].ToString()" title="Familias" onclick="viewPageIndex()">
@@ -137,14 +137,11 @@
                                 <i class="fas fa-calendar-alt fa-2x"></i>
                             </a>
                         </li>
-                        if (User.Identity.Name == "jcabrera@litoprocess.com")
-                        {
-                            <li class="iMenu">
-                                <a id="bitacoraB" href="@Url.Action("Index", "Bitacora")" class="@Session["bitacoraB"].ToString()" title="Bitácora" onclick="viewPageIndex()">
-                                    <i class="fas fa-atlas fa-2x"></i>
-                                </a>
-                            </li>
-                        }
+                        <li class="iMenu">
+                            <a id="bitacoraB" href="@Url.Action("Index", "Bitacora")" class="@Session["bitacoraB"].ToString()" title="Bitácora" onclick="viewPageIndex()">
+                                <i class="fas fa-atlas fa-2x"></i>
+                            </a>
+                        </li>
                     }
                     @if (User.IsInRole("User") || User.IsInRole("CONSULTAS"))
                     {
@@ -167,20 +164,6 @@
                                 <i class="fas fa-store fa-2x"></i>
                             </a>
                         </li>
-
-
-
-
-                        @*<li class="iMenu">
-                            <a id="restaurantesB" href="@Url.Action("IndexDev", "Restaurantes")" class="@Session["restaurantesB"].ToString()" title="Restaurantes" onclick="viewPageIndex()">
-                                <i class="fas fa-store fa-2x"></i>
-                            </a>
-                        </li>*@
-                        
-                        
-                        
-                        
-                        
                         <li class="iMenu">
                             <div>
                                 <a id="familiasB" href="@Url.Action("Index", "Familias")" class="@Session["familiasB"].ToString()" title="Familias" onclick="viewPageIndex()">
@@ -198,6 +181,11 @@
                         <li class="iMenu">
                             <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="@Session["campañasB"].ToString()" title="Campañas" onclick="viewPageIndex()">
                                 <i class="fas fa-calendar-alt fa-2x"></i>
+                            </a>
+                        </li>
+                        <li class="iMenu">
+                            <a id="bitacoraB" href="@Url.Action("Index", "Bitacora")" class="@Session["bitacoraB"].ToString()" title="Bitácora" onclick="viewPageIndex()">
+                                <i class="fas fa-atlas fa-2x"></i>
                             </a>
                         </li>
                     }
@@ -219,15 +207,15 @@
                     </li>
                     <li class="iMenuSalir">
                         @*@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                        {*@
-                            @Html.AntiForgeryToken()
-                            <div>
-                                <a href="javascript:document.getElementById('logoutForm').submit()"
-                                   class="iconomenuSalir"
-                                   title="Salir" onclick="viewPageIndex()" style="margin-top: -6px;">
-                                    <i class="large material-icons">power_settings_new</i>
-                                </a>
-                            </div>
+            {*@
+                        @Html.AntiForgeryToken()
+                        <div>
+                            <a href="javascript:document.getElementById('logoutForm').submit()"
+                               class="iconomenuSalir"
+                               title="Salir" onclick="viewPageIndex()" style="margin-top: -6px;">
+                                <i class="large material-icons">power_settings_new</i>
+                            </a>
+                        </div>
                         @*}*@
                     </li>
                 </ul>
@@ -290,15 +278,12 @@
                         <i class="fas fa-calendar-alt"></i>
                     </a>
                 </li>
-                if (User.Identity.Name == "jcabrera@litoprocess.com")
-                {
-                    <li>
-                        <a id="bitacoraB" href="@Url.Action("Index", "Bitacora")" class="iconomenu @Session["bitacoraB"].ToString()" onclick="viewPageIndex()">
-                            Bitácora
-                            <i class="fas fa-atlas"></i>
-                        </a>
-                    </li>
-                }
+                <li>
+                    <a id="bitacoraB" href="@Url.Action("Index", "Bitacora")" class="iconomenu @Session["bitacoraB"].ToString()" onclick="viewPageIndex()">
+                        Bitácora
+                        <i class="fas fa-atlas"></i>
+                    </a>
+                </li>
             }
             @if (User.IsInRole("User") || User.IsInRole("CONSULTAS"))
             {
@@ -342,6 +327,12 @@
                     <a id="campañasB" href="@Url.Action("Index", "Campañas")" class="iconomenu @Session["campañasB"].ToString()" onclick="viewPageIndex()">
                         Campañas
                         <i class="fas fa-calendar-alt"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="bitacoraB" href="@Url.Action("Index", "Bitacora")" class="iconomenu @Session["bitacoraB"].ToString()" onclick="viewPageIndex()">
+                        Bitácora
+                        <i class="fas fa-atlas"></i>
                     </a>
                 </li>
             }

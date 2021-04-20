@@ -2891,6 +2891,7 @@
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\Familia.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JqueryDatatableParam.cs" />
     <Compile Include="Models\keyAttribute.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Modulo.cs" />
@@ -3003,6 +3004,7 @@
     <Content Include="Views\Restaurantes\EditCERDev.cshtml" />
     <Content Include="Views\Restaurantes\EditCMESDev.cshtml" />
     <Content Include="Views\Restaurantes\RestaurantesEquity.cshtml" />
+    <Content Include="Views\Materiales\IndexActivos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

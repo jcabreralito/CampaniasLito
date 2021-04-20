@@ -153,6 +153,9 @@ namespace CampaniasLito.Controllers
 
             if (tienda.TiendaId == 0)
             {
+                movimiento = "Agregando Restaurante";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 var tipo = Session["Categoria"].ToString();
 
                 tienda.Activo = true;
@@ -215,7 +218,7 @@ namespace CampaniasLito.Controllers
 
                     MovimientosRestaurantes(tienda);
 
-                    movimiento = "Agregar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                    movimiento = "Agregar Restaurante " + tienda.TiendaId + " / " + tienda.CCoFranquicia + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                     //if (cat == "EQUITY")
@@ -240,6 +243,9 @@ namespace CampaniasLito.Controllers
             }
             else
             {
+                movimiento = "Actualizando Restaurante";
+                MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
                 var tipo = Session["Categoria"].ToString();
 
                 tienda.EquityFranquicia = tipo;
@@ -254,7 +260,7 @@ namespace CampaniasLito.Controllers
 
                     MovimientosRestaurantes(tienda);
 
-                    movimiento = "Actualizar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                    movimiento = "Actualizar Restaurante " + tienda.TiendaId + " / " + tienda.CCoFranquicia + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
 
@@ -427,6 +433,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Actualizaando CG";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             db.Entry(tiendas).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
@@ -435,7 +444,7 @@ namespace CampaniasLito.Controllers
 
                 MovimientosRestaurantes(tiendas);
 
-                movimiento = "Actualizar CG " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+                movimiento = "Actualizar CG " + tiendas.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -485,6 +494,9 @@ namespace CampaniasLito.Controllers
         public ActionResult EditCGDev(Tienda tiendas, FormCollection formCollection)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Actualizaando CG";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] restauranteId = formCollection.GetValues("TiendaId");
             string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
@@ -567,7 +579,7 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar CG " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            movimiento = "Actualizar CG " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -588,6 +600,9 @@ namespace CampaniasLito.Controllers
         public ActionResult EditCPDev(Tienda tiendas, FormCollection formCollection)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Actualizaando CP";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] restauranteId = formCollection.GetValues("TiendaId");
             string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
@@ -643,7 +658,7 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar CP " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            movimiento = "Actualizar CP " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -663,6 +678,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Actualizando CP";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             db.Entry(tienda).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
@@ -671,7 +689,7 @@ namespace CampaniasLito.Controllers
 
                 MovimientosRestaurantes(tienda);
 
-                movimiento = "Actualizar CP " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                movimiento = "Actualizar CP " + tienda.TiendaId + " / " + tienda.CCoFranquicia + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -706,6 +724,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Actualizando CME";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             string[] restauranteId = formCollection.GetValues("TiendaId");
             string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
             string[] valor = formCollection.GetValues("Valor");
@@ -760,7 +781,7 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar ME " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            movimiento = "Actualizar ME " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -772,6 +793,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Actualizando CME";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             db.Entry(tienda).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
@@ -780,7 +804,7 @@ namespace CampaniasLito.Controllers
 
                 MovimientosRestaurantes(tienda);
 
-                movimiento = "Actualizar CME " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                movimiento = "Actualizar CME " + tienda.TiendaId + " / " + tienda.CCoFranquicia + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -814,6 +838,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Actualizando CMES";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             string[] restauranteId = formCollection.GetValues("TiendaId");
             string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
             string[] valor = formCollection.GetValues("Valor");
@@ -868,7 +895,7 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar CMES " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            movimiento = "Actualizar CMES " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -880,6 +907,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Actualizando CMES";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             db.Entry(tienda).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
@@ -888,7 +918,7 @@ namespace CampaniasLito.Controllers
 
                 MovimientosRestaurantes(tienda);
 
-                movimiento = "Actualizar CMES " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                movimiento = "Actualizar CMES " + tienda.TiendaId + " / " + tienda.CCoFranquicia + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -928,6 +958,9 @@ namespace CampaniasLito.Controllers
         public ActionResult EditCERDev(Tienda tiendas, FormCollection formCollection)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Actualizando CER";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] restauranteId = formCollection.GetValues("TiendaId");
             string[] catalogoId = formCollection.GetValues("ReglaCatalogoId");
@@ -1010,7 +1043,7 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar CG " + tiendas.TiendaId + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            movimiento = "Actualizar CG " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -1022,6 +1055,9 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Actualizando CER";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
             db.Entry(tienda).State = EntityState.Modified;
             var response = DBHelper.SaveChanges(db);
             if (response.Succeeded)
@@ -1030,7 +1066,7 @@ namespace CampaniasLito.Controllers
 
                 MovimientosRestaurantes(tienda);
 
-                movimiento = "Actualizar CER " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                movimiento = "Actualizar CER " + tienda.TiendaId + " / " + tienda.CCoFranquicia  + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -1101,6 +1137,9 @@ namespace CampaniasLito.Controllers
         public ActionResult Materiales(FormCollection fc)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+
+            movimiento = "Asignando Materiales";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] campañaId = fc.GetValues("Campaña");
             string[] articuloKFCTMPId = fc.GetValues("TiendaArticuloId");
@@ -1458,7 +1497,7 @@ namespace CampaniasLito.Controllers
             }
             TiendaArticulo tienda = db.TiendaArticulos.Find(Convert.ToInt32(articuloKFCTMPId[0]));
 
-            movimiento = "Asignar Materiales / " + tienda.TiendaId + " / " + tienda.Tienda.Restaurante;
+            movimiento = "Asignar Materiales / " + tienda.TiendaId + " / " + tienda.Tienda.CCoFranquicia + " / " + tienda.Tienda.Restaurante;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "MATERIALES ASIGNADOS" }, JsonRequestBehavior.AllowGet);
@@ -1499,6 +1538,8 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
+            movimiento = "Eliminando Restaurante";
+            MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             Tienda tienda = db.Tiendas.Where(x => x.TiendaId == id).FirstOrDefault();
             tienda.Eliminado = true;
@@ -1530,7 +1571,7 @@ namespace CampaniasLito.Controllers
                     }
                 }
 
-                movimiento = "Eliminar Restaurante " + tienda.TiendaId + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                movimiento = "Eliminar Restaurante " + tienda.TiendaId + " / " + tienda.CCoFranquicia + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 return Json(new { success = true, message = "RESTAURANTE ELIMINADO" }, JsonRequestBehavior.AllowGet);

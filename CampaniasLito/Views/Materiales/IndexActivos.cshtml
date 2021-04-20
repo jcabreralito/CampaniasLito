@@ -1,12 +1,12 @@
 ﻿@{
-    ViewBag.Title = "Materiales";
+    ViewBag.Title = "Materiales Activos";
     //Layout = "~/Views/Shared/_Layout_Materiales.cshtml";
 }
 
 <div id="equity" style="visibility: visible; display: block">
 
     <style>
-        #matEquityTable th, #matEquityTable td {
+        #matActEquityTable th, #matActEquityTable td {
             white-space: nowrap;
         }
     </style>
@@ -17,12 +17,12 @@
         </a>
     </div>
     @*<div class="fixed-action-btn mr-lg-5">
-        <a class="btn-floating btn-sm green" title="Actualizar" onclick="ActualizarTodo()">
-            <i class="large material-icons">autorenew</i>
-        </a>
-    </div>*@
+            <a class="btn-floating btn-sm green" title="Actualizar" onclick="ActualizarTodo()">
+                <i class="large material-icons">autorenew</i>
+            </a>
+        </div>*@
 
-    <table id="matEquityTable" class="table table-striped table-bordered compact" style="width:100%; text-transform: uppercase">
+    <table id="matActEquityTable" class="table table-striped table-bordered compact" style="width:100%; text-transform: uppercase">
         <tfoot>
             <tr>
                 <th></th>
@@ -48,15 +48,11 @@
 
     <script>
 
-    var Popup, dataTable, dataTableF, PopupTiendas, PopupReglas;
+    var Popup, dataTable, PopupTiendas;
     $(document).ready(function () {
-        dataTable = $("#matEquityTable").DataTable({
-            //"sAjaxSource": "/Materiales/GetData",
-            //"bServerSide": true,
-            //"bProcessing": true,
-            //"bSearchable": true,  
+        dataTable = $("#matActEquityTable").DataTable({
             "ajax": {
-                "url": "Materiales/GetDataEquity",
+                "url": "Materiales/GetDataEquityActivos",
                 "type": "GET",
                 "datatype": "json"
             },
