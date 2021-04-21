@@ -243,12 +243,16 @@ namespace CampaniasLito.Controllers
             }
             else
             {
-                movimiento = "Actualizando Restaurante";
+
+                var datoActual = db.Database.SqlQuery<Tienda>("spGetRestaurantes").Where(x => x.TiendaId == tienda.TiendaId).FirstOrDefault();
+
+                movimiento = "Actualizando Restaurante / C.C.: " + datoActual.CCoFranquicia + " / " + datoActual.Restaurante + " / Activo: " + datoActual.Activo;
                 MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                 var tipo = Session["Categoria"].ToString();
 
                 tienda.EquityFranquicia = tipo;
+
 
                 db.Entry(tienda).State = EntityState.Modified;
                 var response = DBHelper.SaveChanges(db);
@@ -260,7 +264,7 @@ namespace CampaniasLito.Controllers
 
                     MovimientosRestaurantes(tienda);
 
-                    movimiento = "Actualizar Restaurante " + tienda.TiendaId + " / " + tienda.CCoFranquicia + " " + tienda.Restaurante + " / " + tienda.EquityFranquicia;
+                    movimiento = "Restaurante Actualizado / C.C.: " + tienda.CCoFranquicia + " / " + tienda.Restaurante + " / Activo: " + tienda.Activo;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
 
@@ -433,7 +437,7 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            movimiento = "Actualizaando CG";
+            movimiento = "Actualizando CG";
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             db.Entry(tiendas).State = EntityState.Modified;
@@ -495,7 +499,19 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            movimiento = "Actualizaando CG";
+            var restauranteCGCurrent = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasG @TiendaID",
+                                new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            var textMovimiento = string.Empty;
+
+            var cc = string.Empty;
+
+            foreach (var item in restauranteCGCurrent)
+            {
+                cc = item.CCoFranquicia;
+            }
+
+            movimiento = "Actualizando CG C.C.: " + cc;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] restauranteId = formCollection.GetValues("TiendaId");
@@ -578,8 +594,33 @@ namespace CampaniasLito.Controllers
 
             MovimientosRestaurantes(tienda);
 
+            var restauranteCGActualizado = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasG @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
 
-            movimiento = "Actualizar CG " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            textMovimiento = string.Empty;
+
+            cc = string.Empty;
+
+            for (int i = 0; i < restauranteCGCurrent.Count; i++)
+            {
+                var caracteristica = restauranteCGActualizado.Where(x => x.ReglaCatalogoId == restauranteCGCurrent[i].ReglaCatalogoId).FirstOrDefault();
+
+                if (caracteristica.Valor != restauranteCGCurrent[i].Valor)
+                {
+                    textMovimiento += " " + caracteristica.Nombre + " :" + caracteristica.Valor + " / ";
+                }
+
+                cc = caracteristica.CCoFranquicia;
+            }
+
+            if (textMovimiento == string.Empty)
+            {
+                textMovimiento = "Sin Modificaciones";
+            }
+
+            movimiento = "CG Actualizado C.C.: " + cc + " / " + textMovimiento.ToString();
+
+            //movimiento = "Actualizar CG " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -601,7 +642,19 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            movimiento = "Actualizaando CP";
+            var restauranteCPCurrent = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasP @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            var textMovimiento = string.Empty;
+
+            var cc = string.Empty;
+
+            foreach (var item in restauranteCPCurrent)
+            {
+                cc = item.CCoFranquicia;
+            }
+
+            movimiento = "Actualizando CP C.C.: " + cc;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] restauranteId = formCollection.GetValues("TiendaId");
@@ -658,7 +711,31 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar CP " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            var restauranteCPActualizado = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasP @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            textMovimiento = string.Empty;
+
+            cc = string.Empty;
+
+            for (int i = 0; i < restauranteCPCurrent.Count; i++)
+            {
+                var caracteristica = restauranteCPActualizado.Where(x => x.ReglaCatalogoId == restauranteCPCurrent[i].ReglaCatalogoId).FirstOrDefault();
+
+                if (caracteristica.Valor != restauranteCPCurrent[i].Valor)
+                {
+                    textMovimiento += " " + caracteristica.Nombre + " :" + caracteristica.Valor + " / ";
+                }
+
+                cc = caracteristica.CCoFranquicia;
+            }
+
+            if (textMovimiento == string.Empty)
+            {
+                textMovimiento = "Sin Modificaciones";
+            }
+
+            movimiento = "CP Actualizado C.C.: " + cc + " / " + textMovimiento.ToString();
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -724,7 +801,19 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            movimiento = "Actualizando CME";
+            var restauranteCMECurrent = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasME @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            var textMovimiento = string.Empty;
+
+            var cc = string.Empty;
+
+            foreach (var item in restauranteCMECurrent)
+            {
+                cc = item.CCoFranquicia;
+            }
+
+            movimiento = "Actualizando CME C.C.: " + cc;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] restauranteId = formCollection.GetValues("TiendaId");
@@ -781,7 +870,31 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar ME " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            var restauranteCMEActualizado = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasME @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            textMovimiento = string.Empty;
+
+            cc = string.Empty;
+
+            for (int i = 0; i < restauranteCMECurrent.Count; i++)
+            {
+                var caracteristica = restauranteCMEActualizado.Where(x => x.ReglaCatalogoId == restauranteCMECurrent[i].ReglaCatalogoId).FirstOrDefault();
+
+                if (caracteristica.Valor != restauranteCMECurrent[i].Valor)
+                {
+                    textMovimiento += " " + caracteristica.Nombre + " :" + caracteristica.Valor + " / ";
+                }
+
+                cc = caracteristica.CCoFranquicia;
+            }
+
+            if (textMovimiento == string.Empty)
+            {
+                textMovimiento = "Sin Modificaciones";
+            }
+
+            movimiento = "CME Actualizado C.C.: " + cc + " / " + textMovimiento.ToString();
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -838,7 +951,22 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            movimiento = "Actualizando CMES";
+            var restauranteCMESCurrent = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasMED @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            var textMovimiento = string.Empty;
+
+            var cc = string.Empty;
+
+            foreach (var item in restauranteCMESCurrent)
+            {
+                //var reglaCatalogo = db.ReglasCatalogo.Find(item.ReglaCatalogoId);
+
+                //textMovimiento += " " + reglaCatalogo.Nombre + " :" + item.Valor + " / ";
+                cc = item.CCoFranquicia;
+            }
+
+            movimiento = "Actualizando CMES C.C.: " + cc;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] restauranteId = formCollection.GetValues("TiendaId");
@@ -895,7 +1023,39 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar CMES " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            var restauranteCMESActualizado = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasMED @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            textMovimiento = string.Empty;
+
+            cc = string.Empty;
+
+            for (int i = 0; i < restauranteCMESCurrent.Count; i++)
+            {
+                var caracteristica = restauranteCMESActualizado.Where(x => x.ReglaCatalogoId == restauranteCMESCurrent[i].ReglaCatalogoId).FirstOrDefault();
+
+                if (caracteristica.Valor != restauranteCMESCurrent[i].Valor)
+                {
+                    textMovimiento += " " + caracteristica.Nombre + " :" + caracteristica.Valor + " / ";
+                }
+
+                cc = caracteristica.CCoFranquicia;
+            }
+
+            if (textMovimiento == string.Empty)
+            {
+                textMovimiento = "Sin Modificaciones";
+            }
+
+            //foreach (var item in restauranteCMESActualizado)
+            //{
+            //    var reglaCatalogo = db.ReglasCatalogo.Find(item.ReglaCatalogoId);
+
+            //    textMovimiento += " " + reglaCatalogo.Nombre + " :" + item.Valor + " / ";
+            //    cc = item.CCoFranquicia;
+            //}
+
+            movimiento = "CMES Actualizado C.C.: " + cc + " / " + textMovimiento.ToString();
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);
@@ -959,7 +1119,19 @@ namespace CampaniasLito.Controllers
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
 
-            movimiento = "Actualizando CER";
+            var restauranteERCurrent = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasER @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            var textMovimiento = string.Empty;
+
+            var cc = string.Empty;
+
+            foreach (var item in restauranteERCurrent)
+            {
+                cc = item.CCoFranquicia;
+            }
+
+            movimiento = "Actualizando CER C.C.: " + cc;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] restauranteId = formCollection.GetValues("TiendaId");
@@ -1043,7 +1215,31 @@ namespace CampaniasLito.Controllers
             MovimientosRestaurantes(tienda);
 
 
-            movimiento = "Actualizar CG " + tienda.TiendaId + " / " + tiendas.CCoFranquicia + " " + tiendas.Restaurante + " / " + tiendas.EquityFranquicia;
+            var restauranteERActualizado = db.Database.SqlQuery<spRestaurantesCaracteristicas>("spGetTiendasCaracteristicasER @TiendaID",
+                    new SqlParameter("@TiendaId", tiendas.TiendaId)).ToList();
+
+            textMovimiento = string.Empty;
+
+            cc = string.Empty;
+
+            for (int i = 0; i < restauranteERCurrent.Count; i++)
+            {
+                var caracteristica = restauranteERActualizado.Where(x => x.ReglaCatalogoId == restauranteERCurrent[i].ReglaCatalogoId).FirstOrDefault();
+
+                if (caracteristica.Valor != restauranteERCurrent[i].Valor)
+                {
+                    textMovimiento += " " + caracteristica.Nombre + " :" + caracteristica.Valor + " / ";
+                }
+
+                cc = caracteristica.CCoFranquicia;
+            }
+
+            if (textMovimiento == string.Empty)
+            {
+                textMovimiento = "Sin Modificaciones";
+            }
+
+            movimiento = "CER Actualizado C.C.: " + cc + " / " + textMovimiento.ToString();
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             return Json(new { success = true, message = "RESTAURANTE ACTUALIZADO" }, JsonRequestBehavior.AllowGet);

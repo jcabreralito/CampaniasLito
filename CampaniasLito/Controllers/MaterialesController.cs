@@ -486,7 +486,7 @@ namespace CampaniasLito.Controllers
                         MovementsHelper.AgregarArticuloCampañas(material, campañaId);
                     }
 
-                    movimiento = "Agregar Material " + material.ArticuloKFCId + " " + material.Descripcion + " / " + material.EquityFranquicia;
+                    movimiento = "Material Agregado" + material.ArticuloKFCId + " " + material.Descripcion + " / " + material.EquityFranquicia;
                     MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
                     return Json(new { success = true, message = "MATERIAL AGREGADO" }, JsonRequestBehavior.AllowGet);

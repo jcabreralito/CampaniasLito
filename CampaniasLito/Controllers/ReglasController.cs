@@ -345,6 +345,8 @@ namespace CampaniasLito.Controllers
         [HttpGet]
         public ActionResult Caracteristicas(int? id)
         {
+            Session["reglaid"] = id;
+
             var reglasList = db.Database.SqlQuery<spReglasCaracteristicas>("spReglasCaracteristicas @ReglaId",
                 new SqlParameter("@ReglaId", id)).OrderBy(x => x.ReglaCatalogoId).ToList();
 
@@ -383,8 +385,21 @@ namespace CampaniasLito.Controllers
         public ActionResult Caracteristicas(FormCollection fc)
         {
             var usuario = db.Usuarios.Where(u => u.NombreUsuario == User.Identity.Name).FirstOrDefault().UsuarioId;
+            var id = Session["reglaid"];
 
-            movimiento = "Agregando Característica";
+            var reglasListCurrent = db.Database.SqlQuery<spReglasCaracteristicas>("spReglasCaracteristicas @ReglaId",
+                new SqlParameter("@ReglaId", id)).OrderBy(x => x.ReglaCatalogoId).ToList();
+
+            var textMovimiento = string.Empty;
+
+            var reglaNombre = string.Empty;
+
+            foreach (var item in reglasListCurrent)
+            {
+                reglaNombre = item.Regla;
+            }
+
+            movimiento = "Modificando Características Regla : " + reglaNombre;
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
 
             string[] reglaCaractersiticaId = fc.GetValues("ReglaCaractersiticaId");
@@ -519,8 +534,55 @@ namespace CampaniasLito.Controllers
                 MovementsHelper.AgregarArticuloCampañas(material, campañaId);
             }
 
-            movimiento = "Asignar Características";
+            var reglasListActualizado = db.Database.SqlQuery<spReglasCaracteristicas>("spReglasCaracteristicas @ReglaId",
+                new SqlParameter("@ReglaId", id)).OrderBy(x => x.ReglaCatalogoId).ToList();
+
+            textMovimiento = string.Empty;
+
+            reglaNombre = string.Empty;
+
+            var valorIsTrue = string.Empty;
+            var valorIsFalse = string.Empty;
+
+            for (int i = 0; i < reglasListCurrent.Count; i++)
+            {
+                var caracteristica = reglasListActualizado.Where(x => x.ReglaCatalogoId == reglasListCurrent[i].ReglaCatalogoId).FirstOrDefault();
+
+                if (caracteristica.IsFalse != reglasListCurrent[i].IsFalse || caracteristica.IsTrue != reglasListCurrent[i].IsTrue)
+                {
+                    if (caracteristica.IsTrue == true)
+                    {
+                        valorIsTrue = "ACTIVADO";
+                    }
+                    else
+                    {
+                        valorIsTrue = "DEACTIVADO";
+                    }
+
+                    if (caracteristica.IsFalse == true)
+                    {
+                        valorIsFalse = "ACTIVADO";
+                    }
+                    else
+                    {
+                        valorIsFalse = "DESACTIVADO";
+                    }
+
+                    textMovimiento += " " + caracteristica.Caracteristica + " SI : " + valorIsTrue + " - NO : " + valorIsFalse + " / ";
+                }
+
+                reglaNombre = caracteristica.Regla;
+            }
+
+            if (textMovimiento == string.Empty)
+            {
+                textMovimiento = "Sin Modificaciones";
+            }
+
+            movimiento = "Características Asignadas Regla : " + reglaNombre + " / " + textMovimiento.ToString();
             MovementsHelper.MovimientosBitacora(usuario, modulo, movimiento);
+
+            Session["reglaid"] = string.Empty;
 
             return Json(new { success = true, message = "CARACTERÍSTICAS ASIGNADAS" }, JsonRequestBehavior.AllowGet);
 

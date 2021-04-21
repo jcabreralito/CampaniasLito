@@ -35,6 +35,7 @@
                     "type": "GET",
                     "datatype": "json",
                 },
+                "order": [[0, "desc"]],
                 "columns": [
                     {
                         "data": "BitacoraId", "render": function (data) {
@@ -68,7 +69,7 @@
                             return "<span>" + data + "</span>";
                         },
                         "title": "Movimiento",
-                        "className": "dt-body-center text-center dt-specialColorRed",
+                        "className": "dt-body-center text-left dt-specialColorRed",
                     },
                 ],
                 "language": {
@@ -105,7 +106,24 @@
                         }
                     },
                 },
-                dom: 'lfrtip',
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: null,
+                        text: '<i class="fas fa-file-excel" title="Exportar a Excel"></i>',
+                        exportOptions: {
+                            orthogonal: 'export',
+                            columns: "thead th:not(.noExport)",
+                        },
+                        filename: 'Bitácora',
+                        autoFilter: true,
+                        sheetName: 'Movimientos',
+                        messageTop: null,
+                        body: true,
+                        footer: false,
+                    },
+                ],
                 //autoWidth: false,
                 //fixedColumns: true,
                 fixedColumns: {
